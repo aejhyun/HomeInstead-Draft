@@ -28,6 +28,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     var sendButtonTapped: Bool = false
     var startButtonEnabled: Bool = false
     
+    
+    //when you change the value for the two arrays below, make sure you change the size of it under taskMessageViewController as well.
     var segmentSelected: Int = 0
     var standardTaskMessages = [String](count: 10, repeatedValue: "")
     var specializedTaskMessages = [String](count: 10, repeatedValue: "")
@@ -47,8 +49,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var startButtonActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var doneButtonActivityIndicator: UIActivityIndicatorView!
     
-    var standardTasks = ["Go on a walk", "Give a bath", "Dance"]
-    let standardTasksHolder = ["Go on a walk", "Give a bath", "Dance"]
+    var standardTasks = ["Go on a walk", "Give a bath", "Dance", "Give a message", "Practice language", "Excersice"]
+    let standardTasksHolder = ["Go on a walk", "Give a bath", "Dance", "Give a message", "Practice language", "Excersice"]
     var specializedTasks = ["Go on a walk", "Stretch", "Cook food", "Dance", "Organize dongxi"]
     let specializedTasksHolder = ["Go on a walk", "Stretch", "Cook food", "Dance", "Organize dongxi"]
     
@@ -250,9 +252,11 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
             taskInformation["address"] = address
             switch segmentSelected {
             case 0:
-                taskInformation["message"] = standardTaskMessages[messageRowSelected]
+                taskInformation["message"] = standardTaskMessages[sendButtonRowSelected]
+                print(standardTaskMessages[sendButtonRowSelected])
             case 1:
-                taskInformation["message"] = specializedTaskMessages[messageRowSelected]
+                taskInformation["message"] = specializedTaskMessages[sendButtonRowSelected]
+                print(specializedTaskMessages[sendButtonRowSelected])
             default:
                 break
             }
@@ -329,6 +333,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         standardTasks = standardTasksHolder
         specializedTasks = specializedTasksHolder
         expandCellIndexPathSelected = nil
+        standardTaskMessages = [String](count: 10, repeatedValue: "")
+        specializedTaskMessages = [String](count: 10, repeatedValue: "")
         taskListTableView.reloadData()
         
     }
@@ -344,6 +350,18 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         
     }
     
+    func moveDownElements (stringArray: [String], index: Int) -> [String] {
+        var tempArray = [String](count: stringArray.count, repeatedValue: "")
+        
+        var j = 0;
+        for var i = 0; i < stringArray.count; ++i {
+            if(i != index) {
+                tempArray[j] = stringArray[i]
+                j++
+            }
+        }
+        return tempArray
+    }
     
     @IBAction func sendButtonTapped(sender: AnyObject) {
         
@@ -399,6 +417,16 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                                 self.expandCellIndexPathSelected = NSIndexPath(forItem: self.expandCellIndexPathSelected!.row - 1, inSection: 0)
                             }
                         }
+                        
+                        switch self.segmentSelected {
+                        case 0:
+                            self.standardTaskMessages = self.moveDownElements(self.standardTaskMessages, index: self.sendButtonRowSelected)
+                        case 1:
+                            self.specializedTaskMessages = self.moveDownElements(self.specializedTaskMessages, index: self.sendButtonRowSelected)
+                        default:
+                            break
+                        }
+                        
                         self.taskListTableView.reloadData()
                         flag = false
                         
