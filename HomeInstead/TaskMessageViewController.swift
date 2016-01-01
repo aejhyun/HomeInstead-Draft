@@ -12,14 +12,15 @@ class TaskMessageViewController: UIViewController {
 
     
     @IBOutlet weak var messageTextView: UITextView!
-    var message: String = ""
+    var message = [String](count: 10, repeatedValue: "")
+    var messageRowSelected: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         messageTextView.becomeFirstResponder()
         messageTextView.layer.cornerRadius = 10
-        messageTextView.text = message
+        messageTextView.text = message[messageRowSelected]
         
     }
     

@@ -29,8 +29,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     var startButtonEnabled: Bool = false
     
     var segmentSelected: Int = 0
-    var segmentZeroMessages = [String](count: 10, repeatedValue: "")
-    var segmentOneMessages = [String](count: 10, repeatedValue: "")
+    var standardTaskMessages = [String](count: 10, repeatedValue: "")
+    var specializedTaskMessages = [String](count: 10, repeatedValue: "")
     var message: String = ""
     
     var passedMessage: String = ""
@@ -60,6 +60,9 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        startButtonEnabled = true
+        taskListTableView.reloadData()
         
         for parent in self.navigationController!.navigationBar.subviews {
             for childView in parent.subviews {
@@ -113,15 +116,6 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
 
         navigationBarLine.hidden = true
         
-        switch segmentSelected {
-        case 0:
-            segmentZeroMessages[messageRowSelected] = message
-        case 1:
-            segmentOneMessages[messageRowSelected] = message
-        default:
-            break
-        }
-        
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -132,7 +126,6 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     override func viewDidAppear(animated: Bool) {
-        
     
     }
     
@@ -224,6 +217,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                     print("Longitude is nil")
                     completion(address: "Could not find an address")
                 }
+                
+                
             } else {
                 print("Latitude and longitude is nil")
                 completion(address: "Could not find an address")
@@ -253,6 +248,14 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
             taskInformation["date"] = self.getDate()
             taskInformation["time"] = self.getTime()
             taskInformation["address"] = address
+            switch segmentSelected {
+            case 0:
+                taskInformation["message"] = standardTaskMessages[messageRowSelected]
+            case 1:
+                taskInformation["message"] = specializedTaskMessages[messageRowSelected]
+            default:
+                break
+            }
             
             taskInformation.saveInBackgroundWithBlock {
                 (success: Bool, error: NSError?) -> Void in
@@ -516,20 +519,20 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
             let giverCathyListTableViewController = segue.destinationViewController as! GiverCathyListTableViewController
             
             giverCathyListTableViewController.passedClientName = passClientName
-        }
-        
-        if segue.identifier == "taskListToTaskMessage" {
+            
+        } else if segue.identifier == "taskListToTaskMessage" {
             
             let taskMessageViewController = segue.destinationViewController as! TaskMessageViewController
+            
             switch segmentSelected {
             case 0:
-                taskMessageViewController.message = segmentZeroMessages[messageRowSelected]
+                taskMessageViewController.message[messageRowSelected] = standardTaskMessages[messageRowSelected]
             case 1:
-                taskMessageViewController.message = segmentOneMessages[messageRowSelected]
+                taskMessageViewController.message[messageRowSelected] = specializedTaskMessages[messageRowSelected]
             default:
                 break
             }
-
+            taskMessageViewController.messageRowSelected = messageRowSelected
         }
         
     }
@@ -538,8 +541,17 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     
         if let taskMessageViewController = segue.sourceViewController as? TaskMessageViewController {
             passedMessage = taskMessageViewController.messageTextView.text
+            messageRowSelected = taskMessageViewController.messageRowSelected
         }
-        print(passedMessage)
+        
+        switch segmentSelected {
+        case 0:
+            standardTaskMessages[messageRowSelected] = passedMessage
+        case 1:
+            specializedTaskMessages[messageRowSelected] = passedMessage
+        default:
+            break
+        }
     
     }
 
