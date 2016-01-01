@@ -351,6 +351,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         sendButtonRowSelected = (indexPath?.row)!
         sendButtonTapped = true
         segmentedControl.enabled = false
+        doneButton.enabled = false
         
         var task: String!
         switch segmentedControl.selectedSegmentIndex {
@@ -396,6 +397,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                                 self.expandCellIndexPathSelected = NSIndexPath(forItem: self.expandCellIndexPathSelected!.row - 1, inSection: 0)
                             }
                         }
+                        self.doneButton.enabled = true
                         self.taskListTableView.reloadData()
                         flag = false
                         
