@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		847374E91C37EE5500B4096F /* TaskPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847374E81C37EE5500B4096F /* TaskPictureViewController.swift */; };
 		8479A8EF1C2FBCA30069A046 /* OfficeClientListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479A8EE1C2FBCA30069A046 /* OfficeClientListTableViewController.swift */; };
 		8479A8F11C2FDDF40069A046 /* OfficeCathyListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479A8F01C2FDDF40069A046 /* OfficeCathyListTableViewController.swift */; };
 		847D00001C25389C0047505F /* GiverCathyListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847DFFFF1C25389C0047505F /* GiverCathyListTableViewController.swift */; };
@@ -50,7 +51,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		847374E71C36A2EA00B4096F /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = MyPlayground.playground; path = ../MyPlayground.playground; sourceTree = "<group>"; };
+		847374E81C37EE5500B4096F /* TaskPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskPictureViewController.swift; sourceTree = "<group>"; };
 		8479A8EE1C2FBCA30069A046 /* OfficeClientListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeClientListTableViewController.swift; sourceTree = "<group>"; };
 		8479A8F01C2FDDF40069A046 /* OfficeCathyListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeCathyListTableViewController.swift; sourceTree = "<group>"; };
 		847DFFFF1C25389C0047505F /* GiverCathyListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiverCathyListTableViewController.swift; sourceTree = "<group>"; };
@@ -125,7 +126,6 @@
 		84D930F41C197DB1003C1688 = {
 			isa = PBXGroup;
 			children = (
-				847374E71C36A2EA00B4096F /* MyPlayground.playground */,
 				84D931431C19945A003C1688 /* Frameworks */,
 				84D930FF1C197DB1003C1688 /* HomeInstead */,
 				84D930FE1C197DB1003C1688 /* Products */,
@@ -156,6 +156,7 @@
 				84B74CDB1C219A1B00A2C914 /* TaskListViewController.swift */,
 				84C05E0D1C281870009A137C /* TaskListTableViewCell.swift */,
 				849D64051C310E0300571E47 /* TaskMessageViewController.swift */,
+				847374E81C37EE5500B4096F /* TaskPictureViewController.swift */,
 				847DFFFF1C25389C0047505F /* GiverCathyListTableViewController.swift */,
 				84D203CF1C2E627400746066 /* GiverCathyListTableViewCell.swift */,
 				84C05E131C2BAE30009A137C /* CathyTaskLogTableCellViewController.swift */,
@@ -288,6 +289,7 @@
 				8479A8EF1C2FBCA30069A046 /* OfficeClientListTableViewController.swift in Sources */,
 				84B74CDC1C219A1B00A2C914 /* TaskListViewController.swift in Sources */,
 				84D203D01C2E627400746066 /* GiverCathyListTableViewCell.swift in Sources */,
+				847374E91C37EE5500B4096F /* TaskPictureViewController.swift in Sources */,
 				8479A8F11C2FDDF40069A046 /* OfficeCathyListTableViewController.swift in Sources */,
 				84C05E141C2BAE30009A137C /* CathyTaskLogTableCellViewController.swift in Sources */,
 				84C462AC1C202C1400FA82F9 /* FirstPageViewController.swift in Sources */,

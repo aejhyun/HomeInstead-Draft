@@ -996,7 +996,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         <variation key="widthClass=compact" fixedFrame="YES">
-                                            <rect key="frame" x="23" y="39" width="328" height="87"/>
+                                            <rect key="frame" x="8" y="39" width="359" height="87"/>
                                         </variation>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2sq-RB-bCR">
@@ -1313,10 +1313,10 @@
             </objects>
             <point key="canvasLocation" x="2670.75" y="461.5"/>
         </scene>
-        <!--View Controller-->
+        <!--Task Picture View Controller-->
         <scene sceneID="kyB-NZ-aqC">
             <objects>
-                <viewController modalPresentationStyle="overFullScreen" id="3ck-QK-wi4" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="overFullScreen" id="3ck-QK-wi4" customClass="TaskPictureViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Fhc-tP-O1z"/>
                         <viewControllerLayoutGuide type="bottom" id="Ilb-G6-rdf"/>
@@ -1334,7 +1334,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         <variation key="widthClass=compact" fixedFrame="YES">
-                                            <rect key="frame" x="23" y="39" width="328" height="87"/>
+                                            <rect key="frame" x="103" y="39" width="264" height="87"/>
                                         </variation>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZK0-tF-eFN">
@@ -1347,6 +1347,16 @@
                                             <segue destination="bzI-LD-WDh" kind="unwind" unwindAction="unwindToSegue:" id="vAg-Jn-24R"/>
                                         </connections>
                                     </button>
+                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image" translatesAutoresizingMaskIntoConstraints="NO" id="m3g-zA-sUO">
+                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <gestureRecognizers/>
+                                        <variation key="widthClass=compact" fixedFrame="YES">
+                                            <rect key="frame" x="8" y="39" width="87" height="87"/>
+                                        </variation>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="QrW-bm-WIn" appends="YES" id="ZLy-Nx-r9d"/>
+                                        </connections>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -1359,6 +1369,7 @@
                                     <mask key="subviews">
                                         <exclude reference="JFI-CU-GLT"/>
                                         <exclude reference="ZK0-tF-eFN"/>
+                                        <exclude reference="m3g-zA-sUO"/>
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="mKB-nw-slJ"/>
@@ -1369,6 +1380,7 @@
                                     <mask key="subviews">
                                         <include reference="JFI-CU-GLT"/>
                                         <include reference="ZK0-tF-eFN"/>
+                                        <include reference="m3g-zA-sUO"/>
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="mKB-nw-slJ"/>
@@ -1405,23 +1417,27 @@
                                 <include reference="akd-Ys-M1v"/>
                             </mask>
                         </variation>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="kt8-qq-6aZ" appends="YES" id="JT6-Jg-iOy"/>
-                        </connections>
                     </view>
                     <value key="contentSizeForViewInPopover" type="size" width="200" height="400"/>
+                    <connections>
+                        <outlet property="photoImageView" destination="m3g-zA-sUO" id="aDc-Ry-k1Y"/>
+                        <outlet property="photoMessageTextView" destination="JFI-CU-GLT" id="jpy-GN-YhC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K40-SG-GAm" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="bzI-LD-WDh" userLabel="Exit" sceneMemberID="exit"/>
-                <tapGestureRecognizer id="kt8-qq-6aZ">
+                <tapGestureRecognizer id="QrW-bm-WIn">
                     <connections>
-                        <segue destination="bzI-LD-WDh" kind="unwind" unwindAction="unwindToSegue:" id="hsY-fJ-LRE"/>
+                        <action selector="selectImageFromPhotoLibraryButtonTapped:" destination="3ck-QK-wi4" id="OZT-ut-T6o"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2670.75" y="-1167.5"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Image" width="540" height="540"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="JvB-e1-eF0"/>
         <segue reference="CPS-1T-8Nc"/>

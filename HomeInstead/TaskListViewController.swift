@@ -126,10 +126,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         
     }
-    
-    override func viewDidAppear(animated: Bool) {
-    
-    }
+
     
     @IBAction func indexChanged(sender: UISegmentedControl) {
         
