@@ -31,8 +31,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     //when you change the value for the two arrays below, make sure you change the size of it under taskMessageViewController as well.
     var segmentSelected: Int = 0
-    var standardTaskMessages = [String](count: 10, repeatedValue: "")
-    var specializedTaskMessages = [String](count: 10, repeatedValue: "")
+    var standardTaskMessages = [String](count: 30, repeatedValue: "")
+    var specializedTaskMessages = [String](count: 30, repeatedValue: "")
     var message: String = ""
     
     var passedMessage: String = ""
@@ -49,8 +49,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var startButtonActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var doneButtonActivityIndicator: UIActivityIndicatorView!
     
-    var standardTasks = ["Go on a walk", "Give a bath", "Dance", "Give a message", "Practice language", "Excersice"]
-    let standardTasksHolder = ["Go on a walk", "Give a bath", "Dance", "Give a message", "Practice language", "Excersice"]
+    var standardTasks = ["Go on a walk", "Give a bath", "Dance", "Give a message", "Practice language", "Excersice", "Go shopping", "Go out to the park", "Look at a flower", "Read a book", "Play piano", "Make a new friend", "Wash clothes", "Paint nails", "Paint"]
+    let standardTasksHolder = ["Go on a walk", "Give a bath", "Dance", "Give a message", "Practice language", "Excersice", "Go shopping", "Go out to the park", "Look at a flower", "Read a book", "Play piano", "Make a new friend", "Wash clothes", "Paint nails", "Paint"]
     var specializedTasks = ["Go on a walk", "Stretch", "Cook food", "Dance", "Organize dongxi"]
     let specializedTasksHolder = ["Go on a walk", "Stretch", "Cook food", "Dance", "Organize dongxi"]
     
@@ -333,8 +333,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         standardTasks = standardTasksHolder
         specializedTasks = specializedTasksHolder
         expandCellIndexPathSelected = nil
-        standardTaskMessages = [String](count: 10, repeatedValue: "")
-        specializedTaskMessages = [String](count: 10, repeatedValue: "")
+        standardTaskMessages = [String](count: 30, repeatedValue: "")
+        specializedTaskMessages = [String](count: 30, repeatedValue: "")
         taskListTableView.reloadData()
         
     }

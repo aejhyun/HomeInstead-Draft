@@ -12,7 +12,7 @@ class TaskMessageViewController: UIViewController {
 
     
     @IBOutlet weak var messageTextView: UITextView!
-    var message = [String](count: 10, repeatedValue: "")
+    var message = [String](count: 30, repeatedValue: "")
     var messageRowSelected: Int = 0
     
     override func viewDidLoad() {
