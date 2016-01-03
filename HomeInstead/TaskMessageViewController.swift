@@ -13,14 +13,14 @@ class TaskMessageViewController: UIViewController {
     
     @IBOutlet weak var messageTextView: UITextView!
     var message = [String](count: 30, repeatedValue: "")
-    var messageRowSelected: Int = 0
+    var messageButtonRowSelected: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("picture button row selected in TaskMessageViewController \(messageButtonRowSelected)")
         messageTextView.becomeFirstResponder()
         messageTextView.layer.cornerRadius = 10
-        messageTextView.text = message[messageRowSelected]
+        messageTextView.text = message[messageButtonRowSelected]
         
     }
     

@@ -10,16 +10,21 @@ import UIKit
 
 class TaskPictureViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    @IBOutlet weak var photoImageView: UIImageView!
-    @IBOutlet weak var photoMessageTextView: UITextView!
+    @IBOutlet weak var pictureImageView: UIImageView!
+    @IBOutlet weak var pictureMessageTextView: UITextView!
+    
+    var pictureMessage = [String](count: 30, repeatedValue: "")
+    var picture = [UIImage](count: 30, repeatedValue: UIImage(named: "defaultPicture")!)
+    var pictureButtonRowSelected = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        photoMessageTextView.layer.cornerRadius = 10
+        pictureMessageTextView.layer.cornerRadius = 10
+        pictureImageView.layer.cornerRadius = 10
+        pictureMessageTextView.becomeFirstResponder()
+        pictureMessageTextView.text = pictureMessage[pictureButtonRowSelected]
+        pictureImageView.image = picture[pictureButtonRowSelected]
         
-        photoImageView.layer.cornerRadius = 10
-        photoMessageTextView.becomeFirstResponder()
     
     }
     
@@ -39,15 +44,15 @@ class TaskPictureViewController: UIViewController, UIImagePickerControllerDelega
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
-        photoMessageTextView.becomeFirstResponder()
+        pictureMessageTextView.becomeFirstResponder()
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
         let selectedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-        photoImageView.image = selectedImage
+        pictureImageView.image = selectedImage
         dismissViewControllerAnimated(true, completion: nil)
-        photoMessageTextView.becomeFirstResponder()
+        pictureMessageTextView.becomeFirstResponder()
         
     }
     

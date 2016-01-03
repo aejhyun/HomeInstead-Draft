@@ -22,7 +22,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     var expandCellIndexPathStandardHolder: NSIndexPath? = nil
     var expandCellRowSelectedSpecializedHolder: NSIndexPath? = nil
     
-    var messageRowSelected: Int = 0
+    var messageButtonRowSelected: Int = 0
+    var pictureButtonRowSelected: Int = 0
     var sendButtonRowSelected: Int = 0
     
     var sendButtonTapped: Bool = false
@@ -33,9 +34,10 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     var segmentSelected: Int = 0
     var standardTaskMessages = [String](count: 30, repeatedValue: "")
     var specializedTaskMessages = [String](count: 30, repeatedValue: "")
-    var message: String = ""
-    
-    var passedMessage: String = ""
+    var standardTaskPictureMessages = [String](count: 30, repeatedValue: "")
+    var specializedTaskPictureMessages = [String](count: 30, repeatedValue: "")
+    var standardTaskPictures = [UIImage](count: 30, repeatedValue: UIImage(named: "defaultPicture")!)
+    var specializedTaskPictures = [UIImage](count: 30, repeatedValue: UIImage(named: "defaultPicture")!)
     
     let cLLocationManager: CLLocationManager = CLLocationManager()
     var address: String = ""
@@ -63,8 +65,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        startButtonEnabled = true
-        taskListTableView.reloadData()
+//        startButtonEnabled = true
+//        taskListTableView.reloadData()
         
         for parent in self.navigationController!.navigationBar.subviews {
             for childView in parent.subviews {
@@ -124,7 +126,6 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         navigationBarLine.hidden = false
         
-        
     }
 
     
@@ -142,6 +143,50 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         default:
             break;
         }
+        
+    }
+    
+    func moveDownStringElements (stringArray: [String], index: Int) -> [String] {
+        var tempArray = [String](count: stringArray.count, repeatedValue: "")
+        
+        var j = 0;
+        for var i = 0; i < stringArray.count; ++i {
+            if(i != index) {
+                tempArray[j] = stringArray[i]
+                j++
+            }
+        }
+        return tempArray
+    }
+    
+    func moveDownUIImageElements (imageArray: [UIImage], index: Int) -> [UIImage] {
+        var tempArray = [UIImage](count: imageArray.count, repeatedValue: UIImage(named: "defaultPicture")!)
+        
+        var j = 0;
+        for var i = 0; i < imageArray.count; ++i {
+            if(i != index) {
+                tempArray[j] = imageArray[i]
+                j++
+            }
+        }
+        return tempArray
+    }
+    
+    func getPictureFile() -> PFFile? {
+        
+        switch segmentSelected {
+        case 0:
+            let pictureData = UIImageJPEGRepresentation(standardTaskPictures[sendButtonRowSelected], 0.5)
+            let pictureFile: PFFile = PFFile(data: pictureData!)!
+            return pictureFile
+        case 1:
+            let pictureData = UIImageJPEGRepresentation(specializedTaskPictures[sendButtonRowSelected], 0.5)
+            let pictureFile: PFFile = PFFile(data: pictureData!)!
+            return pictureFile
+        default:
+            break
+        }
+        return nil
         
     }
     
@@ -233,7 +278,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     //The variables in this function that are not local to the function are cathyId, cathyName, giverId, passClientName. I'm sorry this function is so disgusting. The content of this function will be called three time. So will it's completion.
-    func saveTaskInformationToParse(giverName: String, task: String, date: String, time: String, address: String, completion: (savedTaskInformation: Bool) -> Void) {
+    func saveTaskInformationToParse(giverName: String, task: String, date: String, time: String, address: String, pictureFile: PFFile?, completion: (savedTaskInformation: Bool) -> Void) {
         
         for index in 0...(self.cathyIds.count - 1) {
             
@@ -247,15 +292,22 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
             taskInformation["date"] = self.getDate()
             taskInformation["time"] = self.getTime()
             taskInformation["address"] = address
-            switch segmentSelected {
-            case 0:
-                taskInformation["message"] = standardTaskMessages[sendButtonRowSelected]
-                print(standardTaskMessages[sendButtonRowSelected])
-            case 1:
-                taskInformation["message"] = specializedTaskMessages[sendButtonRowSelected]
-                print(specializedTaskMessages[sendButtonRowSelected])
-            default:
-                break
+            
+            if pictureFile != nil && pictureFile != UIImage(named: "defaultPicture") {
+                
+                switch segmentSelected {
+                case 0:
+                    taskInformation["message"] = standardTaskMessages[sendButtonRowSelected]
+                    taskInformation["pictureMessage"] = standardTaskPictureMessages[sendButtonRowSelected]
+                    taskInformation["pictureFile"] = pictureFile
+                case 1:
+                    taskInformation["message"] = specializedTaskMessages[sendButtonRowSelected]
+                    taskInformation["pictureMessage"] = specializedTaskPictureMessages[sendButtonRowSelected]
+                    taskInformation["pictureFile"] = pictureFile
+                default:
+                    break
+                }
+                
             }
             
             taskInformation.saveInBackgroundWithBlock {
@@ -286,7 +338,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         var flag = true
         getAddress() { (address) -> Void in
-            self.saveTaskInformationToParse(giverName, task: "Began Tasks", date: date, time: time, address: address, completion: { (savedTaskInformation) -> Void in
+            self.saveTaskInformationToParse(giverName, task: "Began Tasks", date: date, time: time, address: address, pictureFile: nil, completion: { (savedTaskInformation) -> Void in
                 
                 if flag {
                     self.startButtonActivityIndicator.hidden = true
@@ -313,7 +365,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         var flag = true
         getAddress() { (address) -> Void in
-            self.saveTaskInformationToParse(giverName, task: "Finished Tasks", date: date, time: time, address: address, completion: { (savedTaskInformation) -> Void in
+            self.saveTaskInformationToParse(giverName, task: "Finished Tasks", date: date, time: time, address: address, pictureFile: nil, completion: { (savedTaskInformation) -> Void in
                 
                 if flag == true {
                     self.doneButtonActivityIndicator.hidden = true
@@ -330,8 +382,14 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         standardTasks = standardTasksHolder
         specializedTasks = specializedTasksHolder
         expandCellIndexPathSelected = nil
+        
+        //Make all the array to it's original state
         standardTaskMessages = [String](count: 30, repeatedValue: "")
         specializedTaskMessages = [String](count: 30, repeatedValue: "")
+        standardTaskPictureMessages = [String](count: 30, repeatedValue: "")
+        specializedTaskPictureMessages = [String](count: 30, repeatedValue: "")
+        standardTaskPictures = [UIImage](count: 30, repeatedValue: UIImage(named: "defaultPicture")!)
+        specializedTaskPictures = [UIImage](count: 30, repeatedValue: UIImage(named: "defaultPicture")!)
         taskListTableView.reloadData()
         
     }
@@ -343,21 +401,14 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         let superView = messageButton.superview!
         let taskListTableViewCell = superView.superview as! TaskListTableViewCell
         let indexPath = taskListTableView.indexPathForCell(taskListTableViewCell)
-        messageRowSelected = indexPath!.row
+        messageButtonRowSelected = indexPath!.row
+        pictureButtonRowSelected = indexPath!.row
         
     }
     
-    func moveDownElements (stringArray: [String], index: Int) -> [String] {
-        var tempArray = [String](count: stringArray.count, repeatedValue: "")
-        
-        var j = 0;
-        for var i = 0; i < stringArray.count; ++i {
-            if(i != index) {
-                tempArray[j] = stringArray[i]
-                j++
-            }
-        }
-        return tempArray
+    
+    @IBAction func pictureButtonTapped(sender: AnyObject) {
+        //There is some sort of weird behavior that is occuring with this button. This button always executed after segue was performed. So that was causing some problems for the code for sending and receiving data from taskPicture view controller. And that is why instead of sending the indexPath.row for picture button in this function, I set it in the "messageButtonTapped" function. Also note that the picture button is connected to both the messageButtonTapped and pictureButtonTapped function.
     }
     
     @IBAction func sendButtonTapped(sender: AnyObject) {
@@ -369,6 +420,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         sendButtonRowSelected = (indexPath?.row)!
         sendButtonTapped = true
         segmentedControl.enabled = false
+        doneButton.enabled = false
         
         var task: String!
         switch segmentedControl.selectedSegmentIndex {
@@ -385,15 +437,17 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         let date = getDate()
         let time = getTime()
         let giverName = getGiverName()
+        let pictureFile = getPictureFile()
         
         
-        //saveTaskInformationToParse will run three timese here. That's why I have a check here with the if statement so that the removeAtIndex function won't be called three times. 
+        //saveTaskInformationToParse will run three timese here. That's why I have a check here with the if statement so that the removeAtIndex function won't be called three times.
         var flag = true
         getAddress() { (address) -> Void in
-            self.saveTaskInformationToParse(giverName, task: task, date: date, time: time, address: address, completion: { (savedTaskInformation) -> Void in
+            self.saveTaskInformationToParse(giverName, task: task, date: date, time: time, address: address, pictureFile: pictureFile, completion: { (savedTaskInformation) -> Void in
                 
                 if flag {
                     self.segmentedControl.enabled = true
+                    self.doneButton.enabled = true
                     if savedTaskInformation == true {
                         
                         switch self.segmentedControl.selectedSegmentIndex {
@@ -415,11 +469,16 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                             }
                         }
                         
+                        //When the user presses send, the message that is connected with the indexpath will remain as that message. So if task 0's message was "a" and task 1's message was "b", I send task 0, then the new task 0 which is task 1 will have the message "a" instead of "b".
                         switch self.segmentSelected {
                         case 0:
-                            self.standardTaskMessages = self.moveDownElements(self.standardTaskMessages, index: self.sendButtonRowSelected)
+                            self.standardTaskMessages = self.moveDownStringElements(self.standardTaskMessages, index: self.sendButtonRowSelected)
+                            self.standardTaskPictureMessages = self.moveDownStringElements(self.standardTaskPictureMessages, index: self.sendButtonRowSelected)
+                            self.standardTaskPictures = self.moveDownUIImageElements(self.standardTaskPictures, index: self.sendButtonRowSelected)
                         case 1:
-                            self.specializedTaskMessages = self.moveDownElements(self.specializedTaskMessages, index: self.sendButtonRowSelected)
+                            self.specializedTaskMessages = self.moveDownStringElements(self.specializedTaskMessages, index: self.sendButtonRowSelected)
+                            self.specializedTaskPictureMessages = self.moveDownStringElements(self.specializedTaskPictureMessages, index: self.sendButtonRowSelected)
+                            self.specializedTaskPictures = self.moveDownUIImageElements(self.specializedTaskPictures, index: self.sendButtonRowSelected)
                         default:
                             break
                         }
@@ -463,14 +522,15 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         if startButtonEnabled == true {
             cell.sendButton.enabled = true
             cell.messageButton.enabled = true
+            cell.pictureButton.enabled = true
         } else {
             cell.sendButton.enabled = false
             cell.messageButton.enabled = false
+            cell.pictureButton.enabled = false
         }
 
         if sendButtonTapped == true {
             cell.sendButton.enabled = false
-            cell.messageButton.enabled = false 
         }
         
         if sendButtonTapped == true && sendButtonRowSelected == indexPath.row {
@@ -551,31 +611,70 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
             
             switch segmentSelected {
             case 0:
-                taskMessageViewController.message[messageRowSelected] = standardTaskMessages[messageRowSelected]
+                taskMessageViewController.message[messageButtonRowSelected] = standardTaskMessages[messageButtonRowSelected]
             case 1:
-                taskMessageViewController.message[messageRowSelected] = specializedTaskMessages[messageRowSelected]
+                taskMessageViewController.message[messageButtonRowSelected] = specializedTaskMessages[messageButtonRowSelected]
             default:
                 break
             }
-            taskMessageViewController.messageRowSelected = messageRowSelected
+            taskMessageViewController.messageButtonRowSelected = messageButtonRowSelected
+            
+        } else if segue.identifier == "taskListToTaskPicture" {
+
+            let taskPictureViewController = segue.destinationViewController as! TaskPictureViewController
+            
+            switch segmentSelected {
+            case 0:
+                taskPictureViewController.pictureMessage[pictureButtonRowSelected] = standardTaskPictureMessages[pictureButtonRowSelected]
+                taskPictureViewController.picture[pictureButtonRowSelected] = standardTaskPictures[pictureButtonRowSelected]
+            case 1:
+                taskPictureViewController.pictureMessage[pictureButtonRowSelected] = specializedTaskPictureMessages[pictureButtonRowSelected]
+                taskPictureViewController.picture[pictureButtonRowSelected] = specializedTaskPictures[pictureButtonRowSelected]
+            default:
+                break
+            }
+            taskPictureViewController.pictureButtonRowSelected = pictureButtonRowSelected
+            
         }
+        
         
     }
     
     @IBAction func unwindToSegue (segue : UIStoryboardSegue) {
     
         if let taskMessageViewController = segue.sourceViewController as? TaskMessageViewController {
-            passedMessage = taskMessageViewController.messageTextView.text
-            messageRowSelected = taskMessageViewController.messageRowSelected
+            
+            let passedMessage = taskMessageViewController.messageTextView.text
+            messageButtonRowSelected = taskMessageViewController.messageButtonRowSelected
+    
+            switch segmentSelected {
+            case 0:
+                standardTaskMessages[messageButtonRowSelected] = passedMessage
+            case 1:
+                specializedTaskMessages[messageButtonRowSelected] = passedMessage
+            default:
+                break
+            }
         }
         
-        switch segmentSelected {
-        case 0:
-            standardTaskMessages[messageRowSelected] = passedMessage
-        case 1:
-            specializedTaskMessages[messageRowSelected] = passedMessage
-        default:
-            break
+        if let taskPictureViewController = segue.sourceViewController as? TaskPictureViewController {
+            
+            let passedPictureMessage = taskPictureViewController.pictureMessageTextView.text
+            let passedPicture = taskPictureViewController.pictureImageView.image
+            
+            pictureButtonRowSelected = taskPictureViewController.pictureButtonRowSelected
+
+            switch segmentSelected {
+            case 0:
+                standardTaskPictureMessages[pictureButtonRowSelected] = passedPictureMessage
+                standardTaskPictures[pictureButtonRowSelected] = passedPicture!
+            case 1:
+                specializedTaskPictureMessages[pictureButtonRowSelected] = passedPictureMessage
+                specializedTaskPictures[pictureButtonRowSelected] = passedPicture!
+            default:
+                break
+            }
+            
         }
     
     }

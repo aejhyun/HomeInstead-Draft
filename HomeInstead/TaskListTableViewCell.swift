@@ -14,12 +14,14 @@ class TaskListTableViewCell: UITableViewCell {
     @IBOutlet weak var taskLabel: UILabel!
     @IBOutlet weak var messageButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var pictureButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         sendButton.enabled = false
         messageButton.enabled = false
+        pictureButton.enabled = false
         activityIndicator.hidden = true
     }
 

@@ -733,16 +733,17 @@
                                                         <rect key="frame" x="296" y="12" width="20" height="20"/>
                                                     </variation>
                                                 </activityIndicatorView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xtc-4W-HK3">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JSo-oU-bsl">
                                                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <state key="normal" title="Picture"/>
                                                     <variation key="widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="75" y="36" width="38" height="26"/>
+                                                        <rect key="frame" x="75" y="35" width="38" height="26"/>
                                                     </variation>
                                                     <connections>
-                                                        <action selector="messageButtonTapped:" destination="Esi-sb-ni1" eventType="touchUpInside" id="DcL-XO-Brh"/>
-                                                        <segue destination="3ck-QK-wi4" kind="presentation" id="mUY-Yq-xfM"/>
+                                                        <action selector="messageButtonTapped:" destination="Esi-sb-ni1" eventType="touchUpInside" id="QXf-cn-L0A"/>
+                                                        <action selector="pictureButtonTapped:" destination="Esi-sb-ni1" eventType="touchUpInside" id="Quh-th-R44"/>
+                                                        <segue destination="3ck-QK-wi4" kind="presentation" identifier="taskListToTaskPicture" modalPresentationStyle="overFullScreen" id="peV-MY-3Zc"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -765,7 +766,7 @@
                                                     <exclude reference="JWU-P5-sIt"/>
                                                     <exclude reference="oFG-nv-XUg"/>
                                                     <exclude reference="aR8-rX-0ow"/>
-                                                    <exclude reference="Xtc-4W-HK3"/>
+                                                    <exclude reference="JSo-oU-bsl"/>
                                                 </mask>
                                                 <mask key="constraints">
                                                     <exclude reference="0ip-Ug-kAo"/>
@@ -783,7 +784,7 @@
                                                     <include reference="JWU-P5-sIt"/>
                                                     <include reference="oFG-nv-XUg"/>
                                                     <include reference="aR8-rX-0ow"/>
-                                                    <include reference="Xtc-4W-HK3"/>
+                                                    <include reference="JSo-oU-bsl"/>
                                                 </mask>
                                                 <mask key="constraints">
                                                     <include reference="0ip-Ug-kAo"/>
@@ -800,6 +801,7 @@
                                         <connections>
                                             <outlet property="activityIndicator" destination="aR8-rX-0ow" id="A4q-q1-GWD"/>
                                             <outlet property="messageButton" destination="oFG-nv-XUg" id="xNg-Jm-Hzl"/>
+                                            <outlet property="pictureButton" destination="JSo-oU-bsl" id="NIx-Wk-WAH"/>
                                             <outlet property="sendButton" destination="JWU-P5-sIt" id="e06-6Z-cKl"/>
                                             <outlet property="taskLabel" destination="H2r-xm-9Nu" id="fIs-Zl-wXF"/>
                                         </connections>
@@ -1344,10 +1346,10 @@
                                             <rect key="frame" x="169" y="5" width="37" height="30"/>
                                         </variation>
                                         <connections>
-                                            <segue destination="bzI-LD-WDh" kind="unwind" unwindAction="unwindToSegue:" id="vAg-Jn-24R"/>
+                                            <segue destination="bzI-LD-WDh" kind="unwind" unwindAction="unwindToSegue:" id="Iek-PU-84x"/>
                                         </connections>
                                     </button>
-                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image" translatesAutoresizingMaskIntoConstraints="NO" id="m3g-zA-sUO">
+                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultPicture" translatesAutoresizingMaskIntoConstraints="NO" id="m3g-zA-sUO">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                         <gestureRecognizers/>
                                         <variation key="widthClass=compact" fixedFrame="YES">
@@ -1372,8 +1374,8 @@
                                         <exclude reference="m3g-zA-sUO"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <exclude reference="mKB-nw-slJ"/>
                                         <exclude reference="j09-aT-Nqr"/>
+                                        <exclude reference="mKB-nw-slJ"/>
                                     </mask>
                                 </variation>
                                 <variation key="widthClass=compact">
@@ -1383,8 +1385,8 @@
                                         <include reference="m3g-zA-sUO"/>
                                     </mask>
                                     <mask key="constraints">
-                                        <include reference="mKB-nw-slJ"/>
                                         <include reference="j09-aT-Nqr"/>
+                                        <include reference="mKB-nw-slJ"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -1417,11 +1419,14 @@
                                 <include reference="akd-Ys-M1v"/>
                             </mask>
                         </variation>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Ohz-jQ-wfQ" appends="YES" id="UNC-Vc-a1Y"/>
+                        </connections>
                     </view>
                     <value key="contentSizeForViewInPopover" type="size" width="200" height="400"/>
                     <connections>
-                        <outlet property="photoImageView" destination="m3g-zA-sUO" id="aDc-Ry-k1Y"/>
-                        <outlet property="photoMessageTextView" destination="JFI-CU-GLT" id="jpy-GN-YhC"/>
+                        <outlet property="pictureImageView" destination="m3g-zA-sUO" id="1d9-2G-FTA"/>
+                        <outlet property="pictureMessageTextView" destination="JFI-CU-GLT" id="aSv-9O-igC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K40-SG-GAm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1431,12 +1436,17 @@
                         <action selector="selectImageFromPhotoLibraryButtonTapped:" destination="3ck-QK-wi4" id="OZT-ut-T6o"/>
                     </connections>
                 </tapGestureRecognizer>
+                <tapGestureRecognizer id="Ohz-jQ-wfQ">
+                    <connections>
+                        <segue destination="bzI-LD-WDh" kind="unwind" unwindAction="unwindToSegue:" id="BMZ-lT-sZf"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2670.75" y="-1167.5"/>
         </scene>
     </scenes>
     <resources>
-        <image name="Image" width="540" height="540"/>
+        <image name="defaultPicture" width="540" height="540"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="JvB-e1-eF0"/>
