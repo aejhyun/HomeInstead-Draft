@@ -20,8 +20,8 @@ class TaskListTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         sendButton.enabled = false
-        messageButton.enabled = false
-        pictureButton.enabled = false
+        messageButton.enabled = true
+        pictureButton.enabled = true
         activityIndicator.hidden = true
     }
 

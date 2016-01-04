@@ -65,8 +65,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        startButtonEnabled = true
-//        taskListTableView.reloadData()
+        startButtonEnabled = true
+        taskListTableView.reloadData()
         
         for parent in self.navigationController!.navigationBar.subviews {
             for childView in parent.subviews {
@@ -172,17 +172,15 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         return tempArray
     }
     
-    func getPictureFile() -> PFFile? {
+    func getPictureFile() -> NSData? {
         
         switch segmentSelected {
         case 0:
             let pictureData = UIImageJPEGRepresentation(standardTaskPictures[sendButtonRowSelected], 0.5)
-            let pictureFile: PFFile = PFFile(data: pictureData!)!
-            return pictureFile
+            return pictureData
         case 1:
             let pictureData = UIImageJPEGRepresentation(specializedTaskPictures[sendButtonRowSelected], 0.5)
-            let pictureFile: PFFile = PFFile(data: pictureData!)!
-            return pictureFile
+            return pictureData
         default:
             break
         }
@@ -278,7 +276,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     //The variables in this function that are not local to the function are cathyId, cathyName, giverId, passClientName. I'm sorry this function is so disgusting. The content of this function will be called three time. So will it's completion.
-    func saveTaskInformationToParse(giverName: String, task: String, date: String, time: String, address: String, pictureFile: PFFile?, completion: (savedTaskInformation: Bool) -> Void) {
+    func saveTaskInformationToParse(giverName: String, task: String, date: String, time: String, address: String, pictureData: NSData?, completion: (savedTaskInformation: Bool) -> Void) {
         
         for index in 0...(self.cathyIds.count - 1) {
             
@@ -292,9 +290,20 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
             taskInformation["date"] = self.getDate()
             taskInformation["time"] = self.getTime()
             taskInformation["address"] = address
-            
-            if pictureFile != nil && pictureFile != UIImage(named: "defaultPicture") {
-                
+            switch segmentSelected {
+            case 0:
+                taskInformation["message"] = standardTaskMessages[sendButtonRowSelected]
+            case 1:
+                taskInformation["message"] = specializedTaskMessages[sendButtonRowSelected]
+            default:
+                break
+            }
+        
+            let defaultPictureData = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 0.5)
+
+            if pictureData != nil && pictureData! != defaultPictureData {
+                let pictureFile: PFFile = PFFile(data: pictureData!)!
+                print("Entered control flow")
                 switch segmentSelected {
                 case 0:
                     taskInformation["message"] = standardTaskMessages[sendButtonRowSelected]
@@ -338,7 +347,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         var flag = true
         getAddress() { (address) -> Void in
-            self.saveTaskInformationToParse(giverName, task: "Began Tasks", date: date, time: time, address: address, pictureFile: nil, completion: { (savedTaskInformation) -> Void in
+            self.saveTaskInformationToParse(giverName, task: "Began Tasks", date: date, time: time, address: address, pictureData: nil, completion: { (savedTaskInformation) -> Void in
                 
                 if flag {
                     self.startButtonActivityIndicator.hidden = true
@@ -365,7 +374,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         var flag = true
         getAddress() { (address) -> Void in
-            self.saveTaskInformationToParse(giverName, task: "Finished Tasks", date: date, time: time, address: address, pictureFile: nil, completion: { (savedTaskInformation) -> Void in
+            self.saveTaskInformationToParse(giverName, task: "Finished Tasks", date: date, time: time, address: address, pictureData: nil, completion: { (savedTaskInformation) -> Void in
                 
                 if flag == true {
                     self.doneButtonActivityIndicator.hidden = true
@@ -437,13 +446,13 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         let date = getDate()
         let time = getTime()
         let giverName = getGiverName()
-        let pictureFile = getPictureFile()
+        let pictureData = getPictureFile()
         
         
         //saveTaskInformationToParse will run three timese here. That's why I have a check here with the if statement so that the removeAtIndex function won't be called three times.
         var flag = true
         getAddress() { (address) -> Void in
-            self.saveTaskInformationToParse(giverName, task: task, date: date, time: time, address: address, pictureFile: pictureFile, completion: { (savedTaskInformation) -> Void in
+            self.saveTaskInformationToParse(giverName, task: task, date: date, time: time, address: address, pictureData: pictureData, completion: { (savedTaskInformation) -> Void in
                 
                 if flag {
                     self.segmentedControl.enabled = true
@@ -521,12 +530,12 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
 
         if startButtonEnabled == true {
             cell.sendButton.enabled = true
-            cell.messageButton.enabled = true
-            cell.pictureButton.enabled = true
+//            cell.messageButton.enabled = true
+//            cell.pictureButton.enabled = true
         } else {
             cell.sendButton.enabled = false
-            cell.messageButton.enabled = false
-            cell.pictureButton.enabled = false
+//            cell.messageButton.enabled = false
+//            cell.pictureButton.enabled = false
         }
 
         if sendButtonTapped == true {

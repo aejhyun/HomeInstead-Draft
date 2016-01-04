@@ -17,7 +17,6 @@ class TaskMessageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("picture button row selected in TaskMessageViewController \(messageButtonRowSelected)")
         messageTextView.becomeFirstResponder()
         messageTextView.layer.cornerRadius = 10
         messageTextView.text = message[messageButtonRowSelected]
