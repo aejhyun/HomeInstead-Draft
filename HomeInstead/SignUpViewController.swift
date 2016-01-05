@@ -38,7 +38,9 @@ class SignUpViewController: UIViewController {
         user.email = emailAddress.text
         user.password = password.text
         user.username = emailAddress.text
+        //Try taking the verificaiton code to parse saving out. 
         user["verificationCode"] = verificationCode.text
+        user["alreadyAddedByOffice"] = false
         //user["type"] is also included down below
         
         if self.firstName.text == "" {

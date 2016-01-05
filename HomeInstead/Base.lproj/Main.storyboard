@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ppx-0d-QBl">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ppx-0d-QBl">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -241,7 +241,7 @@
             </objects>
             <point key="canvasLocation" x="205.5" y="461.5"/>
         </scene>
-        <!--Care Giver List-->
+        <!--CGiver List-->
         <scene sceneID="dRp-sQ-tHm">
             <objects>
                 <tableViewController id="hSF-Za-jHw" customClass="OfficeGiverListTableViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
@@ -264,7 +264,7 @@
                             <outlet property="delegate" destination="hSF-Za-jHw" id="Pay-pg-k7o"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Care Giver List" id="fHN-ca-iz4">
+                    <navigationItem key="navigationItem" title="CGiver List" id="fHN-ca-iz4">
                         <barButtonItem key="leftBarButtonItem" title="Sign Out" id="Ksc-IM-GAv">
                             <connections>
                                 <action selector="signOutButtonPressed:" destination="hSF-Za-jHw" id="RSn-yz-QcY"/>
@@ -273,6 +273,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Xyx-wr-se5">
                             <connections>
                                 <action selector="addGiverButtonPressed:" destination="hSF-Za-jHw" id="vsf-i7-loS"/>
+                                <segue destination="dne-Bk-erA" kind="show" id="2jN-hB-gUO"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -283,6 +284,70 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CCd-n1-LsT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1836.75" y="2077.5"/>
+        </scene>
+        <!--Add Giver Table View Controller-->
+        <scene sceneID="UIG-oZ-JuD">
+            <objects>
+                <tableViewController id="dne-Bk-erA" customClass="AddGiverTableViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="9ul-iu-DQ9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="teT-rR-dcq" customClass="AddGiverTableViewCell" customModule="HomeInstead" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="136" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="teT-rR-dcq" id="l6u-1Y-lD2">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4k-A3-ZIt">
+                                            <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                            <color key="textColor" red="0.40000000000000002" green="0.59999999999999998" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                            <variation key="widthClass=compact" fixedFrame="YES">
+                                                <rect key="frame" x="8" y="29" width="202" height="14"/>
+                                            </variation>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CfP-Ck-OOF">
+                                            <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                            <variation key="widthClass=compact" fixedFrame="YES">
+                                                <rect key="frame" x="8" y="8" width="202" height="21"/>
+                                            </variation>
+                                        </label>
+                                    </subviews>
+                                    <variation key="default">
+                                        <mask key="subviews">
+                                            <exclude reference="g4k-A3-ZIt"/>
+                                            <exclude reference="CfP-Ck-OOF"/>
+                                        </mask>
+                                    </variation>
+                                    <variation key="widthClass=compact">
+                                        <mask key="subviews">
+                                            <include reference="g4k-A3-ZIt"/>
+                                            <include reference="CfP-Ck-OOF"/>
+                                        </mask>
+                                    </variation>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="giverEmailLabel" destination="g4k-A3-ZIt" id="7FG-dc-G1M"/>
+                                    <outlet property="giverNameLabel" destination="CfP-Ck-OOF" id="EgD-cI-vtJ"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="dne-Bk-erA" id="2eg-of-8iu"/>
+                            <outlet property="delegate" destination="dne-Bk-erA" id="9eZ-3w-jl2"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="07T-an-5hj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1836.75" y="2904.5"/>
         </scene>
         <!--Client List-->
         <scene sceneID="6GC-tC-VZk">
@@ -697,6 +762,9 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.96470588235294119" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <variation key="widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="20" y="11" width="153" height="21"/>
+                                                    </variation>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JWU-P5-sIt">
                                                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -709,7 +777,8 @@
                                                             <exclude reference="ATL-XW-74y"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="widthClass=compact">
+                                                    <variation key="widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="181" y="7" width="36" height="30"/>
                                                         <mask key="constraints">
                                                             <include reference="ATL-XW-74y"/>
                                                         </mask>

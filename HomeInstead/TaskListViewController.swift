@@ -176,7 +176,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         switch segmentSelected {
         case 0:
-            let pictureData = UIImageJPEGRepresentation(standardTaskPictures[sendButtonRowSelected], 0.5)
+            let pictureData = UIImageJPEGRepresentation(standardTaskPictures[sendButtonRowSelected], 0.0)
             return pictureData
         case 1:
             let pictureData = UIImageJPEGRepresentation(specializedTaskPictures[sendButtonRowSelected], 0.5)
@@ -281,6 +281,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         for index in 0...(self.cathyIds.count - 1) {
             
             let taskInformation = PFObject(className:"TaskInformation")
+            
             taskInformation["cathyId"] = self.cathyIds[index]
             taskInformation["cathyName"] = self.cathyNames[index]
             taskInformation["giverId"] = PFUser.currentUser()?.objectId
@@ -299,16 +300,19 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                 break
             }
         
-            let defaultPictureData = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 0.5)
+            let defaultPictureData = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 1.0)
+     
 
             if pictureData != nil && pictureData! != defaultPictureData {
                 let pictureFile: PFFile = PFFile(data: pictureData!)!
-                print("Entered control flow")
+                
                 switch segmentSelected {
                 case 0:
                     taskInformation["message"] = standardTaskMessages[sendButtonRowSelected]
                     taskInformation["pictureMessage"] = standardTaskPictureMessages[sendButtonRowSelected]
                     taskInformation["pictureFile"] = pictureFile
+                    print("Entered control flow")
+                    print("apsdifjapsdf")
                 case 1:
                     taskInformation["message"] = specializedTaskMessages[sendButtonRowSelected]
                     taskInformation["pictureMessage"] = specializedTaskPictureMessages[sendButtonRowSelected]
