@@ -12,6 +12,7 @@ class AddGiverTableViewCell: UITableViewCell {
 
     @IBOutlet weak var giverNameLabel: UILabel!
     @IBOutlet weak var giverEmailLabel: UILabel!
+    @IBOutlet weak var addButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -9,6 +9,7 @@
 import UIKit
 import Parse
 import CoreData
+import AddressBookUI
 
 class TaskListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIBarPositioningDelegate, CLLocationManagerDelegate {
 
@@ -176,7 +177,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         switch segmentSelected {
         case 0:
-            let pictureData = UIImageJPEGRepresentation(standardTaskPictures[sendButtonRowSelected], 0.0)
+            let pictureData = UIImageJPEGRepresentation(standardTaskPictures[sendButtonRowSelected], 0.5)
             return pictureData
         case 1:
             let pictureData = UIImageJPEGRepresentation(specializedTaskPictures[sendButtonRowSelected], 0.5)
@@ -237,9 +238,17 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                     
                     cLGeocoder.reverseGeocodeLocation(location!) { (placemarks, error) -> Void in
                         if error == nil {
+                            
                             placemark = placemarks![0]
-                            if let street = placemark.addressDictionary!["Thoroughfare"] as? String {
-                                address = street
+                            
+                            if let subThoroughFare = placemark.addressDictionary!["SubThoroughfare"] as? String {
+                                address = subThoroughFare + " "
+                            }
+                            if let thoroughFare = placemark.addressDictionary!["Thoroughfare"] as? String {
+                                address += thoroughFare
+                            }
+                            if let state = placemark.addressDictionary!["State"] as? String {
+                                address += ", " + state
                             }
                             if let city = placemark.addressDictionary!["City"] as? String {
                                 address += ", " + city
@@ -250,7 +259,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                             print(address)
                             completion(address: address)
                         } else {
-                            print(error)
+                            print("hello \(error)")
+                            return
                         }
                     }
                     
@@ -300,9 +310,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                 break
             }
         
-            let defaultPictureData = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 1.0)
+            let defaultPictureData = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 0.5)
      
-
             if pictureData != nil && pictureData! != defaultPictureData {
                 let pictureFile: PFFile = PFFile(data: pictureData!)!
                 
@@ -312,7 +321,6 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                     taskInformation["pictureMessage"] = standardTaskPictureMessages[sendButtonRowSelected]
                     taskInformation["pictureFile"] = pictureFile
                     print("Entered control flow")
-                    print("apsdifjapsdf")
                 case 1:
                     taskInformation["message"] = specializedTaskMessages[sendButtonRowSelected]
                     taskInformation["pictureMessage"] = specializedTaskPictureMessages[sendButtonRowSelected]
@@ -383,13 +391,13 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                 if flag == true {
                     self.doneButtonActivityIndicator.hidden = true
                     self.startButton.enabled = true
+                    self.navigationItem.hidesBackButton = false
                     flag = false
                 }
                 
             })
         }
         
-        self.navigationItem.hidesBackButton = false
         doneButton.enabled = false
         startButtonEnabled = false
         standardTasks = standardTasksHolder

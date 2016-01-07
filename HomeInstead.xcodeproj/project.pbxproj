@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		843C8E871C3E9551009E47C0 /* IOSVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843C8E861C3E9550009E47C0 /* IOSVersion.swift */; };
 		8460ECA11C3A99280041FD83 /* AddGiverTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8460ECA01C3A99280041FD83 /* AddGiverTableViewController.swift */; };
 		8460ECA31C3AA0430041FD83 /* AddGiverTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8460ECA21C3AA0430041FD83 /* AddGiverTableViewCell.swift */; };
 		847374E91C37EE5500B4096F /* TaskPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847374E81C37EE5500B4096F /* TaskPictureViewController.swift */; };
@@ -53,6 +54,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		843C8E861C3E9550009E47C0 /* IOSVersion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOSVersion.swift; sourceTree = "<group>"; };
 		8460ECA01C3A99280041FD83 /* AddGiverTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGiverTableViewController.swift; sourceTree = "<group>"; };
 		8460ECA21C3AA0430041FD83 /* AddGiverTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGiverTableViewCell.swift; sourceTree = "<group>"; };
 		847374E81C37EE5500B4096F /* TaskPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskPictureViewController.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 			children = (
 				84C32F7B1C325B3000A245BC /* Miscellaneous.swift */,
 				84C32F7D1C350E4A00A245BC /* Protocols.swift */,
+				843C8E861C3E9550009E47C0 /* IOSVersion.swift */,
 				84FD3E571C225B82007D2C31 /* MyActivityIndicator.swift */,
 				84D931001C197DB1003C1688 /* AppDelegate.swift */,
 				84C462AB1C202C1400FA82F9 /* FirstPageViewController.swift */,
@@ -287,6 +290,7 @@
 				84C05E1A1C2BC0B2009A137C /* TestViewController.swift in Sources */,
 				84C32F7E1C350E4A00A245BC /* Protocols.swift in Sources */,
 				84C05E161C2BB016009A137C /* CathyTaskLogTableViewCell.swift in Sources */,
+				843C8E871C3E9551009E47C0 /* IOSVersion.swift in Sources */,
 				849D64061C310E0300571E47 /* TaskMessageViewController.swift in Sources */,
 				84D931841C199840003C1688 /* SignUpSignInViewController.swift in Sources */,
 				84D931091C197DB1003C1688 /* HomeInstead.xcdatamodeld in Sources */,
@@ -423,7 +427,7 @@
 					"$(PROJECT_DIR)/ParseLibrary",
 				);
 				INFOPLIST_FILE = HomeInstead/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaekim.HomeInstead;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -442,7 +446,7 @@
 					"$(PROJECT_DIR)/ParseLibrary",
 				);
 				INFOPLIST_FILE = HomeInstead/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaekim.HomeInstead;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -104,7 +104,7 @@ class OfficeGiverListTableViewController: UITableViewController {
         }))
         
         enterNameAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
-        presentViewController(enterNameAlert, animated: true, completion: nil)
+        //presentViewController(enterNameAlert, animated: true, completion: nil)
         
     }
     override func didReceiveMemoryWarning() {

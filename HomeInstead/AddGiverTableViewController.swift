@@ -16,6 +16,7 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
     var giverNamesEmails = [String: String]()
     var filteredGiverNames = [String]()
     var showSearchResults = false
+    var addButtonRowSelected = 0
     var searchController: UISearchController!
     
     func configureSearchBar() {
@@ -97,9 +98,18 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
 
     // MARK: - Table view data source
 
+    @IBAction func addButtonTapped(sender: AnyObject) {
+        let addButton = sender as! UIButton
+        let superView = addButton.superview!
+        let addGiverTableViewCell = superView.superview as! AddGiverTableViewCell
+        let indexPath = tableView.indexPathForCell(addGiverTableViewCell)
+        addButtonRowSelected = (indexPath?.row)!
+        print(addButtonRowSelected)
+    }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        print(indexPath.row)
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath
+        indexPath: NSIndexPath) {
+        
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

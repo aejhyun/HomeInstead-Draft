@@ -295,45 +295,58 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="teT-rR-dcq" customClass="AddGiverTableViewCell" customModule="HomeInstead" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="136" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="teT-rR-dcq" id="l6u-1Y-lD2">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4k-A3-ZIt">
-                                            <rect key="frame" x="-42" y="-21" width="42" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                            <color key="textColor" red="0.40000000000000002" green="0.59999999999999998" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                            <variation key="widthClass=compact" fixedFrame="YES">
-                                                <rect key="frame" x="8" y="29" width="202" height="14"/>
-                                            </variation>
-                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CfP-Ck-OOF">
                                             <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                             <variation key="widthClass=compact" fixedFrame="YES">
-                                                <rect key="frame" x="8" y="8" width="202" height="21"/>
+                                                <rect key="frame" x="16" y="8" width="202" height="21"/>
                                             </variation>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4k-A3-ZIt">
+                                            <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                            <color key="textColor" red="0.40000000000000002" green="0.59999999999999998" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                            <variation key="widthClass=compact" fixedFrame="YES">
+                                                <rect key="frame" x="16" y="29" width="202" height="14"/>
+                                            </variation>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="snF-Dk-t7S">
+                                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                            <state key="normal" title="Add"/>
+                                            <variation key="widthClass=compact" fixedFrame="YES">
+                                                <rect key="frame" x="323" y="7" width="30" height="30"/>
+                                            </variation>
+                                            <connections>
+                                                <action selector="addButtonTapped:" destination="dne-Bk-erA" eventType="touchUpInside" id="wP2-Vj-l65"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <variation key="default">
                                         <mask key="subviews">
-                                            <exclude reference="g4k-A3-ZIt"/>
                                             <exclude reference="CfP-Ck-OOF"/>
+                                            <exclude reference="g4k-A3-ZIt"/>
+                                            <exclude reference="snF-Dk-t7S"/>
                                         </mask>
                                     </variation>
                                     <variation key="widthClass=compact">
                                         <mask key="subviews">
-                                            <include reference="g4k-A3-ZIt"/>
                                             <include reference="CfP-Ck-OOF"/>
+                                            <include reference="g4k-A3-ZIt"/>
+                                            <include reference="snF-Dk-t7S"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="addButton" destination="snF-Dk-t7S" id="mey-yT-5zG"/>
                                     <outlet property="giverEmailLabel" destination="g4k-A3-ZIt" id="7FG-dc-G1M"/>
                                     <outlet property="giverNameLabel" destination="CfP-Ck-OOF" id="EgD-cI-vtJ"/>
                                 </connections>
@@ -762,9 +775,6 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="highlightedColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.96470588235294119" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <variation key="widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="20" y="11" width="153" height="21"/>
-                                                    </variation>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JWU-P5-sIt">
                                                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -777,8 +787,7 @@
                                                             <exclude reference="ATL-XW-74y"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="181" y="7" width="36" height="30"/>
+                                                    <variation key="widthClass=compact">
                                                         <mask key="constraints">
                                                             <include reference="ATL-XW-74y"/>
                                                         </mask>
@@ -791,6 +800,9 @@
                                                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <state key="normal" title="Message"/>
+                                                    <variation key="widthClass=compact" fixedFrame="YES">
+                                                        <rect key="frame" x="20" y="42" width="47" height="14"/>
+                                                    </variation>
                                                     <connections>
                                                         <action selector="messageButtonTapped:" destination="Esi-sb-ni1" eventType="touchUpInside" id="ztT-iz-dWE"/>
                                                         <segue destination="bgT-F6-2Pi" kind="presentation" identifier="taskListToTaskMessage" modalPresentationStyle="overFullScreen" id="nWf-EU-0hS"/>
@@ -807,7 +819,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <state key="normal" title="Picture"/>
                                                     <variation key="widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="75" y="35" width="38" height="26"/>
+                                                        <rect key="frame" x="75" y="44" width="38" height="11"/>
                                                     </variation>
                                                     <connections>
                                                         <action selector="messageButtonTapped:" destination="Esi-sb-ni1" eventType="touchUpInside" id="QXf-cn-L0A"/>
@@ -819,10 +831,6 @@
                                             <constraints>
                                                 <constraint firstItem="JWU-P5-sIt" firstAttribute="baseline" secondItem="H2r-xm-9Nu" secondAttribute="baseline" id="0ip-Ug-kAo"/>
                                                 <constraint firstItem="JWU-P5-sIt" firstAttribute="top" secondItem="36K-Sn-Oea" secondAttribute="topMargin" constant="-1" id="3xe-8z-tWM"/>
-                                                <constraint firstItem="oFG-nv-XUg" firstAttribute="top" secondItem="H2r-xm-9Nu" secondAttribute="bottom" constant="3" id="BWf-gu-1Yl"/>
-                                                <constraint firstItem="oFG-nv-XUg" firstAttribute="leading" secondItem="36K-Sn-Oea" secondAttribute="leadingMargin" constant="11" id="CfS-0w-1ds">
-                                                    <variation key="widthClass=compact" constant="12"/>
-                                                </constraint>
                                                 <constraint firstAttribute="trailingMargin" secondItem="JWU-P5-sIt" secondAttribute="trailing" constant="15" id="c4m-qW-WEF"/>
                                                 <constraint firstItem="H2r-xm-9Nu" firstAttribute="leading" secondItem="36K-Sn-Oea" secondAttribute="leadingMargin" constant="10" id="neV-Uv-EMT">
                                                     <variation key="widthClass=compact" constant="12"/>
@@ -842,8 +850,6 @@
                                                     <exclude reference="3xe-8z-tWM"/>
                                                     <exclude reference="c4m-qW-WEF"/>
                                                     <exclude reference="o8S-aH-Z9Q"/>
-                                                    <exclude reference="BWf-gu-1Yl"/>
-                                                    <exclude reference="CfS-0w-1ds"/>
                                                     <exclude reference="neV-Uv-EMT"/>
                                                 </mask>
                                             </variation>
@@ -860,8 +866,6 @@
                                                     <include reference="3xe-8z-tWM"/>
                                                     <include reference="c4m-qW-WEF"/>
                                                     <include reference="o8S-aH-Z9Q"/>
-                                                    <include reference="BWf-gu-1Yl"/>
-                                                    <include reference="CfS-0w-1ds"/>
                                                     <include reference="neV-Uv-EMT"/>
                                                 </mask>
                                             </variation>
