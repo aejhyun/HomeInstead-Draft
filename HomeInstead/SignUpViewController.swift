@@ -40,7 +40,7 @@ class SignUpViewController: UIViewController {
         user.username = emailAddress.text
         //Try taking the verificaiton code to parse saving out. 
         user["verificationCode"] = verificationCode.text
-        user["alreadyAddedByOffice"] = false
+
         //user["type"] is also included down below
         
         if self.firstName.text == "" {
@@ -73,7 +73,7 @@ class SignUpViewController: UIViewController {
         }
         
         if ready == true {
-           
+            
             UIApplication.sharedApplication().beginIgnoringInteractionEvents()
             activityIndicator.hidden = false
             activityIndicator.startAnimating()
@@ -91,10 +91,29 @@ class SignUpViewController: UIViewController {
                     self.setAlertControllerMessage("\(errorString)")
                     
                 } else {
-                    
+
                     if self.verificationCode.text == "office" {
                         self.performSegueWithIdentifier("signUpToOffice", sender: nil)
                     } else if self.verificationCode.text == "giver" {
+                        
+                        let giverList = PFObject(className:"GiverList")
+                        giverList["giverId"] = PFUser.currentUser()?.objectId
+                        giverList["giverName"] = self.firstName.text! + " " + self.lastName.text!
+                        giverList["giverEmail"] = self.emailAddress.text!
+                        giverList["alreadyAddedByOffice"] = false
+                        //The reason for the two dictionaries being empty is because these two things will be UPDATED in the AddGiverTableView. So that I wouldn't have to create these two things later. Create them now and update them later.
+                        giverList["officeName"] = ""
+                        giverList["officeId"] = ""
+                        giverList.saveInBackgroundWithBlock {
+                            (success: Bool, error: NSError?) -> Void in
+                            if (success) {
+
+                            } else {
+                                print(error?.description)
+                                // There was a problem, check error.description
+                            }
+                        }
+                        
                         self.performSegueWithIdentifier("signUpToGiver", sender: nil)
                     } else if self.verificationCode.text == "cathy" {
                         self.performSegueWithIdentifier("signUpToCathy", sender: nil)

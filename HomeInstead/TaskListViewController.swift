@@ -10,6 +10,7 @@ import UIKit
 import Parse
 import CoreData
 import AddressBookUI
+//delete coredata and addressbookui
 
 class TaskListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIBarPositioningDelegate, CLLocationManagerDelegate {
 
