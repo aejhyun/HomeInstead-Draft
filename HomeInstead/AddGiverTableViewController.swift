@@ -14,7 +14,10 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
     var giverNames = [String]()
     var giverEmails = [String]()
     var giverNamesEmails = [String: String]()
+    var giverEmailsNames = [String: String]()
     var filteredGiverNames = [String]()
+    var searchGiverNamesEmails = [String]()
+    var filteredSearchGiverNamesEmails = [String]()
     var showSearchResults = false
     var addButtonRowSelected = 0
     var searchController: UISearchController!
@@ -51,6 +54,9 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
                             self.giverNames.append(giverName)
                             self.giverEmails.append(giverEmail)
                             self.giverNamesEmails[giverName] = giverEmail
+                            self.giverEmailsNames[giverEmail] = giverName
+                            self.searchGiverNamesEmails.append(giverName)
+                            self.searchGiverNamesEmails.append(giverEmail)
                         }
                     }
                     self.tableView.reloadData()
@@ -83,11 +89,29 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
+        
+        filteredGiverNames.removeAll()
+        
         let searchString = searchController.searchBar.text
-        filteredGiverNames = giverNames.filter({ (giverName) -> Bool in
-            let giverNameText: NSString = giverName
-            return (giverNameText.rangeOfString(searchString!, options: NSStringCompareOptions.CaseInsensitiveSearch).location) != NSNotFound
+        
+        filteredSearchGiverNamesEmails = searchGiverNamesEmails.filter({ (giverNameEmail) -> Bool in
+            let giverNameEmailText: NSString = giverNameEmail
+            return (giverNameEmailText.rangeOfString(searchString!, options: NSStringCompareOptions.CaseInsensitiveSearch).location) != NSNotFound
         })
+        
+//        filteredGiverNames = giverNames.filter({ (giverName) -> Bool in
+//            let giverNameText: NSString = giverName
+//            return (giverNameText.rangeOfString(searchString!, options: NSStringCompareOptions.CaseInsensitiveSearch).location) != NSNotFound
+//        })
+        
+        for var filteredSearchGiverNameEmail in filteredSearchGiverNamesEmails {
+            if filteredSearchGiverNameEmail.rangeOfString("@") != nil {
+                filteredSearchGiverNameEmail = giverEmailsNames[filteredSearchGiverNameEmail]!
+            }
+            if filteredGiverNames.contains(filteredSearchGiverNameEmail) == false {
+                filteredGiverNames.append(filteredSearchGiverNameEmail)
+            }
+        }
         tableView.reloadData()
     }
 
@@ -104,7 +128,14 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
         let addGiverTableViewCell = superView.superview as! AddGiverTableViewCell
         let indexPath = tableView.indexPathForCell(addGiverTableViewCell)
         addButtonRowSelected = (indexPath?.row)!
-        print(addButtonRowSelected)
+        
+        if showSearchResults {
+            print(filteredGiverNames[addButtonRowSelected])
+            //selectedGiverEmail =
+            
+        } else {
+            print(giverNames[addButtonRowSelected])
+        }
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath
@@ -124,10 +155,11 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
             return giverNames.count
         }
     }
-
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! AddGiverTableViewCell
+        
+        print(filteredGiverNames.count)
         
         if showSearchResults {
             cell.giverNameLabel.text = filteredGiverNames[indexPath.row]

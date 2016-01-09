@@ -234,12 +234,13 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
             if let latitude = latitude {
                 if let longitude = longitude {
                     location = CLLocation(latitude: latitude, longitude: longitude)
-                
                     
                     cLGeocoder.reverseGeocodeLocation(location!) { (placemarks, error) -> Void in
                         if error == nil {
                             
                             placemark = placemarks![0]
+                            
+                            print(placemark.addressDictionary)
                             
                             if let subThoroughFare = placemark.addressDictionary!["SubThoroughfare"] as? String {
                                 address = subThoroughFare + " "
@@ -301,6 +302,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
             taskInformation["date"] = self.getDate()
             taskInformation["time"] = self.getTime()
             taskInformation["address"] = address
+            taskInformation["pictureMessage"] = ""
             switch segmentSelected {
             case 0:
                 taskInformation["message"] = standardTaskMessages[sendButtonRowSelected]
@@ -317,12 +319,9 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                 
                 switch segmentSelected {
                 case 0:
-                    taskInformation["message"] = standardTaskMessages[sendButtonRowSelected]
                     taskInformation["pictureMessage"] = standardTaskPictureMessages[sendButtonRowSelected]
                     taskInformation["pictureFile"] = pictureFile
-                    print("Entered control flow")
                 case 1:
-                    taskInformation["message"] = specializedTaskMessages[sendButtonRowSelected]
                     taskInformation["pictureMessage"] = specializedTaskPictureMessages[sendButtonRowSelected]
                     taskInformation["pictureFile"] = pictureFile
                 default:
