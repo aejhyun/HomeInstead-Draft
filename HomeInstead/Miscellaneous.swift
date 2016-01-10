@@ -8,6 +8,16 @@
 
 import Foundation
 
+//Office giver list crashes when I navigate using the navigation bar too quickly because the array is not completely filled with data before I try to make a transition from Parse. So data is being pulled from Parse too slowly. 
+
+
+
+
+
+
+
+
+
 
 //override func viewDidLoad() {
 //    super.viewDidLoad()

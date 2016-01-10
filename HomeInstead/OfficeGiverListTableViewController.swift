@@ -114,6 +114,8 @@ class OfficeGiverListTableViewController: UITableViewController {
         passGiverName = giverNames[indexPath.row]
         passGiverId = giverIds[indexPath.row]
         
+        
+        
         performSegueWithIdentifier("officeGiverListToClientList", sender: self)
     }
     

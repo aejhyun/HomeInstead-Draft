@@ -41,6 +41,8 @@ class OfficeClientListTableViewController: UITableViewController {
         }
 
     }
+    
+    //When uploading the clientList, make sure you have the "clientName", "giverName", and "giverId"
 
     @IBAction func addClientButtonPressed(sender: AnyObject) {
         
