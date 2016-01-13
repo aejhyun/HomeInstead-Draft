@@ -288,7 +288,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     //The variables in this function that are not local to the function are cathyId, cathyName, giverId, passClientName. I'm sorry this function is so disgusting. The content of this function will be called three time. So will it's completion.
-    func saveTaskInformationToParse(giverName: String, task: String, date: String, time: String, address: String, pictureData: NSData?, completion: (savedTaskInformation: Bool) -> Void) {
+    func saveTaskInformationToParse(giverName: String, task: String, date: String, time: String, address: String, includeMessage: Bool, pictureData: NSData?, completion: (savedTaskInformation: Bool) -> Void) {
         
         for index in 0...(self.cathyIds.count - 1) {
             
@@ -304,14 +304,22 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
             taskInformation["time"] = self.getTime()
             taskInformation["address"] = address
             taskInformation["pictureMessage"] = ""
-            switch segmentSelected {
-            case 0:
-                taskInformation["message"] = standardTaskMessages[sendButtonRowSelected]
-            case 1:
-                taskInformation["message"] = specializedTaskMessages[sendButtonRowSelected]
-            default:
-                break
+            
+            if includeMessage {
+                
+                switch segmentSelected {
+                case 0:
+                    taskInformation["message"] = standardTaskMessages[sendButtonRowSelected]
+                case 1:
+                    taskInformation["message"] = specializedTaskMessages[sendButtonRowSelected]
+                default:
+                    break
+                }
+                
+            } else {
+                taskInformation["message"] = ""
             }
+            
         
             let defaultPictureData = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 0.5)
      
@@ -359,7 +367,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         var flag = true
         getAddress() { (address) -> Void in
-            self.saveTaskInformationToParse(giverName, task: "Began Tasks", date: date, time: time, address: address, pictureData: nil, completion: { (savedTaskInformation) -> Void in
+            self.saveTaskInformationToParse(giverName, task: "Began Tasks", date: date, time: time, address: address, includeMessage: false, pictureData: nil, completion: { (savedTaskInformation) -> Void in
                 
                 if flag {
                     self.startButtonActivityIndicator.hidden = true
@@ -386,7 +394,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         
         var flag = true
         getAddress() { (address) -> Void in
-            self.saveTaskInformationToParse(giverName, task: "Finished Tasks", date: date, time: time, address: address, pictureData: nil, completion: { (savedTaskInformation) -> Void in
+            self.saveTaskInformationToParse(giverName, task: "Finished Tasks", date: date, time: time, address: address, includeMessage: false, pictureData: nil, completion: { (savedTaskInformation) -> Void in
                 
                 if flag == true {
                     self.doneButtonActivityIndicator.hidden = true
@@ -464,7 +472,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         //saveTaskInformationToParse will run three timese here. That's why I have a check here with the if statement so that the removeAtIndex function won't be called three times.
         var flag = true
         getAddress() { (address) -> Void in
-            self.saveTaskInformationToParse(giverName, task: task, date: date, time: time, address: address, pictureData: pictureData, completion: { (savedTaskInformation) -> Void in
+            self.saveTaskInformationToParse(giverName, task: task, date: date, time: time, address: address, includeMessage: true, pictureData: pictureData, completion: { (savedTaskInformation) -> Void in
                 
                 if flag {
                     self.segmentedControl.enabled = true

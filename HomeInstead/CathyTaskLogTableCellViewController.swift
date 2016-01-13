@@ -73,6 +73,8 @@ class CathyTaskLogTableViewController: UITableViewController {
         cell.timeLabel.text = times[indexPath.row]
         cell.locationLabel.text = addresses[indexPath.row]
         
+        cell.messageButton.hidden = true
+        
         if messages[indexPath.row] != "" {
             cell.messageButton.hidden = false
         }
