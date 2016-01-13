@@ -14,38 +14,17 @@ class OfficeGiverListTableViewController: UITableViewController {
     var giverNames = [String]()
     var giverEmails = [String]()
     var giverIds = [String]()
-    var passGiverName: String = ""
-    var passGiverId: String = ""
+    var giverNameToBePassed: String = ""
+    var giverIdToBePassed: String = ""
+    var giverEmailToBePassed: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        let query = PFQuery(className:"GiverList")
-//        query.whereKey("officeId", equalTo: (PFUser.currentUser()?.objectId)!)
-//        query.findObjectsInBackgroundWithBlock {
-//            (objects: [PFObject]?, error: NSError?) -> Void in
-//            
-//            if error == nil {
-//                // The find succeeded.
-//                print("Successfully retrieved \(objects!.count) objects.")
-//                // Do something with the found objects
-//                if let objects = objects {
-//                    for object in objects {
-//                        self.giverNames.append(object.objectForKey("giverName") as! String)
-//                        self.giverIds.append(object.objectForKey("giverId") as! String)
-//                    }
-//                    self.tableView.reloadData()
-//                }
-//            } else {
-//                // Log details of the failure
-//                print("Error: \(error!) \(error!.userInfo)")
-//            }
-//        }
-        print("view did load")
         
     }
     
     override func viewDidAppear(animated: Bool) {
+        
         giverNames.removeAll()
         giverIds.removeAll()
         giverEmails.removeAll()
@@ -64,7 +43,6 @@ class OfficeGiverListTableViewController: UITableViewController {
                         self.giverIds.append(object.objectForKey("giverId") as! String)
                         self.giverEmails.append(object.objectForKey("giverEmail") as! String)
                     }
-                    print(self.giverEmails)
                     self.tableView.reloadData()
                 }
             } else {
@@ -111,10 +89,9 @@ class OfficeGiverListTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let indexPath = tableView.indexPathForSelectedRow!;
-        passGiverName = giverNames[indexPath.row]
-        passGiverId = giverIds[indexPath.row]
-        
-        
+        giverNameToBePassed = giverNames[indexPath.row]
+        giverEmailToBePassed = giverEmails[indexPath.row]
+        giverIdToBePassed = giverIds[indexPath.row]
         
         performSegueWithIdentifier("officeGiverListToClientList", sender: self)
     }
@@ -122,8 +99,9 @@ class OfficeGiverListTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == "officeGiverListToClientList") {
             let officeClientListTableViewController = segue.destinationViewController as! OfficeClientListTableViewController
-            officeClientListTableViewController.passedGiverName = passGiverName
-            officeClientListTableViewController.passedGiverId = passGiverId
+            officeClientListTableViewController.passedGiverName = giverNameToBePassed
+            officeClientListTableViewController.passedGiverId = giverIdToBePassed
+            officeClientListTableViewController.passedGiverEmail = giverEmailToBePassed
         }
     }
 

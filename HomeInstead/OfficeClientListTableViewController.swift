@@ -13,8 +13,9 @@ class OfficeClientListTableViewController: UITableViewController {
     
     var passedGiverName: String = ""
     var passedGiverId: String = ""
+    var passedGiverEmail: String = ""
     var clientNames = [String!]()
-    var passClientName: String = ""
+    var clientNameToBePassed: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,7 +106,7 @@ class OfficeClientListTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let indexPath = tableView.indexPathForSelectedRow!;
-        passClientName = clientNames[indexPath.row]
+        clientNameToBePassed = clientNames[indexPath.row]
         performSegueWithIdentifier("officeClientListToCathyList", sender: self)
     }
     
@@ -114,7 +115,8 @@ class OfficeClientListTableViewController: UITableViewController {
             let officeClientListTableViewController = segue.destinationViewController as! OfficeCathyListTableViewController
             officeClientListTableViewController.passedGiverName = passedGiverName
             officeClientListTableViewController.passedGiverId = passedGiverId
-            officeClientListTableViewController.passedClientName = passClientName
+            officeClientListTableViewController.passedGiverEmail = passedGiverEmail
+            officeClientListTableViewController.passedClientName = clientNameToBePassed
         }
     }
     

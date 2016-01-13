@@ -116,6 +116,29 @@ class SignUpViewController: UIViewController {
                         
                         self.performSegueWithIdentifier("signUpToGiver", sender: nil)
                     } else if self.verificationCode.text == "cathy" {
+                        
+                        let cathyList = PFObject(className: "CathyList")
+                        cathyList["cathyName"] = self.firstName.text! + " " + self.lastName.text!
+                        cathyList["cathyId"] = PFUser.currentUser()?.objectId
+                        cathyList["cathyEmail"] = self.emailAddress.text!
+                        cathyList["alreadyAddedByOffice"] = false
+                        cathyList["giverName"] = ""
+                        cathyList["giverEmail"] = ""
+                        cathyList["giverId"] = ""
+                        cathyList["clientName"] = ""
+                        cathyList["officeName"] = ""
+                        cathyList["officeId"] = ""
+                        
+                        cathyList.saveInBackgroundWithBlock {
+                            (success: Bool, error: NSError?) -> Void in
+                            if (success) {
+                                
+                            } else {
+                                print(error?.description)
+                                // There was a problem, check error.description
+                            }
+                        }
+
                         self.performSegueWithIdentifier("signUpToCathy", sender: nil)
                     }
                     

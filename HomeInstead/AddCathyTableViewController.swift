@@ -1,67 +1,69 @@
 //
-//  AddGiverTableViewController.swift
+//  AddCathyTableViewController.swift
 //  HomeInstead
 //
-//  Created by Jae Hyun Kim on 1/4/16.
+//  Created by Jae Hyun Kim on 1/12/16.
 //  Copyright © 2016 Jae Hyun Kim. All rights reserved.
 //
 
 import UIKit
 import Parse
 
-class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, UISearchResultsUpdating {
+class AddCathyTableViewController: UITableViewController, UISearchBarDelegate, UISearchResultsUpdating {
 
-    var giverNames = [String]()
-    var giverEmails = [String]()
-    var giverNamesEmails = [String: String]()
-    var giverEmailsNames = [String: String]()
-    var searchGiverNamesEmails = [String]()
-    var filteredGiverEmails = [String]()
-    var filteredSearchGiverNamesEmails = [String]()
-    var giverEmailsObjectIds = [String: String]()
+    var searchController: UISearchController!
+    var cathyNames = [String]()
+    var cathyEmails = [String]()
+    var cathyNamesEmails = [String: String]()
+    var cathyEmailsNames = [String: String]()
+    var cathyEmailsObjectIds = [String: String]()
+    var searchCathyNamesEmails = [String]()
+    var filteredCathyEmails = [String]()
+    var filteredSearchCathyNamesEmails = [String]()
     var showSearchResults = false
     var addButtonRowSelected = -1
-    var searchController: UISearchController!
-    var passedClientName: String = ""
+    var passedClientName = ""
+    var passedGiverName: String = ""
+    var passedGiverId: String = ""
+    var passedGiverEmail: String = ""
     
     func configureSearchBar() {
+        
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = "Search for a giver :)"
+        searchController.searchBar.placeholder = "Search for a cathy :)"
         searchController.searchBar.sizeToFit()
         searchController.loadView()
         tableView.tableHeaderView = searchController.searchBar
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureSearchBar()
-        
-        let query = PFQuery(className: "GiverList")
+
+        let query = PFQuery(className: "CathyList")
         query.whereKey("alreadyAddedByOffice", equalTo: false)
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
-            
             if error == nil {
                 // The find succeeded.
                 print("Successfully retrieved \(objects!.count) objects.")
                 // Do something with the found objects
                 if let objects = objects {
                     for object in objects {
-                        let giverName = object.objectForKey("giverName") as! String
-                        let giverEmail = object.objectForKey("giverEmail") as! String
-                        self.giverEmails.append(giverEmail)
-                        self.giverNames.append(giverName)
-                        self.giverNamesEmails[giverName] = giverEmail
-                        self.giverEmailsNames[giverEmail] = giverName
-                        self.giverEmailsObjectIds[giverEmail] = object.objectId
-                        self.searchGiverNamesEmails.append(giverName)
-                        self.searchGiverNamesEmails.append(giverEmail)
+                        let cathyName = object.objectForKey("cathyName") as! String
+                        let cathyEmail = object.objectForKey("cathyEmail") as! String
+                        self.cathyNames.append(cathyName)
+                        self.cathyEmails.append(cathyEmail)
+                        self.cathyNamesEmails[cathyName] = cathyEmail
+                        self.cathyEmailsNames[cathyEmail] = cathyName
+                        self.cathyEmailsObjectIds[cathyEmail] = object.objectId
+                        self.searchCathyNamesEmails.append(cathyName)
+                        self.searchCathyNamesEmails.append(cathyEmail)
                     }
-                    
                     self.tableView.reloadData()
                 }
             } else {
@@ -76,21 +78,21 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
         
         let addButton = sender as! UIButton
         let superView = addButton.superview!
-        let addGiverTableViewCell = superView.superview as! AddGiverTableViewCell
-        let indexPath = tableView.indexPathForCell(addGiverTableViewCell)
+        let addCathyTableViewCell = superView.superview as! AddCathyTableViewCell
+        let indexPath = tableView.indexPathForCell(addCathyTableViewCell)
         addButtonRowSelected = (indexPath?.row)!
         self.tableView.reloadData()
-        
-        var selectedGiverEmail = ""
+            
+        var selectedCathyEmail = ""
         
         if showSearchResults {
-            selectedGiverEmail = filteredGiverEmails[addButtonRowSelected]
+            selectedCathyEmail = filteredCathyEmails[addButtonRowSelected]
         } else {
-            selectedGiverEmail = giverEmails[addButtonRowSelected]
+            selectedCathyEmail = cathyEmails[addButtonRowSelected]
         }
         
-        let query = PFQuery(className:"GiverList")
-        query.getObjectInBackgroundWithId(giverEmailsObjectIds[selectedGiverEmail]!) {
+        let query = PFQuery(className:"CathyList")
+        query.getObjectInBackgroundWithId(cathyEmailsObjectIds[selectedCathyEmail]!) {
             (user: PFObject?, error: NSError?) -> Void in
             if error != nil {
                 print(error?.description)
@@ -98,15 +100,19 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
                 user["alreadyAddedByOffice"] = true
                 user["officeId"] = PFUser.currentUser()?.objectId
                 user["officeName"] = PFUser.currentUser()?.objectForKey("fullName")
+                user["clientName"] = self.passedClientName
+                user["giverName"] = self.passedGiverName
+                user["giverId"] = self.passedGiverId
+                user["giverEmail"] = self.passedGiverEmail
                 user.saveInBackgroundWithBlock {
                     (success: Bool, error: NSError?) -> Void in
                     if (success) {
                         //this removing of element is for the user to see it dissappear. It's mainly for look because filteredGiverEmails will be loaded with new emails every single time the search is used.
-                        self.filteredGiverEmails = self.filteredGiverEmails.filter {$0 != selectedGiverEmail}
-                        self.giverEmails = self.giverEmails.filter {$0 != selectedGiverEmail}
-                        self.giverNames = self.giverNames.filter {$0 != self.giverEmailsNames[selectedGiverEmail]}
-                        self.searchGiverNamesEmails = self.giverEmails
-                        self.searchGiverNamesEmails += self.giverNames
+                        self.filteredCathyEmails = self.filteredCathyEmails.filter {$0 != selectedCathyEmail}
+                        self.cathyEmails = self.cathyEmails.filter {$0 != selectedCathyEmail}
+                        self.cathyNames = self.cathyNames.filter {$0 != self.cathyEmailsNames[selectedCathyEmail]}
+                        self.searchCathyNamesEmails = self.cathyEmails
+                        self.searchCathyNamesEmails += self.cathyNames
                         //after the user adds a giver, the searchGiverNamesEmails gets smaller with self.filteredGiverEmails = self.filteredGiverEmails.filter {$0 != selectedGiverEmail}. So instead of using searchGiverNamesEmails which is the old string that was retrived from view did load, I "refresh it with the newest set of emails and givernames that should be displayed to the user. Remember searchGiverNamesEmails needs to have both the emails and the names for it to work because I cannot call updateSearchResultsForSearchController for both email and name. I had to put it into one array.
                         self.addButtonRowSelected = -1
                         self.tableView.reloadData()
@@ -116,6 +122,7 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
                 }
             }
         }
+        
         
     }
     
@@ -139,53 +146,44 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
     }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        
-        filteredGiverEmails.removeAll()
+
+        filteredCathyEmails.removeAll()
         let searchString = searchController.searchBar.text
-        filteredSearchGiverNamesEmails = searchGiverNamesEmails.filter({ (giverNameEmail) -> Bool in
-            let giverNameEmailText: NSString = giverNameEmail
-            return (giverNameEmailText.rangeOfString(searchString!, options: NSStringCompareOptions.CaseInsensitiveSearch).location) != NSNotFound
+        filteredSearchCathyNamesEmails = searchCathyNamesEmails.filter({ (cathyNameEmail) -> Bool in
+            let cathyNameEmailText: NSString = cathyNameEmail
+            return (cathyNameEmailText.rangeOfString(searchString!, options: NSStringCompareOptions.CaseInsensitiveSearch).location) != NSNotFound
         })
         
         //With the following code, I get the filteredSearchGiverNamesEmails array that has both the giver names and emails and translate it into unique emails. So if the user types "a", and both the giver's email and name has the letter "a", it will then appened to filteredGiverEmails one email for both the name and the email. And by using the dictionary of giverEmailsNames, I can translate this unique email into the giver's name. The reason for this is in the case of givers having the same name but obviously different emails.
-        for var filteredSearchGiverNameEmail in filteredSearchGiverNamesEmails {
-            if filteredSearchGiverNameEmail.rangeOfString("@") == nil {
-                filteredSearchGiverNameEmail = giverNamesEmails[filteredSearchGiverNameEmail]!
+        for var filteredSearchCathyNameEmail in filteredSearchCathyNamesEmails {
+            if filteredSearchCathyNameEmail.rangeOfString("@") == nil {
+                filteredSearchCathyNameEmail = cathyNamesEmails[filteredSearchCathyNameEmail]!
             }
-            if filteredGiverEmails.contains(filteredSearchGiverNameEmail) == false {
-                filteredGiverEmails.append(filteredSearchGiverNameEmail)
+            if filteredCathyEmails.contains(filteredSearchCathyNameEmail) == false {
+                filteredCathyEmails.append(filteredSearchCathyNameEmail)
             }
         }
         tableView.reloadData()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     // MARK: - Table view data source
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath
-        indexPath: NSIndexPath) {
-        
-    }
-    
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
         if showSearchResults {
-            return filteredGiverEmails.count
+            return filteredCathyEmails.count
         } else {
-            return giverEmails.count
+            return cathyEmails.count
         }
     }
+
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! AddGiverTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! AddCathyTableViewCell
         
         if addButtonRowSelected == indexPath.row {
             cell.addButton.enabled = false
@@ -194,13 +192,13 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
         }
         
         if showSearchResults {
-            cell.giverNameLabel.text = giverEmailsNames[filteredGiverEmails[indexPath.row]]
-            cell.giverEmailLabel.text = filteredGiverEmails[indexPath.row]
+            cell.cathyNameLabel.text = cathyEmailsNames[filteredCathyEmails[indexPath.row]]
+            cell.cathyEmailLabel.text = filteredCathyEmails[indexPath.row]
         } else {
-            cell.giverNameLabel.text = giverEmailsNames[giverEmails[indexPath.row]]
-            cell.giverEmailLabel.text = giverEmails[indexPath.row]
+            cell.cathyNameLabel.text = cathyEmailsNames[cathyEmails[indexPath.row]]
+            cell.cathyEmailLabel.text = cathyEmails[indexPath.row]
         }
-
+        
         return cell
     }
 

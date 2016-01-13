@@ -14,8 +14,6 @@ class SignInViewController: UIViewController {
     @IBOutlet weak var emailAddress: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()

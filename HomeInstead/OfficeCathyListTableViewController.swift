@@ -13,14 +13,20 @@ class OfficeCathyListTableViewController: UITableViewController {
     
     var passedGiverName: String = ""
     var passedGiverId: String = ""
+    var passedGiverEmail: String = ""
     var passedClientName: String = ""
     var cathyNames = [String]()
+    var cathyEmails = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(passedGiverName)
-        print(passedGiverId)
-        print(passedClientName)
+
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        
+        cathyNames.removeAll()
+        cathyEmails.removeAll()
         
         let query = PFQuery(className:"CathyList")
         query.findObjectsInBackgroundWithBlock {
@@ -34,6 +40,7 @@ class OfficeCathyListTableViewController: UITableViewController {
                     for object in objects {
                         if (object.objectForKey("clientName") as! String == self.passedClientName) {
                             self.cathyNames.append(object.objectForKey("cathyName") as! String)
+                            self.cathyEmails.append(object.objectForKey("cathyEmail") as! String)
                         }
                     }
                     self.tableView.reloadData()
@@ -43,82 +50,8 @@ class OfficeCathyListTableViewController: UITableViewController {
                 print("Error: \(error!) \(error!.userInfo)")
             }
         }
-
-    }
-
-    @IBAction func addCathyButtonPressed(sender: AnyObject) {
         
-        var nameTextField: UITextField?
-        let enterNameAlert = UIAlertController(title: "Add a Cathy :)", message: "Enter cathy's name", preferredStyle: UIAlertControllerStyle.Alert)
-        enterNameAlert.addTextFieldWithConfigurationHandler({(textField: UITextField!) in
-            textField.placeholder = "Full Name"
-            nameTextField = textField
-        })
-        enterNameAlert.addAction(UIAlertAction(title: "Add", style: UIAlertActionStyle.Default, handler: { (action) -> Void in
-            
-            //Make sure before I push to CathyList, check if the userType is actually Cathy and not some other userType.
-            //Also make sure that the giver doesn't accidentally save the same Givers twice. Do an error check.
-            let query = PFQuery(className:"_User")
-            query.whereKey("fullName", equalTo: nameTextField!.text!)
-            query.findObjectsInBackgroundWithBlock {
-                (objects: [PFObject]?, error: NSError?) -> Void in
-                
-                if error == nil {
-                    if objects!.count != 0 {
-                        print("Found the giver with that email account")
-                        
-                        var cathyName: String!
-                        var cathyId: String!
-                        if let objects = objects {
-                            for object in objects {
-                                cathyName = object.objectForKey("fullName") as! String
-                                cathyId = object.objectId
-                                self.cathyNames.append(cathyName)
-                            }
-                            
-                            self.tableView.reloadData()
-                            
-                            //Make sure before I push to CathyList, check if the userType is actually Cathy and not some other userType.
-                            //Also make sure that the giver doesn't accidentally save the same Cathys twice. Do an error check.
-                            let cathyList = PFObject(className:"CathyList")
-                            cathyList["cathyName"] = cathyName
-                            cathyList["cathyId"] = cathyId
-                            cathyList["clientName"] = self.passedClientName
-                            cathyList["giverName"] = self.passedGiverName
-                            cathyList["giverId"] = self.passedGiverId
-                            
-                            cathyList.saveInBackgroundWithBlock {
-                                (success: Bool, error: NSError?) -> Void in
-                                if (success) {
-                                    
-                                } else {
-                                    // There was a problem, check error.description
-                                }
-                            }
-                        }
-                    } else {
-                        print("Error: Couldn't find the cathy with that email account")
-                    }
-                } else {
-                    print("Error: \(error!) \(error!.userInfo)")
-                }
-            }
-
-            
-            
-            
-            
-            
-            
-            
-            
-        }))
-        
-        enterNameAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
-        presentViewController(enterNameAlert, animated: true, completion: nil)
-        
-    }
-    
+    }    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -139,12 +72,23 @@ class OfficeCathyListTableViewController: UITableViewController {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
-
-        cell.textLabel?.text = cathyNames[indexPath.row]
-
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeCathyListTableViewCell
+        cell.cathyNameLabel.text = cathyNames[indexPath.row]
+        cell.cathyEmailLabel.text = cathyEmails[indexPath.row]
+        
         return cell
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let addCathyTableViewController = segue.destinationViewController as! AddCathyTableViewController
+        
+        addCathyTableViewController.passedClientName = passedClientName
+        addCathyTableViewController.passedGiverId = passedGiverId
+        addCathyTableViewController.passedGiverName = passedGiverName
+        addCathyTableViewController.passedGiverEmail = passedGiverEmail
+    }
+    
 
 
     /*
