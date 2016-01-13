@@ -1399,6 +1399,7 @@
                                                 <rect key="frame" x="269" y="7" width="30" height="26"/>
                                             </variation>
                                             <connections>
+                                                <action selector="messageButtonTapped:" destination="7fr-5a-dLV" eventType="touchUpInside" id="Eoy-dk-M80"/>
                                                 <action selector="messageButtonTapped:" destination="Esi-sb-ni1" eventType="touchUpInside" id="asg-fA-7b2"/>
                                                 <segue destination="lJQ-HI-BEJ" kind="presentation" id="nmW-vR-vgp"/>
                                             </connections>
@@ -1463,10 +1464,10 @@
             </objects>
             <point key="canvasLocation" x="1836.75" y="461.5"/>
         </scene>
-        <!--View Controller-->
+        <!--Cathy Task Log Message View Controller-->
         <scene sceneID="N1g-9R-0Vv">
             <objects>
-                <viewController modalPresentationStyle="overCurrentContext" id="lJQ-HI-BEJ" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="overCurrentContext" id="lJQ-HI-BEJ" customClass="CathyTaskLogMessageViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Gip-lX-5bN"/>
                         <viewControllerLayoutGuide type="bottom" id="rnc-zr-tDC"/>
@@ -1475,7 +1476,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0iI-qg-fBv">
+                            <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0iI-qg-fBv">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="4Lg-Fl-dWL">
@@ -1487,6 +1488,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z4p-OF-u2a">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                         <state key="normal" title="Done"/>
+                                        <connections>
+                                            <segue destination="bXQ-fH-jhu" kind="unwind" unwindAction="unwindToSegue:" id="5RW-Pb-aPm"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
@@ -1536,21 +1540,41 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gqj-dK-mpZ">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="0.0" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="O6s-6K-bUf" appends="YES" id="k6V-UH-cuj"/>
+                                </connections>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.96470588235294119" alpha="0.17000000000000001" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="0iI-qg-fBv" firstAttribute="top" secondItem="Gqj-dK-mpZ" secondAttribute="bottom" constant="27" id="9Aw-wX-nxc">
+                                <variation key="widthClass=compact" constant="0.0"/>
+                            </constraint>
                             <constraint firstItem="rnc-zr-tDC" firstAttribute="top" secondItem="0iI-qg-fBv" secondAttribute="bottom" id="ECs-P1-b4w"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Gqj-dK-mpZ" secondAttribute="trailing" constant="-20" id="Hr4-7s-NiZ"/>
+                            <constraint firstItem="Gqj-dK-mpZ" firstAttribute="top" secondItem="Hag-7w-8BP" secondAttribute="topMargin" id="Obn-9l-AyQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="0iI-qg-fBv" secondAttribute="trailing" constant="-20" id="Z1T-mA-3VO"/>
                             <constraint firstItem="0iI-qg-fBv" firstAttribute="top" secondItem="Gip-lX-5bN" secondAttribute="bottom" constant="295" id="fIF-HQ-p1C">
                                 <variation key="widthClass=compact" constant="475"/>
                             </constraint>
+                            <constraint firstItem="Gqj-dK-mpZ" firstAttribute="leading" secondItem="Hag-7w-8BP" secondAttribute="leadingMargin" constant="-20" id="spu-l8-Kz6"/>
                             <constraint firstItem="0iI-qg-fBv" firstAttribute="leading" secondItem="Hag-7w-8BP" secondAttribute="leadingMargin" constant="-20" id="yJd-WJ-HwK"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="0iI-qg-fBv"/>
+                                <exclude reference="Gqj-dK-mpZ"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="Hr4-7s-NiZ"/>
+                                <exclude reference="Obn-9l-AyQ"/>
+                                <exclude reference="spu-l8-Kz6"/>
+                                <exclude reference="9Aw-wX-nxc"/>
                                 <exclude reference="Z1T-mA-3VO"/>
                                 <exclude reference="fIF-HQ-p1C"/>
                                 <exclude reference="yJd-WJ-HwK"/>
@@ -1560,8 +1584,13 @@
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="0iI-qg-fBv"/>
+                                <include reference="Gqj-dK-mpZ"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="Hr4-7s-NiZ"/>
+                                <include reference="Obn-9l-AyQ"/>
+                                <include reference="spu-l8-Kz6"/>
+                                <include reference="9Aw-wX-nxc"/>
                                 <include reference="Z1T-mA-3VO"/>
                                 <include reference="fIF-HQ-p1C"/>
                                 <include reference="yJd-WJ-HwK"/>
@@ -1569,8 +1598,17 @@
                             </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="messageTextView" destination="4Lg-Fl-dWL" id="brk-zI-ONZ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2UG-m9-Zxl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="bXQ-fH-jhu" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="O6s-6K-bUf">
+                    <connections>
+                        <segue destination="bXQ-fH-jhu" kind="unwind" unwindAction="unwindToSegue:" id="9gc-KM-mly"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1836.75" y="1278.5"/>
         </scene>
@@ -1768,8 +1806,8 @@
         <image name="defaultPicture" width="540" height="540"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="JvB-e1-eF0"/>
-        <segue reference="CPS-1T-8Nc"/>
-        <segue reference="KS2-cD-Ng0"/>
+        <segue reference="x9m-QM-WVL"/>
+        <segue reference="gHM-KO-YzH"/>
+        <segue reference="Dx0-iJ-XQZ"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -16,6 +16,7 @@ class CathyTaskLogTableViewController: UITableViewController {
     var times = [String]()
     var addresses = [String]()
     var messages = [String]()
+    var messageButtonRowSelected: Int? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,10 +49,16 @@ class CathyTaskLogTableViewController: UITableViewController {
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func messageButtonTapped(sender: AnyObject) {
+        
+        let messageButton = sender as! UIButton
+        let superView = messageButton.superview!
+        let taskListTableViewCell = superView.superview as! CathyTaskLogTableViewCell
+        let indexPath = tableView.indexPathForCell(taskListTableViewCell)
+        messageButtonRowSelected = indexPath!.row
+        
     }
+    
 
     // MARK: - Table view data source
 
@@ -80,6 +87,19 @@ class CathyTaskLogTableViewController: UITableViewController {
         }
         
         return cell
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        let cathyTaskLogMessageViewController = segue.destinationViewController as! CathyTaskLogMessageViewController
+        if messageButtonRowSelected != nil {
+            cathyTaskLogMessageViewController.passedMessage = messages[messageButtonRowSelected!]
+        }
+        
+    }
+    
+    @IBAction func unwindToSegue (segue : UIStoryboardSegue) {
+    
     }
 
     @IBAction func signOutButtonTapped(sender: AnyObject) {
