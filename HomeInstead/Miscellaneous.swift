@@ -13,7 +13,7 @@ import Foundation
 
 
 
-
+//Set activity indicator for when deleting because if you exit the app before the delete is complete, the update won't occur on parse.
 
 
 

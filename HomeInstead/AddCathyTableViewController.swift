@@ -93,18 +93,20 @@ class AddCathyTableViewController: UITableViewController, UISearchBarDelegate, U
         
         let query = PFQuery(className:"CathyList")
         query.getObjectInBackgroundWithId(cathyEmailsObjectIds[selectedCathyEmail]!) {
-            (user: PFObject?, error: NSError?) -> Void in
+            (cathyList: PFObject?, error: NSError?) -> Void in
             if error != nil {
                 print(error?.description)
-            } else if let user = user {
-                user["alreadyAddedByOffice"] = true
-                user["officeId"] = PFUser.currentUser()?.objectId
-                user["officeName"] = PFUser.currentUser()?.objectForKey("fullName")
-                user["clientName"] = self.passedClientName
-                user["giverName"] = self.passedGiverName
-                user["giverId"] = self.passedGiverId
-                user["giverEmail"] = self.passedGiverEmail
-                user.saveInBackgroundWithBlock {
+            } else if let cathyList = cathyList {
+                cathyList["alreadyAddedByOffice"] = true
+                cathyList["officeId"] = PFUser.currentUser()?.objectId
+                cathyList["officeName"] = PFUser.currentUser()?.objectForKey("fullName")
+                cathyList["officeEmail"] = PFUser.currentUser()?.objectForKey("email")
+                cathyList["clientName"] = self.passedClientName
+                cathyList["giverName"] = self.passedGiverName
+                cathyList["giverId"] = self.passedGiverId
+                cathyList["giverEmail"] = self.passedGiverEmail
+                cathyList.pinInBackground()
+                cathyList.saveInBackgroundWithBlock {
                     (success: Bool, error: NSError?) -> Void in
                     if (success) {
                         //this removing of element is for the user to see it dissappear. It's mainly for look because filteredGiverEmails will be loaded with new emails every single time the search is used.

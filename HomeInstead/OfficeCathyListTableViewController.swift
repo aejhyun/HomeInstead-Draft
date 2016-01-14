@@ -17,6 +17,7 @@ class OfficeCathyListTableViewController: UITableViewController {
     var passedClientName: String = ""
     var cathyNames = [String]()
     var cathyEmails = [String]()
+    var objects = [PFObject]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +30,9 @@ class OfficeCathyListTableViewController: UITableViewController {
         cathyEmails.removeAll()
         
         let query = PFQuery(className:"CathyList")
+        query.whereKey("officeId", equalTo: (PFUser.currentUser()?.objectId)!)
+        query.whereKey("clientName", equalTo: passedClientName)
+        //query.fromLocalDatastore()
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             
@@ -37,11 +41,10 @@ class OfficeCathyListTableViewController: UITableViewController {
                 print("Successfully retrieved \(objects!.count) objects.")
                 // Do something with the found objects
                 if let objects = objects {
+                    self.objects = objects
                     for object in objects {
-                        if (object.objectForKey("clientName") as! String == self.passedClientName) {
-                            self.cathyNames.append(object.objectForKey("cathyName") as! String)
-                            self.cathyEmails.append(object.objectForKey("cathyEmail") as! String)
-                        }
+                        self.cathyNames.append(object.objectForKey("cathyName") as! String)
+                        self.cathyEmails.append(object.objectForKey("cathyEmail") as! String)
                     }
                     self.tableView.reloadData()
                 }
@@ -80,6 +83,38 @@ class OfficeCathyListTableViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            
+            cathyNames.removeAtIndex(indexPath.row)
+            cathyEmails.removeAtIndex(indexPath.row)
+            
+            let query = PFQuery(className:"CathyList")
+            query.getObjectInBackgroundWithId(objects[indexPath.row].objectId!) {
+                (cathyList: PFObject?, error: NSError?) -> Void in
+                if error != nil {
+                    print(error?.description)
+                } else if let cathyList = cathyList {
+                    cathyList["alreadyAddedByOffice"] = false
+                    cathyList["officeId"] = ""
+                    cathyList["officeName"] = ""
+                    cathyList["officeEmail"] = ""
+                    cathyList["giverName"] = ""
+                    cathyList["giverId"] = ""
+                    cathyList["giverEmail"] = ""
+                    cathyList.saveInBackgroundWithBlock({ (success: Bool, error: NSError?) -> Void in
+                        if (success) {
+                            print("Successfully updated object containing \(self.objects[indexPath.row].objectForKey("cathyName")).")
+                        } else {
+                            print(error?.description)
+                        }
+                    })
+                }
+            }
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let addCathyTableViewController = segue.destinationViewController as! AddCathyTableViewController
         
@@ -87,6 +122,7 @@ class OfficeCathyListTableViewController: UITableViewController {
         addCathyTableViewController.passedGiverId = passedGiverId
         addCathyTableViewController.passedGiverName = passedGiverName
         addCathyTableViewController.passedGiverEmail = passedGiverEmail
+        
     }
     
 

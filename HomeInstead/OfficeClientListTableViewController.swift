@@ -60,9 +60,12 @@ class OfficeClientListTableViewController: UITableViewController {
             clientList["clientName"] = nameTextField!.text
             clientList["giverName"] = self.passedGiverName
             clientList["giverId"] = self.passedGiverId
+            clientList["giverEmail"] = self.passedGiverEmail
+            clientList["officeName"] = PFUser.currentUser()?.objectForKey("fullName")
+            clientList["officeId"] = PFUser.currentUser()?.objectId
+            clientList["officeEmail"] = PFUser.currentUser()?.objectForKey("email")
             self.clientNames.append(nameTextField!.text)
             self.tableView.reloadData()
-            
             clientList.saveInBackgroundWithBlock {
                 (success: Bool, error: NSError?) -> Void in
                 if (success) {

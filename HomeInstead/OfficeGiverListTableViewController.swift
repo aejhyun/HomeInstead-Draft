@@ -17,6 +17,7 @@ class OfficeGiverListTableViewController: UITableViewController {
     var giverNameToBePassed: String = ""
     var giverIdToBePassed: String = ""
     var giverEmailToBePassed: String = ""
+    var objects = [PFObject]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,7 @@ class OfficeGiverListTableViewController: UITableViewController {
         giverEmails.removeAll()
         let query = PFQuery(className:"GiverList")
         query.whereKey("officeId", equalTo: (PFUser.currentUser()?.objectId)!)
+        query.fromLocalDatastore()
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             
@@ -38,6 +40,7 @@ class OfficeGiverListTableViewController: UITableViewController {
                 print("Successfully retrieved \(objects!.count) objects.")
                 // Do something with the found objects
                 if let objects = objects {
+                    self.objects = objects
                     for object in objects {
                         self.giverNames.append(object.objectForKey("giverName") as! String)
                         self.giverIds.append(object.objectForKey("giverId") as! String)
@@ -52,7 +55,7 @@ class OfficeGiverListTableViewController: UITableViewController {
         }
         
     }
-
+    
     @IBAction func addGiverButtonPressed(sender: AnyObject) {
 
         
@@ -102,6 +105,113 @@ class OfficeGiverListTableViewController: UITableViewController {
             officeClientListTableViewController.passedGiverName = giverNameToBePassed
             officeClientListTableViewController.passedGiverId = giverIdToBePassed
             officeClientListTableViewController.passedGiverEmail = giverEmailToBePassed
+        }
+    }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            
+            
+            
+            let giverListQuery = PFQuery(className:"GiverList")
+            giverListQuery.getObjectInBackgroundWithId(objects[indexPath.row].objectId!) {
+                (giverList: PFObject?, error: NSError?) -> Void in
+                if error != nil {
+                    print(error?.description)
+                } else if let giverList = giverList {
+                    giverList["alreadyAddedByOffice"] = false
+                    giverList["officeId"] = ""
+                    giverList["officeName"] = ""
+                    giverList["officeEmail"] = ""
+                    giverList.saveInBackgroundWithBlock({ (success: Bool, error: NSError?) -> Void in
+                        if (success) {
+                            print("Successfully updated object containing \(self.objects[indexPath.row].objectForKey("giverName")) for the GiverList Class")
+                        } else {
+                            print(error?.description)
+                        }
+                    })
+                }
+            }
+            
+            let clientListQuery = PFQuery(className:"ClientList")
+            clientListQuery.whereKey("giverId", equalTo: giverIds[indexPath.row])
+            clientListQuery.findObjectsInBackgroundWithBlock {
+                (objects: [PFObject]?, error: NSError?) -> Void in
+                if error == nil {
+                    print("Successfully retrieved \(objects!.count) objects.")
+                    // Do something with the found objects
+                    if let objects = objects {
+                        for object in objects {
+                            object.deleteInBackground()
+                        }
+                        self.tableView.reloadData()
+                    }
+                } else {
+                    // Log details of the failure
+                    print("Error: \(error!) \(error!.userInfo)")
+                }
+            }
+            
+            let cathyListQuery = PFQuery(className:"CathyList")
+            cathyListQuery.whereKey("giverId", equalTo: giverIds[indexPath.row])
+            cathyListQuery.findObjectsInBackgroundWithBlock {
+                (objects: [PFObject]?, error: NSError?) -> Void in
+                
+                if error == nil {
+                    // The find succeeded.
+                    print("Successfully retrieved \(objects!.count) objects.")
+                    // Do something with the found objects
+                    if let objects = objects {
+                        for object in objects {
+                            object["alreadyAddedByOffice"] = false
+                            object["giverEmail"] = ""
+                            object["giverId"] = ""
+                            object["giverName"] = ""
+                            object["officeEmail"] = ""
+                            object["officeId"] = ""
+                            object["officeName"] = ""
+                            object["clientName"] = ""
+                            object.saveInBackground()
+                        }
+                    }
+                } else {
+                    // Log details of the failure
+                    print("Error: \(error!) \(error!.userInfo)")
+                }
+            }
+            
+            giverNames.removeAtIndex(indexPath.row)
+            giverIds.removeAtIndex(indexPath.row)
+            giverEmails.removeAtIndex(indexPath.row)
+            
+            objects[indexPath.row].unpinInBackground()
+            
+            
+            
+//            cathyListQuery.getObjectInBackgroundWithId(objects[indexPath.row].objectId!) {
+//                (cathyList: PFObject?, error: NSError?) -> Void in
+//                if error != nil {
+//                    print(error?.description)
+//                } else if let cathyList = cathyList {
+//                    cathyList["officeId"] = ""
+//                    cathyList["officeName"] = ""
+//                    cathyList["officeEmail"] = ""
+//                    cathyList["giverName"] = ""
+//                    cathyList["giverId"] = ""
+//                    cathyList["giverEmail"] = ""
+//                    cathyList["clientName"] = ""
+//                    
+//                    cathyList.saveInBackgroundWithBlock({ (success: Bool, error: NSError?) -> Void in
+//                        if (success) {
+//                            print("Successfully updated object containing \(self.objects[indexPath.row].objectForKey("giverName")) for the CathyList Class.")
+//                        } else {
+//                            print(error?.description)
+//                        }
+//                    })
+//                }
+//            }
+            
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
         }
     }
 

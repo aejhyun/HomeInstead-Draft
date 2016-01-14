@@ -39,7 +39,7 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
         super.viewDidLoad()
         
         configureSearchBar()
-        
+
         let query = PFQuery(className: "GiverList")
         query.whereKey("alreadyAddedByOffice", equalTo: false)
         query.findObjectsInBackgroundWithBlock {
@@ -60,8 +60,8 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
                         self.giverEmailsObjectIds[giverEmail] = object.objectId
                         self.searchGiverNamesEmails.append(giverName)
                         self.searchGiverNamesEmails.append(giverEmail)
-                    }
                     
+                    }
                     self.tableView.reloadData()
                 }
             } else {
@@ -91,14 +91,16 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
         
         let query = PFQuery(className:"GiverList")
         query.getObjectInBackgroundWithId(giverEmailsObjectIds[selectedGiverEmail]!) {
-            (user: PFObject?, error: NSError?) -> Void in
+            (giverList: PFObject?, error: NSError?) -> Void in
             if error != nil {
                 print(error?.description)
-            } else if let user = user {
-                user["alreadyAddedByOffice"] = true
-                user["officeId"] = PFUser.currentUser()?.objectId
-                user["officeName"] = PFUser.currentUser()?.objectForKey("fullName")
-                user.saveInBackgroundWithBlock {
+            } else if let giverList = giverList {
+                giverList["alreadyAddedByOffice"] = true
+                giverList["officeId"] = PFUser.currentUser()?.objectId
+                giverList["officeName"] = PFUser.currentUser()?.objectForKey("fullName")
+                giverList["officeEmail"] = PFUser.currentUser()?.objectForKey("email")
+                giverList.pinInBackground()
+                giverList.saveInBackgroundWithBlock {
                     (success: Bool, error: NSError?) -> Void in
                     if (success) {
                         //this removing of element is for the user to see it dissappear. It's mainly for look because filteredGiverEmails will be loaded with new emails every single time the search is used.

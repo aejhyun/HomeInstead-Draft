@@ -101,9 +101,6 @@ class SignUpViewController: UIViewController {
                         giverList["giverName"] = self.firstName.text! + " " + self.lastName.text!
                         giverList["giverEmail"] = self.emailAddress.text!
                         giverList["alreadyAddedByOffice"] = false
-                        //The reason for the two dictionaries being empty is because these two things will be UPDATED in the AddGiverTableView. So that I wouldn't have to create these two things later. Create them now and update them later.
-                        giverList["officeName"] = ""
-                        giverList["officeId"] = ""
                         giverList.saveInBackgroundWithBlock {
                             (success: Bool, error: NSError?) -> Void in
                             if (success) {
@@ -122,13 +119,6 @@ class SignUpViewController: UIViewController {
                         cathyList["cathyId"] = PFUser.currentUser()?.objectId
                         cathyList["cathyEmail"] = self.emailAddress.text!
                         cathyList["alreadyAddedByOffice"] = false
-                        cathyList["giverName"] = ""
-                        cathyList["giverEmail"] = ""
-                        cathyList["giverId"] = ""
-                        cathyList["clientName"] = ""
-                        cathyList["officeName"] = ""
-                        cathyList["officeId"] = ""
-                        
                         cathyList.saveInBackgroundWithBlock {
                             (success: Bool, error: NSError?) -> Void in
                             if (success) {
