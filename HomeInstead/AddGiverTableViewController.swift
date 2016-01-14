@@ -60,7 +60,6 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
                         self.giverEmailsObjectIds[giverEmail] = object.objectId
                         self.searchGiverNamesEmails.append(giverName)
                         self.searchGiverNamesEmails.append(giverEmail)
-                    
                     }
                     self.tableView.reloadData()
                 }

@@ -21,6 +21,7 @@ class OfficeClientListTableViewController: UITableViewController {
         super.viewDidLoad()
         
         let query = PFQuery(className:"ClientList")
+        query.fromLocalDatastore()
         query.whereKey("giverId", equalTo: passedGiverId)
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
@@ -66,6 +67,7 @@ class OfficeClientListTableViewController: UITableViewController {
             clientList["officeEmail"] = PFUser.currentUser()?.objectForKey("email")
             self.clientNames.append(nameTextField!.text)
             self.tableView.reloadData()
+            clientList.pinInBackground()
             clientList.saveInBackgroundWithBlock {
                 (success: Bool, error: NSError?) -> Void in
                 if (success) {

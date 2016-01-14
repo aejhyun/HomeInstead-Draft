@@ -32,7 +32,7 @@ class OfficeCathyListTableViewController: UITableViewController {
         let query = PFQuery(className:"CathyList")
         query.whereKey("officeId", equalTo: (PFUser.currentUser()?.objectId)!)
         query.whereKey("clientName", equalTo: passedClientName)
-        //query.fromLocalDatastore()
+        query.fromLocalDatastore()
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             
@@ -96,6 +96,7 @@ class OfficeCathyListTableViewController: UITableViewController {
                     print(error?.description)
                 } else if let cathyList = cathyList {
                     cathyList["alreadyAddedByOffice"] = false
+                    cathyList["clientName"] = ""
                     cathyList["officeId"] = ""
                     cathyList["officeName"] = ""
                     cathyList["officeEmail"] = ""
@@ -111,6 +112,7 @@ class OfficeCathyListTableViewController: UITableViewController {
                     })
                 }
             }
+            objects[indexPath.row].unpinInBackground()
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
         }
     }

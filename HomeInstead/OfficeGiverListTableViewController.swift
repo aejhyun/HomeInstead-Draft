@@ -110,9 +110,7 @@ class OfficeGiverListTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            
-            
-            
+
             let giverListQuery = PFQuery(className:"GiverList")
             giverListQuery.getObjectInBackgroundWithId(objects[indexPath.row].objectId!) {
                 (giverList: PFObject?, error: NSError?) -> Void in
@@ -185,31 +183,6 @@ class OfficeGiverListTableViewController: UITableViewController {
             giverEmails.removeAtIndex(indexPath.row)
             
             objects[indexPath.row].unpinInBackground()
-            
-            
-            
-//            cathyListQuery.getObjectInBackgroundWithId(objects[indexPath.row].objectId!) {
-//                (cathyList: PFObject?, error: NSError?) -> Void in
-//                if error != nil {
-//                    print(error?.description)
-//                } else if let cathyList = cathyList {
-//                    cathyList["officeId"] = ""
-//                    cathyList["officeName"] = ""
-//                    cathyList["officeEmail"] = ""
-//                    cathyList["giverName"] = ""
-//                    cathyList["giverId"] = ""
-//                    cathyList["giverEmail"] = ""
-//                    cathyList["clientName"] = ""
-//                    
-//                    cathyList.saveInBackgroundWithBlock({ (success: Bool, error: NSError?) -> Void in
-//                        if (success) {
-//                            print("Successfully updated object containing \(self.objects[indexPath.row].objectForKey("giverName")) for the CathyList Class.")
-//                        } else {
-//                            print(error?.description)
-//                        }
-//                    })
-//                }
-//            }
             
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
         }
