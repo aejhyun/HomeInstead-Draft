@@ -21,6 +21,8 @@ class CathyTaskLogTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
         let query = PFQuery(className:"TaskInformation")
         query.whereKey("cathyId", equalTo: (PFUser.currentUser()?.objectId)!)
         query.findObjectsInBackgroundWithBlock {
