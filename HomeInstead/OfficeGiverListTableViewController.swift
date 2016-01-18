@@ -18,7 +18,20 @@ class OfficeGiverListTableViewController: UITableViewController {
     var giverIdToBePassed: String = ""
     var giverEmailToBePassed: String = ""
     var objects = [PFObject]()
-
+    let userDefaults = NSUserDefaults.standardUserDefaults()
+    
+    func appAlreadyLaunchedOnce() -> Bool {
+        
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if userDefaults.boolForKey("FirstTimeLoadingOfficeGiverListOnThisDeviceForUser: \(PFUser.currentUser()!.objectId)") {
+            return true
+        } else {
+            userDefaults.setBool(true, forKey: "FirstTimeLoadingOfficeGiverListOnThisDeviceForUser: \(PFUser.currentUser()!.objectId)")
+            return false
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,46 +39,66 @@ class OfficeGiverListTableViewController: UITableViewController {
     
     override func viewDidAppear(animated: Bool) {
         
-        giverNames.removeAll()
-        giverIds.removeAll()
-        giverEmails.removeAll()
-        let query = PFQuery(className:"GiverList")
-        query.whereKey("officeId", equalTo: (PFUser.currentUser()?.objectId)!)
-        query.fromLocalDatastore()
-        query.findObjectsInBackgroundWithBlock {
-            (objects: [PFObject]?, error: NSError?) -> Void in
+        if appAlreadyLaunchedOnce() {
             
-            if error == nil {
-                // The find succeeded.
-                print("Successfully retrieved \(objects!.count) objects.")
-                // Do something with the found objects
-                if let objects = objects {
-                    self.objects = objects
-                    for object in objects {
-                        self.giverNames.append(object.objectForKey("giverName") as! String)
-                        self.giverIds.append(object.objectForKey("giverId") as! String)
-                        self.giverEmails.append(object.objectForKey("giverEmail") as! String)
+            giverNames.removeAll()
+            giverIds.removeAll()
+            giverEmails.removeAll()
+            let query = PFQuery(className:"GiverList")
+            query.whereKey("officeId", equalTo: (PFUser.currentUser()?.objectId)!)
+            query.fromLocalDatastore()
+            query.findObjectsInBackgroundWithBlock {
+                (objects: [PFObject]?, error: NSError?) -> Void in
+                
+                if error == nil {
+                    // The find succeeded.
+                    print("Successfully retrieved \(objects!.count) objects.")
+                    // Do something with the found objects
+                    if let objects = objects {
+                        self.objects = objects
+                        for object in objects {
+                            self.giverNames.append(object.objectForKey("giverName") as! String)
+                            self.giverIds.append(object.objectForKey("giverId") as! String)
+                            self.giverEmails.append(object.objectForKey("giverEmail") as! String)
+                        }
+                        self.tableView.reloadData()
                     }
-                    self.tableView.reloadData()
+                } else {
+                    // Log details of the failure
+                    print("Error: \(error!) \(error!.userInfo)")
                 }
-            } else {
-                // Log details of the failure
-                print("Error: \(error!) \(error!.userInfo)")
             }
+
+        } else {
+            
+            let query = PFQuery(className:"GiverList")
+            query.whereKey("officeId", equalTo: (PFUser.currentUser()?.objectId)!)
+            query.findObjectsInBackgroundWithBlock {
+                (objects: [PFObject]?, error: NSError?) -> Void in
+                if error == nil {
+                    // The find succeeded.
+                    print("Successfully retrieved \(objects!.count) objects.")
+                    // Do something with the found objects
+                    if let objects = objects {
+                        self.objects = objects
+                        for object in objects {
+                            self.giverNames.append(object.objectForKey("giverName") as! String)
+                            self.giverIds.append(object.objectForKey("giverId") as! String)
+                            self.giverEmails.append(object.objectForKey("giverEmail") as! String)
+                            object.pinInBackground()
+                        }
+                        self.tableView.reloadData()
+                    }
+                } else {
+                    // Log details of the failure
+                    print("Error: \(error!) \(error!.userInfo)")
+                }
+            }
+            
         }
-        
+ 
     }
     
-    @IBAction func addGiverButtonPressed(sender: AnyObject) {
-
-        
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

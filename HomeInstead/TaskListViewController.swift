@@ -62,8 +62,6 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         return UIBarPosition.TopAttached
     }
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -262,6 +260,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                             completion(address: address)
                         } else {
                             print("hello \(error)")
+                            completion(address: "Could not find an address")
                             return
                         }
                     }
@@ -290,12 +289,12 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     //The variables in this function that are not local to the function are cathyId, cathyName, giverId, passClientName. I'm sorry this function is so disgusting. The content of this function will be called three time. So will it's completion.
     func saveTaskInformationToParse(giverName: String, task: String, date: String, time: String, address: String, includeMessage: Bool, pictureData: NSData?, completion: (savedTaskInformation: Bool) -> Void) {
         
-        for index in 0...(self.cathyIds.count - 1) {
+        if self.cathyIds.count == 0 {
             
             let taskInformation = PFObject(className:"TaskInformation")
             
-            taskInformation["cathyId"] = self.cathyIds[index]
-            taskInformation["cathyName"] = self.cathyNames[index]
+            taskInformation["cathyId"] = ""
+            taskInformation["cathyName"] = ""
             taskInformation["giverId"] = PFUser.currentUser()?.objectId
             taskInformation["giverName"] = giverName
             taskInformation["clientName"] = self.passClientName
@@ -320,9 +319,9 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                 taskInformation["message"] = ""
             }
             
-        
+            
             let defaultPictureData = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 0.5)
-     
+            
             if pictureData != nil && pictureData! != defaultPictureData {
                 let pictureFile: PFFile = PFFile(data: pictureData!)!
                 
@@ -350,8 +349,70 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
             
+        } else {
+            
+            for index in 0...(self.cathyIds.count - 1) {
+                
+                let taskInformation = PFObject(className:"TaskInformation")
+                taskInformation["cathyId"] = self.cathyIds[index]
+                taskInformation["cathyName"] = self.cathyNames[index]
+                taskInformation["giverId"] = PFUser.currentUser()?.objectId
+                taskInformation["giverName"] = giverName
+                taskInformation["clientName"] = self.passClientName
+                taskInformation["task"] = task
+                taskInformation["date"] = self.getDate()
+                taskInformation["time"] = self.getTime()
+                taskInformation["address"] = address
+                taskInformation["pictureMessage"] = ""
+                
+                if includeMessage {
+                    
+                    switch segmentSelected {
+                    case 0:
+                        taskInformation["message"] = standardTaskMessages[sendButtonRowSelected]
+                    case 1:
+                        taskInformation["message"] = specializedTaskMessages[sendButtonRowSelected]
+                    default:
+                        break
+                    }
+                    
+                } else {
+                    taskInformation["message"] = ""
+                }
+                
+                
+                let defaultPictureData = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 0.5)
+                
+                if pictureData != nil && pictureData! != defaultPictureData {
+                    let pictureFile: PFFile = PFFile(data: pictureData!)!
+                    
+                    switch segmentSelected {
+                    case 0:
+                        taskInformation["pictureMessage"] = standardTaskPictureMessages[sendButtonRowSelected]
+                        taskInformation["pictureFile"] = pictureFile
+                    case 1:
+                        taskInformation["pictureMessage"] = specializedTaskPictureMessages[sendButtonRowSelected]
+                        taskInformation["pictureFile"] = pictureFile
+                    default:
+                        break
+                    }
+                    
+                }
+                
+                taskInformation.saveInBackgroundWithBlock {
+                    (success: Bool, error: NSError?) -> Void in
+                    if (success) {
+                        completion(savedTaskInformation: true)
+                        print("The object has been saved.")
+                    } else {
+                        completion(savedTaskInformation: false)
+                        print("There was a problem, check error.description")
+                    }
+                }
+                
+            }
+            
         }
-        
     }
     
     @IBAction func startButtonTapped(sender: AnyObject) {
@@ -512,7 +573,9 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
                             break
                         }
                         
-                        self.taskListTableView.reloadData()
+                        self.taskListTableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
+                        NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(0.3), target: self, selector: "reloadTaskListTableView", userInfo: nil, repeats: false)
+                        
                         flag = false
                         
                     }
@@ -521,6 +584,10 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
             })
         }
         
+    }
+    
+    func reloadTaskListTableView() {
+        self.taskListTableView.reloadData()
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -547,7 +614,7 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! TaskListTableViewCell
-
+        
         if startButtonEnabled == true {
             cell.sendButton.enabled = true
 //            cell.messageButton.enabled = true

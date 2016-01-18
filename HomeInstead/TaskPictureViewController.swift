@@ -33,6 +33,12 @@ class TaskPictureViewController: UIViewController, UIImagePickerControllerDelega
         
     }
     
+    @IBAction func defaultButtonTapped(sender: AnyObject) {
+        
+        pictureImageView.image = UIImage(named: "defaultPicture")!
+        
+    }
+    
     @IBAction func selectImageFromPhotoLibraryButtonTapped(sender: UITapGestureRecognizer) {
         
         let imagePickerController = UIImagePickerController()

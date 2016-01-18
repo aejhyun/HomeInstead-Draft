@@ -19,6 +19,18 @@ class OfficeCathyListTableViewController: UITableViewController {
     var cathyEmails = [String]()
     var objects = [PFObject]()
     
+    func appAlreadyLaunchedOnce() -> Bool {
+        
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if userDefaults.boolForKey("FirstTimeLoadingOfficeCathyListOnThisDeviceForUser: \(PFUser.currentUser()!.objectId)") {
+            return true
+        } else {
+            userDefaults.setBool(true, forKey: "FirstTimeLoadingOfficeCathyListOnThisDeviceForUser: \(PFUser.currentUser()!.objectId)")
+            return false
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,34 +38,64 @@ class OfficeCathyListTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         
-        cathyNames.removeAll()
-        cathyEmails.removeAll()
-        
-        let query = PFQuery(className:"CathyList")
-        query.whereKey("officeId", equalTo: (PFUser.currentUser()?.objectId)!)
-        query.whereKey("clientName", equalTo: passedClientName)
-        query.fromLocalDatastore()
-        query.findObjectsInBackgroundWithBlock {
-            (objects: [PFObject]?, error: NSError?) -> Void in
+        if appAlreadyLaunchedOnce() {
+
+            cathyNames.removeAll()
+            cathyEmails.removeAll()
             
-            if error == nil {
-                // The find succeeded.
-                print("Successfully retrieved \(objects!.count) objects.")
-                // Do something with the found objects
-                if let objects = objects {
-                    self.objects = objects
-                    for object in objects {
-                        self.cathyNames.append(object.objectForKey("cathyName") as! String)
-                        self.cathyEmails.append(object.objectForKey("cathyEmail") as! String)
+            let query = PFQuery(className:"CathyList")
+            query.whereKey("officeId", equalTo: (PFUser.currentUser()?.objectId)!)
+            query.whereKey("clientName", equalTo: passedClientName)
+            query.fromLocalDatastore()
+            query.findObjectsInBackgroundWithBlock {
+                (objects: [PFObject]?, error: NSError?) -> Void in
+                
+                if error == nil {
+                    // The find succeeded.
+                    print("Successfully retrieved \(objects!.count) objects.")
+                    // Do something with the found objects
+                    if let objects = objects {
+                        self.objects = objects
+                        for object in objects {
+                            self.cathyNames.append(object.objectForKey("cathyName") as! String)
+                            self.cathyEmails.append(object.objectForKey("cathyEmail") as! String)
+                        }
+                        self.tableView.reloadData()
                     }
-                    self.tableView.reloadData()
+                } else {
+                    // Log details of the failure
+                    print("Error: \(error!) \(error!.userInfo)")
                 }
-            } else {
-                // Log details of the failure
-                print("Error: \(error!) \(error!.userInfo)")
             }
+            
+        } else {
+            
+            let query = PFQuery(className:"CathyList")
+            query.whereKey("officeId", equalTo: (PFUser.currentUser()?.objectId)!)
+            query.whereKey("clientName", equalTo: passedClientName)
+            query.findObjectsInBackgroundWithBlock {
+                (objects: [PFObject]?, error: NSError?) -> Void in
+                if error == nil {
+                    // The find succeeded.
+                    print("Successfully retrieved \(objects!.count) objects.")
+                    // Do something with the found objects
+                    if let objects = objects {
+                        self.objects = objects
+                        for object in objects {
+                            self.cathyNames.append(object.objectForKey("cathyName") as! String)
+                            self.cathyEmails.append(object.objectForKey("cathyEmail") as! String)
+                            object.pinInBackground()
+                        }
+                        self.tableView.reloadData()
+                    }
+                } else {
+                    // Log details of the failure
+                    print("Error: \(error!) \(error!.userInfo)")
+                }
+            }
+            
         }
-        
+
     }    
     
     override func didReceiveMemoryWarning() {

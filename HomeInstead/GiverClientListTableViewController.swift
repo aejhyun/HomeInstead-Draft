@@ -16,29 +16,71 @@ class GiverClientListTableViewController: UITableViewController {
     //Variable to hold the value passed to the next view controller. It's destination is to the CathyListTableViewController. It's being passed twice. 
     var passClientName: String = ""
     
+    func appAlreadyLaunchedOnce() -> Bool {
+        
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if userDefaults.boolForKey("FirstTimeLoadingGiverClientListOnThisDeviceForUser: \(PFUser.currentUser()!.objectId)") {
+            return true
+        } else {
+            userDefaults.setBool(true, forKey: "FirstTimeLoadingGiverClientListOnThisDeviceForUser: \(PFUser.currentUser()!.objectId)")
+            return false
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let query = PFQuery(className:"ClientList")
-        query.whereKey("giverId", equalTo: (PFUser.currentUser()?.objectId)!)
-        query.findObjectsInBackgroundWithBlock {
-            (objects: [PFObject]?, error: NSError?) -> Void in
-            
-            if error == nil {
-                // The find succeeded.
-                print("Successfully retrieved \(objects!.count) objects.")
-                if let objects = objects {
-                    for object in objects {
-                        //print(object.objectForKey("clientName")!)
-                        self.clientNames.append(object.objectForKey("clientName") as! String)
+        if appAlreadyLaunchedOnce() {
+            print("appAlreadyLaunchedOnce")
+            let query = PFQuery(className:"ClientList")
+            query.fromLocalDatastore()
+            query.whereKey("giverId", equalTo: (PFUser.currentUser()?.objectId)!)
+            query.findObjectsInBackgroundWithBlock {
+                (objects: [PFObject]?, error: NSError?) -> Void in
+                
+                if error == nil {
+                    // The find succeeded.
+                    print("Successfully retrieved \(objects!.count) objects.")
+                    if let objects = objects {
+                        for object in objects {
+                            //print(object.objectForKey("clientName")!)
+                            self.clientNames.append(object.objectForKey("clientName") as! String)
+                        }
+                        self.tableView.reloadData()
                     }
-                    self.tableView.reloadData()
+                } else {
+                    // Log details of the failure
+                    print("Error: \(error!) \(error!.userInfo)")
                 }
-            } else {
-                // Log details of the failure
-                print("Error: \(error!) \(error!.userInfo)")
             }
+            
+        } else {
+            print("appNotAlreadyLaunchedOnce")
+            let query = PFQuery(className:"ClientList")
+            query.whereKey("giverId", equalTo: (PFUser.currentUser()?.objectId)!)
+            query.findObjectsInBackgroundWithBlock {
+                (objects: [PFObject]?, error: NSError?) -> Void in
+                
+                if error == nil {
+                    // The find succeeded.
+                    print("Successfully retrieved \(objects!.count) objects.")
+                    if let objects = objects {
+                        for object in objects {
+                            self.clientNames.append(object.objectForKey("clientName") as! String)
+                            object.pinInBackground()
+                        }
+                        self.tableView.reloadData()
+                    }
+                } else {
+                    // Log details of the failure
+                    print("Error: \(error!) \(error!.userInfo)")
+                }
+            }
+            
         }
+        
+        
     }
     
     

@@ -17,30 +17,74 @@ class OfficeClientListTableViewController: UITableViewController {
     var clientNames = [String!]()
     var clientNameToBePassed: String = ""
     
+    func appAlreadyLaunchedOnce() -> Bool {
+        
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        if userDefaults.boolForKey("FirstTimeLoadingOfficeClientListOnThisDeviceForUser: \(PFUser.currentUser()!.objectId)") {
+            return true
+        } else {
+            userDefaults.setBool(true, forKey: "FirstTimeLoadingOfficeClientListOnThisDeviceForUser: \(PFUser.currentUser()!.objectId)")
+            return false
+        
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let query = PFQuery(className:"ClientList")
-        query.fromLocalDatastore()
-        query.whereKey("giverId", equalTo: passedGiverId)
-        query.findObjectsInBackgroundWithBlock {
-            (objects: [PFObject]?, error: NSError?) -> Void in
-            
-            if error == nil {
-                // The find succeeded.
-                print("Successfully retrieved \(objects!.count) objects.")
-                // Do something with the found objects
-                if let objects = objects {
-                    for object in objects {
-                        self.clientNames.append(object.objectForKey("clientName") as! String)
+        if appAlreadyLaunchedOnce() {
+
+            let query = PFQuery(className:"ClientList")
+            query.fromLocalDatastore()
+            query.whereKey("giverId", equalTo: passedGiverId)
+            query.findObjectsInBackgroundWithBlock {
+                (objects: [PFObject]?, error: NSError?) -> Void in
+                
+                if error == nil {
+                    // The find succeeded.
+                    print("Successfully retrieved \(objects!.count) objects.")
+                    // Do something with the found objects
+                    if let objects = objects {
+                        for object in objects {
+                            self.clientNames.append(object.objectForKey("clientName") as! String)
+                        }
+                        self.tableView.reloadData()
                     }
-                    self.tableView.reloadData()
+                } else {
+                    // Log details of the failure
+                    print("Error: \(error!) \(error!.userInfo)")
                 }
-            } else {
-                // Log details of the failure
-                print("Error: \(error!) \(error!.userInfo)")
             }
+            
+        } else {
+
+            let query = PFQuery(className:"ClientList")
+            query.whereKey("giverId", equalTo: passedGiverId)
+            query.findObjectsInBackgroundWithBlock {
+                (objects: [PFObject]?, error: NSError?) -> Void in
+                
+                if error == nil {
+                    // The find succeeded.
+                    print("Successfully retrieved \(objects!.count) objects.")
+                    // Do something with the found objects
+                    if let objects = objects {
+                        for object in objects {
+                            self.clientNames.append(object.objectForKey("clientName") as! String)
+                            object.pinInBackground()
+                        }
+                        self.tableView.reloadData()
+                    }
+                } else {
+                    // Log details of the failure
+                    print("Error: \(error!) \(error!.userInfo)")
+                }
+            }
+            
         }
+        
+        
+        
 
     }
     

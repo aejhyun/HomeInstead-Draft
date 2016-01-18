@@ -110,7 +110,8 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
                         self.searchGiverNamesEmails += self.giverNames
                         //after the user adds a giver, the searchGiverNamesEmails gets smaller with self.filteredGiverEmails = self.filteredGiverEmails.filter {$0 != selectedGiverEmail}. So instead of using searchGiverNamesEmails which is the old string that was retrived from view did load, I "refresh it with the newest set of emails and givernames that should be displayed to the user. Remember searchGiverNamesEmails needs to have both the emails and the names for it to work because I cannot call updateSearchResultsForSearchController for both email and name. I had to put it into one array.
                         self.addButtonRowSelected = -1
-                        self.tableView.reloadData()
+                        self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
+                        //self.tableView.reloadData()
                     } else {
                         print(error?.description)
                     }
