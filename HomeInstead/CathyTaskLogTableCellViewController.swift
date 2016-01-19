@@ -22,6 +22,7 @@ class CathyTaskLogTableViewController: UITableViewController {
         super.viewDidLoad()
         
         tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 150
         
         let query = PFQuery(className:"TaskInformation")
         query.whereKey("cathyId", equalTo: (PFUser.currentUser()?.objectId)!)
@@ -81,12 +82,13 @@ class CathyTaskLogTableViewController: UITableViewController {
         cell.dateLabel.text = dates[indexPath.row]
         cell.timeLabel.text = times[indexPath.row]
         cell.locationLabel.text = addresses[indexPath.row]
-        
-        cell.messageButton.hidden = true
-        
-        if messages[indexPath.row] != "" {
-            cell.messageButton.hidden = false
-        }
+        cell.messageLabel.sizeToFit()
+        cell.messageLabel.text = messages[indexPath.row]
+//        cell.messageButton.hidden = true
+//        
+//        if messages[indexPath.row] != "" {
+//            cell.messageButton.hidden = false
+//        }
         
         return cell
     }
