@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CathyTaskLogTableViewCell: UITableViewCell {
+class CathyTaskLogOneTableViewCell: UITableViewCell {
 
     @IBOutlet weak var taskLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -16,6 +16,7 @@ class CathyTaskLogTableViewCell: UITableViewCell {
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var messageButton: UIButton!
     @IBOutlet weak var messageLabel: UILabel!
+    @IBOutlet weak var messageToOfficeTextView: UITextView!
 
     override func awakeFromNib() {
         super.awakeFromNib()

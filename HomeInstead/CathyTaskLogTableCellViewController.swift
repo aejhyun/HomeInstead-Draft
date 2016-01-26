@@ -17,6 +17,7 @@ class CathyTaskLogTableViewController: UITableViewController {
     var addresses = [String]()
     var messages = [String]()
     var messageButtonRowSelected: Int? = nil
+    var selectedIndexPath: NSIndexPath? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,9 +57,9 @@ class CathyTaskLogTableViewController: UITableViewController {
         
         let messageButton = sender as! UIButton
         let superView = messageButton.superview!
-        let taskListTableViewCell = superView.superview as! CathyTaskLogTableViewCell
-        let indexPath = tableView.indexPathForCell(taskListTableViewCell)
-        messageButtonRowSelected = indexPath!.row
+        let cathyTaskLogOneTableViewCell = superView.superview as! CathyTaskLogOneTableViewCell
+        let indexPath = tableView.indexPathForCell(cathyTaskLogOneTableViewCell)!
+        messageButtonRowSelected = indexPath.row
         
     }
     
@@ -76,21 +77,29 @@ class CathyTaskLogTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! CathyTaskLogTableViewCell
-        
+
+        let cell = tableView.dequeueReusableCellWithIdentifier("cellOne", forIndexPath: indexPath) as! CathyTaskLogOneTableViewCell
         cell.taskLabel.text = tasks[indexPath.row]
         cell.dateLabel.text = dates[indexPath.row]
         cell.timeLabel.text = times[indexPath.row]
         cell.locationLabel.text = addresses[indexPath.row]
-        cell.messageLabel.sizeToFit()
         cell.messageLabel.text = messages[indexPath.row]
+        
+        if indexPath.row == 0 {
+            cell.taskLabel.text = "Hello my name is Jae and I really enjoy partying with the homies apsdijf asdijf as djfao sjdf paosdjfo "
+            cell.locationLabel.text = "Hello my name is Jae and I really enjoy partying with the homies"
+        }
+    
+        
+        return cell
+        
+        
 //        cell.messageButton.hidden = true
 //        
 //        if messages[indexPath.row] != "" {
 //            cell.messageButton.hidden = false
 //        }
         
-        return cell
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -110,5 +119,25 @@ class CathyTaskLogTableViewController: UITableViewController {
         dismissViewControllerAnimated(true, completion: nil)
         PFUser.logOut()
     }
+    
+//    func cellWithoutMessage(indexPath: NSIndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCellWithIdentifier("cellOne", forIndexPath: indexPath) as! CathyTaskLogOneTableViewCell
+//        cell.taskLabel.text = tasks[indexPath.row]
+//        cell.dateLabel.text = dates[indexPath.row]
+//        cell.timeLabel.text = times[indexPath.row]
+//        cell.locationLabel.text = addresses[indexPath.row]
+//        cell.messageLabel.text = messages[indexPath.row]
+//        return cell
+//    }
+//    
+//    func cellWithMessage(indexPath: NSIndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCellWithIdentifier("cellTwo", forIndexPath: indexPath) as! CathyTaskLogTwoTableViewCell
+//        cell.taskLabel.text = tasks[indexPath.row]
+//        cell.dateLabel.text = dates[indexPath.row]
+//        cell.timeLabel.text = times[indexPath.row]
+//        cell.locationLabel.text = addresses[indexPath.row]
+//        cell.messageLabel.text = messages[indexPath.row]
+//        return cell
+//    }
 
 }

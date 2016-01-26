@@ -664,6 +664,8 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
             }
         }
         
+        print(expandCellIndexPathSelected)
+        
         switch segmentedControl.selectedSegmentIndex {
         case 0:
             expandCellIndexPathStandardHolder = expandCellIndexPathSelected
