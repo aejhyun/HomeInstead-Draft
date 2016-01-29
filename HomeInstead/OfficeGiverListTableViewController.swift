@@ -174,6 +174,7 @@ class OfficeGiverListTableViewController: UITableViewController {
                     if let objects = objects {
                         for object in objects {
                             object.deleteInBackground()
+                            object.unpinInBackground()
                         }
                         self.tableView.reloadData()
                     }

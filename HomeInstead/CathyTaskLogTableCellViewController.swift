@@ -16,8 +16,12 @@ class CathyTaskLogTableViewController: UITableViewController {
     var times = [String]()
     var addresses = [String]()
     var messages = [String]()
+    var pictures = [UIImage?]()
+    var pictureFiles = [PFFile?]()
+    var pictureMessages = [String]()
     var messageButtonRowSelected: Int? = nil
     var selectedIndexPath: NSIndexPath? = nil
+    var flag = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,18 +36,53 @@ class CathyTaskLogTableViewController: UITableViewController {
             if error == nil {
                 if let objects = objects {
                     for object in objects {
+                        self.pictures.append(nil)
                         self.tasks.append(object.objectForKey("task") as! String)
                         self.dates.append(object.objectForKey("date") as! String)
                         self.times.append(object.objectForKey("time") as! String)
                         self.addresses.append(object.objectForKey("address") as! String)
                         self.messages.append(object.objectForKey("message") as! String)
+                        self.pictureMessages.append(object.objectForKey("pictureMessage") as! String)
+                        if object.objectForKey("pictureFile") != nil {
+                            self.pictureFiles.append(object.objectForKey("pictureFile") as? PFFile)
+                        } else {
+                            self.pictureFiles.append(nil)
+                        }
+                        
+//                        if object.objectForKey("pictureFile") != nil {
+//                            let pictureFile = object.objectForKey("pictureFile") as! PFFile
+//                            pictureFile.getDataInBackgroundWithBlock({ (imageData: NSData?, error:NSError?) -> Void in
+//                                if error == nil {
+//                                    let image = UIImage(data:imageData!)
+//                                    self.pictures.append(image)
+//                                } else {
+//                                    print(error?.description)
+//                                }
+//                                //print(self.pictures)
+//                                self.tableView.reloadData()
+//                            })
+//                        } else {
+//                            self.pictures.append(nil)
+//                        }
+                        
                     }
                     self.tasks = self.tasks.reverse()
                     self.dates = self.dates.reverse()
                     self.times = self.times.reverse()
                     self.addresses = self.addresses.reverse()
                     self.messages = self.messages.reverse()
-                    self.tableView.reloadData()
+                    self.pictureMessages = self.pictureMessages.reverse()
+                    
+                    self.getImagesFromPictureFiles({ (imageIndex) -> Void in
+                        
+                        if imageIndex == self.pictures.count - 1 {
+                            self.tableView.reloadData()
+                            print("hello")
+                        }
+                        
+                    })
+                    //self.tableView.reloadData()
+                    
                 }
             } else {
                 // Log details of the failure
@@ -52,14 +91,35 @@ class CathyTaskLogTableViewController: UITableViewController {
         }
         
     }
+    
+    func getImagesFromPictureFiles(completion: (imageIndex: Int) -> Void) {
+        
+        for index in 0...pictureFiles.count - 1 {
+            
+            if pictureFiles[index] != nil {
+                pictureFiles[index]?.getDataInBackgroundWithBlock({ (imageData: NSData?, error: NSError?) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData!)
+                        self.pictures[index] = image
+                        completion(imageIndex: index)
+                    } else {
+                        print(error?.description)
+                    }
+                })
+            }
+            
+        }
+        
+    }
+
 
     @IBAction func messageButtonTapped(sender: AnyObject) {
-        
-        let messageButton = sender as! UIButton
-        let superView = messageButton.superview!
-        let cathyTaskLogOneTableViewCell = superView.superview as! CathyTaskLogOneTableViewCell
-        let indexPath = tableView.indexPathForCell(cathyTaskLogOneTableViewCell)!
-        messageButtonRowSelected = indexPath.row
+        print(self.pictureFiles)
+//        let messageButton = sender as! UIButton
+//        let superView = messageButton.superview!
+//        let cathyTaskLogOneTableViewCell = superView.superview as! CathyTaskLogOneTableViewCell
+//        let indexPath = tableView.indexPathForCell(cathyTaskLogOneTableViewCell)!
+//        messageButtonRowSelected = indexPath.row
         
     }
     
@@ -76,8 +136,8 @@ class CathyTaskLogTableViewController: UITableViewController {
         return tasks.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-
+    func cellOne(indexPath: NSIndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCellWithIdentifier("cellOne", forIndexPath: indexPath) as! CathyTaskLogOneTableViewCell
         cell.taskLabel.text = tasks[indexPath.row]
         cell.dateLabel.text = dates[indexPath.row]
@@ -85,20 +145,87 @@ class CathyTaskLogTableViewController: UITableViewController {
         cell.locationLabel.text = addresses[indexPath.row]
         cell.messageLabel.text = messages[indexPath.row]
         
-        if indexPath.row == 0 {
-            cell.taskLabel.text = "Hello my name is Jae and I really enjoy partying with the homies apsdijf asdijf as djfao sjdf paosdjfo "
-            cell.locationLabel.text = "Hello my name is Jae and I really enjoy partying with the homies"
-        }
-    
-        
         return cell
         
+    }
+    
+    func cellTwo(indexPath: NSIndexPath) -> UITableViewCell {
         
-//        cell.messageButton.hidden = true
-//        
-//        if messages[indexPath.row] != "" {
-//            cell.messageButton.hidden = false
+        if flag {
+            pictures = pictures.reverse()
+            flag = false
+        }
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("cellTwo", forIndexPath: indexPath) as! CathyTaskLogTwoTableViewCell
+        
+        let cGPoint = CGPoint(x: 0.0, y: 0.0)
+        let cGSize = CGSize(width: 100.0, height: 100.0)
+        let cGRect = CGRect(origin: cGPoint, size: cGSize)
+        let bezierPath = UIBezierPath(rect: cGRect)
+        cell.pictureMessageTextView.textContainer.exclusionPaths = [bezierPath]
+        
+        cell.taskLabel.text = tasks[indexPath.row]
+        cell.dateLabel.text = dates[indexPath.row]
+        cell.timeLabel.text = times[indexPath.row]
+        cell.locationLabel.text = addresses[indexPath.row]
+        cell.pictureMessageTextView.text = pictureMessages[indexPath.row]
+        cell.pictureMessageTextView.textColor = UIColor.lightGrayColor()
+        cell.pictureMessageTextView.font = UIFont.systemFontOfSize(13.0)
+        cell.pictureImageView.image = pictures[indexPath.row]
+        
+        
+//        getImageFromFile(pictureFiles[indexPath.row]!, indexPath: indexPath) { (imageFromFile) -> UITableViewCell in
+//            if imageFromFile == nil {
+//                cell.pictureImageView.image = UIImage(named: "defaultPicture")!
+//                return cell
+//            } else {
+//                cell.pictureImageView.image = imageFromFile
+//                return cell
+//            }
 //        }
+        
+        
+        
+//        let pictureFile = pictureFiles[indexPath.row]
+//        pictureFile!.getDataInBackgroundWithBlock({ (imageData: NSData?, error:NSError?) -> Void in
+//            if error == nil {
+//                let image = UIImage(data:imageData!)
+//                cell.pictureImageView.image = image
+//                
+//            } else {
+//                print(error?.description)
+//                return cell
+//            }
+//        })
+
+        return cell
+        
+    }
+    
+//    func getImageFromFile(pictureFile: PFFile, indexPath: NSIndexPath, completion: (imageFromFile: UIImage?) -> UITableViewCell) {
+//        
+//        let pictureFile = pictureFiles[indexPath.row]
+//        pictureFile!.getDataInBackgroundWithBlock({ (imageData: NSData?, error:NSError?) -> Void in
+//            if error == nil {
+//                let image = UIImage(data:imageData!)
+//                completion(imageFromFile: image)
+//            } else {
+//                print(error?.description)
+//                completion(imageFromFile: nil)
+//            }
+//        })
+//    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+//        let cell = tableView.dequeueReusableCellWithIdentifier("cellTwo", forIndexPath: indexPath) as! CathyTaskLogTwoTableViewCell
+//        
+//        return cell
+        if pictures[indexPath.row] == nil {
+            return cellOne(indexPath)
+        } else {
+            return cellTwo(indexPath)
+        }
         
     }
     

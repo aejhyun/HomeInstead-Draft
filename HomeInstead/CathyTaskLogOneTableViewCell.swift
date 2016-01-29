@@ -17,6 +17,7 @@ class CathyTaskLogOneTableViewCell: UITableViewCell {
     @IBOutlet weak var messageButton: UIButton!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var messageToOfficeTextView: UITextView!
+    @IBOutlet weak var pictureMessageTextView: UITextView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
