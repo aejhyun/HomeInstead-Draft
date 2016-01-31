@@ -17,13 +17,11 @@ class CathyTaskLogOneTableViewCell: UITableViewCell {
     @IBOutlet weak var messageButton: UIButton!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var messageToOfficeTextView: UITextView!
-    @IBOutlet weak var pictureMessageTextView: UITextView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        // Initialization code
-        //messageButton.hidden = true
+        
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

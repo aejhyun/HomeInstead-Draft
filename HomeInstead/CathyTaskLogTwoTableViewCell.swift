@@ -18,4 +18,10 @@ class CathyTaskLogTwoTableViewCell: UITableViewCell {
     @IBOutlet weak var pictureMessageTextView: UITextView!
     @IBOutlet weak var pictureImageView: UIImageView!
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+
+    }
+    
 }
+

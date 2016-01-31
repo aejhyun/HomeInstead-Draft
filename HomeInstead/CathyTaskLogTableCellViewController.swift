@@ -19,9 +19,10 @@ class CathyTaskLogTableViewController: UITableViewController {
     var pictures = [UIImage?]()
     var pictureFiles = [PFFile?]()
     var pictureMessages = [String]()
+    var giverNames = [String]()
     var messageButtonRowSelected: Int? = nil
     var selectedIndexPath: NSIndexPath? = nil
-    var flag = true
+    var flags = [Bool](count: 40, repeatedValue: true)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +38,7 @@ class CathyTaskLogTableViewController: UITableViewController {
                 if let objects = objects {
                     for object in objects {
                         self.pictures.append(nil)
+                        self.giverNames.append(object.objectForKey("giverName") as! String)
                         self.tasks.append(object.objectForKey("task") as! String)
                         self.dates.append(object.objectForKey("date") as! String)
                         self.times.append(object.objectForKey("time") as! String)
@@ -72,12 +74,11 @@ class CathyTaskLogTableViewController: UITableViewController {
                     self.addresses = self.addresses.reverse()
                     self.messages = self.messages.reverse()
                     self.pictureMessages = self.pictureMessages.reverse()
-                    
+                    self.pictureFiles = self.pictureFiles.reverse()
                     self.getImagesFromPictureFiles({ (imageIndex) -> Void in
                         
                         if imageIndex == self.pictures.count - 1 {
                             self.tableView.reloadData()
-                            print("hello")
                         }
                         
                     })
@@ -136,6 +137,34 @@ class CathyTaskLogTableViewController: UITableViewController {
         return tasks.count
     }
     
+    func cropToSquare(image originalImage: UIImage) -> UIImage {
+        
+        let contextImage: UIImage = UIImage(CGImage: originalImage.CGImage!)
+        let contextImageSize: CGSize = contextImage.size
+        let positionX: CGFloat
+        let positionY: CGFloat
+        let width: CGFloat
+        let height: CGFloat
+        
+        if contextImageSize.width > contextImageSize.height {
+            positionX = ((contextImageSize.width - contextImageSize.height) / 2)
+            positionY = 0
+            width = contextImageSize.height
+            height = contextImageSize.height
+        } else {
+            positionX = 0
+            positionY = ((contextImageSize.height - contextImageSize.width) / 2)
+            width = contextImageSize.width
+            height = contextImageSize.width
+        }
+        let rect: CGRect = CGRectMake(positionX, positionY, width, height)
+        let imageRef: CGImageRef = CGImageCreateWithImageInRect(contextImage.CGImage, rect)!
+        let image: UIImage = UIImage(CGImage: imageRef, scale: originalImage.scale, orientation: originalImage.imageOrientation)
+        
+        return image
+        
+    }
+    
     func cellOne(indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("cellOne", forIndexPath: indexPath) as! CathyTaskLogOneTableViewCell
@@ -143,7 +172,8 @@ class CathyTaskLogTableViewController: UITableViewController {
         cell.dateLabel.text = dates[indexPath.row]
         cell.timeLabel.text = times[indexPath.row]
         cell.locationLabel.text = addresses[indexPath.row]
-        cell.messageLabel.text = messages[indexPath.row]
+        cell.messageLabel.text = "\(giverNames[indexPath.row]) wrote: \(messages[indexPath.row])"
+
         
         return cell
         
@@ -151,12 +181,72 @@ class CathyTaskLogTableViewController: UITableViewController {
     
     func cellTwo(indexPath: NSIndexPath) -> UITableViewCell {
         
-        if flag {
-            pictures = pictures.reverse()
-            flag = false
-        }
-        
         let cell = tableView.dequeueReusableCellWithIdentifier("cellTwo", forIndexPath: indexPath) as! CathyTaskLogTwoTableViewCell
+        
+        let cGPoint = CGPoint(x: 0.0, y: 0.0)
+        let cGSize = CGSize(width: 100.0, height: 100.0)
+        let cGRect = CGRect(origin: cGPoint, size: cGSize)
+        let bezierPath = UIBezierPath(rect: cGRect)
+        cell.pictureMessageTextView.textContainer.exclusionPaths = [bezierPath]
+
+        cell.taskLabel.text = tasks[indexPath.row]
+        cell.dateLabel.text = dates[indexPath.row]
+        cell.timeLabel.text = times[indexPath.row]
+        cell.locationLabel.text = addresses[indexPath.row]
+        cell.pictureMessageTextView.text = "\(giverNames[indexPath.row]) wrote: \(pictureMessages[indexPath.row])"
+        cell.pictureMessageTextView.textColor = UIColor.lightGrayColor()
+        cell.pictureMessageTextView.font = UIFont.systemFontOfSize(13.0)
+        
+        
+        
+        cell.pictureImageView.image = cropToSquare(image: pictures[indexPath.row]!)
+        cell.pictureImageView.contentMode = .ScaleAspectFill
+        
+//        let pictureImageView = UIImageView()
+//        pictureImageView.contentMode = .ScaleAspectFill
+//        pictureImageView.frame.size.width = 100
+//        pictureImageView.frame.size.height = 100
+//        
+//        pictureImageView.image = pictures[indexPath.row]
+//        print(pictureImageView.image!.size.height)
+//        print(pictureImageView.image!.size.width)
+//        let desiredPictureHeight = pictureImageView.image!.size.height
+//        let desiredPictureWidth = pictureImageView.image!.size.width
+//        
+//        pictureImageView.frame.size.width = 100
+//        pictureImageView.frame.size.height = 100
+//
+//        
+//        
+        
+        
+        
+//        cell.pictureImageView.addSubview(pictureImageView)
+//        
+//        
+//        pictureImageView.tag = indexPath.row
+    
+//        for subview in cell.pictureMessageTextView.subviews {
+//            print("PSDIFJPSIDFJPSIDJFPJ \(subview)")
+//            print(cell.pictureMessageTextView.textContainer)
+//            if subview != pictureImageView {
+//                if subview != cell.pictureMessageTextView.textContainer {
+//                    subview.removeFromSuperview()
+//                }
+//                
+//            }
+//        }
+//        
+
+
+        return cell
+        
+    }
+    
+    
+    
+    func cellThree(indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("cellThree", forIndexPath: indexPath) as! CathyTaskLogThreeTableViewCell
         
         let cGPoint = CGPoint(x: 0.0, y: 0.0)
         let cGSize = CGSize(width: 100.0, height: 100.0)
@@ -171,60 +261,55 @@ class CathyTaskLogTableViewController: UITableViewController {
         cell.pictureMessageTextView.text = pictureMessages[indexPath.row]
         cell.pictureMessageTextView.textColor = UIColor.lightGrayColor()
         cell.pictureMessageTextView.font = UIFont.systemFontOfSize(13.0)
-        cell.pictureImageView.image = pictures[indexPath.row]
         
+        let pictureImageView = UIImageView()
+        pictureImageView.contentMode = .ScaleAspectFill
+        pictureImageView.frame.size.width = 100
+        pictureImageView.frame.size.height = 100
+        pictureImageView.tag = indexPath.row
         
-//        getImageFromFile(pictureFiles[indexPath.row]!, indexPath: indexPath) { (imageFromFile) -> UITableViewCell in
-//            if imageFromFile == nil {
-//                cell.pictureImageView.image = UIImage(named: "defaultPicture")!
-//                return cell
-//            } else {
-//                cell.pictureImageView.image = imageFromFile
-//                return cell
-//            }
-//        }
+        pictureImageView.image = pictures[indexPath.row]
+        print(pictureImageView.viewWithTag(indexPath.row))
+        print(pictureImageView.image!.size.height)
+        print(pictures[indexPath.row])
         
+        if pictureImageView.viewWithTag(indexPath.row) == pictures[indexPath.row] {
+            
+        }
         
+        for subview in cell.pictureMessageTextView.subviews {
+            if subview is UIImageView {
+                if subview != pictures[indexPath.row] {
+                    subview.removeFromSuperview()
+                }
+            }
+        }
         
-//        let pictureFile = pictureFiles[indexPath.row]
-//        pictureFile!.getDataInBackgroundWithBlock({ (imageData: NSData?, error:NSError?) -> Void in
-//            if error == nil {
-//                let image = UIImage(data:imageData!)
-//                cell.pictureImageView.image = image
-//                
-//            } else {
-//                print(error?.description)
-//                return cell
-//            }
-//        })
 
-        return cell
         
+        
+        cell.pictureMessageTextView.addSubview(pictureImageView)
+
+        
+        
+        
+        
+        return cell
     }
-    
-//    func getImageFromFile(pictureFile: PFFile, indexPath: NSIndexPath, completion: (imageFromFile: UIImage?) -> UITableViewCell) {
-//        
-//        let pictureFile = pictureFiles[indexPath.row]
-//        pictureFile!.getDataInBackgroundWithBlock({ (imageData: NSData?, error:NSError?) -> Void in
-//            if error == nil {
-//                let image = UIImage(data:imageData!)
-//                completion(imageFromFile: image)
-//            } else {
-//                print(error?.description)
-//                completion(imageFromFile: nil)
-//            }
-//        })
-//    }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
 //        let cell = tableView.dequeueReusableCellWithIdentifier("cellTwo", forIndexPath: indexPath) as! CathyTaskLogTwoTableViewCell
 //        
 //        return cell
+        
+
+        
         if pictures[indexPath.row] == nil {
             return cellOne(indexPath)
         } else {
             return cellTwo(indexPath)
+            
         }
         
     }
@@ -267,4 +352,27 @@ class CathyTaskLogTableViewController: UITableViewController {
 //        return cell
 //    }
 
+    //        getImageFromFile(pictureFiles[indexPath.row]!, indexPath: indexPath) { (imageFromFile) -> UITableViewCell in
+    //            if imageFromFile == nil {
+    //                cell.pictureImageView.image = UIImage(named: "defaultPicture")!
+    //                return cell
+    //            } else {
+    //                cell.pictureImageView.image = imageFromFile
+    //                return cell
+    //            }
+    //        }
+    
+    
+    
+    //        let pictureFile = pictureFiles[indexPath.row]
+    //        pictureFile!.getDataInBackgroundWithBlock({ (imageData: NSData?, error:NSError?) -> Void in
+    //            if error == nil {
+    //                let image = UIImage(data:imageData!)
+    //                cell.pictureImageView.image = image
+    //
+    //            } else {
+    //                print(error?.description)
+    //                return cell
+    //            }
+    //        })
 }
