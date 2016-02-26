@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Ppx-0d-QBl">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="nSP-XR-nEV">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -464,7 +464,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MPU-yM-unW">
                                             <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                             <variation key="widthClass=compact" fixedFrame="YES">
                                                 <rect key="frame" x="16" y="11" width="272" height="21"/>
@@ -1537,8 +1537,8 @@
                                     <outlet property="timeLabel" destination="WVT-ts-wqf" id="1gk-Sc-h9O"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellTwo" rowHeight="174" id="cMQ-8B-RRQ" customClass="CathyTaskLogTwoTableViewCell" customModule="HomeInstead" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="316" width="375" height="174"/>
+                            <tableViewCell clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellTwo" rowHeight="174" id="cMQ-8B-RRQ" customClass="CathyTaskLogTwoTableViewCell" customModule="HomeInstead" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="170" width="375" height="174"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cMQ-8B-RRQ" id="3tm-lD-mgQ">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="173"/>
@@ -1673,8 +1673,9 @@
                                                 </mask>
                                             </variation>
                                         </textView>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KfG-XZ-J3C">
+                                        <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KfG-XZ-J3C">
                                             <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                            <gestureRecognizers/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="KfG-XZ-J3C" secondAttribute="height" multiplier="1:1" id="QMP-U6-N8H"/>
                                                 <constraint firstAttribute="height" constant="70" id="Uxq-Ze-N9h">
@@ -1801,17 +1802,17 @@
                                     </variation>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="dateLabel" destination="sv7-q0-zIV" id="alL-cS-DcH"/>
-                                    <outlet property="locationLabel" destination="VOW-fH-43X" id="ir5-j5-IhQ"/>
-                                    <outlet property="messageButton" destination="LEO-DF-hO6" id="Uai-P0-l2I"/>
+                                    <outlet property="dateLabel" destination="sv7-q0-zIV" id="MMc-BR-ILp"/>
+                                    <outlet property="locationLabel" destination="VOW-fH-43X" id="qSo-Uv-bZY"/>
+                                    <outlet property="messageButton" destination="LEO-DF-hO6" id="2gs-zT-ejB"/>
                                     <outlet property="pictureImageView" destination="KfG-XZ-J3C" id="3c4-ic-yHu"/>
                                     <outlet property="pictureMessageTextView" destination="k9o-nK-pDj" id="sPS-9k-YPg"/>
-                                    <outlet property="taskLabel" destination="fOA-IO-aEu" id="32g-f9-QAn"/>
-                                    <outlet property="timeLabel" destination="Qst-Tx-3Za" id="OOz-c5-oc1"/>
+                                    <outlet property="taskLabel" destination="fOA-IO-aEu" id="EIx-Fc-Ny4"/>
+                                    <outlet property="timeLabel" destination="Qst-Tx-3Za" id="Zpa-73-to3"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellThree" rowHeight="174" id="RR1-BC-UIb" customClass="CathyTaskLogThreeTableViewCell" customModule="HomeInstead" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="316" width="375" height="174"/>
+                                <rect key="frame" x="0.0" y="344" width="375" height="174"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RR1-BC-UIb" id="wni-I9-0Ee">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="173"/>
@@ -1866,14 +1867,14 @@
                                             <nil key="highlightedColor"/>
                                             <variation key="default">
                                                 <mask key="constraints">
-                                                    <exclude reference="wTR-dQ-osZ"/>
                                                     <exclude reference="H4H-f5-OLO"/>
+                                                    <exclude reference="wTR-dQ-osZ"/>
                                                 </mask>
                                             </variation>
                                             <variation key="widthClass=compact">
                                                 <mask key="constraints">
-                                                    <include reference="wTR-dQ-osZ"/>
                                                     <include reference="H4H-f5-OLO"/>
+                                                    <include reference="wTR-dQ-osZ"/>
                                                 </mask>
                                             </variation>
                                         </label>
@@ -1888,14 +1889,14 @@
                                             <nil key="highlightedColor"/>
                                             <variation key="default">
                                                 <mask key="constraints">
-                                                    <exclude reference="pRZ-2B-ohu"/>
                                                     <exclude reference="3ig-V2-z3w"/>
+                                                    <exclude reference="pRZ-2B-ohu"/>
                                                 </mask>
                                             </variation>
                                             <variation key="widthClass=compact">
                                                 <mask key="constraints">
-                                                    <include reference="pRZ-2B-ohu"/>
                                                     <include reference="3ig-V2-z3w"/>
+                                                    <include reference="pRZ-2B-ohu"/>
                                                 </mask>
                                             </variation>
                                         </label>
@@ -1909,14 +1910,14 @@
                                             <state key="normal" title="Mes."/>
                                             <variation key="default">
                                                 <mask key="constraints">
-                                                    <exclude reference="iS7-CC-2T3"/>
                                                     <exclude reference="9oO-CM-Yib"/>
+                                                    <exclude reference="iS7-CC-2T3"/>
                                                 </mask>
                                             </variation>
                                             <variation key="widthClass=compact">
                                                 <mask key="constraints">
-                                                    <include reference="iS7-CC-2T3"/>
                                                     <include reference="9oO-CM-Yib"/>
+                                                    <include reference="iS7-CC-2T3"/>
                                                 </mask>
                                             </variation>
                                             <connections>
@@ -1982,23 +1983,23 @@
                                         </mask>
                                         <mask key="constraints">
                                             <exclude reference="ZCL-0c-anl"/>
-                                            <exclude reference="wMF-Sl-aMP"/>
-                                            <exclude reference="R9X-9T-osQ"/>
-                                            <exclude reference="8vF-eQ-fre"/>
-                                            <exclude reference="WCv-AX-JtW"/>
-                                            <exclude reference="A64-xo-FZA"/>
+                                            <exclude reference="IPS-BG-GL8"/>
+                                            <exclude reference="d6a-Qc-186"/>
+                                            <exclude reference="udT-km-WDq"/>
                                             <exclude reference="FZF-rJ-2vo"/>
                                             <exclude reference="NzJ-TU-aYd"/>
                                             <exclude reference="Wz9-cR-IWs"/>
-                                            <exclude reference="udT-km-WDq"/>
-                                            <exclude reference="d6a-Qc-186"/>
-                                            <exclude reference="IPS-BG-GL8"/>
-                                            <exclude reference="iGc-ve-vdg"/>
-                                            <exclude reference="hwN-tK-u2P"/>
-                                            <exclude reference="gMl-xE-brL"/>
-                                            <exclude reference="KxA-qX-BNk"/>
-                                            <exclude reference="I75-Ex-cMh"/>
+                                            <exclude reference="8vF-eQ-fre"/>
+                                            <exclude reference="A64-xo-FZA"/>
+                                            <exclude reference="WCv-AX-JtW"/>
+                                            <exclude reference="R9X-9T-osQ"/>
+                                            <exclude reference="wMF-Sl-aMP"/>
                                             <exclude reference="7la-lZ-XvC"/>
+                                            <exclude reference="I75-Ex-cMh"/>
+                                            <exclude reference="KxA-qX-BNk"/>
+                                            <exclude reference="gMl-xE-brL"/>
+                                            <exclude reference="hwN-tK-u2P"/>
+                                            <exclude reference="iGc-ve-vdg"/>
                                         </mask>
                                     </variation>
                                     <variation key="widthClass=compact">
@@ -2012,23 +2013,23 @@
                                         </mask>
                                         <mask key="constraints">
                                             <include reference="ZCL-0c-anl"/>
-                                            <include reference="wMF-Sl-aMP"/>
-                                            <include reference="R9X-9T-osQ"/>
-                                            <include reference="8vF-eQ-fre"/>
-                                            <include reference="WCv-AX-JtW"/>
-                                            <include reference="A64-xo-FZA"/>
+                                            <include reference="IPS-BG-GL8"/>
+                                            <include reference="d6a-Qc-186"/>
+                                            <include reference="udT-km-WDq"/>
                                             <include reference="FZF-rJ-2vo"/>
                                             <include reference="NzJ-TU-aYd"/>
                                             <include reference="Wz9-cR-IWs"/>
-                                            <include reference="udT-km-WDq"/>
-                                            <include reference="d6a-Qc-186"/>
-                                            <include reference="IPS-BG-GL8"/>
-                                            <include reference="iGc-ve-vdg"/>
-                                            <exclude reference="hwN-tK-u2P"/>
-                                            <exclude reference="gMl-xE-brL"/>
-                                            <include reference="KxA-qX-BNk"/>
-                                            <include reference="I75-Ex-cMh"/>
+                                            <include reference="8vF-eQ-fre"/>
+                                            <include reference="A64-xo-FZA"/>
+                                            <include reference="WCv-AX-JtW"/>
+                                            <include reference="R9X-9T-osQ"/>
+                                            <include reference="wMF-Sl-aMP"/>
                                             <include reference="7la-lZ-XvC"/>
+                                            <include reference="I75-Ex-cMh"/>
+                                            <include reference="KxA-qX-BNk"/>
+                                            <exclude reference="gMl-xE-brL"/>
+                                            <exclude reference="hwN-tK-u2P"/>
+                                            <include reference="iGc-ve-vdg"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
@@ -2063,6 +2064,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PsK-T1-3Av" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1836.75" y="461.5"/>
+        </scene>
+        <!--Cathy Task Log Message View Controller-->
+        <scene sceneID="1Se-Pq-nVw">
+            <objects>
+                <viewController id="nSP-XR-nEV" customClass="CathyTaskLogMessageViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="72J-5E-igv"/>
+                        <viewControllerLayoutGuide type="bottom" id="w3j-RY-DcO"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0Lr-te-iaL">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KO8-Xc-xer" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1026" y="1252"/>
         </scene>
         <!--Cathy Task Log Message View Controller-->
         <scene sceneID="N1g-9R-0Vv">
@@ -2142,8 +2161,30 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gqj-dK-mpZ">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FOn-Tg-pOC">
+                                        <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                        <state key="normal" title="Button"/>
+                                        <variation key="widthClass=compact" fixedFrame="YES">
+                                            <rect key="frame" x="177" y="233" width="46" height="30"/>
+                                        </variation>
+                                        <connections>
+                                            <action selector="buttonTapped:" destination="lJQ-HI-BEJ" eventType="touchUpInside" id="2o8-dF-tZ5"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="0.0" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
+                                <variation key="default">
+                                    <mask key="subviews">
+                                        <exclude reference="FOn-Tg-pOC"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="subviews">
+                                        <include reference="FOn-Tg-pOC"/>
+                                    </mask>
+                                </variation>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="O6s-6K-bUf" appends="YES" id="k6V-UH-cuj"/>
                                 </connections>
@@ -2418,8 +2459,8 @@
         <image name="defaultPicture" width="540" height="540"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="x9m-QM-WVL"/>
-        <segue reference="gHM-KO-YzH"/>
-        <segue reference="Dx0-iJ-XQZ"/>
+        <segue reference="KS2-cD-Ng0"/>
+        <segue reference="JvB-e1-eF0"/>
+        <segue reference="CPS-1T-8Nc"/>
     </inferredMetricsTieBreakers>
 </document>
