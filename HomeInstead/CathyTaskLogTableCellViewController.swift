@@ -75,6 +75,14 @@ class CathyTaskLogTableViewController: UITableViewController {
         }
         
     }
+
+    
+    override func childViewControllerForStatusBarHidden() -> UIViewController? {
+        
+        print("yo")
+        return ImageViewerViewController()
+        
+    }
     
     func getImagesFromPictureFiles(completion: (imageIndex: Int) -> Void) {
         
@@ -176,18 +184,38 @@ class CathyTaskLogTableViewController: UITableViewController {
         return cell
         
     }
+
     
     func pictureTapped(gestureRecognizer: UITapGestureRecognizer) {
-        print("hello")
+
+        let tappedLocation = gestureRecognizer.locationInView(self.tableView)
+        if let tappedIndexPath = tableView.indexPathForRowAtPoint(tappedLocation) {
+            
         
         
-        let imageViewerViewController = ImageViewerViewController()
-        let transition = CATransition()
-        transition.duration = 0.3
-        transition.type = kCATransitionFade
-        
-        self.navigationController!.view.layer.addAnimation(transition, forKey: "kCATransition")
-        self.navigationController?.pushViewController(imageViewerViewController, animated: false)
+            
+            let pointTapped: CGPoint = CGPoint(x: tappedLocation.x, y: tappedLocation.y)
+            let size: CGSize = CGSize(width: 0, height: 0)
+            
+            let pictureTapped: UIImage = pictures[tappedIndexPath.row]!
+            let imageViewerViewController = ImageViewerViewController()
+            self.addChildViewController(imageViewerViewController)
+            
+            imageViewerViewController.image = self.pictures[tappedIndexPath.row]
+            
+            imageViewerViewController.cancelButtonImage = UIImage(named: "cancelButtonImage")
+            imageViewerViewController.disableSavingImage = false
+            self.view.addSubview(imageViewerViewController.view)
+            
+ 
+            imageViewerViewController.centerPictureFromPoint(pointTapped, ofSize: size, withCornerRadius: 0)
+            self.navigationController?.navigationBarHidden = false
+            self.didMoveToParentViewController(self)
+            
+
+        }
+
+ 
         
         
         //imageViewerViewController.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
@@ -199,16 +227,6 @@ class CathyTaskLogTableViewController: UITableViewController {
         
         
         
-        //        let tappedLocation = gestureRecognizer.locationInView(self.tableView)
-        //        if let tappedIndexPath = tableView.indexPathForRowAtPoint(tappedLocation) {
-        //            let aKImageViewerViewController = AKImageViewerViewController()
-        //            aKImageViewerViewController.image = pictures[tappedIndexPath.row]
-        //            aKImageViewerViewController.imgCancel = UIImage(named: "cancelButton")
-        //            self.view.addSubview(aKImageViewerViewController.view)
-        //            aKImageViewerViewController.centerPictureFromPoint(CGPointMake(0, 100), ofSize: CGSizeMake(100, 100), withCornerRadius: 1.0)
-        //
-        //
-        //        }
         
         //        let messageButton = sender as! UIButton
         //        let superView = messageButton.superview!

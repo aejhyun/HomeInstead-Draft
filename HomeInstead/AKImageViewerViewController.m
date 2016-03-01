@@ -174,8 +174,7 @@
         }
         else if (velocityY < -700 || (abs(deltaY)>maxDeltaY && deltaY<0)) //swipe up
         {
-            [[UIApplication sharedApplication] setStatusBarHidden:NO];
-            [UIView animateWithDuration:0.3f animations:^{
+            [[UIApplication sharedApplication] setStatusBarHidden:NO];            [UIView animateWithDuration:0.3f animations:^{
                 self.imageView.frame = CGRectMake(self.imageView.frame.origin.x, -self.imageView.frame.size.height, self.imageView.frame.size.width, self.imageView.frame.size.height);
                 self.view.alpha = 0.0;
             } completion:^(BOOL finished) {

@@ -18,17 +18,11 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
     var longPressGestureRecognizer: UILongPressGestureRecognizer!
     var cancelButton: UIButton!
     var cancelButtonImage: UIImage!
-  
-    
-//    @property (retain, nonatomic) IBOutlet UIButton *btnCancel;
-//    @property (retain, nonatomic) IBOutlet UIImage *image;
-//    @property (retain, nonatomic) IBOutlet UIImage *imgCancel;
-//    @property (retain, nonatomic) IBOutlet UIImageView *imageView;
-//    @property (retain, nonatomic) IBOutlet UIPanGestureRecognizer *pan;
-//    @property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+   
         
         self.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.0)
         self.scrollView = UIScrollView(frame: self.view.frame)
@@ -48,21 +42,11 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
         self.scrollView.addGestureRecognizer(tapOnce)
         self.scrollView.addGestureRecognizer(tapTwice)
         
-        self.navigationController?.navigationBarHidden = true
+        
         
         setCancelButton()
+        
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        
-//        self.cancelButton = UIButton(type: UIButtonType.RoundedRect)
-//        self.cancelButton.addTarget(self, action: Selector("cancelButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-//        self.cancelButton.setImage(cancelButtonImage, forState: UIControlState.Normal)
-//        self.cancelButton.tintColor = UIColor.whiteColor()
-//        self.cancelButton.frame = CGRectMake(self.view.frame.size.width - (self.cancelButtonImage.size.width * 2) - 18, 18, self.cancelButtonImage.size.width * 2, self.cancelButtonImage.size.height * 2)
-//        self.view.addSubview(self.cancelButton)
-//
-//    }
     
     func setCancelButton() {
         
@@ -88,13 +72,15 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func centerPictureFromPoint(point: CGPoint, ofSize size: CGSize, withCornerRadius radius: CGFloat) {
+        
+        
         self.imageView = UIImageView(frame: CGRect(x: point.x, y: point.y, width: size.width, height: size.height))
         self.imageView.layer.cornerRadius = radius
         self.imageView.clipsToBounds = true
         self.imageView.image = self.image
         self.scrollView.addSubview(self.imageView)
         
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
             
             let imageWidth = self.image.size.width;
             let imageHeight = self.image.size.height;
@@ -115,7 +101,8 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
             self.view.backgroundColor = UIColor(colorLiteralRed: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
             
             }) { (finished: Bool) -> Void in
-                
+                self.navigationController?.navigationBarHidden = true
+                UIApplication.sharedApplication().statusBarHidden = true
                 if !self.disableSavingImage {
                     self.longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: Selector("longPress:"))
                     self.scrollView.addGestureRecognizer(self.longPressGestureRecognizer)
@@ -144,30 +131,40 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
             
             let velocityY: CGFloat = gesture.velocityInView(self.scrollView).y
             let maxDeltaY: CGFloat = (self.view.frame.size.height - self.imageView.frame.size.height) / 2
-            print(maxDeltaY)
-            if velocityY > 700 || (abs(deltaY) > maxDeltaY && deltaY < 0) {
+            if velocityY > 700 || (abs(deltaY) > maxDeltaY && deltaY > 0) {
                 
-                UIView.animateWithDuration(0.3, animations: { () -> Void in
+                UIView.animateWithDuration(0.5, animations: { () -> Void in
                     self.imageView.frame = CGRectMake(self.imageView.frame.origin.x, self.view.frame.size.height, self.imageView.frame.size.width, self.imageView.frame.size.height)
                     self.view.alpha = 0
                     }, completion: { (finished: Bool) -> Void in
+                        self.willMoveToParentViewController(nil)
                         self.view.removeFromSuperview()
+                        self.removeFromParentViewController()
+                })
+                
+            } else if velocityY < -700 || (abs(deltaY)) > maxDeltaY && deltaY < 0 {
+                
+                UIView.animateWithDuration(0.5, animations: { () -> Void in
+                    self.imageView.frame = CGRectMake(self.imageView.frame.origin.x, -self.view.frame.size.height, self.imageView.frame.size.width, self.imageView.frame.size.height)
+                    self.view.alpha = 0
+                    }, completion: { (finished: Bool) -> Void in
+                        self.willMoveToParentViewController(nil)
+                        self.view.removeFromSuperview()
+                        self.removeFromParentViewController()
+                })
+                
+            } else {
+                
+                UIView.animateWithDuration(0.5, animations: {() -> Void in
+                    self.cancelButton.alpha = 1.0
+                    self.cancelButton.hidden = false
+                    self.scrollView.center = self.view.center
                 })
                 
             }
-        } else {
-            
-//            UIView.animateWithDuration(0.5, animations: {() -> Void in
-//                self.cancelButton.alpha = 1.0
-//                self.cancelButton.hidden = false
-//                self.scrollView.center = self.view.center
-//            })
             
         }
-        
-        
-        
-        
+
     }
     
     func tapOnce(gestureRecognizer: UIGestureRecognizer) {
@@ -276,10 +273,9 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
     
     func longPress(gesture: UILongPressGestureRecognizer) {
         
-        
+        //Copy and paste functionality here.
         
     }
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
