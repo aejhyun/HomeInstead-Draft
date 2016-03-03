@@ -2253,6 +2253,23 @@
             </objects>
             <point key="canvasLocation" x="1836.75" y="1278.5"/>
         </scene>
+        <!--Cathy Image Viewer View Controller-->
+        <scene sceneID="Fmo-Hv-Dg8">
+            <objects>
+                <viewController id="n1p-uU-Y2p" customClass="CathyImageViewerViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7OM-Tn-0k3"/>
+                        <viewControllerLayoutGuide type="bottom" id="J7K-Re-Eyb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Rnk-27-Ndm">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Tg2-6y-jmQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2689.5" y="1278"/>
+        </scene>
         <!--Giver List Table View Controller-->
         <scene sceneID="qzU-iJ-28A">
             <objects>

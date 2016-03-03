@@ -190,28 +190,33 @@ class CathyTaskLogTableViewController: UITableViewController {
 
         let tappedLocation = gestureRecognizer.locationInView(self.tableView)
         if let tappedIndexPath = tableView.indexPathForRowAtPoint(tappedLocation) {
-            
+            let cathyImageViewerViewController = CathyImageViewerViewController()
+            cathyImageViewerViewController.image = pictures[tappedIndexPath.row]
+            cathyImageViewerViewController.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+            self.presentViewController(cathyImageViewerViewController, animated: true, completion: nil)
         
         
             
-            let pointTapped: CGPoint = CGPoint(x: tappedLocation.x, y: tappedLocation.y)
-            let size: CGSize = CGSize(width: 0, height: 0)
             
-            let pictureTapped: UIImage = pictures[tappedIndexPath.row]!
-            let imageViewerViewController = ImageViewerViewController()
-            self.addChildViewController(imageViewerViewController)
             
-            imageViewerViewController.image = self.pictures[tappedIndexPath.row]
-            
-            imageViewerViewController.cancelButtonImage = UIImage(named: "cancelButtonImage")
-            imageViewerViewController.disableSavingImage = false
-            self.view.addSubview(imageViewerViewController.view)
-            
- 
-            imageViewerViewController.centerPictureFromPoint(pointTapped, ofSize: size, withCornerRadius: 0)
-            self.navigationController?.navigationBarHidden = false
-            self.didMoveToParentViewController(self)
-            
+//            let pointTapped: CGPoint = CGPoint(x: tappedLocation.x, y: tappedLocation.y)
+//            let size: CGSize = CGSize(width: 0, height: 0)
+//            
+//            let pictureTapped: UIImage = pictures[tappedIndexPath.row]!
+//            let imageViewerViewController = ImageViewerViewController()
+//            self.addChildViewController(imageViewerViewController)
+//            
+//            imageViewerViewController.image = self.pictures[tappedIndexPath.row]
+//            
+//            imageViewerViewController.cancelButtonImage = UIImage(named: "cancelButtonImage")
+//            imageViewerViewController.disableSavingImage = false
+//            self.view.addSubview(imageViewerViewController.view)
+//            
+// 
+//            imageViewerViewController.centerPictureFromPoint(pointTapped, ofSize: size, withCornerRadius: 0)
+//            self.navigationController?.navigationBarHidden = false
+//            self.didMoveToParentViewController(self)
+//            
 
         }
 

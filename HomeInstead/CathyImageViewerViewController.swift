@@ -1,19 +1,18 @@
 //
-//  ImageViewerViewController.swift
+//  CathyImageViewerViewController.swift
 //  HomeInstead
 //
-//  Created by Jae Hyun Kim on 2/2/16.
+//  Created by Jae Hyun Kim on 3/3/16.
 //  Copyright © 2016 Jae Hyun Kim. All rights reserved.
 //
 
 import UIKit
 
-class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
-    
+class CathyImageViewerViewController: UIViewController, UIScrollViewDelegate {
+
     var image: UIImage!
     var imageView: UIImageView!
     var scrollView: UIScrollView!
-    var disableSavingImage: Bool!
     var panGestureRecognizer: UIPanGestureRecognizer!
     var longPressGestureRecognizer: UILongPressGestureRecognizer!
     var cancelButton: UIButton!
@@ -32,6 +31,8 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
         
         let tapOnce = UITapGestureRecognizer(target: self, action: "tapOnce:")
         let tapTwice = UITapGestureRecognizer(target: self, action: "tapTwice:")
+        self.longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: Selector("longPress:"))
+        self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("moveImage:"))
         
         tapOnce.numberOfTapsRequired = 1
         tapTwice.numberOfTapsRequired = 2
@@ -39,18 +40,19 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
         
         self.scrollView.addGestureRecognizer(tapOnce)
         self.scrollView.addGestureRecognizer(tapTwice)
-        
-        
+        self.scrollView.addGestureRecognizer(self.longPressGestureRecognizer)
+        self.scrollView.addGestureRecognizer(self.panGestureRecognizer)
         
         setCancelButton()
+        centerPicture()
         
     }
     
     func setCancelButton() {
-        
+        self.cancelButtonImage = UIImage(named: "cancelButtonImage")
         self.cancelButton = UIButton(type: UIButtonType.RoundedRect)
         self.cancelButton.addTarget(self, action: Selector("cancelButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-        self.cancelButton.setImage(cancelButtonImage, forState: UIControlState.Normal)
+        self.cancelButton.setImage(self.cancelButtonImage, forState: UIControlState.Normal)
         self.cancelButton.tintColor = UIColor.whiteColor()
         self.cancelButton.frame = CGRectMake(self.view.frame.size.width - (self.cancelButtonImage.size.width * 2) - 18, 18, self.cancelButtonImage.size.width * 2, self.cancelButtonImage.size.height * 2)
         self.view.addSubview(self.cancelButton)
@@ -59,57 +61,36 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
     
     func cancelButtonTapped(sender: UIButton) {
         
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
-            self.view.alpha = 0.0
-            }) { (finished: Bool) -> Void in
-                self.willMoveToParentViewController(nil)
-                self.view.removeFromSuperview()
-                self.removeFromParentViewController()
-        }
+        self.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+        self.dismissViewControllerAnimated(true, completion: nil)
         
     }
     
-    func centerPictureFromPoint(point: CGPoint, ofSize size: CGSize, withCornerRadius radius: CGFloat) {
+    func centerPicture() {
         
-        
-        self.imageView = UIImageView(frame: CGRect(x: point.x, y: point.y, width: size.width, height: size.height))
-        self.imageView.layer.cornerRadius = radius
+        self.imageView = UIImageView()
         self.imageView.clipsToBounds = true
         self.imageView.image = self.image
         self.scrollView.addSubview(self.imageView)
-        
-        UIView.animateWithDuration(0.5, animations: { () -> Void in
-            
-            let imageWidth = self.image.size.width;
-            let imageHeight = self.image.size.height;
-            let imageRatio = imageWidth/imageHeight;
-            let viewRatio = self.view.frame.size.width / self.view.frame.size.height
-            let ratio: CGFloat
-            if imageRatio >= viewRatio {
-                ratio = imageWidth / self.view.frame.size.width
-            }
-            else {
-                ratio = imageHeight / self.view.frame.size.height
-            }
-            let newWidth = imageWidth / ratio
-            let newHeight = imageHeight / ratio
-            self.imageView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, newWidth, newHeight)
-            self.imageView.center = self.scrollView.center
-            self.imageView.layer.cornerRadius = 0.0
-            self.view.backgroundColor = UIColor(colorLiteralRed: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
-            
-            }) { (finished: Bool) -> Void in
-                self.navigationController?.navigationBarHidden = true
-                UIApplication.sharedApplication().statusBarHidden = true
-                if !self.disableSavingImage {
-                    self.longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: Selector("longPress:"))
-                    self.scrollView.addGestureRecognizer(self.longPressGestureRecognizer)
-                }
-                self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("moveImage:"))
-                self.scrollView.addGestureRecognizer(self.panGestureRecognizer)
-                
+
+        let imageWidth = self.image.size.width;
+        let imageHeight = self.image.size.height;
+        let imageRatio = imageWidth/imageHeight;
+        let viewRatio = self.view.frame.size.width / self.view.frame.size.height
+        let ratio: CGFloat
+        if imageRatio >= viewRatio {
+            ratio = imageWidth / self.view.frame.size.width
         }
-        
+        else {
+            ratio = imageHeight / self.view.frame.size.height
+        }
+        let newWidth = imageWidth / ratio
+        let newHeight = imageHeight / ratio
+        self.imageView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, newWidth, newHeight)
+        self.imageView.center = self.scrollView.center
+        self.imageView.layer.cornerRadius = 0.0
+        self.view.backgroundColor = UIColor(colorLiteralRed: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+
     }
     
     func moveImage(gesture: UIPanGestureRecognizer) {
@@ -131,29 +112,27 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
             let maxDeltaY: CGFloat = (self.view.frame.size.height - self.imageView.frame.size.height) / 2
             if velocityY > 700 || (abs(deltaY) > maxDeltaY && deltaY > 0) {
                 
-                UIView.animateWithDuration(0.5, animations: { () -> Void in
+                UIView.animateWithDuration(0.3, animations: { () -> Void in
                     self.imageView.frame = CGRectMake(self.imageView.frame.origin.x, self.view.frame.size.height, self.imageView.frame.size.width, self.imageView.frame.size.height)
                     self.view.alpha = 0
                     }, completion: { (finished: Bool) -> Void in
-                        self.willMoveToParentViewController(nil)
-                        self.view.removeFromSuperview()
-                        self.removeFromParentViewController()
+                        self.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+                        self.dismissViewControllerAnimated(true, completion: nil)
                 })
                 
             } else if velocityY < -700 || (abs(deltaY)) > maxDeltaY && deltaY < 0 {
                 
-                UIView.animateWithDuration(0.5, animations: { () -> Void in
+                UIView.animateWithDuration(0.3, animations: { () -> Void in
                     self.imageView.frame = CGRectMake(self.imageView.frame.origin.x, -self.view.frame.size.height, self.imageView.frame.size.width, self.imageView.frame.size.height)
                     self.view.alpha = 0
                     }, completion: { (finished: Bool) -> Void in
-                        self.willMoveToParentViewController(nil)
-                        self.view.removeFromSuperview()
-                        self.removeFromParentViewController()
+                        self.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+                        self.dismissViewControllerAnimated(true, completion: nil)
                 })
                 
             } else {
                 
-                UIView.animateWithDuration(0.5, animations: {() -> Void in
+                UIView.animateWithDuration(0.3, animations: {() -> Void in
                     self.cancelButton.alpha = 1.0
                     self.cancelButton.hidden = false
                     self.scrollView.center = self.view.center
@@ -162,7 +141,7 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
             }
             
         }
-
+        
     }
     
     func tapOnce(gestureRecognizer: UIGestureRecognizer) {
@@ -177,7 +156,7 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
         alertAction = UIAlertAction(title: "Cancel", style: .Default, handler: nil)
         alertController.addAction(alertAction)
         self.presentViewController(alertController, animated: true, completion: nil)
-
+        
     }
     
     func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
@@ -193,7 +172,7 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func tapTwice(gestureRecognizer: UIGestureRecognizer) {
-
+        
         if self.scrollView.zoomScale == self.scrollView.minimumZoomScale {
             let zoomRect = self.zoomRectForScale(self.scrollView.maximumZoomScale, withCenter: gestureRecognizer.locationInView(gestureRecognizer.view!))
             self.scrollView.zoomToRect(zoomRect, animated: true)
@@ -263,7 +242,7 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
                         self.cancelButton.hidden = true
                 })
                 self.scrollView.removeGestureRecognizer(self.panGestureRecognizer)
-            
+                
             }
         }
         
@@ -274,12 +253,5 @@ class ImageViewerViewController: UIViewController, UIScrollViewDelegate {
         //Copy and paste functionality here.
         
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
 
 }
