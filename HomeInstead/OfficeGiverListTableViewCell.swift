@@ -12,10 +12,13 @@ class OfficeGiverListTableViewCell: UITableViewCell {
 
     @IBOutlet weak var giverNameLabel: UILabel!
     @IBOutlet weak var giverEmailLabel: UILabel!
+    @IBOutlet weak var addContactButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+
+        
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

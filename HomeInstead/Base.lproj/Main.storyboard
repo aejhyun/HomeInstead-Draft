@@ -299,34 +299,44 @@
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZDZ-Mg-6yO">
                                             <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="15" id="GB0-Ui-7MW"/>
-                                                <constraint firstAttribute="height" constant="15" id="IBg-i7-AtJ"/>
+                                                <constraint firstAttribute="height" constant="15" id="0db-Y8-Oai">
+                                                    <variation key="widthClass=compact" constant="15"/>
+                                                </constraint>
+                                                <constraint firstAttribute="width" constant="15" id="S9D-65-L0Z">
+                                                    <variation key="widthClass=compact" constant="15"/>
+                                                </constraint>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
-                                                    <exclude reference="GB0-Ui-7MW"/>
-                                                    <exclude reference="IBg-i7-AtJ"/>
+                                                    <exclude reference="0db-Y8-Oai"/>
+                                                    <exclude reference="S9D-65-L0Z"/>
                                                 </mask>
                                             </variation>
                                             <variation key="widthClass=compact">
                                                 <mask key="constraints">
-                                                    <include reference="GB0-Ui-7MW"/>
-                                                    <include reference="IBg-i7-AtJ"/>
+                                                    <include reference="0db-Y8-Oai"/>
+                                                    <include reference="S9D-65-L0Z"/>
                                                 </mask>
                                             </variation>
                                         </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="OhP-3T-ByB" firstAttribute="leading" secondItem="Kvu-71-TyY" secondAttribute="leadingMargin" constant="30" id="0AK-nU-6xg"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="ZDZ-Mg-6yO" secondAttribute="leading" id="C7j-68-awh"/>
                                         <constraint firstItem="OhP-3T-ByB" firstAttribute="top" secondItem="Kvu-71-TyY" secondAttribute="topMargin" id="G8T-XA-PP3"/>
-                                        <constraint firstItem="BKe-Qh-M8Z" firstAttribute="leading" secondItem="Kvu-71-TyY" secondAttribute="leadingMargin" constant="30" id="b6b-Bb-b0D"/>
-                                        <constraint firstItem="ZDZ-Mg-6yO" firstAttribute="top" secondItem="Kvu-71-TyY" secondAttribute="topMargin" constant="6" id="ezO-ZU-kyd"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="ZDZ-Mg-6yO" secondAttribute="bottom" constant="6" id="giT-yi-gLj"/>
-                                        <constraint firstItem="BKe-Qh-M8Z" firstAttribute="trailing" secondItem="Kvu-71-TyY" secondAttribute="trailingMargin" id="iRn-lZ-6dD"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="BKe-Qh-M8Z" secondAttribute="bottom" constant="-8" id="pyv-lH-Pcs"/>
-                                        <constraint firstItem="ZDZ-Mg-6yO" firstAttribute="leading" secondItem="Kvu-71-TyY" secondAttribute="leadingMargin" id="sDl-mW-HaU">
-                                            <variation key="widthClass=compact" constant="5"/>
+                                        <constraint firstItem="ZDZ-Mg-6yO" firstAttribute="leading" secondItem="Kvu-71-TyY" secondAttribute="leadingMargin" constant="203" id="Hzj-5G-iLD">
+                                            <variation key="widthClass=compact" constant="6"/>
                                         </constraint>
+                                        <constraint firstAttribute="leadingMargin" secondItem="ZDZ-Mg-6yO" secondAttribute="leading" id="ZDu-w8-NmY">
+                                            <variation key="widthClass=compact" constant="15"/>
+                                        </constraint>
+                                        <constraint firstItem="BKe-Qh-M8Z" firstAttribute="leading" secondItem="Kvu-71-TyY" secondAttribute="leadingMargin" constant="30" id="b6b-Bb-b0D"/>
+                                        <constraint firstItem="ZDZ-Mg-6yO" firstAttribute="centerY" secondItem="Kvu-71-TyY" secondAttribute="centerY" id="bYQ-hK-zB2"/>
+                                        <constraint firstItem="ZDZ-Mg-6yO" firstAttribute="centerY" secondItem="Kvu-71-TyY" secondAttribute="centerY" id="dba-L0-UEY"/>
+                                        <constraint firstItem="BKe-Qh-M8Z" firstAttribute="trailing" secondItem="Kvu-71-TyY" secondAttribute="trailingMargin" id="iRn-lZ-6dD"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="ZDZ-Mg-6yO" secondAttribute="leading" id="nlt-IU-pcm"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="ZDZ-Mg-6yO" secondAttribute="leading" id="pKt-7f-NCj"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="BKe-Qh-M8Z" secondAttribute="bottom" constant="-8" id="pyv-lH-Pcs"/>
                                         <constraint firstItem="OhP-3T-ByB" firstAttribute="leading" secondItem="ZDZ-Mg-6yO" secondAttribute="trailing" constant="15" id="teb-zu-GOQ">
                                             <variation key="widthClass=compact" constant="30"/>
                                         </constraint>
@@ -339,9 +349,6 @@
                                             <exclude reference="ZDZ-Mg-6yO"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <exclude reference="ezO-ZU-kyd"/>
-                                            <exclude reference="giT-yi-gLj"/>
-                                            <exclude reference="sDl-mW-HaU"/>
                                             <exclude reference="0AK-nU-6xg"/>
                                             <exclude reference="G8T-XA-PP3"/>
                                             <exclude reference="teb-zu-GOQ"/>
@@ -349,6 +356,13 @@
                                             <exclude reference="b6b-Bb-b0D"/>
                                             <exclude reference="iRn-lZ-6dD"/>
                                             <exclude reference="pyv-lH-Pcs"/>
+                                            <exclude reference="C7j-68-awh"/>
+                                            <exclude reference="Hzj-5G-iLD"/>
+                                            <exclude reference="ZDu-w8-NmY"/>
+                                            <exclude reference="bYQ-hK-zB2"/>
+                                            <exclude reference="dba-L0-UEY"/>
+                                            <exclude reference="nlt-IU-pcm"/>
+                                            <exclude reference="pKt-7f-NCj"/>
                                         </mask>
                                     </variation>
                                     <variation key="widthClass=compact">
@@ -358,9 +372,6 @@
                                             <include reference="ZDZ-Mg-6yO"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <include reference="ezO-ZU-kyd"/>
-                                            <include reference="giT-yi-gLj"/>
-                                            <include reference="sDl-mW-HaU"/>
                                             <include reference="0AK-nU-6xg"/>
                                             <include reference="G8T-XA-PP3"/>
                                             <exclude reference="teb-zu-GOQ"/>
@@ -368,10 +379,18 @@
                                             <include reference="b6b-Bb-b0D"/>
                                             <include reference="iRn-lZ-6dD"/>
                                             <include reference="pyv-lH-Pcs"/>
+                                            <exclude reference="C7j-68-awh"/>
+                                            <include reference="Hzj-5G-iLD"/>
+                                            <exclude reference="ZDu-w8-NmY"/>
+                                            <include reference="bYQ-hK-zB2"/>
+                                            <exclude reference="dba-L0-UEY"/>
+                                            <exclude reference="nlt-IU-pcm"/>
+                                            <exclude reference="pKt-7f-NCj"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="addContactButton" destination="ZDZ-Mg-6yO" id="T3r-4O-oEv"/>
                                     <outlet property="giverEmailLabel" destination="BKe-Qh-M8Z" id="4yv-06-Qbf"/>
                                     <outlet property="giverNameLabel" destination="OhP-3T-ByB" id="yCj-9n-Fdt"/>
                                 </connections>
