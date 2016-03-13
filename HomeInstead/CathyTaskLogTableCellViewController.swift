@@ -271,10 +271,10 @@ class CathyTaskLogTableViewController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        let cathyTaskLogMessageViewController = segue.destinationViewController as! CathyTaskLogMessageViewController
-        if messageButtonRowSelected != nil {
-            cathyTaskLogMessageViewController.passedMessage = messages[messageButtonRowSelected!]
-        }
+//        let cathyTaskLogMessageViewController = segue.destinationViewController as! CathyTaskLogMessageViewController
+//        if messageButtonRowSelected != nil {
+//            cathyTaskLogMessageViewController.passedMessage = messages[messageButtonRowSelected!]
+//        }
         
     }
     

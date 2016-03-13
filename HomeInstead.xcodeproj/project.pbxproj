@@ -13,7 +13,6 @@
 		8460ECA11C3A99280041FD83 /* AddGiverTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8460ECA01C3A99280041FD83 /* AddGiverTableViewController.swift */; };
 		8460ECA31C3AA0430041FD83 /* AddGiverTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8460ECA21C3AA0430041FD83 /* AddGiverTableViewCell.swift */; };
 		846DC5001C44FF97007B757C /* OfficeCathyListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DC4FF1C44FF97007B757C /* OfficeCathyListTableViewCell.swift */; };
-		846DC5021C461662007B757C /* CathyTaskLogMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DC5011C461662007B757C /* CathyTaskLogMessageViewController.swift */; };
 		847374E91C37EE5500B4096F /* TaskPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847374E81C37EE5500B4096F /* TaskPictureViewController.swift */; };
 		8479A8EF1C2FBCA30069A046 /* OfficeClientListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479A8EE1C2FBCA30069A046 /* OfficeClientListTableViewController.swift */; };
 		8479A8F11C2FDDF40069A046 /* OfficeCathyListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479A8F01C2FDDF40069A046 /* OfficeCathyListTableViewController.swift */; };
@@ -71,7 +70,6 @@
 		8460ECA01C3A99280041FD83 /* AddGiverTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGiverTableViewController.swift; sourceTree = "<group>"; };
 		8460ECA21C3AA0430041FD83 /* AddGiverTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGiverTableViewCell.swift; sourceTree = "<group>"; };
 		846DC4FF1C44FF97007B757C /* OfficeCathyListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeCathyListTableViewCell.swift; sourceTree = "<group>"; };
-		846DC5011C461662007B757C /* CathyTaskLogMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CathyTaskLogMessageViewController.swift; sourceTree = "<group>"; };
 		847374E81C37EE5500B4096F /* TaskPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskPictureViewController.swift; sourceTree = "<group>"; };
 		8479A8EE1C2FBCA30069A046 /* OfficeClientListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeClientListTableViewController.swift; sourceTree = "<group>"; };
 		8479A8F01C2FDDF40069A046 /* OfficeCathyListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeCathyListTableViewController.swift; sourceTree = "<group>"; };
@@ -199,7 +197,6 @@
 				84C05E151C2BB016009A137C /* CathyTaskLogOneTableViewCell.swift */,
 				84B53A821C575ECB008CAB8A /* CathyTaskLogTwoTableViewCell.swift */,
 				845CE0821C5DCD3C00A82437 /* CathyTaskLogThreeTableViewCell.swift */,
-				846DC5011C461662007B757C /* CathyTaskLogMessageViewController.swift */,
 				84F802591C8853A900708CEC /* CathyImageViewerViewController.swift */,
 				84863F481C414E7F00267E01 /* OfficeGiverListTableViewCell.swift */,
 				84C05E171C2BBF97009A137C /* OfficeGiverListTableViewController.swift */,
@@ -322,7 +319,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				846DC5021C461662007B757C /* CathyTaskLogMessageViewController.swift in Sources */,
 				84D931A21C19A600003C1688 /* SignInViewController.swift in Sources */,
 				84C462AA1C20232A00FA82F9 /* GiverClientListTableViewController.swift in Sources */,
 				84C05E1A1C2BC0B2009A137C /* TestViewController.swift in Sources */,
