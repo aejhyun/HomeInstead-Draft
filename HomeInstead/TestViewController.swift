@@ -7,33 +7,46 @@
 //
 
 import UIKit
-import Parse
 
 class TestViewController: UIViewController {
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-    }
+        
+        
+        //self.subView.bounds.width = self.view.bounds.width
+       
+        
+        
+        
+        
+//        self.subView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height + 500))
+//        self.scrollView = UIScrollView(frame: self.view.frame)
+//        self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.width)
+//        self.scrollView.contentSize = self.subView.bounds.size
+//        self.scrollView.scrollEnabled = true
+//        self.scrollView.addSubview(self.subView)
+//        self.scrollView.addSubview(self.label)
+//        self.view.addSubview(self.scrollView)
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
     }
     
-    @IBAction func signOutButtonTapped(sender: AnyObject) {
-        PFUser.logOut()
+    @IBAction func buttonPressed(sender: AnyObject) {
+        
+        
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func viewDidLayoutSubviews() {
+       //self.scrollView.contentSize = self.view.bounds.size
+//        self.scrollView.contentSize.width = self.view.bounds.height
+//        self.scrollView.contentSize.height = self.view.bounds.height + 300
+        
     }
-    */
+    
+
+   
+
 
 }
