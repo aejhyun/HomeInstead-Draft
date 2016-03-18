@@ -8,15 +8,16 @@
 
 import UIKit
 
-class OfficeAddClientAndCathyViewController: UIViewController, UITextViewDelegate {
+class OfficeAddClientAndCathyViewController: UIViewController, UITextViewDelegate, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var notesTextView: UITextView!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
     var drewTextFieldWithOnlyBottomLine: Bool = false
-    var number = 0
+    var numbers = [1, 2, 3, 4, 5]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,17 +38,6 @@ class OfficeAddClientAndCathyViewController: UIViewController, UITextViewDelegat
         self.drewTextFieldWithOnlyBottomLine = true
         
         
-    }
-    
-    func textViewDidChange(textView: UITextView) {
-        
-        let textViewWidth: CGFloat = self.notesTextView.frame.size.width
-        let newSize: CGSize = self.notesTextView.sizeThatFits(CGSizeMake(textViewWidth, CGFloat(MAXFLOAT)))
-        var newFrame: CGRect = self.notesTextView.frame
-        newFrame.size = CGSizeMake(fmax(newSize.width, textViewWidth), newSize.height)
-        newFrame.offsetInPlace(dx: 0.0, dy: 0.0)
-        self.notesTextView.frame = newFrame
-       
     }
     
     
@@ -79,10 +69,35 @@ class OfficeAddClientAndCathyViewController: UIViewController, UITextViewDelegat
         
     }
     
+    @IBAction func buttonTapped(sender: AnyObject) {
+        
+        
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        return 10
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+        
+        cell.textLabel?.text = "hello"
+        return cell
+
+        
+    }
 
     @IBAction func cancelButtonTapped(sender: AnyObject) {
         
         self.dismissViewControllerAnimated(true, completion: nil)
         
     }
+    
 }
