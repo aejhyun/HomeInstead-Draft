@@ -48,6 +48,7 @@ class AddCathyTableViewController: UITableViewController, UISearchBarDelegate, U
 
         let query = PFQuery(className: "CathyList")
         query.whereKey("alreadyAddedByOffice", equalTo: false)
+        query.fromLocalDatastore()
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             if error == nil {
@@ -65,6 +66,7 @@ class AddCathyTableViewController: UITableViewController, UISearchBarDelegate, U
                         self.cathyEmailsObjectIds[cathyEmail] = object.objectId
                         self.searchCathyNamesEmails.append(cathyName)
                         self.searchCathyNamesEmails.append(cathyEmail)
+                        object.pinInBackground()
                     }
                     self.tableView.reloadData()
                 }
