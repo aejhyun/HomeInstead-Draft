@@ -18,6 +18,7 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var tableViewHeightLayoutConstraint: NSLayoutConstraint!
+    @IBOutlet weak var textViewBottomLayoutConstraint: NSLayoutConstraint!
     
     var cathyNames:[String] = [String]()
     var cathyEmails:[String] = [String]()
@@ -40,6 +41,8 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
         
+        self.notesTextView.delegate = self
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -59,15 +62,20 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
         
     }
     
+    func textViewDidChange(textView: UITextView) {
+        
+    }
+    
     func keyboardDidShow(notification: NSNotification) {
         
         if let activeField = self.notesTextView, keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+            
             let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardSize.height, right: 0.0)
             self.scrollView.contentInset = contentInsets
             self.scrollView.scrollIndicatorInsets = contentInsets
             var aRect = self.view.frame
             aRect.size.height -= keyboardSize.size.height
-            if (!CGRectContainsPoint(aRect, activeField.frame.origin)) {
+            if (CGRectContainsPoint(aRect, activeField.frame.origin)) {
                 self.scrollView.scrollRectToVisible(activeField.frame, animated: true)
             }
         }
@@ -100,6 +108,7 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+  
         self.notesTextView.resignFirstResponder()
     }
     
@@ -108,6 +117,7 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
         self.scrollView.contentSize.width = self.view.bounds.width
         self.scrollView.contentSize.height = self.view.bounds.height
         self.scrollView.keyboardDismissMode = .OnDrag
+        self.scrollView.delegate = self
         self.automaticallyAdjustsScrollViewInsets = false
         
     }
