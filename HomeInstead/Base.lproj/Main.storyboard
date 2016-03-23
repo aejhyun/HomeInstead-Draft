@@ -2709,7 +2709,7 @@
                                             </constraint>
                                             <constraint firstAttribute="trailing" secondItem="sbA-4U-JOL" secondAttribute="trailing" constant="8" id="Adg-4h-aaC"/>
                                             <constraint firstItem="xO8-WC-xgk" firstAttribute="top" secondItem="sbA-4U-JOL" secondAttribute="bottom" constant="8" id="BF2-5A-Jol">
-                                                <variation key="widthClass=compact" constant="40"/>
+                                                <variation key="widthClass=compact" constant="50"/>
                                             </constraint>
                                             <constraint firstItem="PUe-VV-SgJ" firstAttribute="top" secondItem="CAi-1N-2h1" secondAttribute="bottom" constant="8" id="HSg-Vs-t24"/>
                                             <constraint firstAttribute="trailing" secondItem="Sls-eS-4UL" secondAttribute="trailing" constant="8" id="IX0-Kv-AeM"/>

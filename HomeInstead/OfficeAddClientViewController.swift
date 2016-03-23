@@ -26,14 +26,15 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
     var gestureRecognizer: UIGestureRecognizer!
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        self.imageView.image = UIImage(named: "defaultPicture")
-        self.tableView.tableFooterView = UIView(frame: CGRectZero)
+
+        //self.tableView.tableFooterView = UIView(frame: CGRectZero)
+        self.tableView.setEditing(true, animated: true)
+        
         self.setScrollView()
+        
         self.addLeftPaddingToTextField(self.firstNameTextField)
         self.addLeftPaddingToTextField(self.lastNameTextField)
-        self.tableView.setEditing(true, animated: true)
         
         self.gestureRecognizer = UITapGestureRecognizer(target: self, action: "notesTextViewTapped:")
         self.notesTextView.addGestureRecognizer(gestureRecognizer)
@@ -51,8 +52,18 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
         if self.drewTextFieldWithOnlyBottomLine {
             self.drawTextFieldWithOnlyBottomLine(self.firstNameTextField)
             self.drawTextFieldWithOnlyBottomLine(self.lastNameTextField)
+            
+            //The imageView set up is also inside self.drewTextFieldWithOnlyBottomLine Bool check because the code below will be called twice. And the imageView set up is not in viewDidLoad() because, self.imageView.frame returned was the incorrect value. It returns the correct self.imageView.frame value either in the viewDidLayoutSubviews and viewWillAppear functions. But in the viewWillAppear function causes the image to show up visibly late. 
+            self.imageView.image = UIImage(named: "defaultPicture")
+            imageView.layer.borderWidth = 1
+            imageView.layer.masksToBounds = false
+            imageView.layer.borderColor = UIColor.whiteColor().CGColor
+            imageView.layer.cornerRadius = self.imageView.frame.height / 2
+            imageView.clipsToBounds = true
         }
         self.drewTextFieldWithOnlyBottomLine = true
+        
+       
         
     }
     
