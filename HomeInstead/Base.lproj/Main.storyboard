@@ -2702,21 +2702,40 @@
                                                     </mask>
                                                 </variation>
                                             </imageView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="characterWrap" translatesAutoresizingMaskIntoConstraints="NO" id="AX4-H1-guc">
+                                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                <state key="normal" title="Add Photo"/>
+                                                <connections>
+                                                    <action selector="addPhotoButtonTapped:" destination="rWN-SL-jl8" eventType="touchUpInside" id="NKc-Rx-vQY"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="characterWrap" translatesAutoresizingMaskIntoConstraints="NO" id="jZe-EQ-kbf">
+                                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                <state key="normal" title="Edit"/>
+                                                <connections>
+                                                    <action selector="editButtonTapped:" destination="rWN-SL-jl8" eventType="touchUpInside" id="748-0S-cXT"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="PUe-VV-SgJ" secondAttribute="bottom" constant="250" id="6cE-Tf-Bor">
                                                 <variation key="widthClass=compact" constant="8"/>
                                             </constraint>
+                                            <constraint firstItem="jZe-EQ-kbf" firstAttribute="centerX" secondItem="7IK-dW-aow" secondAttribute="centerX" id="ACQ-yE-vod"/>
                                             <constraint firstAttribute="trailing" secondItem="sbA-4U-JOL" secondAttribute="trailing" constant="8" id="Adg-4h-aaC"/>
                                             <constraint firstItem="xO8-WC-xgk" firstAttribute="top" secondItem="sbA-4U-JOL" secondAttribute="bottom" constant="8" id="BF2-5A-Jol">
-                                                <variation key="widthClass=compact" constant="50"/>
+                                                <variation key="widthClass=compact" constant="63"/>
                                             </constraint>
+                                            <constraint firstItem="AX4-H1-guc" firstAttribute="centerX" secondItem="7IK-dW-aow" secondAttribute="centerX" id="Dy2-8z-RMg"/>
                                             <constraint firstItem="PUe-VV-SgJ" firstAttribute="top" secondItem="CAi-1N-2h1" secondAttribute="bottom" constant="8" id="HSg-Vs-t24"/>
                                             <constraint firstAttribute="trailing" secondItem="Sls-eS-4UL" secondAttribute="trailing" constant="8" id="IX0-Kv-AeM"/>
                                             <constraint firstAttribute="bottom" secondItem="sbA-4U-JOL" secondAttribute="bottom" constant="8" id="KuX-3C-bjH"/>
                                             <constraint firstItem="7IK-dW-aow" firstAttribute="leading" secondItem="G3Y-l4-isQ" secondAttribute="leading" constant="40" id="PAh-No-u1l"/>
                                             <constraint firstAttribute="trailing" secondItem="xO8-WC-xgk" secondAttribute="trailing" constant="8" id="Qqw-re-96C"/>
                                             <constraint firstItem="Oo6-Km-pcb" firstAttribute="leading" secondItem="G3Y-l4-isQ" secondAttribute="leading" constant="8" id="R7L-SB-k2C"/>
+                                            <constraint firstItem="AX4-H1-guc" firstAttribute="centerY" secondItem="7IK-dW-aow" secondAttribute="centerY" id="SSB-Jr-uc1"/>
                                             <constraint firstAttribute="bottom" secondItem="Oo6-Km-pcb" secondAttribute="bottom" constant="502" id="W78-2v-grW"/>
                                             <constraint firstItem="7IK-dW-aow" firstAttribute="top" secondItem="G3Y-l4-isQ" secondAttribute="top" constant="8" id="Wty-vm-pff">
                                                 <variation key="widthClass=compact" constant="15"/>
@@ -2735,8 +2754,13 @@
                                             <constraint firstItem="sbA-4U-JOL" firstAttribute="top" secondItem="Oo6-Km-pcb" secondAttribute="bottom" constant="8" id="hmX-m9-hW0"/>
                                             <constraint firstAttribute="trailing" secondItem="PUe-VV-SgJ" secondAttribute="trailing" constant="8" id="kLQ-sN-tuQ"/>
                                             <constraint firstItem="Sls-eS-4UL" firstAttribute="top" secondItem="xO8-WC-xgk" secondAttribute="bottom" constant="8" id="nhH-MK-A6a"/>
-                                            <constraint firstItem="Oo6-Km-pcb" firstAttribute="top" secondItem="G3Y-l4-isQ" secondAttribute="top" constant="8" id="sks-t6-i7m"/>
+                                            <constraint firstItem="Oo6-Km-pcb" firstAttribute="top" secondItem="G3Y-l4-isQ" secondAttribute="top" constant="8" id="sks-t6-i7m">
+                                                <variation key="widthClass=compact" constant="10"/>
+                                            </constraint>
                                             <constraint firstItem="CAi-1N-2h1" firstAttribute="top" secondItem="Sls-eS-4UL" secondAttribute="bottom" constant="8" id="vkZ-Hx-Mmn"/>
+                                            <constraint firstItem="jZe-EQ-kbf" firstAttribute="top" secondItem="7IK-dW-aow" secondAttribute="bottom" constant="-6" id="ybG-AY-bse">
+                                                <variation key="widthClass=compact" constant="0.0"/>
+                                            </constraint>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="subviews">
@@ -2746,23 +2770,29 @@
                                                 <exclude reference="PUe-VV-SgJ"/>
                                                 <exclude reference="CAi-1N-2h1"/>
                                                 <exclude reference="7IK-dW-aow"/>
+                                                <exclude reference="AX4-H1-guc"/>
+                                                <exclude reference="jZe-EQ-kbf"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="PAh-No-u1l"/>
                                                 <exclude reference="Wty-vm-pff"/>
+                                                <exclude reference="Dy2-8z-RMg"/>
+                                                <exclude reference="SSB-Jr-uc1"/>
+                                                <exclude reference="ACQ-yE-vod"/>
+                                                <exclude reference="ybG-AY-bse"/>
                                                 <exclude reference="BF2-5A-Jol"/>
                                                 <exclude reference="Qqw-re-96C"/>
                                                 <exclude reference="g6H-i6-cqd"/>
                                                 <exclude reference="IX0-Kv-AeM"/>
                                                 <exclude reference="ehS-we-9lk"/>
                                                 <exclude reference="nhH-MK-A6a"/>
-                                                <exclude reference="dhX-cD-HAY"/>
-                                                <exclude reference="vkZ-Hx-Mmn"/>
                                                 <exclude reference="c1c-o1-jTt"/>
                                                 <exclude reference="sks-t6-i7m"/>
                                                 <exclude reference="Adg-4h-aaC"/>
                                                 <exclude reference="KuX-3C-bjH"/>
                                                 <exclude reference="hmX-m9-hW0"/>
+                                                <exclude reference="dhX-cD-HAY"/>
+                                                <exclude reference="vkZ-Hx-Mmn"/>
                                                 <exclude reference="6cE-Tf-Bor"/>
                                                 <exclude reference="HSg-Vs-t24"/>
                                                 <exclude reference="eeL-z8-yef"/>
@@ -2777,18 +2807,22 @@
                                                 <include reference="PUe-VV-SgJ"/>
                                                 <include reference="CAi-1N-2h1"/>
                                                 <include reference="7IK-dW-aow"/>
+                                                <include reference="AX4-H1-guc"/>
+                                                <include reference="jZe-EQ-kbf"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="PAh-No-u1l"/>
                                                 <include reference="Wty-vm-pff"/>
+                                                <include reference="Dy2-8z-RMg"/>
+                                                <include reference="SSB-Jr-uc1"/>
+                                                <include reference="ACQ-yE-vod"/>
+                                                <include reference="ybG-AY-bse"/>
                                                 <include reference="BF2-5A-Jol"/>
                                                 <include reference="Qqw-re-96C"/>
                                                 <include reference="g6H-i6-cqd"/>
                                                 <include reference="IX0-Kv-AeM"/>
                                                 <include reference="ehS-we-9lk"/>
                                                 <include reference="nhH-MK-A6a"/>
-                                                <include reference="dhX-cD-HAY"/>
-                                                <include reference="vkZ-Hx-Mmn"/>
                                                 <exclude reference="R7L-SB-k2C"/>
                                                 <exclude reference="W78-2v-grW"/>
                                                 <include reference="c1c-o1-jTt"/>
@@ -2796,6 +2830,8 @@
                                                 <include reference="Adg-4h-aaC"/>
                                                 <exclude reference="KuX-3C-bjH"/>
                                                 <include reference="hmX-m9-hW0"/>
+                                                <include reference="dhX-cD-HAY"/>
+                                                <include reference="vkZ-Hx-Mmn"/>
                                                 <include reference="6cE-Tf-Bor"/>
                                                 <include reference="HSg-Vs-t24"/>
                                                 <include reference="eeL-z8-yef"/>
@@ -2852,7 +2888,9 @@
                         <barButtonItem key="rightBarButtonItem" title="Done" id="2UD-9E-vq4"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="addPhotoButton" destination="AX4-H1-guc" id="Bw3-6O-TiD"/>
                         <outlet property="contentView" destination="G3Y-l4-isQ" id="Hu0-Xh-YVa"/>
+                        <outlet property="editButton" destination="jZe-EQ-kbf" id="T59-dZ-3Jt"/>
                         <outlet property="firstNameTextField" destination="Oo6-Km-pcb" id="65E-8w-uJc"/>
                         <outlet property="imageView" destination="7IK-dW-aow" id="Y3H-zY-i1t"/>
                         <outlet property="lastNameTextField" destination="sbA-4U-JOL" id="cRs-bx-HMe"/>

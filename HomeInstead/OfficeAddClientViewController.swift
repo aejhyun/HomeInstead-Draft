@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
+class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var notesTextView: UITextView!
@@ -19,16 +19,21 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var tableViewHeightLayoutConstraint: NSLayoutConstraint!
     @IBOutlet weak var textViewBottomLayoutConstraint: NSLayoutConstraint!
+    @IBOutlet weak var addPhotoButton: UIButton!
+    @IBOutlet weak var editButton: UIButton!
     
     var cathyNames:[String] = [String]()
     var cathyEmails:[String] = [String]()
     var drewTextFieldWithOnlyBottomLine: Bool = false
     var gestureRecognizer: UIGestureRecognizer!
+    var numberOfTimesViewLaidOutSubviews: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //self.tableView.tableFooterView = UIView(frame: CGRectZero)
+        self.editButton.hidden = true
+        self.addPhotoButton.titleLabel?.textAlignment = .Center
+        
         self.tableView.setEditing(true, animated: true)
         
         self.setScrollView()
@@ -42,28 +47,25 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
         
-        self.notesTextView.delegate = self
-        
     }
     
     override func viewDidLayoutSubviews() {
         
-        //The reason for self.drewTextFieldWithOnlyBottomLine Bool check is because the "viewDidLayoutSubviews()" is being called twice. The reason for this, I hypothesize is because these UITextField(s) are laid "on top" of the UIScrollView, which is laid "on top" of a UIView. So this function  is called when the UIView loads and then another time when UIScrollView loads.
-        if self.drewTextFieldWithOnlyBottomLine {
+        //The reason for self.numberOfTimesViewLaidOutSubviews == 1 check is because the "viewDidLayoutSubviews()" is being called more than once. The reason for this, I hypothesize is because these UITextField(s) are laid "on top" of the UIScrollView, which is laid "on top" of a UIView. So this function  is called when the UIView loads and then another time when UIScrollView loads.
+        if self.numberOfTimesViewLaidOutSubviews == 1 {
+            
             self.drawTextFieldWithOnlyBottomLine(self.firstNameTextField)
             self.drawTextFieldWithOnlyBottomLine(self.lastNameTextField)
             
-            //The imageView set up is also inside self.drewTextFieldWithOnlyBottomLine Bool check because the code below will be called twice. And the imageView set up is not in viewDidLoad() because, self.imageView.frame returned was the incorrect value. It returns the correct self.imageView.frame value either in the viewDidLayoutSubviews and viewWillAppear functions. But in the viewWillAppear function causes the image to show up visibly late. 
-            self.imageView.image = UIImage(named: "defaultPicture")
+            //The imageView set up is also inside self.numberOfTimesViewLaidOutSubviews == 1 check because the code below will be called more than once. And the imageView set up is not in viewDidLoad() because, self.imageView.frame returned was the incorrect value. It returns the correct self.imageView.frame value either in the viewDidLayoutSubviews and viewWillAppear functions. But in the viewWillAppear function causes the image to show up visibly late.
             imageView.layer.borderWidth = 1
             imageView.layer.masksToBounds = false
-            imageView.layer.borderColor = UIColor.whiteColor().CGColor
+            imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
             imageView.layer.cornerRadius = self.imageView.frame.height / 2
             imageView.clipsToBounds = true
+            print("paidsjfpasijf")
         }
-        self.drewTextFieldWithOnlyBottomLine = true
-        
-       
+        self.numberOfTimesViewLaidOutSubviews++
         
     }
     
@@ -73,10 +75,7 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
         
     }
     
-    func textViewDidChange(textView: UITextView) {
-        
-    }
-    
+//Keyboard functions start here.
     func keyboardDidShow(notification: NSNotification) {
         
         if let activeField = self.notesTextView, keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
@@ -106,6 +105,7 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
         self.notesTextView.becomeFirstResponder()
         
     }
+//Keyboard functions end here.
     
     func adjustTableViewHeight() {
         
@@ -132,6 +132,8 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
         self.automaticallyAdjustsScrollViewInsets = false
         
     }
+
+//TextField functions tart here.
     
     func drawTextFieldWithOnlyBottomLine(textField: UITextField!) {
       
@@ -152,6 +154,84 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
         textField.leftViewMode = .Always
         
     }
+    
+//TextField functions end here.
+//Image functions start here.
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        
+        dismissViewControllerAnimated(true, completion: nil)
+
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        let selectedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        self.imageView.image = selectedImage
+        self.imageView.layer.borderWidth = 0
+        self.addPhotoButton.hidden = true
+        self.editButton.hidden = false
+        dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    
+    @IBAction func addPhotoButtonTapped(sender: AnyObject) {
+        let alertController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        var alertAction: UIAlertAction = UIAlertAction(title: "Take Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Choose Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            
+            let imagePickerController: UIImagePickerController = UIImagePickerController()
+            imagePickerController.sourceType = .PhotoLibrary
+            imagePickerController.delegate = self
+            
+            self.presentViewController(imagePickerController, animated: true, completion: nil)
+            
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alertController.addAction(alertAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    @IBAction func editButtonTapped(sender: AnyObject) {
+        
+        let alertController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        var alertAction: UIAlertAction = UIAlertAction(title: "Take Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Choose Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            let imagePickerController: UIImagePickerController = UIImagePickerController()
+            imagePickerController.sourceType = .PhotoLibrary
+            imagePickerController.delegate = self
+            
+            self.presentViewController(imagePickerController, animated: true, completion: nil)
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Delete Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            self.imageView.image = nil
+            self.imageView.layer.borderWidth = 1
+            self.addPhotoButton.hidden = false
+            self.editButton.hidden = true
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alertController.addAction(alertAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+//Image functions end here.
+//TableView functions start here.
     
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
         
@@ -214,6 +294,9 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
         
     }
     
+//TableView functions end here.
+//Segue functions start here.
+    
     @IBAction func unwindToSegue (segue : UIStoryboardSegue) {
         
         if let addCathyTableViewController = segue.sourceViewController as? AddCathyTableViewController {
@@ -231,5 +314,7 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
         self.dismissViewControllerAnimated(true, completion: nil)
         
     }
+    
+//Segue functions end here.
     
 }
