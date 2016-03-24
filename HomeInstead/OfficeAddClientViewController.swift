@@ -63,7 +63,7 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
             imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
             imageView.layer.cornerRadius = self.imageView.frame.height / 2
             imageView.clipsToBounds = true
-            print("paidsjfpasijf")
+            
         }
         self.numberOfTimesViewLaidOutSubviews++
         
@@ -71,11 +71,12 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
     
     override func viewWillAppear(animated: Bool) {
         
-        adjustTableViewHeight()
+        adjustTableViewHeight(self.cathyNames.count)
         
     }
     
 //Keyboard functions start here.
+    
     func keyboardDidShow(notification: NSNotification) {
         
         if let activeField = self.notesTextView, keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
@@ -107,10 +108,10 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
     }
 //Keyboard functions end here.
     
-    func adjustTableViewHeight() {
+    func adjustTableViewHeight(numberOfRows: Int) {
         
         //The 44 is the original height of self.tableView.contentSize. If the row height is changed in the XIB, then the 44 should also be changed to whatever number it is changed in the XIB.
-        let height:CGFloat = 44 * CGFloat(self.cathyNames.count + 1)
+        let height:CGFloat = 44 * CGFloat(numberOfRows + 1)
         var frame:CGRect = self.tableView.frame
         frame.size.height = height
         self.tableView.frame = frame
@@ -138,7 +139,7 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
     func drawTextFieldWithOnlyBottomLine(textField: UITextField!) {
       
         let border = CALayer()
-        let width = CGFloat(0.8)
+        let width = CGFloat(0.1)
         border.borderColor = UIColor.lightGrayColor().CGColor
         border.frame = CGRect(x: 0, y: textField.frame.size.height - width, width: textField.frame.size.width, height: width)
         border.borderWidth = width
@@ -246,10 +247,10 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
         if editingStyle == .Delete {
-            // Delete the row from the data source
+            self.adjustTableViewHeight(self.cathyNames.count - 1)
             self.cathyNames.removeAtIndex(indexPath.row)
             self.cathyEmails.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         } else if editingStyle == .Insert {
             self.view.removeGestureRecognizer(self.gestureRecognizer)
             self.performSegueWithIdentifier("AddClientToAddCathy", sender: nil)
@@ -300,14 +301,17 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
     @IBAction func unwindToSegue (segue : UIStoryboardSegue) {
         
         if let addCathyTableViewController = segue.sourceViewController as? AddCathyTableViewController {
-            
             self.cathyNames = addCathyTableViewController.addedCathyNames
             self.cathyEmails = addCathyTableViewController.addedCathyEmails
             self.tableView.reloadData()
-
         }
         
     }
+    
+    @IBAction func doneButtonTapped(sender: AnyObject) {
+        
+    }
+    
 
     @IBAction func cancelButtonTapped(sender: AnyObject) {
         

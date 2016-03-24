@@ -2885,7 +2885,11 @@
                                 <action selector="cancelButtonTapped:" destination="rWN-SL-jl8" id="ZyU-PS-m1r"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Done" id="2UD-9E-vq4"/>
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="2UD-9E-vq4">
+                            <connections>
+                                <action selector="doneButtonTapped:" destination="rWN-SL-jl8" id="s1b-te-UrF"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="addPhotoButton" destination="AX4-H1-guc" id="Bw3-6O-TiD"/>
