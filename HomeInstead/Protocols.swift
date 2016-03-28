@@ -13,5 +13,5 @@ protocol ReceiveMessageDelegate {
 }
 
 protocol OfficeGiverListTableViewControllerDelegate {
-    func segueToTestViewController()
+    func segueToOfficeClientProfileViewController()
 }

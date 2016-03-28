@@ -219,23 +219,26 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
             officeClientListTableViewController.passedGiverName = giverNameToBePassed
             officeClientListTableViewController.passedGiverId = giverIdToBePassed
             officeClientListTableViewController.passedGiverEmail = giverEmailToBePassed
-        } else if segue.identifier == "OfficeGiverListToOfficeAddClient" {
-            
+        } else if segue.identifier == "officeGiverListToOfficeCreateClientProfile" {
 
-            
-            let nav = segue.destinationViewController as! UINavigationController
-            let officeAddClientViewController = nav.topViewController as! OfficeAddClientViewController
-            
-            print("segue being executed")
-            officeAddClientViewController.delegate = self
-            
-   
+            if let navigationController = segue.destinationViewController as? UINavigationController {
+                if let officeCreateClientProfileViewController = navigationController.topViewController as? OfficeCreateClientProfileViewController {
+                    officeCreateClientProfileViewController.delegate = self
+                } else {
+                    print("officeCreateClientProfileViewController is nil")
+                }
+            } else {
+                print("navigationController is nil")
+            }
+        
+        } else if segue.identifier == "officeGiverListToOfficeClientProfile" {
             
         }
     }
     
-    func segueToTestViewController() {
-        performSegueWithIdentifier("OfficeGiverListToTest", sender: nil)
+    //OfficeGiverListTableViewControllerDelegate protocol function
+    func segueToOfficeClientProfileViewController() {
+        performSegueWithIdentifier("officeGiverListToOfficeClientProfile", sender: nil)
     }
 
     @IBAction func signOutButtonPressed(sender: AnyObject) {

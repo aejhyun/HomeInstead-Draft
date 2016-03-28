@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class OfficeCreateClientProfileViewController: UIViewController, UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var notesTextView: UITextView!
@@ -311,9 +311,8 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
     }
     
     @IBAction func doneButtonTapped(sender: AnyObject) {
-        print("doneButtonTapped")
-        print(self.delegate)
-        self.delegate?.segueToTestViewController()
+        //Perhaps safely unwrap this delegate.
+        self.delegate?.segueToOfficeClientProfileViewController()
         self.dismissViewControllerAnimated(true, completion: nil)
         
     }
