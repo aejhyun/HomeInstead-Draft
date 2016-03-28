@@ -9,9 +9,15 @@
 import Foundation
 
 protocol ReceiveMessageDelegate {
-    func receiveMessageFromTaskMessageViewController (message: String)
+    func receiveMessageFromTaskMessageViewController(message: String)
 }
 
 protocol OfficeGiverListTableViewControllerDelegate {
+    
+    func getClientFirstName(firstName: String)
+    func getClientLastName(lastName: String)
+    func getClientNotes(notes: String)
+    func getClientImage(image: UIImage?)
     func segueToOfficeClientProfileViewController()
+    
 }

@@ -72,9 +72,7 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     }
     
     override func viewWillAppear(animated: Bool) {
-        
         self.adjustTableViewHeight(self.cathyNames.count)
-        
     }
     
 //Keyboard functions start here.
@@ -104,9 +102,7 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     }
 
     func notesTextViewTapped(gestureRecognizer: UIGestureRecognizer) {
-        
         self.notesTextView.becomeFirstResponder()
-        
     }
 //Keyboard functions end here.
     
@@ -122,7 +118,6 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-  
         self.notesTextView.resignFirstResponder()
     }
     
@@ -162,9 +157,7 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
 //Image functions start here.
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        
         dismissViewControllerAnimated(true, completion: nil)
-
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
@@ -268,15 +261,11 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
         return 1
-        
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return self.cathyNames.count + 1
-        
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -312,6 +301,10 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     
     @IBAction func doneButtonTapped(sender: AnyObject) {
         //Perhaps safely unwrap this delegate.
+        self.delegate?.getClientFirstName(self.firstNameTextField.text!)
+        self.delegate?.getClientLastName(self.lastNameTextField.text!)
+        self.delegate?.getClientNotes(self.notesTextView.text!)
+        self.delegate?.getClientImage(self.imageView.image)
         self.delegate?.segueToOfficeClientProfileViewController()
         self.dismissViewControllerAnimated(true, completion: nil)
         
@@ -319,9 +312,7 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     
 
     @IBAction func cancelButtonTapped(sender: AnyObject) {
-        
         self.dismissViewControllerAnimated(true, completion: nil)
-        
     }
     
 //Segue functions end here.

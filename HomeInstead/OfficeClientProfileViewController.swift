@@ -9,13 +9,29 @@
 import UIKit
 
 class OfficeClientProfileViewController: UIViewController {
+    
+    @IBOutlet weak var firstNameLabel: UILabel!
+    @IBOutlet weak var lastNameLabel: UILabel!
+    @IBOutlet weak var notesLabel: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
 
-    @IBOutlet weak var testLabel: UILabel!
+    var firstName: String!
+    var lastName: String!
+    var notes: String!
+    var image: UIImage!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-
+        
+        self.firstNameLabel.text = self.firstName
+        self.lastNameLabel.text = self.lastName
+        self.notesLabel.text = self.notes
+        if let image = self.image {
+            self.imageView.image = image
+        } else {
+            self.imageView.hidden = true
+        }
+        
     }
 
 }

@@ -18,6 +18,11 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
     var giverIdToBePassed: String = ""
     var giverEmailToBePassed: String = ""
     var objects = [PFObject]()
+    var clientFirstName: String!
+    var clientLastName: String!
+    var clientNotes: String!
+    var clientImage: UIImage?
+    
     let userDefaults = NSUserDefaults.standardUserDefaults()
     
     func appAlreadyLaunchedOnce() -> Bool {
@@ -232,15 +237,39 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
             }
         
         } else if segue.identifier == "officeGiverListToOfficeClientProfile" {
-            
+            if let officeClientProfileViewController = segue.destinationViewController as? OfficeClientProfileViewController {
+                officeClientProfileViewController.firstName = self.clientFirstName
+                officeClientProfileViewController.lastName = self.clientLastName
+                officeClientProfileViewController.notes = self.clientNotes
+                officeClientProfileViewController.image = self.clientImage
+            } else {
+                print("officeClientProfileViewController is nil")
+            }
         }
     }
     
-    //OfficeGiverListTableViewControllerDelegate protocol function
+//OfficeGiverListTableViewControllerDelegate protocol functions
+    
+    func getClientFirstName(firstName: String) {
+        self.clientFirstName = firstName
+    }
+    
+    func getClientLastName(lastName: String) {
+        self.clientLastName = lastName
+    }
+
+    func getClientNotes(notes: String) {
+        self.clientNotes = notes
+    }
+    
+    func getClientImage(image: UIImage?) {
+        self.clientImage = image
+    }
+    
     func segueToOfficeClientProfileViewController() {
         performSegueWithIdentifier("officeGiverListToOfficeClientProfile", sender: nil)
     }
-
+    
     @IBAction func signOutButtonPressed(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
         PFUser.logOut()
