@@ -11,3 +11,7 @@ import Foundation
 protocol ReceiveMessageDelegate {
     func receiveMessageFromTaskMessageViewController (message: String)
 }
+
+protocol OfficeGiverListTableViewControllerDelegate {
+    func segueToTestViewController()
+}

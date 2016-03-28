@@ -28,6 +28,8 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
     var gestureRecognizer: UIGestureRecognizer!
     var numberOfTimesViewLaidOutSubviews: Int = 0
     
+    var delegate: OfficeGiverListTableViewControllerDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -58,11 +60,11 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
             self.drawTextFieldWithOnlyBottomLine(self.lastNameTextField)
             
             //The imageView set up is also inside self.numberOfTimesViewLaidOutSubviews == 1 check because the code below will be called more than once. And the imageView set up is not in viewDidLoad() because, self.imageView.frame returned was the incorrect value. It returns the correct self.imageView.frame value either in the viewDidLayoutSubviews and viewWillAppear functions. But in the viewWillAppear function causes the image to show up visibly late.
-            imageView.layer.borderWidth = 1
-            imageView.layer.masksToBounds = false
-            imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
-            imageView.layer.cornerRadius = self.imageView.frame.height / 2
-            imageView.clipsToBounds = true
+            self.imageView.layer.borderWidth = 1
+            self.imageView.layer.masksToBounds = false
+            self.imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
+            self.imageView.layer.cornerRadius = self.imageView.frame.height / 2
+            self.imageView.clipsToBounds = true
             
         }
         self.numberOfTimesViewLaidOutSubviews++
@@ -71,7 +73,7 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
     
     override func viewWillAppear(animated: Bool) {
         
-        adjustTableViewHeight(self.cathyNames.count)
+        self.adjustTableViewHeight(self.cathyNames.count)
         
     }
     
@@ -309,6 +311,10 @@ class OfficeAddClientViewController: UIViewController, UITextViewDelegate, UITab
     }
     
     @IBAction func doneButtonTapped(sender: AnyObject) {
+        print("doneButtonTapped")
+        print(self.delegate)
+        self.delegate?.segueToTestViewController()
+        self.dismissViewControllerAnimated(true, completion: nil)
         
     }
     
