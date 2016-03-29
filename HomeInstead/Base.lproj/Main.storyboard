@@ -425,7 +425,7 @@
                     </navigationItem>
                     <connections>
                         <segue destination="eQ5-uE-Mal" kind="show" identifier="officeGiverListToClientList" id="H2D-bq-MM2"/>
-                        <segue destination="dOd-ps-bj0" kind="show" identifier="officeGiverListToOfficeClientProfile" id="0Qe-sA-6eG"/>
+                        <segue destination="sWo-Kf-w0R" kind="show" identifier="officeGiverListToOfficeClientProfile" id="Zl4-es-umA"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CCd-n1-LsT" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -588,7 +588,8 @@
                                         <exclude reference="Qqx-3U-8YE"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact">
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="40" y="79" width="68" height="68"/>
                                     <mask key="constraints">
                                         <include reference="oXS-8G-2Zh"/>
                                         <include reference="Qqx-3U-8YE"/>
@@ -600,24 +601,36 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="118" y="102" width="83" height="21"/>
+                                </variation>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tiA-Gc-oj1">
                                 <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="206" y="102" width="82" height="21"/>
+                                </variation>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5gc-jV-00Z">
                                 <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="40" y="187" width="39" height="17"/>
+                                </variation>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EQZ-tg-nwF">
                                 <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="40" y="214" width="39" height="17"/>
+                                </variation>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -695,12 +708,11 @@
                         <outlet property="imageView" destination="lLm-6S-xCP" id="eG1-o7-MGX"/>
                         <outlet property="lastNameLabel" destination="tiA-Gc-oj1" id="xg4-ib-t2m"/>
                         <outlet property="notesLabel" destination="EQZ-tg-nwF" id="UUV-Tn-g9d"/>
-                        <segue destination="sWo-Kf-w0R" kind="show" id="GOf-nx-PNZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lhk-Zb-4bk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2567.25" y="2223.5"/>
+            <point key="canvasLocation" x="5076" y="2054"/>
         </scene>
         <!--Client List-->
         <scene sceneID="6GC-tC-VZk">
@@ -3168,10 +3180,10 @@
             </objects>
             <point key="canvasLocation" x="5076" y="1302"/>
         </scene>
-        <!--Office Add Client And Cathy View Controller-->
+        <!--Office Client Profile View Controller-->
         <scene sceneID="y6i-t6-pMp">
             <objects>
-                <viewController id="sWo-Kf-w0R" customClass="OfficeAddClientAndCathyViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="sWo-Kf-w0R" customClass="OfficeClientProfileViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="r8W-bB-2vU"/>
                         <viewControllerLayoutGuide type="bottom" id="jpi-Bv-4E9"/>
@@ -3185,22 +3197,30 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JqS-FK-gXJ" userLabel="Content View">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="540"/>
-                                        <color key="backgroundColor" red="0.89563607119999999" green="0.93831884990000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <variation key="widthClass=compact" ambiguous="YES">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="0.0"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sno-jC-hUT">
+                                                <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <nil key="highlightedColor"/>
+                                                <variation key="widthClass=compact" fixedFrame="YES">
+                                                    <rect key="frame" x="110" y="97" width="42" height="21"/>
+                                                </variation>
+                                            </label>
+                                        </subviews>
+                                        <variation key="default">
+                                            <mask key="subviews">
+                                                <exclude reference="Sno-jC-hUT"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="216"/>
+                                            <mask key="subviews">
+                                                <include reference="Sno-jC-hUT"/>
+                                            </mask>
                                         </variation>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sno-jC-hUT">
-                                        <rect key="frame" x="-42" y="-21" width="42" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                        <variation key="widthClass=compact" fixedFrame="YES">
-                                            <rect key="frame" x="104" y="187" width="42" height="21"/>
-                                        </variation>
-                                    </label>
                                 </subviews>
-                                <color key="backgroundColor" red="1" green="0.98613109170000002" blue="0.64984704869999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="JqS-FK-gXJ" secondAttribute="trailing" id="10O-Vm-YhH"/>
                                     <constraint firstItem="JqS-FK-gXJ" firstAttribute="top" secondItem="7Gh-go-0l0" secondAttribute="top" constant="50" id="UWm-Lz-TJu">
@@ -3210,18 +3230,12 @@
                                     <constraint firstAttribute="bottom" secondItem="JqS-FK-gXJ" secondAttribute="bottom" id="zQm-WT-V7O"/>
                                 </constraints>
                                 <variation key="default">
-                                    <mask key="subviews">
-                                        <exclude reference="Sno-jC-hUT"/>
-                                    </mask>
                                     <mask key="constraints">
                                         <exclude reference="UWm-Lz-TJu"/>
                                     </mask>
                                 </variation>
                                 <variation key="widthClass=compact" ambiguous="YES">
                                     <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                                    <mask key="subviews">
-                                        <include reference="Sno-jC-hUT"/>
-                                    </mask>
                                     <mask key="constraints">
                                         <include reference="UWm-Lz-TJu"/>
                                     </mask>
@@ -3256,7 +3270,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bS9-f5-Guu" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3186.75" y="2223.5"/>
+            <point key="canvasLocation" x="4214.25" y="2077.5"/>
         </scene>
         <!--Office Add Client And Cathy View Controller-->
         <scene sceneID="kf6-oj-w7k">
@@ -3353,8 +3367,8 @@
         <image name="defaultPicture" width="540" height="540"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="KS2-cD-Ng0"/>
         <segue reference="JvB-e1-eF0"/>
         <segue reference="CPS-1T-8Nc"/>
-        <segue reference="KS2-cD-Ng0"/>
     </inferredMetricsTieBreakers>
 </document>
