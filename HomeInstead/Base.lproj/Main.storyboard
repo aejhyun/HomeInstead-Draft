@@ -419,7 +419,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Xyx-wr-se5">
                             <connections>
-                                <segue destination="dne-Bk-erA" kind="show" id="2jN-hB-gUO"/>
+                                <segue destination="3AW-mr-dVK" kind="presentation" id="YKV-8w-57s"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -432,7 +432,23 @@
             </objects>
             <point key="canvasLocation" x="1836.5" y="2077.5"/>
         </scene>
-        <!--Add Giver Table View Controller-->
+        <!--Navigation Controller-->
+        <scene sceneID="zrc-B1-w1K">
+            <objects>
+                <navigationController id="3AW-mr-dVK" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="HGQ-k4-8to">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="dne-Bk-erA" kind="relationship" relationship="rootViewController" id="Mpn-GJ-YJT"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Cmk-fI-rtW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1830.75" y="2900.5"/>
+        </scene>
+        <!--Add a CGiver-->
         <scene sceneID="UIG-oZ-JuD">
             <objects>
                 <tableViewController id="dne-Bk-erA" customClass="AddGiverTableViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
@@ -448,12 +464,6 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4k-A3-ZIt">
-                                            <rect key="frame" x="-42" y="-21" width="42" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                            <color key="textColor" red="0.40000000000000002" green="0.59999999999999998" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="snF-Dk-t7S">
                                             <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                             <state key="normal" title="Add"/>
@@ -467,43 +477,49 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4k-A3-ZIt">
+                                            <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                            <color key="textColor" red="0.40000000000000002" green="0.59999999999999998" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="CfP-Ck-OOF" firstAttribute="leading" secondItem="l6u-1Y-lD2" secondAttribute="leadingMargin" constant="6" id="Mcf-7J-7gv"/>
                                         <constraint firstItem="snF-Dk-t7S" firstAttribute="centerY" secondItem="l6u-1Y-lD2" secondAttribute="centerY" id="PJZ-Ic-Pj7"/>
-                                        <constraint firstItem="g4k-A3-ZIt" firstAttribute="leading" secondItem="l6u-1Y-lD2" secondAttribute="leadingMargin" constant="3" id="Pb4-QL-roF"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="g4k-A3-ZIt" secondAttribute="bottom" constant="-6" id="QAd-hm-V7s"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="g4k-A3-ZIt" secondAttribute="bottom" constant="-3" id="fD2-5h-pnp"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="snF-Dk-t7S" secondAttribute="trailing" constant="14" id="gBg-8q-Z3q">
                                             <variation key="widthClass=compact" constant="3"/>
                                         </constraint>
-                                        <constraint firstItem="CfP-Ck-OOF" firstAttribute="top" secondItem="l6u-1Y-lD2" secondAttribute="topMargin" constant="-6" id="mRz-6Q-V04"/>
-                                        <constraint firstItem="CfP-Ck-OOF" firstAttribute="leading" secondItem="l6u-1Y-lD2" secondAttribute="leadingMargin" constant="3" id="ung-kb-gGs"/>
+                                        <constraint firstItem="CfP-Ck-OOF" firstAttribute="top" secondItem="l6u-1Y-lD2" secondAttribute="topMargin" constant="-3" id="lny-DT-rn1"/>
+                                        <constraint firstItem="g4k-A3-ZIt" firstAttribute="leading" secondItem="l6u-1Y-lD2" secondAttribute="leadingMargin" constant="6" id="x2x-qJ-azt"/>
                                     </constraints>
                                     <variation key="default">
                                         <mask key="subviews">
-                                            <exclude reference="g4k-A3-ZIt"/>
                                             <exclude reference="snF-Dk-t7S"/>
                                             <exclude reference="CfP-Ck-OOF"/>
+                                            <exclude reference="g4k-A3-ZIt"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <exclude reference="mRz-6Q-V04"/>
-                                            <exclude reference="ung-kb-gGs"/>
-                                            <exclude reference="Pb4-QL-roF"/>
-                                            <exclude reference="QAd-hm-V7s"/>
+                                            <exclude reference="Mcf-7J-7gv"/>
+                                            <exclude reference="lny-DT-rn1"/>
+                                            <exclude reference="fD2-5h-pnp"/>
+                                            <exclude reference="x2x-qJ-azt"/>
                                             <exclude reference="PJZ-Ic-Pj7"/>
                                             <exclude reference="gBg-8q-Z3q"/>
                                         </mask>
                                     </variation>
                                     <variation key="widthClass=compact">
                                         <mask key="subviews">
-                                            <include reference="g4k-A3-ZIt"/>
                                             <include reference="snF-Dk-t7S"/>
                                             <include reference="CfP-Ck-OOF"/>
+                                            <include reference="g4k-A3-ZIt"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <include reference="mRz-6Q-V04"/>
-                                            <include reference="ung-kb-gGs"/>
-                                            <include reference="Pb4-QL-roF"/>
-                                            <include reference="QAd-hm-V7s"/>
+                                            <include reference="Mcf-7J-7gv"/>
+                                            <include reference="lny-DT-rn1"/>
+                                            <include reference="fD2-5h-pnp"/>
+                                            <include reference="x2x-qJ-azt"/>
                                             <include reference="PJZ-Ic-Pj7"/>
                                             <include reference="gBg-8q-Z3q"/>
                                         </mask>
@@ -521,10 +537,17 @@
                             <outlet property="delegate" destination="dne-Bk-erA" id="9eZ-3w-jl2"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Add a CGiver" id="9mf-o2-F9I">
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="3ZA-54-Qak">
+                            <connections>
+                                <action selector="doneButtonTapped:" destination="dne-Bk-erA" id="AlZ-eD-bOZ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="07T-an-5hj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1836.75" y="2904.5"/>
+            <point key="canvasLocation" x="2670.75" y="2900.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="8aS-dh-Jak">
@@ -677,7 +700,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lhk-Zb-4bk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3278.25" y="1508.5"/>
+            <point key="canvasLocation" x="2567.25" y="2223.5"/>
         </scene>
         <!--Client List-->
         <scene sceneID="6GC-tC-VZk">
@@ -897,7 +920,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Add a Cathy" id="h9j-SK-t0V">
-                        <barButtonItem key="leftBarButtonItem" title="Done" id="dx9-8n-0p5">
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="dx9-8n-0p5">
                             <connections>
                                 <segue destination="XC0-eD-nlc" kind="unwind" unwindAction="unwindToSegue:" id="2N3-sI-mHc"/>
                             </connections>
@@ -3233,7 +3256,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bS9-f5-Guu" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4679.25" y="1656.5"/>
+            <point key="canvasLocation" x="3186.75" y="2223.5"/>
         </scene>
         <!--Office Add Client And Cathy View Controller-->
         <scene sceneID="kf6-oj-w7k">

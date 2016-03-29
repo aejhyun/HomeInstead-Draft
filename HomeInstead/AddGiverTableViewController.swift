@@ -206,6 +206,9 @@ class AddGiverTableViewController: UITableViewController, UISearchBarDelegate, U
         return cell
     }
 
+    @IBAction func doneButtonTapped(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
 
     /*
     // Override to support conditional editing of the table view.
