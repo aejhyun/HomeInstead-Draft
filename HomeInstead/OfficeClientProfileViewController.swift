@@ -16,34 +16,41 @@ class OfficeClientProfileViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var noPhotoLabel: UILabel!
+    @IBOutlet weak var imageViewHeightLayoutConstraint: NSLayoutConstraint!
     
     var firstName: String!
     var lastName: String!
     var notes: String!
     var image: UIImage!
-    var numberOfTimesViewLaidOutSubviews: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.automaticallyAdjustsScrollViewInsets = false
-//        self.firstNameLabel.text = self.firstName
-//        self.lastNameLabel.text = self.lastName
-//        self.notesLabel.text = self.notes
-//        if let image = self.image {
-//            self.imageView.image = image
-//        } else {
-//            self.imageView.hidden = true
-//        }
+        self.firstNameLabel.text = self.firstName
+        self.lastNameLabel.text = self.lastName
+        self.notesLabel.text = self.notes
         
+        self.setImageView()
+
     }
     
-    override func viewDidLayoutSubviews() {
-//
-//        self.imageView.layer.masksToBounds = false
-//        self.imageView.layer.cornerRadius = self.imageView.frame.height / 2
-//        self.imageView.clipsToBounds = true
-
+    func setImageView() {
+        
+        //The reason for self.imageViewHeightLayoutConstraint is because the imageView's correct height only became available in viewWillDidLoad(). But if I put the setImageView() inside viewWillDidLoad(), you can see the imageView circle being drawn.
+        self.imageView.layer.masksToBounds = false
+        self.imageView.layer.cornerRadius = self.imageViewHeightLayoutConstraint.constant / 2
+        self.imageView.clipsToBounds = true
+        if let image = self.image {
+            self.imageView.image = image
+            self.noPhotoLabel.hidden = true
+        } else {
+            self.imageView.layer.borderWidth = 1.0
+            self.imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
+            self.noPhotoLabel.textAlignment = .Center
+        }
+        
     }
 
 }
