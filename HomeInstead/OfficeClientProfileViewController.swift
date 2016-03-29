@@ -19,6 +19,7 @@ class OfficeClientProfileViewController: UIViewController {
     var lastName: String!
     var notes: String!
     var image: UIImage!
+    var numberOfTimesViewLaidOutSubviews: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,14 @@ class OfficeClientProfileViewController: UIViewController {
             self.imageView.hidden = true
         }
         
+    }
+    
+    override func viewDidLayoutSubviews() {
+
+        self.imageView.layer.masksToBounds = false
+        self.imageView.layer.cornerRadius = self.imageView.frame.height / 2
+        self.imageView.clipsToBounds = true
+
     }
 
 }
