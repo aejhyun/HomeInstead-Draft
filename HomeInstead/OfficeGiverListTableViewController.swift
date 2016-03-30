@@ -22,6 +22,8 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
     var clientLastName: String!
     var clientNotes: String!
     var clientImage: UIImage?
+    var cathyNames: [String] = [String]()
+    var cathyEmails: [String] = [String]()
     
     let userDefaults = NSUserDefaults.standardUserDefaults()
     
@@ -242,6 +244,8 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
                 officeClientProfileViewController.lastName = self.clientLastName
                 officeClientProfileViewController.notes = self.clientNotes
                 officeClientProfileViewController.image = self.clientImage
+                officeClientProfileViewController.cathyNames = self.cathyNames
+                officeClientProfileViewController.cathyEmails = self.cathyEmails
             } else {
                 print("officeClientProfileViewController is nil")
             }
@@ -264,6 +268,14 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
     
     func getClientImage(image: UIImage?) {
         self.clientImage = image
+    }
+    
+    func getCathyNames(names: [String]) {
+        self.cathyNames = names
+    }
+    
+    func getCathyEmails(emails: [String]) {
+        self.cathyEmails = emails
     }
     
     func segueToOfficeClientProfileViewController() {

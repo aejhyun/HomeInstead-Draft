@@ -3239,6 +3239,37 @@ Photo</string>
                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="CwC-3A-NOZ">
+                                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="44" id="mnA-Xx-gGf"/>
+                                                </constraints>
+                                                <prototypes>
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="44" id="nmA-gC-i2p" customClass="OfficeAddCathyTableViewCell" customModule="HomeInstead" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nmA-gC-i2p" id="21x-bh-1op">
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                        </tableViewCellContentView>
+                                                    </tableViewCell>
+                                                </prototypes>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="mnA-Xx-gGf"/>
+                                                    </mask>
+                                                </variation>
+                                                <variation key="widthClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="40" y="179" width="327" height="112"/>
+                                                    <mask key="constraints">
+                                                        <include reference="mnA-Xx-gGf"/>
+                                                    </mask>
+                                                </variation>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="sWo-Kf-w0R" id="y2K-LX-BA5"/>
+                                                    <outlet property="delegate" destination="sWo-Kf-w0R" id="UR3-lf-kYi"/>
+                                                </connections>
+                                            </tableView>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="R5M-oa-AMs" firstAttribute="leading" secondItem="SX8-Lm-SK0" secondAttribute="trailing" constant="14" id="5Sf-AY-VZM">
@@ -3247,15 +3278,14 @@ Photo</string>
                                             <constraint firstItem="dvy-YL-L9M" firstAttribute="centerY" secondItem="SX8-Lm-SK0" secondAttribute="centerY" id="A5K-X2-Hav"/>
                                             <constraint firstItem="J22-L9-YTJ" firstAttribute="centerY" secondItem="SX8-Lm-SK0" secondAttribute="centerY" id="AVA-Im-u2y"/>
                                             <constraint firstItem="dvy-YL-L9M" firstAttribute="leading" secondItem="R5M-oa-AMs" secondAttribute="trailing" constant="5" id="BmM-oe-t7T"/>
-                                            <constraint firstAttribute="bottom" secondItem="22l-wc-dEn" secondAttribute="bottom" constant="49" id="OIc-Sm-B7o">
-                                                <variation key="widthClass=compact" constant="8"/>
-                                            </constraint>
+                                            <constraint firstItem="CwC-3A-NOZ" firstAttribute="leading" secondItem="JqS-FK-gXJ" secondAttribute="leading" constant="40" id="DvY-Kl-s6V"/>
+                                            <constraint firstAttribute="trailing" secondItem="CwC-3A-NOZ" secondAttribute="trailing" constant="8" id="L6N-i3-Qvv"/>
                                             <constraint firstItem="R5M-oa-AMs" firstAttribute="centerY" secondItem="SX8-Lm-SK0" secondAttribute="centerY" id="WkX-PJ-Vg0"/>
                                             <constraint firstItem="SX8-Lm-SK0" firstAttribute="top" secondItem="JqS-FK-gXJ" secondAttribute="top" constant="35" id="ah8-bm-lEu">
                                                 <variation key="widthClass=compact" constant="15"/>
                                             </constraint>
                                             <constraint firstItem="22l-wc-dEn" firstAttribute="top" secondItem="qu5-tI-3xq" secondAttribute="bottom" constant="5" id="bCt-mT-USO">
-                                                <variation key="widthClass=compact" constant="10"/>
+                                                <variation key="widthClass=compact" constant="8"/>
                                             </constraint>
                                             <constraint firstItem="qu5-tI-3xq" firstAttribute="leading" secondItem="JqS-FK-gXJ" secondAttribute="leading" constant="20" id="bZU-6V-aIk">
                                                 <variation key="widthClass=compact" constant="40"/>
@@ -3266,11 +3296,15 @@ Photo</string>
                                             <constraint firstItem="qu5-tI-3xq" firstAttribute="top" secondItem="SX8-Lm-SK0" secondAttribute="bottom" constant="24" id="lOd-aB-DUM">
                                                 <variation key="widthClass=compact" constant="46"/>
                                             </constraint>
+                                            <constraint firstAttribute="bottom" secondItem="CwC-3A-NOZ" secondAttribute="bottom" constant="28" id="nXO-1u-XSw">
+                                                <variation key="widthClass=compact" constant="40"/>
+                                            </constraint>
                                             <constraint firstItem="22l-wc-dEn" firstAttribute="leading" secondItem="JqS-FK-gXJ" secondAttribute="leading" constant="18" id="onc-XQ-FFF">
                                                 <variation key="widthClass=compact" constant="40"/>
                                             </constraint>
                                             <constraint firstAttribute="trailing" secondItem="22l-wc-dEn" secondAttribute="trailing" constant="8" id="rOU-bs-SNi"/>
                                             <constraint firstItem="J22-L9-YTJ" firstAttribute="centerX" secondItem="SX8-Lm-SK0" secondAttribute="centerX" id="uEs-d3-Ggx"/>
+                                            <constraint firstItem="CwC-3A-NOZ" firstAttribute="top" secondItem="22l-wc-dEn" secondAttribute="bottom" constant="8" id="wwd-et-gLV"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="subviews">
@@ -3280,6 +3314,7 @@ Photo</string>
                                                 <exclude reference="qu5-tI-3xq"/>
                                                 <exclude reference="22l-wc-dEn"/>
                                                 <exclude reference="J22-L9-YTJ"/>
+                                                <exclude reference="CwC-3A-NOZ"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="ah8-bm-lEu"/>
@@ -3290,10 +3325,13 @@ Photo</string>
                                                 <exclude reference="WkX-PJ-Vg0"/>
                                                 <exclude reference="bZU-6V-aIk"/>
                                                 <exclude reference="lOd-aB-DUM"/>
-                                                <exclude reference="OIc-Sm-B7o"/>
                                                 <exclude reference="bCt-mT-USO"/>
                                                 <exclude reference="onc-XQ-FFF"/>
                                                 <exclude reference="rOU-bs-SNi"/>
+                                                <exclude reference="DvY-Kl-s6V"/>
+                                                <exclude reference="L6N-i3-Qvv"/>
+                                                <exclude reference="nXO-1u-XSw"/>
+                                                <exclude reference="wwd-et-gLV"/>
                                                 <exclude reference="A5K-X2-Hav"/>
                                                 <exclude reference="BmM-oe-t7T"/>
                                             </mask>
@@ -3306,6 +3344,7 @@ Photo</string>
                                                 <include reference="qu5-tI-3xq"/>
                                                 <include reference="22l-wc-dEn"/>
                                                 <include reference="J22-L9-YTJ"/>
+                                                <include reference="CwC-3A-NOZ"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="ah8-bm-lEu"/>
@@ -3316,10 +3355,13 @@ Photo</string>
                                                 <include reference="WkX-PJ-Vg0"/>
                                                 <include reference="bZU-6V-aIk"/>
                                                 <include reference="lOd-aB-DUM"/>
-                                                <include reference="OIc-Sm-B7o"/>
                                                 <include reference="bCt-mT-USO"/>
                                                 <include reference="onc-XQ-FFF"/>
                                                 <include reference="rOU-bs-SNi"/>
+                                                <include reference="DvY-Kl-s6V"/>
+                                                <include reference="L6N-i3-Qvv"/>
+                                                <include reference="nXO-1u-XSw"/>
+                                                <include reference="wwd-et-gLV"/>
                                                 <include reference="A5K-X2-Hav"/>
                                                 <include reference="BmM-oe-t7T"/>
                                             </mask>
@@ -3376,6 +3418,8 @@ Photo</string>
                         <outlet property="noPhotoLabel" destination="J22-L9-YTJ" id="HXH-eR-scf"/>
                         <outlet property="notesLabel" destination="22l-wc-dEn" id="FSl-zi-Z38"/>
                         <outlet property="scrollView" destination="7Gh-go-0l0" id="CXf-XT-3V8"/>
+                        <outlet property="tableView" destination="CwC-3A-NOZ" id="MjA-oU-Tfd"/>
+                        <outlet property="tableViewHeightLayoutConstraint" destination="mnA-Xx-gGf" id="Fys-TF-nRD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bS9-f5-Guu" sceneMemberID="firstResponder"/>

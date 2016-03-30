@@ -18,6 +18,8 @@ protocol OfficeGiverListTableViewControllerDelegate {
     func getClientLastName(lastName: String)
     func getClientNotes(notes: String)
     func getClientImage(image: UIImage?)
+    func getCathyNames(names: [String])
+    func getCathyEmails(emails: [String])
     func segueToOfficeClientProfileViewController()
     
 }

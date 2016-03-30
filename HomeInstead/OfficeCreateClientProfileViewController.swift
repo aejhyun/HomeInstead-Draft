@@ -305,7 +305,10 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
         self.delegate?.getClientLastName(self.lastNameTextField.text!)
         self.delegate?.getClientNotes(self.notesTextView.text!)
         self.delegate?.getClientImage(self.imageView.image)
+        self.delegate?.getCathyNames(self.cathyNames)
+        self.delegate?.getCathyEmails(self.cathyEmails)
         self.delegate?.segueToOfficeClientProfileViewController()
+    
         self.dismissViewControllerAnimated(true, completion: nil)
         
     }
