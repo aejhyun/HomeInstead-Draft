@@ -558,7 +558,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="rWN-SL-jl8" kind="relationship" relationship="rootViewController" id="utD-Ze-gqJ"/>
+                        <segue destination="rWN-SL-jl8" kind="relationship" relationship="rootViewController" id="bwA-YD-zkM"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cp8-mb-PFM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2907,7 +2907,9 @@
                                                 <variation key="widthClass=compact" constant="51"/>
                                             </constraint>
                                             <constraint firstItem="AX4-H1-guc" firstAttribute="centerX" secondItem="7IK-dW-aow" secondAttribute="centerX" id="Dy2-8z-RMg"/>
-                                            <constraint firstItem="PUe-VV-SgJ" firstAttribute="top" secondItem="CAi-1N-2h1" secondAttribute="bottom" constant="8" id="HSg-Vs-t24"/>
+                                            <constraint firstItem="PUe-VV-SgJ" firstAttribute="top" secondItem="CAi-1N-2h1" secondAttribute="bottom" constant="8" id="HSg-Vs-t24">
+                                                <variation key="widthClass=compact" constant="7"/>
+                                            </constraint>
                                             <constraint firstAttribute="trailing" secondItem="Sls-eS-4UL" secondAttribute="trailing" constant="8" id="IX0-Kv-AeM"/>
                                             <constraint firstAttribute="bottom" secondItem="sbA-4U-JOL" secondAttribute="bottom" constant="8" id="KuX-3C-bjH"/>
                                             <constraint firstItem="7IK-dW-aow" firstAttribute="leading" secondItem="G3Y-l4-isQ" secondAttribute="leading" constant="40" id="PAh-No-u1l"/>
@@ -2921,7 +2923,7 @@
                                             <constraint firstAttribute="trailing" secondItem="Oo6-Km-pcb" secondAttribute="trailing" constant="8" id="c1c-o1-jTt"/>
                                             <constraint firstItem="CAi-1N-2h1" firstAttribute="leading" secondItem="G3Y-l4-isQ" secondAttribute="leading" constant="40" id="dhX-cD-HAY"/>
                                             <constraint firstItem="PUe-VV-SgJ" firstAttribute="leading" secondItem="G3Y-l4-isQ" secondAttribute="leading" constant="40" id="eeL-z8-yef">
-                                                <variation key="widthClass=compact" constant="28"/>
+                                                <variation key="widthClass=compact" constant="29"/>
                                             </constraint>
                                             <constraint firstItem="Sls-eS-4UL" firstAttribute="leading" secondItem="G3Y-l4-isQ" secondAttribute="leading" constant="40" id="ehS-we-9lk">
                                                 <variation key="widthClass=compact" constant="45"/>
@@ -3484,6 +3486,9 @@ Photo</string>
                             </mask>
                         </variation>
                     </view>
+                    <navigationItem key="navigationItem" id="heo-Xt-5L5">
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="aZV-HT-cZX"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="contentView" destination="JqS-FK-gXJ" id="bOn-ZT-VJl"/>
                         <outlet property="firstNameLabel" destination="R5M-oa-AMs" id="hqC-CK-XO7"/>
@@ -3596,8 +3601,8 @@ Photo</string>
         <image name="defaultPicture" width="540" height="540"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="KS2-cD-Ng0"/>
         <segue reference="JvB-e1-eF0"/>
         <segue reference="CPS-1T-8Nc"/>
+        <segue reference="KS2-cD-Ng0"/>
     </inferredMetricsTieBreakers>
 </document>
