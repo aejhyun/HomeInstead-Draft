@@ -115,7 +115,6 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
                     officeCreateClientProfileViewController.image = self.image
                     officeCreateClientProfileViewController.cathyNames = self.cathyNames
                     officeCreateClientProfileViewController.cathyEmails = self.cathyEmails
-                    officeCreateClientProfileViewController.officeClientProfileViewControllerDelegate = self
             } else {
                 print("officeCreateClientProfileViewController")
             }

@@ -26,8 +26,8 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     var gestureRecognizer: UIGestureRecognizer!
     var numberOfTimesViewLaidOutSubviews: Int = 0
     var isInEditingMode: Bool = false
-    var officeGiverListTableViewControllerDelegate: OfficeGiverListTableViewControllerDelegate?
-    var officeClientProfileViewControllerDelegate: OfficeClientProfileViewControllerDelegate?
+    var clientInformationDelegate: ClientInformationDelegate?
+    var segueBehindModalViewControllerDelegate: SegueBehindModalViewControllerDelegate?
     var firstName: String!
     var lastName: String!
     var notes: String!
@@ -339,17 +339,17 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
         if self.isInEditingMode == false {
             
             //Perhaps safely unwrap this delegate.
-            self.officeGiverListTableViewControllerDelegate?.getClientFirstName(self.firstNameTextField.text!)
-            self.officeGiverListTableViewControllerDelegate?.getClientLastName(self.lastNameTextField.text!)
-            self.officeGiverListTableViewControllerDelegate?.getClientNotes(self.notesTextView.text!)
-            self.officeGiverListTableViewControllerDelegate?.getClientImage(self.imageView.image)
-            self.officeGiverListTableViewControllerDelegate?.getCathyNames(self.cathyNames)
-            self.officeGiverListTableViewControllerDelegate?.getCathyEmails(self.cathyEmails)
-            self.officeGiverListTableViewControllerDelegate?.segueToOfficeClientProfileViewController()
+            self.clientInformationDelegate?.getClientFirstName(self.firstNameTextField.text!)
+            self.clientInformationDelegate?.getClientLastName(self.lastNameTextField.text!)
+            self.clientInformationDelegate?.getClientNotes(self.notesTextView.text!)
+            self.clientInformationDelegate?.getClientImage(self.imageView.image)
+            self.clientInformationDelegate?.getCathyNames(self.cathyNames)
+            self.clientInformationDelegate?.getCathyEmails(self.cathyEmails)
+            self.segueBehindModalViewControllerDelegate?.segueBehindModalViewController()
             
         } else {
             
-            self.officeClientProfileViewControllerDelegate?.getClientFirstName(self.firstNameTextField.text!)
+//            self.officeClientProfileViewControllerDelegate?.getClientFirstName(self.firstNameTextField.text!)
             
         }
         

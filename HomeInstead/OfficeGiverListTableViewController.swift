@@ -9,7 +9,7 @@
 import UIKit
 import Parse
 
-class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverListTableViewControllerDelegate {
+class OfficeGiverListTableViewController: UITableViewController, ClientInformationDelegate, SegueBehindModalViewControllerDelegate {
     
     var giverNames = [String]()
     var giverEmails = [String]()
@@ -230,7 +230,8 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
 
             if let navigationController = segue.destinationViewController as? UINavigationController {
                 if let officeCreateClientProfileViewController = navigationController.topViewController as? OfficeCreateClientProfileViewController {
-                    officeCreateClientProfileViewController.officeGiverListTableViewControllerDelegate = self
+                    officeCreateClientProfileViewController.clientInformationDelegate = self
+                    officeCreateClientProfileViewController.segueBehindModalViewControllerDelegate = self
                 } else {
                     print("officeCreateClientProfileViewController is nil")
                 }
@@ -280,7 +281,7 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
         self.cathyEmails = emails
     }
     
-    func segueToOfficeClientProfileViewController() {
+    func segueBehindModalViewController() {
         performSegueWithIdentifier("officeGiverListToOfficeClientProfile", sender: nil)
     }
 
