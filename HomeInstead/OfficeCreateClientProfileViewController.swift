@@ -77,7 +77,10 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
         super.viewDidLoad()
         
         self.editButton.hidden = true
+        self.editButton.alpha = 1.0
+        
         self.addPhotoButton.titleLabel?.textAlignment = .Center
+        self.addPhotoButton.alpha = 1.0
         
         self.tableView.setEditing(true, animated: true)
         
@@ -202,7 +205,10 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
         self.imageView.image = selectedImage
         self.imageView.layer.borderWidth = 0
         self.addPhotoButton.hidden = true
+        self.addPhotoButton.alpha = 0.0
         self.editButton.hidden = false
+        self.editButton.alpha = 1.0
+        
         dismissViewControllerAnimated(true, completion: nil)
         
     }
@@ -251,8 +257,15 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
         alertAction = UIAlertAction(title: "Delete Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
             self.imageView.image = nil
             self.imageView.layer.borderWidth = 1
+            UIView.animateWithDuration(1.0, animations: {
+                self.addPhotoButton.alpha = 1.0
+            })
+            UIView.animateWithDuration(1.0, animations: {
+                self.editButton.alpha = 0.0
+            })
             self.addPhotoButton.hidden = false
-            self.editButton.hidden = true
+            //self.editButton.hidden = true
+            
         }
         alertController.addAction(alertAction)
         
@@ -336,6 +349,7 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     
     @IBAction func doneButtonTapped(sender: AnyObject) {
         
+        //Perhaps safely unwrap this delegate.
         self.clientInformationDelegate?.getCathyNames(self.cathyNames)
         self.clientInformationDelegate?.getCathyEmails(self.cathyEmails)
         self.clientInformationDelegate?.getClientFirstName(self.firstNameTextField.text!)
@@ -344,14 +358,7 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
         self.clientInformationDelegate?.getClientImage(self.imageView.image)
         
         if self.isInEditingMode == false {
-            
-            //Perhaps safely unwrap this delegate.
-
             self.segueBehindModalViewControllerDelegate?.segueBehindModalViewController()
-            
-        } else {
-
-            
         }
         
         self.dismissViewControllerAnimated(true, completion: nil)
