@@ -2749,8 +2749,7 @@
                                                                             <exclude reference="32J-ah-H7s"/>
                                                                         </mask>
                                                                     </variation>
-                                                                    <variation key="widthClass=compact" misplaced="YES">
-                                                                        <rect key="frame" x="14" y="26" width="57" height="12"/>
+                                                                    <variation key="widthClass=compact">
                                                                         <mask key="constraints">
                                                                             <exclude reference="32J-ah-H7s"/>
                                                                         </mask>
@@ -3244,12 +3243,6 @@
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notes" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="22l-wc-dEn">
-                                                <rect key="frame" x="-42" y="-21" width="42" height="21"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J22-L9-YTJ">
                                                 <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                                 <string key="text">No
@@ -3287,13 +3280,13 @@ Photo</string>
                                                             </subviews>
                                                             <constraints>
                                                                 <constraint firstItem="Rju-Gg-fZM" firstAttribute="leading" secondItem="21x-bh-1op" secondAttribute="leadingMargin" constant="-8" id="Kde-8M-WtG">
-                                                                    <variation key="widthClass=compact" constant="6"/>
+                                                                    <variation key="widthClass=compact" constant="10"/>
                                                                 </constraint>
                                                                 <constraint firstItem="Rju-Gg-fZM" firstAttribute="leading" secondItem="21x-bh-1op" secondAttribute="leadingMargin" id="PSX-Ez-pDV"/>
                                                                 <constraint firstItem="Rju-Gg-fZM" firstAttribute="top" secondItem="21x-bh-1op" secondAttribute="topMargin" constant="-3" id="Qmd-9y-D2Z"/>
                                                                 <constraint firstAttribute="bottomMargin" secondItem="TFo-Ch-0ak" secondAttribute="bottom" constant="-3" id="VCB-Sb-0yW"/>
                                                                 <constraint firstItem="TFo-Ch-0ak" firstAttribute="leading" secondItem="21x-bh-1op" secondAttribute="leadingMargin" constant="-8" id="a59-yW-4kM">
-                                                                    <variation key="widthClass=compact" constant="6"/>
+                                                                    <variation key="widthClass=compact" constant="10"/>
                                                                 </constraint>
                                                             </constraints>
                                                             <variation key="default">
@@ -3349,9 +3342,39 @@ Photo</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
+                                                <variation key="widthClass=compact" misplaced="YES">
+                                                    <rect key="frame" x="40" y="195" width="91" height="19"/>
+                                                </variation>
                                             </label>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="L6E-hP-E6i">
+                                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" id="crn-iA-QPq">
+                                                        <variation key="widthClass=compact" constant="20"/>
+                                                    </constraint>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="crn-iA-QPq"/>
+                                                    </mask>
+                                                </variation>
+                                                <variation key="widthClass=compact">
+                                                    <mask key="constraints">
+                                                        <include reference="crn-iA-QPq"/>
+                                                    </mask>
+                                                </variation>
+                                                <connections>
+                                                    <outlet property="delegate" destination="rWN-SL-jl8" id="JSz-gD-vP1"/>
+                                                </connections>
+                                            </textView>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="L6E-hP-E6i" firstAttribute="leading" secondItem="JqS-FK-gXJ" secondAttribute="leading" constant="30" id="4Hi-XB-kvf">
+                                                <variation key="widthClass=compact" constant="45"/>
+                                            </constraint>
                                             <constraint firstItem="R5M-oa-AMs" firstAttribute="leading" secondItem="SX8-Lm-SK0" secondAttribute="trailing" constant="14" id="5Sf-AY-VZM">
                                                 <variation key="widthClass=compact" constant="10"/>
                                             </constraint>
@@ -3362,20 +3385,15 @@ Photo</string>
                                                 <variation key="widthClass=compact" constant="30"/>
                                             </constraint>
                                             <constraint firstAttribute="trailing" secondItem="CwC-3A-NOZ" secondAttribute="trailing" constant="8" id="L6N-i3-Qvv"/>
-                                            <constraint firstItem="6us-zL-B7E" firstAttribute="top" secondItem="22l-wc-dEn" secondAttribute="bottom" constant="8" id="OXc-43-ZIw">
-                                                <variation key="widthClass=compact" constant="13"/>
-                                            </constraint>
                                             <constraint firstItem="6us-zL-B7E" firstAttribute="leading" secondItem="JqS-FK-gXJ" secondAttribute="leading" constant="40" id="VTy-np-3r3"/>
                                             <constraint firstItem="R5M-oa-AMs" firstAttribute="centerY" secondItem="SX8-Lm-SK0" secondAttribute="centerY" id="WkX-PJ-Vg0"/>
                                             <constraint firstItem="SX8-Lm-SK0" firstAttribute="top" secondItem="JqS-FK-gXJ" secondAttribute="top" constant="35" id="ah8-bm-lEu">
                                                 <variation key="widthClass=compact" constant="15"/>
                                             </constraint>
-                                            <constraint firstItem="22l-wc-dEn" firstAttribute="top" secondItem="qu5-tI-3xq" secondAttribute="bottom" constant="5" id="bCt-mT-USO">
-                                                <variation key="widthClass=compact" constant="13"/>
-                                            </constraint>
                                             <constraint firstItem="qu5-tI-3xq" firstAttribute="leading" secondItem="JqS-FK-gXJ" secondAttribute="leading" constant="20" id="bZU-6V-aIk">
                                                 <variation key="widthClass=compact" constant="40"/>
                                             </constraint>
+                                            <constraint firstItem="L6E-hP-E6i" firstAttribute="top" secondItem="qu5-tI-3xq" secondAttribute="bottom" constant="8" id="bfk-H2-eDl"/>
                                             <constraint firstItem="SX8-Lm-SK0" firstAttribute="leading" secondItem="JqS-FK-gXJ" secondAttribute="leading" constant="40" id="emM-Qp-bd4">
                                                 <variation key="widthClass=compact" constant="40"/>
                                             </constraint>
@@ -3383,16 +3401,16 @@ Photo</string>
                                                 <variation key="widthClass=compact" constant="46"/>
                                             </constraint>
                                             <constraint firstAttribute="bottom" secondItem="CwC-3A-NOZ" secondAttribute="bottom" constant="28" id="nXO-1u-XSw">
-                                                <variation key="widthClass=compact" constant="40"/>
+                                                <variation key="widthClass=compact" constant="8"/>
                                             </constraint>
-                                            <constraint firstItem="22l-wc-dEn" firstAttribute="leading" secondItem="JqS-FK-gXJ" secondAttribute="leading" constant="18" id="onc-XQ-FFF">
-                                                <variation key="widthClass=compact" constant="48"/>
+                                            <constraint firstItem="6us-zL-B7E" firstAttribute="top" secondItem="L6E-hP-E6i" secondAttribute="bottom" constant="2" id="oNb-uD-LNL">
+                                                <variation key="widthClass=compact" constant="8"/>
                                             </constraint>
-                                            <constraint firstAttribute="trailing" secondItem="22l-wc-dEn" secondAttribute="trailing" constant="8" id="rOU-bs-SNi"/>
                                             <constraint firstItem="J22-L9-YTJ" firstAttribute="centerX" secondItem="SX8-Lm-SK0" secondAttribute="centerX" id="uEs-d3-Ggx"/>
                                             <constraint firstItem="CwC-3A-NOZ" firstAttribute="top" secondItem="6us-zL-B7E" secondAttribute="bottom" constant="23" id="x0c-kA-ouz">
                                                 <variation key="widthClass=compact" constant="3"/>
                                             </constraint>
+                                            <constraint firstAttribute="trailing" secondItem="L6E-hP-E6i" secondAttribute="trailing" constant="8" id="xjn-ef-1Gl"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="subviews">
@@ -3400,10 +3418,10 @@ Photo</string>
                                                 <exclude reference="R5M-oa-AMs"/>
                                                 <exclude reference="dvy-YL-L9M"/>
                                                 <exclude reference="qu5-tI-3xq"/>
-                                                <exclude reference="22l-wc-dEn"/>
                                                 <exclude reference="J22-L9-YTJ"/>
                                                 <exclude reference="CwC-3A-NOZ"/>
                                                 <exclude reference="6us-zL-B7E"/>
+                                                <exclude reference="L6E-hP-E6i"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="ah8-bm-lEu"/>
@@ -3414,11 +3432,11 @@ Photo</string>
                                                 <exclude reference="WkX-PJ-Vg0"/>
                                                 <exclude reference="bZU-6V-aIk"/>
                                                 <exclude reference="lOd-aB-DUM"/>
-                                                <exclude reference="bCt-mT-USO"/>
-                                                <exclude reference="onc-XQ-FFF"/>
-                                                <exclude reference="rOU-bs-SNi"/>
-                                                <exclude reference="OXc-43-ZIw"/>
+                                                <exclude reference="4Hi-XB-kvf"/>
+                                                <exclude reference="bfk-H2-eDl"/>
+                                                <exclude reference="xjn-ef-1Gl"/>
                                                 <exclude reference="VTy-np-3r3"/>
+                                                <exclude reference="oNb-uD-LNL"/>
                                                 <exclude reference="A5K-X2-Hav"/>
                                                 <exclude reference="BmM-oe-t7T"/>
                                                 <exclude reference="DvY-Kl-s6V"/>
@@ -3433,10 +3451,10 @@ Photo</string>
                                                 <include reference="R5M-oa-AMs"/>
                                                 <include reference="dvy-YL-L9M"/>
                                                 <include reference="qu5-tI-3xq"/>
-                                                <include reference="22l-wc-dEn"/>
                                                 <include reference="J22-L9-YTJ"/>
                                                 <include reference="CwC-3A-NOZ"/>
                                                 <include reference="6us-zL-B7E"/>
+                                                <include reference="L6E-hP-E6i"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="ah8-bm-lEu"/>
@@ -3447,11 +3465,11 @@ Photo</string>
                                                 <include reference="WkX-PJ-Vg0"/>
                                                 <include reference="bZU-6V-aIk"/>
                                                 <include reference="lOd-aB-DUM"/>
-                                                <include reference="bCt-mT-USO"/>
-                                                <include reference="onc-XQ-FFF"/>
-                                                <include reference="rOU-bs-SNi"/>
-                                                <include reference="OXc-43-ZIw"/>
+                                                <include reference="4Hi-XB-kvf"/>
+                                                <include reference="bfk-H2-eDl"/>
+                                                <include reference="xjn-ef-1Gl"/>
                                                 <include reference="VTy-np-3r3"/>
+                                                <include reference="oNb-uD-LNL"/>
                                                 <include reference="A5K-X2-Hav"/>
                                                 <include reference="BmM-oe-t7T"/>
                                                 <include reference="DvY-Kl-s6V"/>
@@ -3517,7 +3535,7 @@ Photo</string>
                         <outlet property="imageViewHeightLayoutConstraint" destination="CBp-PL-khs" id="BDc-cK-u87"/>
                         <outlet property="lastNameLabel" destination="dvy-YL-L9M" id="aIR-Nx-ehW"/>
                         <outlet property="noPhotoLabel" destination="J22-L9-YTJ" id="HXH-eR-scf"/>
-                        <outlet property="notesLabel" destination="22l-wc-dEn" id="FSl-zi-Z38"/>
+                        <outlet property="notesTextView" destination="L6E-hP-E6i" id="J9g-R4-IsD"/>
                         <outlet property="scrollView" destination="7Gh-go-0l0" id="CXf-XT-3V8"/>
                         <outlet property="tableView" destination="CwC-3A-NOZ" id="MjA-oU-Tfd"/>
                         <outlet property="tableViewHeightLayoutConstraint" destination="mnA-Xx-gGf" id="Fys-TF-nRD"/>

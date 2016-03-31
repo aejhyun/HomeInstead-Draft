@@ -346,12 +346,11 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
             self.delegate?.getCathyNames(self.cathyNames)
             self.delegate?.getCathyEmails(self.cathyEmails)
             self.delegate?.segueToOfficeClientProfileViewController()
-
+            self.dismissViewControllerAnimated(true, completion: nil)
+            
         } else {
             
         }
-        
-        self.dismissViewControllerAnimated(true, completion: nil)
         
     }
 

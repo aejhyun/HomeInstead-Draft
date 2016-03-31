@@ -12,7 +12,7 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
     
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var lastNameLabel: UILabel!
-    @IBOutlet weak var notesLabel: UILabel!
+    @IBOutlet weak var notesTextView: UITextView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
@@ -34,10 +34,10 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
         self.automaticallyAdjustsScrollViewInsets = false
         self.firstNameLabel.text = self.firstName
         self.lastNameLabel.text = self.lastName
-        self.notesLabel.text = self.notes
+        self.notesTextView.text = self.notes
         
         if self.notes.isEmpty {
-            self.notesLabel.text = "None."
+            self.notesTextView.text = "None."
         }
         
         self.setImageView()
