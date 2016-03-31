@@ -336,20 +336,21 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     
     @IBAction func doneButtonTapped(sender: AnyObject) {
         
+        self.clientInformationDelegate?.getCathyNames(self.cathyNames)
+        self.clientInformationDelegate?.getCathyEmails(self.cathyEmails)
+        self.clientInformationDelegate?.getClientFirstName(self.firstNameTextField.text!)
+        self.clientInformationDelegate?.getClientLastName(self.lastNameTextField.text!)
+        self.clientInformationDelegate?.getClientNotes(self.notesTextView.text!)
+        self.clientInformationDelegate?.getClientImage(self.imageView.image)
+        
         if self.isInEditingMode == false {
             
             //Perhaps safely unwrap this delegate.
-            self.clientInformationDelegate?.getClientFirstName(self.firstNameTextField.text!)
-            self.clientInformationDelegate?.getClientLastName(self.lastNameTextField.text!)
-            self.clientInformationDelegate?.getClientNotes(self.notesTextView.text!)
-            self.clientInformationDelegate?.getClientImage(self.imageView.image)
-            self.clientInformationDelegate?.getCathyNames(self.cathyNames)
-            self.clientInformationDelegate?.getCathyEmails(self.cathyEmails)
+
             self.segueBehindModalViewControllerDelegate?.segueBehindModalViewController()
             
         } else {
-            
-//            self.officeClientProfileViewControllerDelegate?.getClientFirstName(self.firstNameTextField.text!)
+
             
         }
         

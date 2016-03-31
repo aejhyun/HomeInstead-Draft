@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, OfficeClientProfileViewControllerDelegate {
+class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ClientInformationDelegate {
     
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var lastNameLabel: UILabel!
@@ -30,18 +30,25 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+  
         self.automaticallyAdjustsScrollViewInsets = false
+        self.adjustTableViewHeight()
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        
         self.firstNameLabel.text = self.firstName
         self.lastNameLabel.text = self.lastName
         self.notesTextView.text = self.notes
+        self.setImageView()
         
         if self.notes.isEmpty {
             self.notesTextView.text = "None."
         }
         
-        self.setImageView()
         self.adjustTableViewHeight()
+        self.tableView.reloadData()
         
     }
     
@@ -54,6 +61,7 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
         if let image = self.image {
             self.imageView.image = image
             self.noPhotoLabel.hidden = true
+            self.imageView.layer.borderWidth = 0.0
         } else {
             self.imageView.layer.borderWidth = 1.0
             self.imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
@@ -64,7 +72,7 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
     
     func adjustTableViewHeight() {
         
-        //The 44 is the original height of self.tableView.contentSize. If the row height is changed in the XIB, then the 44 should also be changed to whatever number it is changed in the XIB.
+        //The 45 is the original height of self.tableView.contentSize. If the row height is changed in the XIB, then the 45 should also be changed to whatever number it is changed in the XIB.
         let height:CGFloat = 45 * CGFloat(self.cathyNames.count)
         var frame:CGRect = self.tableView.frame
         frame.size.height = height
@@ -115,6 +123,8 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
                     officeCreateClientProfileViewController.image = self.image
                     officeCreateClientProfileViewController.cathyNames = self.cathyNames
                     officeCreateClientProfileViewController.cathyEmails = self.cathyEmails
+                    officeCreateClientProfileViewController.clientInformationDelegate = self
+                
             } else {
                 print("officeCreateClientProfileViewController")
             }
@@ -124,10 +134,31 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
 
     }
     
-    func getClientFirstName(firstName: String) {
-        print(firstName)
-    }
-
 //Segue functions end here.
+    
+    func getClientFirstName(firstName: String) {
+        self.firstName = firstName
+    }
+    
+    func getClientLastName(lastName: String) {
+        self.lastName = lastName
+    }
+    
+    func getClientNotes(notes: String) {
+        self.notes = notes
+    }
+    
+    func getClientImage(image: UIImage?) {
+        self.image = image
+    }
+    
+    func getCathyNames(names: [String]) {
+        self.cathyNames = names
+    }
+    
+    func getCathyEmails(emails: [String]) {
+        self.cathyEmails = emails
+        
+    }
     
 }
