@@ -22,17 +22,60 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     @IBOutlet weak var addPhotoButton: UIButton!
     @IBOutlet weak var editButton: UIButton!
     
-    var cathyNames:[String] = [String]()
-    var cathyEmails:[String] = [String]()
     var drewTextFieldWithOnlyBottomLine: Bool = false
     var gestureRecognizer: UIGestureRecognizer!
     var numberOfTimesViewLaidOutSubviews: Int = 0
-    
+    var isInEditingMode: Bool = false
     var delegate: OfficeGiverListTableViewControllerDelegate?
+    
+    var firstName: String!
+    var lastName: String!
+    var notes: String!
+    var image: UIImage!
+    var cathyNames:[String] = [String]()
+    var cathyEmails:[String] = [String]()
+    
+    func setScrollView() {
+        
+        self.scrollView.contentSize.width = self.view.bounds.width
+        self.scrollView.contentSize.height = self.view.bounds.height
+        self.scrollView.keyboardDismissMode = .OnDrag
+        self.scrollView.delegate = self
+        self.automaticallyAdjustsScrollViewInsets = false
+        
+    }
+    
+    func setImageView() {
+        
+        self.imageView.layer.borderWidth = 1
+        self.imageView.layer.masksToBounds = false
+        self.imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
+        self.imageView.layer.cornerRadius = self.imageView.frame.height / 2
+        self.imageView.clipsToBounds = true
+        
+    }
+    
+    func setEditingMode() {
+        
+        self.navigationController?.navigationBar.topItem!.title = "Edit Client"
+        self.firstNameTextField.text = self.firstName
+        self.lastNameTextField.text = self.lastName
+        self.notesTextView.text = self.notes
+        self.imageView.image = self.image
+        self.adjustTableViewHeight(self.cathyNames.count)
+        
+        if imageView.image != nil {
+            
+            self.imageView.layer.borderWidth = 0
+            self.addPhotoButton.hidden = true
+            self.editButton.hidden = false
+        }
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.editButton.hidden = true
         self.addPhotoButton.titleLabel?.textAlignment = .Center
         
@@ -60,11 +103,14 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
             self.drawTextFieldWithOnlyBottomLine(self.lastNameTextField)
             
             //The imageView set up is also inside self.numberOfTimesViewLaidOutSubviews == 1 check because the code below will be called more than once. And the imageView set up is not in viewDidLoad() because, self.imageView.frame returned was the incorrect value. It returns the correct self.imageView.frame value either in the viewDidLayoutSubviews and viewWillAppear functions. But in the viewWillAppear function causes the image to show up visibly late.
-            self.imageView.layer.borderWidth = 1
-            self.imageView.layer.masksToBounds = false
-            self.imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
-            self.imageView.layer.cornerRadius = self.imageView.frame.height / 2
-            self.imageView.clipsToBounds = true
+            
+            self.setImageView()
+            
+            if self.isInEditingMode {
+                self.setEditingMode()
+            }
+            
+            self.adjustTableViewHeight(self.cathyNames.count)
             
         }
         self.numberOfTimesViewLaidOutSubviews++
@@ -73,6 +119,21 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     
     override func viewWillAppear(animated: Bool) {
         self.adjustTableViewHeight(self.cathyNames.count)
+    }
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        self.notesTextView.resignFirstResponder()
+    }
+    
+    func adjustTableViewHeight(numberOfRows: Int) {
+        
+        //The 45 is the original height of self.tableView.contentSize. If the row height is changed in the XIB, then the 44 should also be changed to whatever number it is changed in the XIB.
+        let height:CGFloat = 45 * CGFloat(numberOfRows + 1)
+        var frame:CGRect = self.tableView.frame
+        frame.size.height = height
+        self.tableView.frame = frame
+        self.tableViewHeightLayoutConstraint.constant = height
+        
     }
     
 //Keyboard functions start here.
@@ -104,33 +165,8 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     func notesTextViewTapped(gestureRecognizer: UIGestureRecognizer) {
         self.notesTextView.becomeFirstResponder()
     }
+    
 //Keyboard functions end here.
-    
-    func adjustTableViewHeight(numberOfRows: Int) {
-        
-        //The 44 is the original height of self.tableView.contentSize. If the row height is changed in the XIB, then the 44 should also be changed to whatever number it is changed in the XIB.
-        let height:CGFloat = 44 * CGFloat(numberOfRows + 1)
-        var frame:CGRect = self.tableView.frame
-        frame.size.height = height
-        self.tableView.frame = frame
-        self.tableViewHeightLayoutConstraint.constant = height
-
-    }
-    
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        self.notesTextView.resignFirstResponder()
-    }
-    
-    func setScrollView() {
-        
-        self.scrollView.contentSize.width = self.view.bounds.width
-        self.scrollView.contentSize.height = self.view.bounds.height
-        self.scrollView.keyboardDismissMode = .OnDrag
-        self.scrollView.delegate = self
-        self.automaticallyAdjustsScrollViewInsets = false
-        
-    }
-
 //TextField functions tart here.
     
     func drawTextFieldWithOnlyBottomLine(textField: UITextField!) {
@@ -253,18 +289,17 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
         
     }
     
-    
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-    
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
         return self.cathyNames.count + 1
     }
     
@@ -300,19 +335,25 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     }
     
     @IBAction func doneButtonTapped(sender: AnyObject) {
-        //Perhaps safely unwrap this delegate.
-        self.delegate?.getClientFirstName(self.firstNameTextField.text!)
-        self.delegate?.getClientLastName(self.lastNameTextField.text!)
-        self.delegate?.getClientNotes(self.notesTextView.text!)
-        self.delegate?.getClientImage(self.imageView.image)
-        self.delegate?.getCathyNames(self.cathyNames)
-        self.delegate?.getCathyEmails(self.cathyEmails)
-        self.delegate?.segueToOfficeClientProfileViewController()
-    
+        
+        if self.isInEditingMode == false {
+            
+            //Perhaps safely unwrap this delegate.
+            self.delegate?.getClientFirstName(self.firstNameTextField.text!)
+            self.delegate?.getClientLastName(self.lastNameTextField.text!)
+            self.delegate?.getClientNotes(self.notesTextView.text!)
+            self.delegate?.getClientImage(self.imageView.image)
+            self.delegate?.getCathyNames(self.cathyNames)
+            self.delegate?.getCathyEmails(self.cathyEmails)
+            self.delegate?.segueToOfficeClientProfileViewController()
+
+        } else {
+            
+        }
+        
         self.dismissViewControllerAnimated(true, completion: nil)
         
     }
-    
 
     @IBAction func cancelButtonTapped(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)

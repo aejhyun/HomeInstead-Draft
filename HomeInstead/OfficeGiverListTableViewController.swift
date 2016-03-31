@@ -252,7 +252,7 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
         }
     }
     
-//OfficeGiverListTableViewControllerDelegate protocol functions
+//OfficeGiverListTableViewControllerDelegate protocol functions start here.
     
     func getClientFirstName(firstName: String) {
         self.clientFirstName = firstName
@@ -281,6 +281,8 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
     func segueToOfficeClientProfileViewController() {
         performSegueWithIdentifier("officeGiverListToOfficeClientProfile", sender: nil)
     }
+
+//OfficeGiverListTableViewControllerDelegate protocol functions end here.
     
     @IBAction func signOutButtonPressed(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)

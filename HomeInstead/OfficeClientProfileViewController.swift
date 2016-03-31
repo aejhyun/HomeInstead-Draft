@@ -73,6 +73,8 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
         
     }
     
+//TableView functions start here.
+    
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
@@ -86,17 +88,41 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.cathyNames.count
     }
-    
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeAddCathyTableViewCell
         
         cell.cathyNameLabel.text = self.cathyNames[indexPath.row]
         cell.cathyEmailLabel.text = self.cathyEmails[indexPath.row]
-        
    
         return cell
         
     }
+    
+//TableView functions end here.
+//Segue functions start here.
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if let navigationController = segue.destinationViewController as? UINavigationController {
+            if let officeCreateClientProfileViewController = navigationController.viewControllers[0] as? OfficeCreateClientProfileViewController {
+                
+                    officeCreateClientProfileViewController.isInEditingMode = true
+                    officeCreateClientProfileViewController.firstName = self.firstName
+                    officeCreateClientProfileViewController.lastName = self.lastName
+                    officeCreateClientProfileViewController.notes = self.notes
+                    officeCreateClientProfileViewController.image = self.image
+                    officeCreateClientProfileViewController.cathyNames = self.cathyNames
+                    officeCreateClientProfileViewController.cathyEmails = self.cathyEmails
+                
+            } else {
+                print("officeCreateClientProfileViewController")
+            }
+        } else {
+            print("navigationController is nil")
+        }
 
+    }
+    
 }

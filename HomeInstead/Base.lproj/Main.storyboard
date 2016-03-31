@@ -705,6 +705,7 @@
         <!--Client List-->
         <scene sceneID="6GC-tC-VZk">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IBf-D1-sv8" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="eQ5-uE-Mal" customClass="OfficeClientListTableViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="aiw-wI-VWA">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -736,13 +737,13 @@
                         <segue destination="2Ph-NX-PMf" kind="show" identifier="officeClientListToCathyList" id="grV-Np-ELG"/>
                     </connections>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="IBf-D1-sv8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2670.75" y="2077.5"/>
         </scene>
         <!--Cathy List-->
         <scene sceneID="zp8-ZS-sJV">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RZd-44-5o8" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="2Ph-NX-PMf" customClass="OfficeCathyListTableViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="WGa-oY-Z8r">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -803,7 +804,6 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="9Tk-3p-TBY"/>
                     </navigationItem>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="RZd-44-5o8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3432.75" y="2077.5"/>
         </scene>
@@ -2723,7 +2723,7 @@
                                                     </constraint>
                                                 </constraints>
                                                 <prototypes>
-                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="FXx-zU-tOX" customClass="OfficeAddCathyTableViewCell" customModule="HomeInstead" customModuleProvider="target">
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="45" id="FXx-zU-tOX" customClass="OfficeAddCathyTableViewCell" customModule="HomeInstead" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FXx-zU-tOX" id="jFQ-QR-EYX">
@@ -2749,7 +2749,8 @@
                                                                             <exclude reference="32J-ah-H7s"/>
                                                                         </mask>
                                                                     </variation>
-                                                                    <variation key="widthClass=compact">
+                                                                    <variation key="widthClass=compact" misplaced="YES">
+                                                                        <rect key="frame" x="14" y="26" width="57" height="12"/>
                                                                         <mask key="constraints">
                                                                             <exclude reference="32J-ah-H7s"/>
                                                                         </mask>
@@ -3172,6 +3173,22 @@
             </objects>
             <point key="canvasLocation" x="5076" y="1302"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="A27-7x-l8e">
+            <objects>
+                <navigationController id="pGH-a5-Wxr" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="f8w-gK-Dpx">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="rWN-SL-jl8" kind="relationship" relationship="rootViewController" id="i3m-7f-ANh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XE9-ZJ-XzH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3477.75" y="461.5"/>
+        </scene>
         <!--Office Client Profile View Controller-->
         <scene sceneID="y6i-t6-pMp">
             <objects>
@@ -3346,7 +3363,7 @@ Photo</string>
                                             </constraint>
                                             <constraint firstAttribute="trailing" secondItem="CwC-3A-NOZ" secondAttribute="trailing" constant="8" id="L6N-i3-Qvv"/>
                                             <constraint firstItem="6us-zL-B7E" firstAttribute="top" secondItem="22l-wc-dEn" secondAttribute="bottom" constant="8" id="OXc-43-ZIw">
-                                                <variation key="widthClass=compact" constant="8"/>
+                                                <variation key="widthClass=compact" constant="13"/>
                                             </constraint>
                                             <constraint firstItem="6us-zL-B7E" firstAttribute="leading" secondItem="JqS-FK-gXJ" secondAttribute="leading" constant="40" id="VTy-np-3r3"/>
                                             <constraint firstItem="R5M-oa-AMs" firstAttribute="centerY" secondItem="SX8-Lm-SK0" secondAttribute="centerY" id="WkX-PJ-Vg0"/>
@@ -3354,7 +3371,7 @@ Photo</string>
                                                 <variation key="widthClass=compact" constant="15"/>
                                             </constraint>
                                             <constraint firstItem="22l-wc-dEn" firstAttribute="top" secondItem="qu5-tI-3xq" secondAttribute="bottom" constant="5" id="bCt-mT-USO">
-                                                <variation key="widthClass=compact" constant="8"/>
+                                                <variation key="widthClass=compact" constant="13"/>
                                             </constraint>
                                             <constraint firstItem="qu5-tI-3xq" firstAttribute="leading" secondItem="JqS-FK-gXJ" secondAttribute="leading" constant="20" id="bZU-6V-aIk">
                                                 <variation key="widthClass=compact" constant="40"/>
@@ -3369,7 +3386,7 @@ Photo</string>
                                                 <variation key="widthClass=compact" constant="40"/>
                                             </constraint>
                                             <constraint firstItem="22l-wc-dEn" firstAttribute="leading" secondItem="JqS-FK-gXJ" secondAttribute="leading" constant="18" id="onc-XQ-FFF">
-                                                <variation key="widthClass=compact" constant="45"/>
+                                                <variation key="widthClass=compact" constant="48"/>
                                             </constraint>
                                             <constraint firstAttribute="trailing" secondItem="22l-wc-dEn" secondAttribute="trailing" constant="8" id="rOU-bs-SNi"/>
                                             <constraint firstItem="J22-L9-YTJ" firstAttribute="centerX" secondItem="SX8-Lm-SK0" secondAttribute="centerX" id="uEs-d3-Ggx"/>
@@ -3487,7 +3504,11 @@ Photo</string>
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" id="heo-Xt-5L5">
-                        <barButtonItem key="rightBarButtonItem" title="Edit" id="aZV-HT-cZX"/>
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="aZV-HT-cZX">
+                            <connections>
+                                <segue destination="pGH-a5-Wxr" kind="presentation" identifier="officeClientProfileToOfficeCreateClientProfile" modalTransitionStyle="crossDissolve" id="gqu-40-4qd"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="contentView" destination="JqS-FK-gXJ" id="bOn-ZT-VJl"/>
@@ -3504,7 +3525,7 @@ Photo</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bS9-f5-Guu" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4214.25" y="2077.5"/>
+            <point key="canvasLocation" x="4334.25" y="461.5"/>
         </scene>
         <!--Office Add Client And Cathy View Controller-->
         <scene sceneID="kf6-oj-w7k">
@@ -3604,5 +3625,6 @@ Photo</string>
         <segue reference="JvB-e1-eF0"/>
         <segue reference="CPS-1T-8Nc"/>
         <segue reference="KS2-cD-Ng0"/>
+        <segue reference="i3m-7f-ANh"/>
     </inferredMetricsTieBreakers>
 </document>
