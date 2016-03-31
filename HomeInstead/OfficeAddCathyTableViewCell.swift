@@ -13,6 +13,7 @@ class OfficeAddCathyTableViewCell: UITableViewCell {
     @IBOutlet weak var cathyNameLabel: UILabel!
     @IBOutlet weak var cathyEmailLabel: UILabel!
     @IBOutlet weak var addCathyLabel: UILabel!
+    @IBOutlet weak var addButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -82,7 +82,7 @@ class AddCathyTableViewController: UITableViewController, UISearchBarDelegate, U
         
         let addButton = sender as! UIButton
         let superView = addButton.superview!
-        let addCathyTableViewCell = superView.superview as! AddCathyTableViewCell
+        let addCathyTableViewCell = superView.superview as! OfficeAddCathyTableViewCell
         let indexPath = tableView.indexPathForCell(addCathyTableViewCell)
         addButtonRowSelected = (indexPath?.row)!
         self.tableView.reloadData()
@@ -192,7 +192,7 @@ class AddCathyTableViewController: UITableViewController, UISearchBarDelegate, U
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! AddCathyTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeAddCathyTableViewCell
         
         if addButtonRowSelected == indexPath.row {
             cell.addButton.enabled = false

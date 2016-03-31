@@ -35,8 +35,13 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
         self.firstNameLabel.text = self.firstName
         self.lastNameLabel.text = self.lastName
         self.notesLabel.text = self.notes
+        
+        if self.notes.isEmpty {
+            self.notesLabel.text = "None."
+        }
+        
         self.setImageView()
-        adjustTableViewHeight()
+        self.adjustTableViewHeight()
         
     }
     
@@ -60,7 +65,7 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
     func adjustTableViewHeight() {
         
         //The 44 is the original height of self.tableView.contentSize. If the row height is changed in the XIB, then the 44 should also be changed to whatever number it is changed in the XIB.
-        let height:CGFloat = 45 * CGFloat(self.cathyNames.count + 1)
+        let height:CGFloat = 45 * CGFloat(self.cathyNames.count)
         var frame:CGRect = self.tableView.frame
         frame.size.height = height
         self.tableView.frame = frame
@@ -84,9 +89,11 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeAddCathyTableViewCell
         
-        cell.textLabel?.text = self.cathyNames[indexPath.row]
+        cell.cathyNameLabel.text = self.cathyNames[indexPath.row]
+        cell.cathyEmailLabel.text = self.cathyEmails[indexPath.row]
+        
    
         return cell
         
