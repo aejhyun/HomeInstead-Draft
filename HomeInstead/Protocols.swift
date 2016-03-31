@@ -8,10 +8,6 @@
 
 import Foundation
 
-protocol ReceiveMessageDelegate {
-    func receiveMessageFromTaskMessageViewController(message: String)
-}
-
 protocol OfficeGiverListTableViewControllerDelegate {
     
     func getClientFirstName(firstName: String)
@@ -23,3 +19,21 @@ protocol OfficeGiverListTableViewControllerDelegate {
     func segueToOfficeClientProfileViewController()
     
 }
+
+protocol OfficeClientProfileViewControllerDelegate {
+    
+    func getClientFirstName(firstName: String)
+    
+}
+
+
+
+//if let navigationController = segue.destinationViewController as? UINavigationController {
+//    if let officeCreateClientProfileViewController = navigationController.topViewController as? OfficeCreateClientProfileViewController {
+//        officeCreateClientProfileViewController.delegate = self
+//    } else {
+//        print("officeCreateClientProfileViewController is nil")
+//    }
+//} else {
+//    print("navigationController is nil")
+//}

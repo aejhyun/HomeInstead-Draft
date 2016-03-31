@@ -26,8 +26,8 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     var gestureRecognizer: UIGestureRecognizer!
     var numberOfTimesViewLaidOutSubviews: Int = 0
     var isInEditingMode: Bool = false
-    var delegate: OfficeGiverListTableViewControllerDelegate?
-    
+    var officeGiverListTableViewControllerDelegate: OfficeGiverListTableViewControllerDelegate?
+    var officeClientProfileViewControllerDelegate: OfficeClientProfileViewControllerDelegate?
     var firstName: String!
     var lastName: String!
     var notes: String!
@@ -339,21 +339,24 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
         if self.isInEditingMode == false {
             
             //Perhaps safely unwrap this delegate.
-            self.delegate?.getClientFirstName(self.firstNameTextField.text!)
-            self.delegate?.getClientLastName(self.lastNameTextField.text!)
-            self.delegate?.getClientNotes(self.notesTextView.text!)
-            self.delegate?.getClientImage(self.imageView.image)
-            self.delegate?.getCathyNames(self.cathyNames)
-            self.delegate?.getCathyEmails(self.cathyEmails)
-            self.delegate?.segueToOfficeClientProfileViewController()
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.officeGiverListTableViewControllerDelegate?.getClientFirstName(self.firstNameTextField.text!)
+            self.officeGiverListTableViewControllerDelegate?.getClientLastName(self.lastNameTextField.text!)
+            self.officeGiverListTableViewControllerDelegate?.getClientNotes(self.notesTextView.text!)
+            self.officeGiverListTableViewControllerDelegate?.getClientImage(self.imageView.image)
+            self.officeGiverListTableViewControllerDelegate?.getCathyNames(self.cathyNames)
+            self.officeGiverListTableViewControllerDelegate?.getCathyEmails(self.cathyEmails)
+            self.officeGiverListTableViewControllerDelegate?.segueToOfficeClientProfileViewController()
             
         } else {
             
+            self.officeClientProfileViewControllerDelegate?.getClientFirstName(self.firstNameTextField.text!)
+            
         }
         
+        self.dismissViewControllerAnimated(true, completion: nil)
+        
     }
-
+    
     @IBAction func cancelButtonTapped(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }

@@ -230,7 +230,7 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
 
             if let navigationController = segue.destinationViewController as? UINavigationController {
                 if let officeCreateClientProfileViewController = navigationController.topViewController as? OfficeCreateClientProfileViewController {
-                    officeCreateClientProfileViewController.delegate = self
+                    officeCreateClientProfileViewController.officeGiverListTableViewControllerDelegate = self
                 } else {
                     print("officeCreateClientProfileViewController is nil")
                 }
@@ -239,6 +239,7 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
             }
         
         } else if segue.identifier == "officeGiverListToOfficeClientProfile" {
+            
             if let officeClientProfileViewController = segue.destinationViewController as? OfficeClientProfileViewController {
                 officeClientProfileViewController.firstName = self.clientFirstName
                 officeClientProfileViewController.lastName = self.clientLastName
@@ -249,6 +250,7 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
             } else {
                 print("officeClientProfileViewController is nil")
             }
+            
         }
     }
     
@@ -288,5 +290,7 @@ class OfficeGiverListTableViewController: UITableViewController,  OfficeGiverLis
         dismissViewControllerAnimated(true, completion: nil)
         PFUser.logOut()
     }
+    
+
 
 }

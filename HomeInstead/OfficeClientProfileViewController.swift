@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, OfficeClientProfileViewControllerDelegate {
     
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var lastNameLabel: UILabel!
@@ -115,7 +115,7 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
                     officeCreateClientProfileViewController.image = self.image
                     officeCreateClientProfileViewController.cathyNames = self.cathyNames
                     officeCreateClientProfileViewController.cathyEmails = self.cathyEmails
-                
+                    officeCreateClientProfileViewController.officeClientProfileViewControllerDelegate = self
             } else {
                 print("officeCreateClientProfileViewController")
             }
@@ -124,5 +124,11 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
         }
 
     }
+    
+    func getClientFirstName(firstName: String) {
+        print(firstName)
+    }
+
+//Segue functions end here.
     
 }
