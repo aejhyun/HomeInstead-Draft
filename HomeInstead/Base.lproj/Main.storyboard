@@ -3188,7 +3188,7 @@
             </objects>
             <point key="canvasLocation" x="3477.75" y="461.5"/>
         </scene>
-        <!--Office Client Profile View Controller-->
+        <!--Client Profile-->
         <scene sceneID="y6i-t6-pMp">
             <objects>
                 <viewController id="sWo-Kf-w0R" customClass="OfficeClientProfileViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
@@ -3518,7 +3518,7 @@ Photo</string>
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" id="heo-Xt-5L5">
+                    <navigationItem key="navigationItem" title="Client Profile" id="heo-Xt-5L5">
                         <barButtonItem key="rightBarButtonItem" title="Edit" id="aZV-HT-cZX">
                             <connections>
                                 <segue destination="pGH-a5-Wxr" kind="presentation" identifier="officeClientProfileToOfficeCreateClientProfile" modalTransitionStyle="crossDissolve" id="gqu-40-4qd"/>
