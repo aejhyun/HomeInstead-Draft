@@ -170,7 +170,7 @@ class OfficeCreateClientProfileViewController: UIViewController, UITextViewDeleg
     }
     
 //Keyboard functions end here.
-//TextField functions tart here.
+//TextField functions start here.
     
     func drawTextFieldWithOnlyBottomLine(textField: UITextField!) {
       

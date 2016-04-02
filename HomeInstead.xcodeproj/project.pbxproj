@@ -15,7 +15,10 @@
 		8460ECA11C3A99280041FD83 /* AddGiverTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8460ECA01C3A99280041FD83 /* AddGiverTableViewController.swift */; };
 		8460ECA31C3AA0430041FD83 /* AddGiverTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8460ECA21C3AA0430041FD83 /* AddGiverTableViewCell.swift */; };
 		8467628D1CA94E7100506C30 /* OfficeClientProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467628C1CA94E7100506C30 /* OfficeClientProfileViewController.swift */; };
+		846762931CAFECB800506C30 /* OlderSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846762921CAFECB800506C30 /* OlderSignUpViewController.swift */; };
 		846DC5001C44FF97007B757C /* OfficeCathyListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846DC4FF1C44FF97007B757C /* OfficeCathyListTableViewCell.swift */; };
+		8472A2181CB028680073E8CA /* ChooseAccountTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8472A2171CB028680073E8CA /* ChooseAccountTypeViewController.swift */; };
+		8472A21A1CB029BD0073E8CA /* Enumerations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8472A2191CB029BD0073E8CA /* Enumerations.swift */; };
 		847374E91C37EE5500B4096F /* TaskPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847374E81C37EE5500B4096F /* TaskPictureViewController.swift */; };
 		8479A8EF1C2FBCA30069A046 /* OfficeClientListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479A8EE1C2FBCA30069A046 /* OfficeClientListTableViewController.swift */; };
 		8479A8F11C2FDDF40069A046 /* OfficeCathyListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479A8F01C2FDDF40069A046 /* OfficeCathyListTableViewController.swift */; };
@@ -75,7 +78,10 @@
 		8460ECA01C3A99280041FD83 /* AddGiverTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGiverTableViewController.swift; sourceTree = "<group>"; };
 		8460ECA21C3AA0430041FD83 /* AddGiverTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGiverTableViewCell.swift; sourceTree = "<group>"; };
 		8467628C1CA94E7100506C30 /* OfficeClientProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeClientProfileViewController.swift; sourceTree = "<group>"; };
+		846762921CAFECB800506C30 /* OlderSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OlderSignUpViewController.swift; sourceTree = "<group>"; };
 		846DC4FF1C44FF97007B757C /* OfficeCathyListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeCathyListTableViewCell.swift; sourceTree = "<group>"; };
+		8472A2171CB028680073E8CA /* ChooseAccountTypeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChooseAccountTypeViewController.swift; path = HomeInstead/ChooseAccountTypeViewController.swift; sourceTree = "<group>"; };
+		8472A2191CB029BD0073E8CA /* Enumerations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Enumerations.swift; path = HomeInstead/Enumerations.swift; sourceTree = "<group>"; };
 		847374E81C37EE5500B4096F /* TaskPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskPictureViewController.swift; sourceTree = "<group>"; };
 		8479A8EE1C2FBCA30069A046 /* OfficeClientListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeClientListTableViewController.swift; sourceTree = "<group>"; };
 		8479A8F01C2FDDF40069A046 /* OfficeCathyListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeCathyListTableViewController.swift; sourceTree = "<group>"; };
@@ -160,6 +166,8 @@
 		84D930F41C197DB1003C1688 = {
 			isa = PBXGroup;
 			children = (
+				8472A2171CB028680073E8CA /* ChooseAccountTypeViewController.swift */,
+				8472A2191CB029BD0073E8CA /* Enumerations.swift */,
 				84D931431C19945A003C1688 /* Frameworks */,
 				84D930FF1C197DB1003C1688 /* HomeInstead */,
 				84D930FE1C197DB1003C1688 /* Products */,
@@ -190,6 +198,7 @@
 				84D931001C197DB1003C1688 /* AppDelegate.swift */,
 				84C462AB1C202C1400FA82F9 /* FirstPageViewController.swift */,
 				84D931831C199840003C1688 /* SignUpSignInViewController.swift */,
+				846762921CAFECB800506C30 /* OlderSignUpViewController.swift */,
 				84D931A31C19A616003C1688 /* SignUpViewController.swift */,
 				84D931A11C19A600003C1688 /* SignInViewController.swift */,
 				84B53A7C1C48CC18008CAB8A /* GiveClientListTableViewCell.swift */,
@@ -335,13 +344,16 @@
 				84C32F7E1C350E4A00A245BC /* Protocols.swift in Sources */,
 				8467628D1CA94E7100506C30 /* OfficeClientProfileViewController.swift in Sources */,
 				84C05E161C2BB016009A137C /* CathyTaskLogOneTableViewCell.swift in Sources */,
+				8472A2181CB028680073E8CA /* ChooseAccountTypeViewController.swift in Sources */,
 				843C8E871C3E9551009E47C0 /* IOSVersion.swift in Sources */,
+				846762931CAFECB800506C30 /* OlderSignUpViewController.swift in Sources */,
 				849D64061C310E0300571E47 /* TaskMessageViewController.swift in Sources */,
 				84B53A831C575ECB008CAB8A /* CathyTaskLogTwoTableViewCell.swift in Sources */,
 				84D931841C199840003C1688 /* SignUpSignInViewController.swift in Sources */,
 				84517D121C60924A005573D2 /* ImageViewerViewController.swift in Sources */,
 				84D931091C197DB1003C1688 /* HomeInstead.xcdatamodeld in Sources */,
 				847D00001C25389C0047505F /* GiverCathyListTableViewController.swift in Sources */,
+				8472A21A1CB029BD0073E8CA /* Enumerations.swift in Sources */,
 				8460ECA11C3A99280041FD83 /* AddGiverTableViewController.swift in Sources */,
 				84C32F7C1C325B3000A245BC /* Miscellaneous.swift in Sources */,
 				84FD3E581C225B82007D2C31 /* MyActivityIndicator.swift in Sources */,
