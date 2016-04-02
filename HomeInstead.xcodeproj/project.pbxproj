@@ -157,13 +157,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8447AD751C96A51C0076B9E3 /* untitled folder */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "untitled folder";
-			sourceTree = "<group>";
-		};
 		84D930F41C197DB1003C1688 = {
 			isa = PBXGroup;
 			children = (
@@ -185,7 +178,6 @@
 		84D930FF1C197DB1003C1688 /* HomeInstead */ = {
 			isa = PBXGroup;
 			children = (
-				8447AD751C96A51C0076B9E3 /* untitled folder */,
 				84B3C1A51C7D93BA00C879E6 /* AKImageViewerViewController.h */,
 				84B3C1A61C7D93BA00C879E6 /* AKImageViewerViewController.m */,
 				849F8A8A1C7C6EAD00A38E73 /* HomeInstead-Bridging-Header.h */,
