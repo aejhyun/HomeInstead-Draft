@@ -7,3 +7,7 @@
 //
 
 import Foundation
+
+enum AccountType: String {
+    case Office, CareGiver, Cathy
+}

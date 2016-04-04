@@ -9,27 +9,78 @@
 import UIKit
 
 class ChooseAccountTypeViewController: UIViewController {
-
+    
+    var accountTypeSelected: AccountType!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+    }
+    @IBAction func officeButtonTapped(sender: AnyObject) {
+        self.accountTypeSelected = AccountType.Office
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func careGiverButtonTapped(sender: AnyObject) {
+        self.accountTypeSelected = AccountType.CareGiver
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @IBAction func cathyButtonTapped(sender: AnyObject) {
+        self.accountTypeSelected = AccountType.Cathy
     }
-    */
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if let navigationController = segue.destinationViewController as? UINavigationController {
+            if let signUpViewController = navigationController.topViewController as? SignUpViewController {
+                
+                signUpViewController.accountTypeSelected = self.accountTypeSelected
+                
+            } else {
+                print("signUpViewController returned nil")
+            }
+        } else {
+            print("navigationController returned nil")
+        }
+        
+        
+        
+        
+    }
 
 }
+
+
+//override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//    if (segue.identifier == "officeGiverListToClientList") {
+//        let officeClientListTableViewController = segue.destinationViewController as! OfficeClientListTableViewController
+//        officeClientListTableViewController.passedGiverName = giverNameToBePassed
+//        officeClientListTableViewController.passedGiverId = giverIdToBePassed
+//        officeClientListTableViewController.passedGiverEmail = giverEmailToBePassed
+//    } else if segue.identifier == "officeGiverListToOfficeCreateClientProfile" {
+//        
+//        if let navigationController = segue.destinationViewController as? UINavigationController {
+//            if let officeCreateClientProfileViewController = navigationController.topViewController as? OfficeCreateClientProfileViewController {
+//                officeCreateClientProfileViewController.clientInformationDelegate = self
+//                officeCreateClientProfileViewController.segueBehindModalViewControllerDelegate = self
+//            } else {
+//                print("officeCreateClientProfileViewController is nil")
+//            }
+//        } else {
+//            print("navigationController is nil")
+//        }
+//        
+//    } else if segue.identifier == "officeGiverListToOfficeClientProfile" {
+//        
+//        if let officeClientProfileViewController = segue.destinationViewController as? OfficeClientProfileViewController {
+//            officeClientProfileViewController.firstName = self.clientFirstName
+//            officeClientProfileViewController.lastName = self.clientLastName
+//            officeClientProfileViewController.notes = self.clientNotes
+//            officeClientProfileViewController.image = self.clientImage
+//            officeClientProfileViewController.cathyNames = self.cathyNames
+//            officeClientProfileViewController.cathyEmails = self.cathyEmails
+//        } else {
+//            print("officeClientProfileViewController is nil")
+//        }
+//        
+//    }
+//}

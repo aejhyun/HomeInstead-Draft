@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		840E72D51CB1074400F24F00 /* ClientSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840E72D41CB1074400F24F00 /* ClientSignUpViewController.swift */; };
 		843C8E871C3E9551009E47C0 /* IOSVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843C8E861C3E9550009E47C0 /* IOSVersion.swift */; };
+		84416F461CB1FF9D00911D09 /* Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84416F451CB1FF9D00911D09 /* Structures.swift */; };
 		8447AD791C96A5F70076B9E3 /* OfficeCreateClientProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8447AD781C96A5F70076B9E3 /* OfficeCreateClientProfileViewController.swift */; };
 		8447AD7B1C96A99C0076B9E3 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8447AD7A1C96A99C0076B9E3 /* TextField.swift */; };
 		84517D121C60924A005573D2 /* ImageViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84517D111C60924A005573D2 /* ImageViewerViewController.swift */; };
@@ -70,7 +72,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		840E72D41CB1074400F24F00 /* ClientSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientSignUpViewController.swift; sourceTree = "<group>"; };
 		843C8E861C3E9550009E47C0 /* IOSVersion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOSVersion.swift; sourceTree = "<group>"; };
+		84416F451CB1FF9D00911D09 /* Structures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Structures.swift; sourceTree = "<group>"; };
 		8447AD781C96A5F70076B9E3 /* OfficeCreateClientProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeCreateClientProfileViewController.swift; sourceTree = "<group>"; };
 		8447AD7A1C96A99C0076B9E3 /* TextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		84517D111C60924A005573D2 /* ImageViewerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewerViewController.swift; sourceTree = "<group>"; };
@@ -80,8 +84,8 @@
 		8467628C1CA94E7100506C30 /* OfficeClientProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeClientProfileViewController.swift; sourceTree = "<group>"; };
 		846762921CAFECB800506C30 /* OlderSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OlderSignUpViewController.swift; sourceTree = "<group>"; };
 		846DC4FF1C44FF97007B757C /* OfficeCathyListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeCathyListTableViewCell.swift; sourceTree = "<group>"; };
-		8472A2171CB028680073E8CA /* ChooseAccountTypeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChooseAccountTypeViewController.swift; path = HomeInstead/ChooseAccountTypeViewController.swift; sourceTree = "<group>"; };
-		8472A2191CB029BD0073E8CA /* Enumerations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Enumerations.swift; path = HomeInstead/Enumerations.swift; sourceTree = "<group>"; };
+		8472A2171CB028680073E8CA /* ChooseAccountTypeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseAccountTypeViewController.swift; sourceTree = "<group>"; };
+		8472A2191CB029BD0073E8CA /* Enumerations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enumerations.swift; sourceTree = "<group>"; };
 		847374E81C37EE5500B4096F /* TaskPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskPictureViewController.swift; sourceTree = "<group>"; };
 		8479A8EE1C2FBCA30069A046 /* OfficeClientListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeClientListTableViewController.swift; sourceTree = "<group>"; };
 		8479A8F01C2FDDF40069A046 /* OfficeCathyListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeCathyListTableViewController.swift; sourceTree = "<group>"; };
@@ -166,8 +170,6 @@
 		84D930F41C197DB1003C1688 = {
 			isa = PBXGroup;
 			children = (
-				8472A2171CB028680073E8CA /* ChooseAccountTypeViewController.swift */,
-				8472A2191CB029BD0073E8CA /* Enumerations.swift */,
 				84D931431C19945A003C1688 /* Frameworks */,
 				84D930FF1C197DB1003C1688 /* HomeInstead */,
 				84D930FE1C197DB1003C1688 /* Products */,
@@ -189,17 +191,21 @@
 				84B3C1A51C7D93BA00C879E6 /* AKImageViewerViewController.h */,
 				84B3C1A61C7D93BA00C879E6 /* AKImageViewerViewController.m */,
 				849F8A8A1C7C6EAD00A38E73 /* HomeInstead-Bridging-Header.h */,
+				84D931001C197DB1003C1688 /* AppDelegate.swift */,
 				84C32F7B1C325B3000A245BC /* Miscellaneous.swift */,
 				84C32F7D1C350E4A00A245BC /* Protocols.swift */,
+				8472A2191CB029BD0073E8CA /* Enumerations.swift */,
+				84416F451CB1FF9D00911D09 /* Structures.swift */,
 				843C8E861C3E9550009E47C0 /* IOSVersion.swift */,
 				84FD3E571C225B82007D2C31 /* MyActivityIndicator.swift */,
 				84517D111C60924A005573D2 /* ImageViewerViewController.swift */,
 				8447AD7A1C96A99C0076B9E3 /* TextField.swift */,
-				84D931001C197DB1003C1688 /* AppDelegate.swift */,
+				8472A2171CB028680073E8CA /* ChooseAccountTypeViewController.swift */,
+				84D931A31C19A616003C1688 /* SignUpViewController.swift */,
+				840E72D41CB1074400F24F00 /* ClientSignUpViewController.swift */,
 				84C462AB1C202C1400FA82F9 /* FirstPageViewController.swift */,
 				84D931831C199840003C1688 /* SignUpSignInViewController.swift */,
 				846762921CAFECB800506C30 /* OlderSignUpViewController.swift */,
-				84D931A31C19A616003C1688 /* SignUpViewController.swift */,
 				84D931A11C19A600003C1688 /* SignInViewController.swift */,
 				84B53A7C1C48CC18008CAB8A /* GiveClientListTableViewCell.swift */,
 				84C462A91C20232A00FA82F9 /* GiverClientListTableViewController.swift */,
@@ -361,6 +367,8 @@
 				84B74CDC1C219A1B00A2C914 /* TaskListViewController.swift in Sources */,
 				84D203D01C2E627400746066 /* GiverCathyListTableViewCell.swift in Sources */,
 				84AA8CAA1C44C8C3002892DF /* AddCathyTableViewController.swift in Sources */,
+				840E72D51CB1074400F24F00 /* ClientSignUpViewController.swift in Sources */,
+				84416F461CB1FF9D00911D09 /* Structures.swift in Sources */,
 				8460ECA31C3AA0430041FD83 /* AddGiverTableViewCell.swift in Sources */,
 				847374E91C37EE5500B4096F /* TaskPictureViewController.swift in Sources */,
 				8479A8F11C2FDDF40069A046 /* OfficeCathyListTableViewController.swift in Sources */,

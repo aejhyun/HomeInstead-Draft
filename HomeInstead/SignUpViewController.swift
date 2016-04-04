@@ -26,14 +26,31 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     @IBOutlet weak var postalCodeTextField: UITextField!
     @IBOutlet weak var phoneNumberTextField: UITextField!
     @IBOutlet weak var emergencyPhoneNumberTextField: UITextField!
-    @IBOutlet weak var submitButton: UIButton!
-    
+ 
+    @IBOutlet weak var signUpButton: UIButton!
+    @IBOutlet weak var clientSignUpButton: UIButton!
     @IBOutlet weak var imageViewHeightLayoutConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
     
     var activeTextField: UITextField?
-    
     var numberOfTimesViewLaidOutSubviews: Int = 0
+    var accountTypeSelected: AccountType!
+    
+    func setDefaultTextFieldValues() {
+        
+        self.firstNameTextField.text = "Jae"
+        self.lastNameTextField.text = "Kim"
+        self.emailTextField.text = "aejhyun@gmail.com"
+        self.passwordTextField.text = "password"
+        self.confirmPasswordTextField.text = "password"
+        self.verificationTextField.text = "verification"
+        self.provinceTextField.text = "Hubei Province"
+        self.cityTextField.text = "Hanyang"
+        self.streetTextField.text = "19300 Nassau St."
+        self.postalCodeTextField.text = "92508"
+        self.phoneNumberTextField.text = "9518077192"
+        
+    }
     
     func setImageView() {
         
@@ -48,13 +65,24 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.setDefaultTextFieldValues()
+        
+        if self.accountTypeSelected == AccountType.Cathy {
+            self.signUpButton.hidden = true
+            self.navigationItem.title = "Cathy Sign Up"
+        } else {
+            if self.accountTypeSelected == AccountType.CareGiver {
+                self.navigationItem.title = "CareGiver Sign Up"
+            } else if self.accountTypeSelected == AccountType.Office {
+                self.navigationItem.title = "Office Sign Up"
+            }
+            self.clientSignUpButton.hidden = true
+        }
+        
         self.addPhotoButton.titleLabel?.textAlignment = .Center
         self.editButton.hidden = true
         self.firstNameTextField.becomeFirstResponder()
         self.automaticallyAdjustsScrollViewInsets = false
-        
-        self.firstNameTextField.delegate = self
-        self.lastNameTextField.delegate = self
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
@@ -185,10 +213,91 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     }
 
 //Image functions end here.
+//SignUp functions start here.
     
+    @IBAction func clientSignUpButtonTapped(sender: AnyObject) {
+        
+        
+        
+    }
+    
+    @IBAction func signUpButtonTapped(sender: AnyObject) {
+        
+        if self.allTextFieldsAreNotEmpty() && self.isValidEmail() && self.passwordIsConfirmed() && self.isValidVerificationCode() {
+            print("success")
+        }
+        
+
+        
+    }
+    
+//SignUp functions end here.
+//Miscellaneous functions start here.
+    
+    func setAlertController(message: String) {
+        
+        let alertController = UIAlertController(title: "", message: "\(message)", preferredStyle: UIAlertControllerStyle.Alert)
+        let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alertController.addAction(defaultAction)
+        presentViewController(alertController, animated: true, completion: nil)
+        
+    }
+    
+    func allTextFieldsAreNotEmpty() -> Bool {
+        
+        if self.firstNameTextField.text == "" {
+            self.setAlertController("Please enter your first name")
+        } else if self.lastNameTextField.text == "" {
+            self.setAlertController("Please enter your last name")
+        } else if self.emailTextField.text == "" {
+            self.setAlertController("Please enter your email")
+        } else if self.passwordTextField.text == "" {
+            self.setAlertController("Please enter your password")
+        } else if self.confirmPasswordTextField.text == "" {
+            self.setAlertController("Please enter your confirmation password")
+        } else if self.verificationTextField.text == "" {
+            self.setAlertController("Please enter your verification code")
+        } else if self.provinceTextField.text == "" {
+            self.setAlertController("Please enter your province")
+        } else if self.cityTextField.text == "" {
+            self.setAlertController("Please enter your city")
+        } else if self.streetTextField.text == "" {
+            self.setAlertController("Please enter your street")
+        } else if self.postalCodeTextField.text == "" {
+            self.setAlertController("Please enter your postal code")
+        } else if self.phoneNumberTextField.text == "" {
+            self.setAlertController("Please enter your phone number")
+        } else {
+            return true
+        }
+        return false
+    }
+    
+    func isValidEmail() -> Bool {
+        return true
+    }
+    
+    func passwordIsConfirmed() -> Bool {
+        print("yo")
+        if self.passwordTextField.text != self.confirmPasswordTextField.text {
+            self.setAlertController("Passwords do not match.")
+            return false
+        }
+        return true
+    }
+    
+    func isValidVerificationCode() -> Bool {
+        return true
+    }
+    
+//Miscellaneous functions end here.
+//Segue functions start here.
+
     @IBAction func cancelButtonTapped(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+//Segue functions end here.
     
     
     
