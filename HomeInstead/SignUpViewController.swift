@@ -33,6 +33,7 @@ class SignUpViewController: ImageManagerViewController, UITextFieldDelegate {
     
     func setDefaultTextFieldValues() {
         
+        self.imageView.image = UIImage(named: "defaultPicture")
         self.firstNameTextField.text = "Jae"
         self.lastNameTextField.text = "Kim"
         self.emailTextField.text = "aejhyun@gmail.com"

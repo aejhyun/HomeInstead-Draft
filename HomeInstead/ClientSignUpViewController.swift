@@ -15,6 +15,7 @@ class ClientSignUpViewController: SignUpViewController {
     
     override func setDefaultTextFieldValues() {
         
+        self.imageView.image = UIImage(named: "defaultPicture")
         self.firstNameTextField.text = "Meong"
         self.lastNameTextField.text = "Choi"
         self.provinceTextField.text = "Hubei Province"
