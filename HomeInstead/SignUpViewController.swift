@@ -9,11 +9,8 @@
 import UIKit
 import Parse
 
-class SignUpViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class SignUpViewController: ImageManagerViewController, UITextFieldDelegate {
     
-    @IBOutlet weak var addPhotoButton: UIButton!
-    @IBOutlet weak var editButton: UIButton!
-    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
@@ -29,11 +26,9 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIImagePicker
  
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var clientSignUpButton: UIButton!
-    @IBOutlet weak var imageViewHeightLayoutConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
     
     var activeTextField: UITextField?
-    var numberOfTimesViewLaidOutSubviews: Int = 0
     var accountTypeSelected: AccountType!
     
     func setDefaultTextFieldValues() {
@@ -50,16 +45,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIImagePicker
         self.postalCodeTextField.text = "92508"
         self.phoneNumberTextField.text = "9518077192"
         self.emergencyPhoneNumberTextField.text = "4350937283"
-        
-    }
-    
-    func setImageView() {
-        
-        self.imageView.layer.borderWidth = 1
-        self.imageView.layer.masksToBounds = false
-        self.imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
-        self.imageView.layer.cornerRadius = self.imageViewHeightLayoutConstraint.constant / 2
-        self.imageView.clipsToBounds = true
         
     }
     
@@ -91,14 +76,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     }
     
     override func viewDidLayoutSubviews() {
-        
-        if self.numberOfTimesViewLaidOutSubviews == 1 {
-            //The imageView set up is inside self.numberOfTimesViewLaidOutSubviews == 1 check because the code below will be called more than once. And the imageView set up is not in viewDidLoad() because, self.imageView.frame returned was the incorrect value. It returns the correct self.imageView.frame value either in the viewDidLayoutSubviews and viewWillAppear functions. But in the viewWillAppear function causes the image to show up visibly late.
-            
-            self.setImageView()
-        }
-        self.numberOfTimesViewLaidOutSubviews++
-
+        super.viewDidLayoutSubviews()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -148,72 +126,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     }
     
 //Keyboard functions end here.
-//Image functions start here.
-    
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        
-        let selectedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-        self.imageView.image = selectedImage
-        self.imageView.layer.borderWidth = 0
-        self.addPhotoButton.hidden = true
-        self.editButton.hidden = false
-        
-        dismissViewControllerAnimated(true, completion: nil)
-        
-    }
-    
-    @IBAction func addPhotoButtonTapped(sender: AnyObject) {
-        let alertController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-        var alertAction: UIAlertAction = UIAlertAction(title: "Take Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
-            
-        }
-        alertController.addAction(alertAction)
-        
-        alertAction = UIAlertAction(title: "Choose Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
-            
-            let imagePickerController: UIImagePickerController = UIImagePickerController()
-            imagePickerController.sourceType = .PhotoLibrary
-            imagePickerController.delegate = self
-            
-            self.presentViewController(imagePickerController, animated: true, completion: nil)
-            
-        }
-        alertController.addAction(alertAction)
-        
-        alertAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-        alertController.addAction(alertAction)
-        
-        self.presentViewController(alertController, animated: true, completion: nil)
-    }
-    
-    @IBAction func editButtonTapped(sender: AnyObject) {
-        
-        let alertController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-        var alertAction: UIAlertAction = UIAlertAction(title: "Take Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
-            
-        }
-        alertController.addAction(alertAction)
-        
-        alertAction = UIAlertAction(title: "Choose Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
-            let imagePickerController: UIImagePickerController = UIImagePickerController()
-            imagePickerController.sourceType = .PhotoLibrary
-            imagePickerController.delegate = self
-            
-            self.presentViewController(imagePickerController, animated: true, completion: nil)
-        }
-        alertController.addAction(alertAction)
-        
-        alertAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-        alertController.addAction(alertAction)
-        
-        self.presentViewController(alertController, animated: true, completion: nil)
-    }
-
-//Image functions end here.
 //SignUp functions start here.
     
     @IBAction func clientSignUpButtonTapped(sender: AnyObject) {
