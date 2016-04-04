@@ -49,6 +49,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIImagePicker
         self.streetTextField.text = "19300 Nassau St."
         self.postalCodeTextField.text = "92508"
         self.phoneNumberTextField.text = "9518077192"
+        self.emergencyPhoneNumberTextField.text = "4350937283"
         
     }
     
@@ -218,21 +219,18 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     @IBAction func clientSignUpButtonTapped(sender: AnyObject) {
         
         
-        
     }
     
     @IBAction func signUpButtonTapped(sender: AnyObject) {
         
-        if self.allTextFieldsAreNotEmpty() && self.isValidEmail() && self.passwordIsConfirmed() && self.isValidVerificationCode() {
+        if self.allFieldsAreNotEmpty() && self.isValidEmail() && self.passwordIsConfirmed() && self.isValidVerificationCode() {
             print("success")
         }
-        
 
-        
     }
     
 //SignUp functions end here.
-//Miscellaneous functions start here.
+//Other functions start here.
     
     func setAlertController(message: String) {
         
@@ -243,9 +241,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIImagePicker
         
     }
     
-    func allTextFieldsAreNotEmpty() -> Bool {
+    func allFieldsAreNotEmpty() -> Bool {
         
-        if self.firstNameTextField.text == "" {
+        if self.imageView.image == nil {
+            self.setAlertController("Please add a photo")
+        } else if self.firstNameTextField.text == "" {
             self.setAlertController("Please enter your first name")
         } else if self.lastNameTextField.text == "" {
             self.setAlertController("Please enter your last name")
@@ -278,7 +278,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     }
     
     func passwordIsConfirmed() -> Bool {
-        print("yo")
         if self.passwordTextField.text != self.confirmPasswordTextField.text {
             self.setAlertController("Passwords do not match.")
             return false
@@ -290,7 +289,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIImagePicker
         return true
     }
     
-//Miscellaneous functions end here.
+//Other functions end here.
 //Segue functions start here.
 
     @IBAction func cancelButtonTapped(sender: AnyObject) {

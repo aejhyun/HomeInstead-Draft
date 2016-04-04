@@ -3853,7 +3853,7 @@ Photo</string>
                                                 <state key="normal" title="Client Sign Up"/>
                                                 <connections>
                                                     <action selector="clientSignUpButtonTapped:" destination="kqo-Jg-mM2" eventType="touchUpInside" id="QEv-tf-FCn"/>
-                                                    <segue destination="Jr2-bc-xAn" kind="show" id="nxC-hK-Q0e"/>
+                                                    <segue destination="Jr2-bc-xAn" kind="show" id="BfD-QY-Rtf"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -4462,7 +4462,7 @@ Photo</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <state key="normal" title="Edit"/>
                                                 <connections>
-                                                    <action selector="editButtonTapped:" destination="Jr2-bc-xAn" eventType="touchUpInside" id="Ck8-0X-4L3"/>
+                                                    <action selector="editButtonTapped:" destination="Jr2-bc-xAn" eventType="touchUpInside" id="HB8-nC-Kk1"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6U0-z5-UkY">
@@ -4514,7 +4514,7 @@ Photo</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                 <state key="normal" title="Add Photo"/>
                                                 <connections>
-                                                    <action selector="addPhotoButtonTapped:" destination="Jr2-bc-xAn" eventType="touchUpInside" id="25l-XR-2TE"/>
+                                                    <action selector="addPhotoButtonTapped:" destination="Jr2-bc-xAn" eventType="touchUpInside" id="70r-cM-pv4"/>
                                                     <action selector="addPhotoButtonTapped:" destination="rWN-SL-jl8" eventType="touchUpInside" id="moK-ET-557"/>
                                                 </connections>
                                             </button>
@@ -4823,21 +4823,21 @@ Photo</string>
                     </view>
                     <navigationItem key="navigationItem" id="OkQ-1g-vHO"/>
                     <connections>
-                        <outlet property="addPhotoButton" destination="rR0-eR-jBW" id="U9u-rX-arP"/>
-                        <outlet property="cityTextField" destination="YSQ-wG-gyL" id="HGa-f3-oDY"/>
-                        <outlet property="editButton" destination="dSx-5u-HRg" id="MDg-5Z-s1c"/>
-                        <outlet property="emergencyPhoneNumberTextField" destination="ayK-H1-5P2" id="GXP-Vq-PFw"/>
-                        <outlet property="firstNameTextField" destination="r8G-wE-5gR" id="x57-LL-f6e"/>
-                        <outlet property="imageView" destination="vzw-yO-yvw" id="UIn-d0-2GK"/>
-                        <outlet property="imageViewHeightLayoutConstraint" destination="TxO-KK-Wco" id="Shb-Jb-wbY"/>
-                        <outlet property="lastNameTextField" destination="WAL-tk-eYU" id="4Iz-5Q-o4r"/>
+                        <outlet property="addPhotoButton" destination="rR0-eR-jBW" id="vRh-Ex-1GJ"/>
+                        <outlet property="cityTextField" destination="YSQ-wG-gyL" id="Js0-gZ-wKl"/>
+                        <outlet property="editButton" destination="dSx-5u-HRg" id="cO5-kk-NiA"/>
+                        <outlet property="emergencyPhoneNumberTextField" destination="ayK-H1-5P2" id="yRv-yO-bqs"/>
+                        <outlet property="firstNameTextField" destination="r8G-wE-5gR" id="8UV-hE-pON"/>
+                        <outlet property="imageView" destination="vzw-yO-yvw" id="k4j-g3-YzA"/>
+                        <outlet property="imageViewHeightLayoutConstraint" destination="TxO-KK-Wco" id="rhR-IC-lTy"/>
+                        <outlet property="lastNameTextField" destination="WAL-tk-eYU" id="1hw-R7-QKg"/>
                         <outlet property="nextButton" destination="ieq-MT-n5N" id="2a5-dl-fdz"/>
-                        <outlet property="phoneNumberTextField" destination="Lbu-9L-HT8" id="DYU-dP-1qD"/>
-                        <outlet property="postalCodeTextField" destination="EOY-wS-1bP" id="1E4-lp-ZVw"/>
+                        <outlet property="phoneNumberTextField" destination="Lbu-9L-HT8" id="zEn-L6-PqK"/>
+                        <outlet property="postalCodeTextField" destination="EOY-wS-1bP" id="qwt-EK-bNF"/>
                         <outlet property="previousButton" destination="6U0-z5-UkY" id="yBf-vI-kH3"/>
-                        <outlet property="provinceTextField" destination="APb-H2-gnx" id="RhE-xf-Ktf"/>
-                        <outlet property="scrollView" destination="wDq-6n-1xB" id="5nw-uf-c41"/>
-                        <outlet property="streetTextField" destination="HJj-QY-aKL" id="tof-uq-j0a"/>
+                        <outlet property="provinceTextField" destination="APb-H2-gnx" id="k4k-gg-N3A"/>
+                        <outlet property="scrollView" destination="wDq-6n-1xB" id="a8M-a7-4k7"/>
+                        <outlet property="streetTextField" destination="HJj-QY-aKL" id="UBk-qx-amL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Byk-bD-2hA" sceneMemberID="firstResponder"/>
