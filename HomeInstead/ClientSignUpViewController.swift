@@ -13,9 +13,10 @@ class ClientSignUpViewController: SignUpViewController {
     @IBOutlet weak var previousButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
     
+    var cathyUserInformation: [String: NSObject] = [String: NSObject]()
+    
     override func setDefaultTextFieldValues() {
         
-        self.imageView.image = UIImage(named: "defaultPicture")
         self.firstNameTextField.text = "Meong"
         self.lastNameTextField.text = "Choi"
         self.provinceTextField.text = "Hubei Province"
@@ -28,6 +29,8 @@ class ClientSignUpViewController: SignUpViewController {
     }
     
     override func viewDidLoad() {
+        
+        print(cathyUserInformation)
         
         self.setDefaultTextFieldValues()
         
@@ -54,7 +57,37 @@ class ClientSignUpViewController: SignUpViewController {
     
     override func viewWillDisappear(animated: Bool) {
         self.view.endEditing(true);
+    }   
+    
+//Other functions start here.
+
+    override func allRequiredFieldsAreNotEmpty() -> Bool {
+        
+        if self.firstNameTextField.text == "" {
+            self.setAlertController("Please enter your first name")
+        } else if self.lastNameTextField.text == "" {
+            self.setAlertController("Please enter your last name")
+        } else if self.provinceTextField.text == "" {
+            self.setAlertController("Please enter your province")
+        } else if self.cityTextField.text == "" {
+            self.setAlertController("Please enter your city")
+        } else if self.streetTextField.text == "" {
+            self.setAlertController("Please enter your street")
+        } else if self.postalCodeTextField.text == "" {
+            self.setAlertController("Please enter your postal code")
+        } else if self.phoneNumberTextField.text == "" {
+            self.setAlertController("Please enter your phone number")
+        } else {
+            return true
+        }
+        return false
+        
     }
+    
+//Other functions end here.
+    
+    
+//Button functions start here.
     
     @IBAction func previousButtonTapped(sender: AnyObject) {
         
@@ -66,11 +99,29 @@ class ClientSignUpViewController: SignUpViewController {
     
     @IBAction func addAnotherClientButtonTapped(sender: AnyObject) {
         
+        if self.allRequiredFieldsAreNotEmpty() {
+            self.setImageView()
+            self.editButton.hidden = true
+            self.addPhotoButton.hidden = false
+            self.firstNameTextField.text = ""
+            self.lastNameTextField.text = ""
+            self.provinceTextField.text = ""
+            self.cityTextField.text = ""
+            self.streetTextField.text = ""
+            self.postalCodeTextField.text = ""
+            self.phoneNumberTextField.text = ""
+            self.emergencyPhoneNumberTextField.text = ""
+        }
+        
     }
    
     @IBAction override func signUpButtonTapped(sender: AnyObject) {
-        
+        if self.allRequiredFieldsAreNotEmpty() {
+            print("success")
+        }
     }
+    
+//Button functions end here.
     
 }
 

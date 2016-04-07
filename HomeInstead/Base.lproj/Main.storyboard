@@ -33,10 +33,10 @@
             </objects>
             <point key="canvasLocation" x="-1476.75" y="461.5"/>
         </scene>
-        <!--Sign Up Sign In View Controller-->
+        <!--Older Sign Up Sign In View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="SignUpSignInViewController" customModule="HomeInstead" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="OlderSignUpSignInViewController" customModule="HomeInstead" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -3550,10 +3550,10 @@ Photo</string>
             </objects>
             <point key="canvasLocation" x="5823" y="1479"/>
         </scene>
-        <!--Choose Account Type View Controller-->
+        <!--Sign Up Sign In View Controller-->
         <scene sceneID="txY-ol-82Q">
             <objects>
-                <viewController id="ZqQ-Mr-6XC" customClass="ChooseAccountTypeViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ZqQ-Mr-6XC" customClass="SignUpSignInViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dku-Vq-p4a"/>
                         <viewControllerLayoutGuide type="bottom" id="Jwd-np-v1W"/>
@@ -3564,69 +3564,114 @@ Photo</string>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ff2-wu-8A2">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="Caregiver"/>
                                 <connections>
                                     <action selector="careGiverButtonTapped:" destination="ZqQ-Mr-6XC" eventType="touchUpInside" id="kRt-sa-1GM"/>
                                     <segue destination="i06-L2-mqU" kind="presentation" identifier="chooseAccountTypeToSignUp" id="6uN-DK-CFN"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tmF-RW-gOd">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6ar-H9-zrH">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                <state key="normal" title="Cathy"/>
-                                <connections>
-                                    <action selector="cathyButtonTapped:" destination="ZqQ-Mr-6XC" eventType="touchUpInside" id="ahb-Y2-zL6"/>
-                                    <segue destination="i06-L2-mqU" kind="presentation" id="Cpo-VL-MgR"/>
-                                </connections>
+                                <state key="normal" title="Sign In"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gVo-V5-fq2">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="Office"/>
                                 <connections>
                                     <action selector="officeButtonTapped:" destination="ZqQ-Mr-6XC" eventType="touchUpInside" id="Kxi-aB-eRj"/>
                                     <segue destination="i06-L2-mqU" kind="presentation" id="HhT-ui-Mnu"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pIR-oe-QrD">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Sign Up"/>
+                                <connections>
+                                    <action selector="signUpButtonTapped:" destination="ZqQ-Mr-6XC" eventType="touchUpInside" id="ZL7-2P-WFd"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tmF-RW-gOd">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <state key="normal" title="Cathy"/>
+                                <connections>
+                                    <action selector="cathyButtonTapped:" destination="ZqQ-Mr-6XC" eventType="touchUpInside" id="ahb-Y2-zL6"/>
+                                    <segue destination="i06-L2-mqU" kind="presentation" id="Cpo-VL-MgR"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ff2-wu-8A2" firstAttribute="centerX" secondItem="ikG-SI-q62" secondAttribute="centerX" id="0OQ-lp-sYY"/>
-                            <constraint firstItem="ff2-wu-8A2" firstAttribute="top" secondItem="gVo-V5-fq2" secondAttribute="bottom" constant="8" id="ZeS-7p-gyz"/>
-                            <constraint firstItem="tmF-RW-gOd" firstAttribute="centerX" secondItem="ikG-SI-q62" secondAttribute="centerX" id="eGR-2R-HHL"/>
-                            <constraint firstItem="tmF-RW-gOd" firstAttribute="top" secondItem="ff2-wu-8A2" secondAttribute="bottom" constant="8" id="lYS-Ti-M8q"/>
-                            <constraint firstItem="ff2-wu-8A2" firstAttribute="centerY" secondItem="ikG-SI-q62" secondAttribute="centerY" id="qYV-Np-KzO"/>
-                            <constraint firstItem="gVo-V5-fq2" firstAttribute="centerX" secondItem="ikG-SI-q62" secondAttribute="centerX" id="tkd-Zh-j0k"/>
+                            <constraint firstItem="tmF-RW-gOd" firstAttribute="centerX" secondItem="ff2-wu-8A2" secondAttribute="centerX" id="1y7-Eu-e38"/>
+                            <constraint firstItem="tmF-RW-gOd" firstAttribute="top" secondItem="ff2-wu-8A2" secondAttribute="bottom" constant="8" id="9gb-OT-CDC">
+                                <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                            </constraint>
+                            <constraint firstItem="ff2-wu-8A2" firstAttribute="centerX" secondItem="gVo-V5-fq2" secondAttribute="centerX" id="FFj-qa-Odv"/>
+                            <constraint firstItem="pIR-oe-QrD" firstAttribute="centerY" secondItem="ikG-SI-q62" secondAttribute="centerY" id="Jg9-R6-0p2"/>
+                            <constraint firstItem="ff2-wu-8A2" firstAttribute="top" secondItem="gVo-V5-fq2" secondAttribute="bottom" constant="8" id="Mi5-i2-meh">
+                                <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                            </constraint>
+                            <constraint firstItem="pIR-oe-QrD" firstAttribute="leading" secondItem="ikG-SI-q62" secondAttribute="leadingMargin" constant="80" id="Mwf-v8-1Kj">
+                                <variation key="heightClass=regular-widthClass=compact" constant="70"/>
+                            </constraint>
+                            <constraint firstItem="gVo-V5-fq2" firstAttribute="centerX" secondItem="pIR-oe-QrD" secondAttribute="centerX" id="cgp-dR-9WI"/>
+                            <constraint firstItem="6ar-H9-zrH" firstAttribute="centerY" secondItem="ikG-SI-q62" secondAttribute="centerY" id="noP-TE-kUf"/>
+                            <constraint firstItem="gVo-V5-fq2" firstAttribute="top" secondItem="pIR-oe-QrD" secondAttribute="bottom" constant="8" id="uGs-az-cCL">
+                                <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
+                            </constraint>
+                            <constraint firstAttribute="trailingMargin" secondItem="6ar-H9-zrH" secondAttribute="trailing" constant="62" id="uhD-EQ-Xxa">
+                                <variation key="heightClass=regular-widthClass=compact" constant="80"/>
+                            </constraint>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="ff2-wu-8A2"/>
-                                <exclude reference="tmF-RW-gOd"/>
+                                <exclude reference="6ar-H9-zrH"/>
                                 <exclude reference="gVo-V5-fq2"/>
+                                <exclude reference="pIR-oe-QrD"/>
+                                <exclude reference="tmF-RW-gOd"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="0OQ-lp-sYY"/>
-                                <exclude reference="ZeS-7p-gyz"/>
-                                <exclude reference="qYV-Np-KzO"/>
-                                <exclude reference="tkd-Zh-j0k"/>
-                                <exclude reference="eGR-2R-HHL"/>
-                                <exclude reference="lYS-Ti-M8q"/>
+                                <exclude reference="Jg9-R6-0p2"/>
+                                <exclude reference="Mwf-v8-1Kj"/>
+                                <exclude reference="cgp-dR-9WI"/>
+                                <exclude reference="uGs-az-cCL"/>
+                                <exclude reference="noP-TE-kUf"/>
+                                <exclude reference="uhD-EQ-Xxa"/>
+                                <exclude reference="FFj-qa-Odv"/>
+                                <exclude reference="Mi5-i2-meh"/>
+                                <exclude reference="1y7-Eu-e38"/>
+                                <exclude reference="9gb-OT-CDC"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
                                 <include reference="ff2-wu-8A2"/>
-                                <include reference="tmF-RW-gOd"/>
+                                <include reference="6ar-H9-zrH"/>
                                 <include reference="gVo-V5-fq2"/>
+                                <include reference="pIR-oe-QrD"/>
+                                <include reference="tmF-RW-gOd"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="0OQ-lp-sYY"/>
-                                <include reference="ZeS-7p-gyz"/>
-                                <include reference="qYV-Np-KzO"/>
-                                <include reference="tkd-Zh-j0k"/>
-                                <include reference="eGR-2R-HHL"/>
-                                <include reference="lYS-Ti-M8q"/>
+                                <include reference="Jg9-R6-0p2"/>
+                                <include reference="Mwf-v8-1Kj"/>
+                                <include reference="cgp-dR-9WI"/>
+                                <include reference="uGs-az-cCL"/>
+                                <include reference="noP-TE-kUf"/>
+                                <include reference="uhD-EQ-Xxa"/>
+                                <include reference="FFj-qa-Odv"/>
+                                <include reference="Mi5-i2-meh"/>
+                                <include reference="1y7-Eu-e38"/>
+                                <include reference="9gb-OT-CDC"/>
                             </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="careGiverButton" destination="ff2-wu-8A2" id="Iz5-3t-X9l"/>
+                        <outlet property="cathyButton" destination="tmF-RW-gOd" id="ONF-bL-AoP"/>
+                        <outlet property="officeButton" destination="gVo-V5-fq2" id="66U-fE-q8C"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TCX-FI-1TH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3853,7 +3898,6 @@ Photo</string>
                                                 <state key="normal" title="Client Sign Up"/>
                                                 <connections>
                                                     <action selector="clientSignUpButtonTapped:" destination="kqo-Jg-mM2" eventType="touchUpInside" id="QEv-tf-FCn"/>
-                                                    <segue destination="Jr2-bc-xAn" kind="show" id="BfD-QY-Rtf"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -4227,7 +4271,8 @@ Photo</string>
                         <outlet property="scrollView" destination="BYq-xp-HSF" id="ka2-70-Loy"/>
                         <outlet property="signUpButton" destination="B8Y-zs-3ob" id="9Zu-dO-HbC"/>
                         <outlet property="streetTextField" destination="s1S-yV-dte" id="hax-zB-X4r"/>
-                        <outlet property="verificationTextField" destination="RmQ-zf-qo3" id="gE7-e6-H7M"/>
+                        <outlet property="verificationCodeTextField" destination="RmQ-zf-qo3" id="7EO-1H-MD0"/>
+                        <segue destination="Jr2-bc-xAn" kind="show" identifier="signUpToClientSignUp" id="bXe-bl-Pv0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a0K-4C-UQi" sceneMemberID="firstResponder"/>
@@ -4850,9 +4895,9 @@ Photo</string>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="i3m-7f-ANh"/>
-        <segue reference="9qw-dz-Ctr"/>
-        <segue reference="c3X-Ub-cn1"/>
-        <segue reference="Spb-1u-jWf"/>
+        <segue reference="JvB-e1-eF0"/>
+        <segue reference="rcA-bd-JiX"/>
+        <segue reference="MC4-7o-Ble"/>
         <segue reference="HhT-ui-Mnu"/>
     </inferredMetricsTieBreakers>
 </document>

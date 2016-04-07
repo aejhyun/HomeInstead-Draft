@@ -9,21 +9,27 @@
 import UIKit
 import Parse
 
-class SignUpViewController: ImageManagerViewController, UITextFieldDelegate {
+class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var confirmPasswordTextField: UITextField!
-    @IBOutlet weak var verificationTextField: UITextField!
+    @IBOutlet weak var verificationCodeTextField: UITextField!
     @IBOutlet weak var provinceTextField: UITextField!
     @IBOutlet weak var cityTextField: UITextField!
     @IBOutlet weak var streetTextField: UITextField!
     @IBOutlet weak var postalCodeTextField: UITextField!
     @IBOutlet weak var phoneNumberTextField: UITextField!
     @IBOutlet weak var emergencyPhoneNumberTextField: UITextField!
- 
+    
+    @IBOutlet weak var addPhotoButton: UIButton!
+    @IBOutlet weak var editButton: UIButton!
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var imageViewHeightLayoutConstraint: NSLayoutConstraint!
+    var numberOfTimesViewLaidOutSubviews: Int = 0
+    
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var clientSignUpButton: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -33,19 +39,29 @@ class SignUpViewController: ImageManagerViewController, UITextFieldDelegate {
     
     func setDefaultTextFieldValues() {
         
-        self.imageView.image = UIImage(named: "defaultPicture")
         self.firstNameTextField.text = "Jae"
         self.lastNameTextField.text = "Kim"
-        self.emailTextField.text = "aejhyun@gmail.com"
+        self.emailTextField.text = "test6@gmail.com"
         self.passwordTextField.text = "password"
         self.confirmPasswordTextField.text = "password"
-        self.verificationTextField.text = "verification"
-        self.provinceTextField.text = "Hubei Province"
-        self.cityTextField.text = "Hanyang"
+        self.verificationCodeTextField.text = "office"
+        self.provinceTextField.text = "湖北"
+        self.cityTextField.text = "武汉"
         self.streetTextField.text = "19300 Nassau St."
         self.postalCodeTextField.text = "92508"
         self.phoneNumberTextField.text = "9518077192"
         self.emergencyPhoneNumberTextField.text = "4350937283"
+        
+    }
+    
+    func setImageView() {
+        
+        self.imageView.image = nil
+        self.imageView.layer.borderWidth = 1
+        self.imageView.layer.masksToBounds = false
+        self.imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
+        self.imageView.layer.cornerRadius = self.imageViewHeightLayoutConstraint.constant / 2
+        self.imageView.clipsToBounds = true
         
     }
     
@@ -77,7 +93,14 @@ class SignUpViewController: ImageManagerViewController, UITextFieldDelegate {
     }
     
     override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+        
+        if self.numberOfTimesViewLaidOutSubviews == 1 {
+            //The imageView set up is inside self.numberOfTimesViewLaidOutSubviews == 1 check because the code below will be called more than once. And the imageView set up is not in viewDidLoad() because, self.imageView.frame returned was the incorrect value. It returns the correct self.imageView.frame value either in the viewDidLayoutSubviews and viewWillAppear functions. But in the viewWillAppear function causes the image to show up visibly late.
+            
+            self.setImageView()
+        }
+        self.numberOfTimesViewLaidOutSubviews++
+        
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -100,6 +123,72 @@ class SignUpViewController: ImageManagerViewController, UITextFieldDelegate {
     }
 
 //TextField functions end here.
+//Image functions start here.
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        let selectedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        self.imageView.image = selectedImage
+        self.imageView.layer.borderWidth = 0
+        self.addPhotoButton.hidden = true
+        self.editButton.hidden = false
+        
+        dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    
+    @IBAction func addPhotoButtonTapped(sender: AnyObject) {
+        let alertController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        var alertAction: UIAlertAction = UIAlertAction(title: "Take Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Choose Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            
+            let imagePickerController: UIImagePickerController = UIImagePickerController()
+            imagePickerController.sourceType = .PhotoLibrary
+            imagePickerController.delegate = self
+            
+            self.presentViewController(imagePickerController, animated: true, completion: nil)
+            
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alertController.addAction(alertAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    @IBAction func editButtonTapped(sender: AnyObject) {
+        
+        let alertController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        var alertAction: UIAlertAction = UIAlertAction(title: "Take Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Choose Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            let imagePickerController: UIImagePickerController = UIImagePickerController()
+            imagePickerController.sourceType = .PhotoLibrary
+            imagePickerController.delegate = self
+            
+            self.presentViewController(imagePickerController, animated: true, completion: nil)
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alertController.addAction(alertAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+   
+//Image functions end here.
 //Keyboard functions start here.
     
     func keyboardDidShow(notification: NSNotification) {
@@ -131,13 +220,19 @@ class SignUpViewController: ImageManagerViewController, UITextFieldDelegate {
     
     @IBAction func clientSignUpButtonTapped(sender: AnyObject) {
         
+        if self.allRequiredFieldsAreNotEmpty() && self.passwordIsConfirmed() && self.isValidVerificationCode() {
+            
+            self.performSegueWithIdentifier("signUpToClientSignUp", sender: nil)
+        }
         
     }
     
     @IBAction func signUpButtonTapped(sender: AnyObject) {
         
-        if self.allFieldsAreNotEmpty() && self.isValidEmail() && self.passwordIsConfirmed() && self.isValidVerificationCode() {
-            print("success")
+        if self.allRequiredFieldsAreNotEmpty() && self.passwordIsConfirmed() && self.isValidVerificationCode() {
+            
+            self.uploadUserInformationToCloud()
+
         }
 
     }
@@ -145,20 +240,114 @@ class SignUpViewController: ImageManagerViewController, UITextFieldDelegate {
 //SignUp functions end here.
 //Other functions start here.
     
-    func setAlertController(message: String) {
+    func uploadUserInformationToCloud() {
         
-        let alertController = UIAlertController(title: "", message: "\(message)", preferredStyle: UIAlertControllerStyle.Alert)
-        let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
-        alertController.addAction(defaultAction)
-        presentViewController(alertController, animated: true, completion: nil)
+        let user = PFUser()
+        user["firstName"] = self.firstNameTextField.text
+        user["lastName"] = self.lastNameTextField.text
+        user["accountType"] = self.accountTypeSelected.rawValue
+        user.email = self.emailTextField.text
+        user.password = self.passwordTextField.text
+        user.username = self.emailTextField.text
+        
+        user.signUpInBackgroundWithBlock {
+            (succeeded: Bool, error: NSError?) -> Void in
+            if let error = error {
+                self.setAlertController("\(self.emailErrorMessage(error))")
+            } else {
+
+                if self.accountTypeSelected == AccountType.Office {
+                    self.uploadUserInformationToCloudWithClassName("OfficeUser")
+                } else if self.accountTypeSelected == AccountType.CareGiver {
+                    self.uploadUserInformationToCloudWithClassName("CareGiverUser")
+                }
+                
+            }
+        }
         
     }
     
-    func allFieldsAreNotEmpty() -> Bool {
+    func emailErrorMessage(error: NSError) -> String {
         
-        if self.imageView.image == nil {
-            self.setAlertController("Please add a photo")
-        } else if self.firstNameTextField.text == "" {
+        var errorMessage = error.userInfo["error"] as! NSString
+        if errorMessage == "invalid email address" {
+            errorMessage = "Invalid email address"
+        } else if errorMessage == "username \(self.emailTextField.text!) already taken" {
+            errorMessage = "The email \(self.emailTextField.text!) is already taken"
+        }
+        return errorMessage as String
+        
+    }
+    
+    func returnCathyUserInformationInDictionary() -> Dictionary <String, NSObject> {
+        
+        let fullName: String = self.firstNameTextField.text! + " " + self.lastNameTextField.text!
+        let imageFile: NSData? = self.getImageFile()
+        
+        var cathyUserInformation = [String: NSObject]()
+        cathyUserInformation["id"] = PFUser.currentUser()?.objectId
+        cathyUserInformation["name"] = fullName
+        cathyUserInformation["email"] = self.emailTextField.text
+        cathyUserInformation["province"] = self.provinceTextField.text
+        cathyUserInformation["city"] = self.cityTextField.text
+        cathyUserInformation["street"] = self.streetTextField.text
+        cathyUserInformation["postalCode"] = self.postalCodeTextField.text
+        cathyUserInformation["phoneNumber"] = self.phoneNumberTextField.text
+        cathyUserInformation["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
+        cathyUserInformation["imageFile"] = imageFile
+        cathyUserInformation["alreadyAddedByOfficeUser"] = false
+        
+        return cathyUserInformation
+        
+    }
+    
+    func uploadUserInformationToCloudWithClassName(className: String) {
+        
+        let fullName: String = self.firstNameTextField.text! + " " + self.lastNameTextField.text!
+        let imageFile: NSData? = self.getImageFile()
+        
+        let object = PFObject(className: className)
+        object["name"] = fullName
+        object["id"] = PFUser.currentUser()?.objectId
+        object["email"] = self.emailTextField.text!
+        object["province"] = self.provinceTextField.text
+        object["city"] = self.cityTextField.text
+        object["street"] = self.streetTextField.text
+        object["postalCode"] = self.postalCodeTextField.text
+        object["phoneNumber"] = self.phoneNumberTextField.text
+        object["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
+        if imageFile != nil {
+            object["imageFile"] = imageFile
+        }
+        
+        object.saveInBackgroundWithBlock {
+            (success: Bool, error: NSError?) -> Void in
+            if (success) {
+                print("Successfully uploaded \(self.firstNameTextField.text!)'s information to cloud under the class name \"\(className)\".")
+            } else {
+                self.setAlertController("\(error?.description)")
+                print(error?.description)
+            }
+        }
+        
+    }
+    
+    func getImageFile() -> NSData? {
+        
+        var imageFile: NSData? = nil
+        
+        if self.imageView.image != nil {
+            imageFile = UIImageJPEGRepresentation(self.imageView.image!, 1.0)
+        } else {
+            imageFile = nil
+        }
+        return imageFile
+        
+    }
+    
+    func allRequiredFieldsAreNotEmpty() -> Bool {
+        
+        if self.firstNameTextField.text == "" {
             self.setAlertController("Please enter your first name")
         } else if self.lastNameTextField.text == "" {
             self.setAlertController("Please enter your last name")
@@ -168,7 +357,7 @@ class SignUpViewController: ImageManagerViewController, UITextFieldDelegate {
             self.setAlertController("Please enter your password")
         } else if self.confirmPasswordTextField.text == "" {
             self.setAlertController("Please enter your confirmation password")
-        } else if self.verificationTextField.text == "" {
+        } else if self.verificationCodeTextField.text == "" {
             self.setAlertController("Please enter your verification code")
         } else if self.provinceTextField.text == "" {
             self.setAlertController("Please enter your province")
@@ -184,10 +373,7 @@ class SignUpViewController: ImageManagerViewController, UITextFieldDelegate {
             return true
         }
         return false
-    }
-    
-    func isValidEmail() -> Bool {
-        return true
+        
     }
     
     func passwordIsConfirmed() -> Bool {
@@ -199,145 +385,58 @@ class SignUpViewController: ImageManagerViewController, UITextFieldDelegate {
     }
     
     func isValidVerificationCode() -> Bool {
-        return true
+        
+        let verificationCode = VerificationCode()
+        
+        if self.accountTypeSelected == AccountType.Office {
+            if self.verificationCodeTextField.text == verificationCode.office {
+                return true
+            }
+        } else if self.accountTypeSelected == AccountType.CareGiver {
+            if self.verificationCodeTextField.text == verificationCode.careGiver {
+                return true
+            }
+        } else if self.accountTypeSelected == AccountType.Cathy {
+            if self.verificationCodeTextField.text == verificationCode.cathy {
+                return true
+            }
+        }
+        self.setAlertController("Incorrect verification code")
+        return false
+        
+    }
+    
+    func setAlertController(message: String) {
+        
+        let alertController = UIAlertController(title: "", message: "\(message)", preferredStyle: UIAlertControllerStyle.Alert)
+        let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alertController.addAction(defaultAction)
+        presentViewController(alertController, animated: true, completion: nil)
+        
     }
     
 //Other functions end here.
 //Segue functions start here.
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "signUpToClientSignUp" {
+            if let clientSignUpViewController = segue.destinationViewController as? ClientSignUpViewController {
+            
+                let cathyUserInformation: [String: NSObject] = self.returnCathyUserInformationInDictionary()
+                
+                clientSignUpViewController.cathyUserInformation = cathyUserInformation
+                
+            } else {
+                print("clientSignUpViewController returned nil")
+            }
+        }
+    }
 
     @IBAction func cancelButtonTapped(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
 //Segue functions end here.
-    
-    
-    
-    
-    
-    
-//    @IBAction func signUpButtonTapped(sender: AnyObject) {
-//        var ready = false
-//        
-//        let user = PFUser()
-//        user["firstName"] = firstNameTextField.text
-//        user["lastName"] = lastNameTextField.text
-//        user["fullName"] = firstNameTextField.text! + " " + lastNameTextField.text!
-//        user.email = emailTextField.text
-//        user.password = passwordTextField.text
-//        user.username = emailTextField.text
-//        //Try taking the verificaiton code to parse saving out. 
-//        user["verificationCode"] = verificationTextField.text
-//
-//        //user["type"] is also included down below
-//        
-//        if self.firstNameTextField.text == "" {
-//            setAlertControllerMessage("Please enter your first name")
-//        } else if self.lastNameTextField.text == "" {
-//            setAlertControllerMessage("Please enter your last name")
-//        } else if self.emailTextField.text == "" {
-//            setAlertControllerMessage("Please enter your email address")
-//        } else if self.passwordTextField.text == "" {
-//            setAlertControllerMessage("Please enter your password")
-//        } else if self.verificationTextField.text == "" {
-//            setAlertControllerMessage("Please enter the verification code")
-//        } else {
-//            ready = true;
-//        }
-//        
-//        //if I can check for whether the email is a valid email here, that would be awesome.
-//        
-//        if ready == true {
-//            if self.verificationTextField.text == "office" {
-//                user["userType"] = "office"
-//            } else if self.verificationTextField.text == "giver" {
-//                user["userType"] = "giver"
-//            } else if self.verificationTextField.text == "cathy" {
-//                user["userType"] = "cathy"
-//            } else {
-//                setAlertControllerMessage("Incorrect verification code")
-//                ready = false
-//            }
-//        }
-//        
-//        if ready == true {
-//            
-//            UIApplication.sharedApplication().beginIgnoringInteractionEvents()
-//            activityIndicator.hidden = false
-//            activityIndicator.startAnimating()
-//            
-//            user.signUpInBackgroundWithBlock {
-//                (succeeded: Bool, error: NSError?) -> Void in
-//                if let error = error {
-//                    
-//                    var errorString = error.userInfo["error"] as! NSString
-//                    if errorString == "invalid email address" {
-//                        errorString = "Invalid email address"
-//                    } else if errorString == "username \(self.emailTextField.text!) already taken" {
-//                        errorString = "The email \(self.emailTextField.text!) is already taken"
-//                    }
-//                    self.setAlertControllerMessage("\(errorString)")
-//                    
-//                } else {
-//
-//                    if self.verificationTextField.text == "office" {
-//                        self.performSegueWithIdentifier("signUpToOffice", sender: nil)
-//                    } else if self.verificationTextField.text == "giver" {
-//                        
-//                        let giverList = PFObject(className:"GiverList")
-//                        giverList["giverId"] = PFUser.currentUser()?.objectId
-//                        giverList["giverName"] = self.firstNameTextField.text! + " " + self.lastNameTextField.text!
-//                        giverList["giverEmail"] = self.emailTextField.text!
-//                        giverList["alreadyAddedByOffice"] = false
-//                        giverList.saveInBackgroundWithBlock {
-//                            (success: Bool, error: NSError?) -> Void in
-//                            if (success) {
-//
-//                            } else {
-//                                print(error?.description)
-//                                // There was a problem, check error.description
-//                            }
-//                        }
-//                        
-//                        self.performSegueWithIdentifier("signUpToGiver", sender: nil)
-//                    } else if self.verificationTextField.text == "cathy" {
-//                        
-//                        let cathyList = PFObject(className: "CathyList")
-//                        cathyList["cathyName"] = self.firstNameTextField.text! + " " + self.lastNameTextField.text!
-//                        cathyList["cathyId"] = PFUser.currentUser()?.objectId
-//                        cathyList["cathyEmail"] = self.emailTextField.text!
-//                        cathyList["alreadyAddedByOffice"] = false
-//                        cathyList.saveInBackgroundWithBlock {
-//                            (success: Bool, error: NSError?) -> Void in
-//                            if (success) {
-//                                
-//                            } else {
-//                                print(error?.description)
-//                                // There was a problem, check error.description
-//                            }
-//                        }
-//
-//                        self.performSegueWithIdentifier("signUpToCathy", sender: nil)
-//                    }
-//                    
-//                }
-//                
-//                UIApplication.sharedApplication().endIgnoringInteractionEvents()
-//                self.activityIndicator.hidden = true
-//                
-//            }
-//        }
-//    }
-//    
-//    func setAlertControllerMessage(message: String) {
-//        let alertController = UIAlertController(title: "", message: "\(message)", preferredStyle: UIAlertControllerStyle.Alert)
-//        let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
-//        alertController.addAction(defaultAction)
-//        presentViewController(alertController, animated: true, completion: nil)
-//    }
-    
-
-    
     
     
 

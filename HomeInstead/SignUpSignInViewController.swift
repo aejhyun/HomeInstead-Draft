@@ -1,29 +1,108 @@
 //
-//  ViewController.swift
-//  Test
+//  SignUpSignInViewController.swift
+//  HomeInstead
 //
-//  Created by Jae Hyun Kim on 12/10/15.
-//  Copyright © 2015 Jae Hyun Kim. All rights reserved.
+//  Created by Jae Hyun Kim on 4/7/16.
+//  Copyright © 2016 Jae Hyun Kim. All rights reserved.
 //
 
 import UIKit
-import Parse
 
 class SignUpSignInViewController: UIViewController {
 
+    @IBOutlet weak var officeButton: UIButton!
+    @IBOutlet weak var careGiverButton: UIButton!
+    @IBOutlet weak var cathyButton: UIButton!
+    
+    var showSignUpAccountOptions: Bool = false
+    var accountTypeSelected: AccountType!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.officeButton.hidden = true
+        self.careGiverButton.hidden = true
+        self.cathyButton.hidden = true
+        self.officeButton.alpha = 0.0
+        self.careGiverButton.alpha = 0.0
+        self.cathyButton.alpha = 0.0
         
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func signUpButtonTapped(sender: AnyObject) {
+        
+        if self.showSignUpAccountOptions == false {
+            
+            self.officeButton.hidden = false
+            self.careGiverButton.hidden = false
+            self.cathyButton.hidden = false
+            
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.officeButton.alpha = 1.0
+            })
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.cathyButton.alpha = 1.0
+            })
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.careGiverButton.alpha = 1.0
+            })
+            
+            self.showSignUpAccountOptions = true
+            
+        } else {
+            
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.officeButton.alpha = 0.0
+                }, completion: { (completed: Bool) -> Void in
+                    self.officeButton.hidden = true
+            })
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.careGiverButton.alpha = 0.0
+                }, completion: { (completed: Bool) -> Void in
+                    self.careGiverButton.hidden = true
+            })
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.cathyButton.alpha = 0.0
+                }, completion: { (completed: Bool) -> Void in
+                    self.cathyButton.hidden = true
+            })
+            
+            self.showSignUpAccountOptions = false
+            
+        }
+        
     }
     
-    @IBAction func unwindToSegue (segue : UIStoryboardSegue) {}
+    @IBAction func officeButtonTapped(sender: AnyObject) {
+        self.accountTypeSelected = AccountType.Office
+    }
     
+    @IBAction func careGiverButtonTapped(sender: AnyObject) {
+        self.accountTypeSelected = AccountType.CareGiver
+    }
+    
+    @IBAction func cathyButtonTapped(sender: AnyObject) {
+        self.accountTypeSelected = AccountType.Cathy
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if let navigationController = segue.destinationViewController as? UINavigationController {
+            if let signUpViewController = navigationController.topViewController as? SignUpViewController {
+                
+                signUpViewController.accountTypeSelected = self.accountTypeSelected
+                
+            } else {
+                print("signUpViewController returned nil")
+            }
+        } else {
+            print("navigationController returned nil")
+        }
+        
+    }
+
+    
+
 
 
 }
-
