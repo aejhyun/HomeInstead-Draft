@@ -220,8 +220,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     @IBAction func clientSignUpButtonTapped(sender: AnyObject) {
         
-        if self.allRequiredFieldsAreNotEmpty() && self.passwordIsConfirmed() && self.isValidVerificationCode() {
-            
+        if self.allRequiredFieldsAreNotEmpty() && self.passwordConfirmed() && self.isValidVerificationCode() {
             self.performSegueWithIdentifier("signUpToClientSignUp", sender: nil)
         }
         
@@ -229,10 +228,24 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     @IBAction func signUpButtonTapped(sender: AnyObject) {
         
-        if self.allRequiredFieldsAreNotEmpty() && self.passwordIsConfirmed() && self.isValidVerificationCode() {
-            
-            self.uploadUserInformationToCloud()
-
+        if self.allRequiredFieldsAreNotEmpty() && self.passwordConfirmed() && self.isValidVerificationCode() {
+            self.uploadUserInformationToCloud({ (uploadSuccessful) -> Void in
+                if uploadSuccessful {
+                    
+                    if self.accountTypeSelected == AccountType.Office {
+                        self.uploadUserInformationToCloudWithClassName("OfficeUser", completion: { (uploadSuccessful) -> Void in
+                            print("segue1")
+                        })
+                    } else if self.accountTypeSelected == AccountType.CareGiver {
+                        self.uploadUserInformationToCloudWithClassName("CareGiverUser", completion: { (uploadSuccessful) -> Void in
+                            print("segue2")
+                        })
+                    }
+                    
+                } else {
+                    print("Upload was not successful")
+                }
+            })
         }
 
     }
@@ -240,7 +253,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
 //SignUp functions end here.
 //Other functions start here.
     
-    func uploadUserInformationToCloud() {
+    func uploadUserInformationToCloud(completion: (uploadSuccessful: Bool) -> Void) {
         
         let user = PFUser()
         user["firstName"] = self.firstNameTextField.text
@@ -254,14 +267,9 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             (succeeded: Bool, error: NSError?) -> Void in
             if let error = error {
                 self.setAlertController("\(self.emailErrorMessage(error))")
+                completion(uploadSuccessful: false)
             } else {
-
-                if self.accountTypeSelected == AccountType.Office {
-                    self.uploadUserInformationToCloudWithClassName("OfficeUser")
-                } else if self.accountTypeSelected == AccountType.CareGiver {
-                    self.uploadUserInformationToCloudWithClassName("CareGiverUser")
-                }
-                
+                completion(uploadSuccessful: true)
             }
         }
         
@@ -301,7 +309,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
     }
     
-    func uploadUserInformationToCloudWithClassName(className: String) {
+    func uploadUserInformationToCloudWithClassName(className: String, completion: (uploadSuccessful: Bool) -> Void) {
         
         let fullName: String = self.firstNameTextField.text! + " " + self.lastNameTextField.text!
         let imageFile: NSData? = self.getImageFile()
@@ -324,9 +332,11 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             (success: Bool, error: NSError?) -> Void in
             if (success) {
                 print("Successfully uploaded \(self.firstNameTextField.text!)'s information to cloud under the class name \"\(className)\".")
+                completion(uploadSuccessful: true)
             } else {
                 self.setAlertController("\(error?.description)")
                 print(error?.description)
+                completion(uploadSuccessful: false)
             }
         }
         
@@ -376,7 +386,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
     }
     
-    func passwordIsConfirmed() -> Bool {
+    func passwordConfirmed() -> Bool {
         if self.passwordTextField.text != self.confirmPasswordTextField.text {
             self.setAlertController("Passwords do not match.")
             return false
@@ -419,17 +429,18 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
 //Segue functions start here.
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
         if segue.identifier == "signUpToClientSignUp" {
             if let clientSignUpViewController = segue.destinationViewController as? ClientSignUpViewController {
             
                 let cathyUserInformation: [String: NSObject] = self.returnCathyUserInformationInDictionary()
-                
                 clientSignUpViewController.cathyUserInformation = cathyUserInformation
                 
             } else {
                 print("clientSignUpViewController returned nil")
             }
         }
+        
     }
 
     @IBAction func cancelButtonTapped(sender: AnyObject) {

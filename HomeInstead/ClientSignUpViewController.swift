@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class ClientSignUpViewController: SignUpViewController {
 
@@ -29,8 +30,6 @@ class ClientSignUpViewController: SignUpViewController {
     }
     
     override func viewDidLoad() {
-        
-        print(cathyUserInformation)
         
         self.setDefaultTextFieldValues()
         
@@ -67,16 +66,6 @@ class ClientSignUpViewController: SignUpViewController {
             self.setAlertController("Please enter your first name")
         } else if self.lastNameTextField.text == "" {
             self.setAlertController("Please enter your last name")
-        } else if self.provinceTextField.text == "" {
-            self.setAlertController("Please enter your province")
-        } else if self.cityTextField.text == "" {
-            self.setAlertController("Please enter your city")
-        } else if self.streetTextField.text == "" {
-            self.setAlertController("Please enter your street")
-        } else if self.postalCodeTextField.text == "" {
-            self.setAlertController("Please enter your postal code")
-        } else if self.phoneNumberTextField.text == "" {
-            self.setAlertController("Please enter your phone number")
         } else {
             return true
         }
@@ -84,9 +73,62 @@ class ClientSignUpViewController: SignUpViewController {
         
     }
     
+    override func uploadUserInformationToCloud(completion: (uploadSuccessful: Bool) -> Void) {
+        
+        let user = PFUser()
+        user["firstName"] = self.cathyUserInformation["firstName"]
+        user["lastName"] = self.cathyUserInformation["lastName"]
+        user["accountType"] = self.accountTypeSelected.rawValue
+        user.email = self.cathyUserInformation["email"] as? String
+        user.password = self.cathyUserInformation["password"] as? String
+        user.username = self.cathyUserInformation["email"] as? String
+        
+        user.signUpInBackgroundWithBlock {
+            (succeeded: Bool, error: NSError?) -> Void in
+            if let error = error {
+                self.setAlertController("\(self.emailErrorMessage(error))")
+                completion(uploadSuccessful: false)
+            } else {
+                completion(uploadSuccessful: true)
+            }
+        }
+        
+    }
+    
+    override func uploadUserInformationToCloudWithClassName(className: String, completion: (uploadSuccessful: Bool) -> Void) {
+        
+        let fullName: String = self.firstNameTextField.text! + " " + self.lastNameTextField.text!
+        let imageFile: NSData? = self.getImageFile()
+        
+        let object = PFObject(className: className)
+        object["name"] = fullName
+        object["id"] = PFUser.currentUser()?.objectId
+        object["email"] = self.emailTextField.text!
+        object["province"] = self.provinceTextField.text
+        object["city"] = self.cityTextField.text
+        object["street"] = self.streetTextField.text
+        object["postalCode"] = self.postalCodeTextField.text
+        object["phoneNumber"] = self.phoneNumberTextField.text
+        object["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
+        if imageFile != nil {
+            object["imageFile"] = imageFile
+        }
+        
+        object.saveInBackgroundWithBlock {
+            (success: Bool, error: NSError?) -> Void in
+            if (success) {
+                print("Successfully uploaded \(self.firstNameTextField.text!)'s information to cloud under the class name \"\(className)\".")
+                completion(uploadSuccessful: true)
+            } else {
+                self.setAlertController("\(error?.description)")
+                print(error?.description)
+                completion(uploadSuccessful: false)
+            }
+        }
+        
+    }
+    
 //Other functions end here.
-    
-    
 //Button functions start here.
     
     @IBAction func previousButtonTapped(sender: AnyObject) {
@@ -117,7 +159,9 @@ class ClientSignUpViewController: SignUpViewController {
    
     @IBAction override func signUpButtonTapped(sender: AnyObject) {
         if self.allRequiredFieldsAreNotEmpty() {
-            print("success")
+            self.uploadUserInformationToCloud({ (uploadSuccessful) -> Void in
+                print("segue")
+            })
         }
     }
     

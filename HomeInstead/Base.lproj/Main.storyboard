@@ -1167,7 +1167,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SRf-TD-rBK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="fxb-Em-D4k" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="206.25" y="-406.5"/>
+            <point key="canvasLocation" x="366.75" y="-410.625"/>
         </scene>
         <!--Client List-->
         <scene sceneID="tkP-wV-8Zq">
@@ -3574,6 +3574,9 @@ Photo</string>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6ar-H9-zrH">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                 <state key="normal" title="Sign In"/>
+                                <connections>
+                                    <segue destination="XyX-t5-lvK" kind="presentation" id="RgG-8o-2qk"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gVo-V5-fq2">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -3677,6 +3680,125 @@ Photo</string>
             </objects>
             <point key="canvasLocation" x="-1243.5" y="-1109.25"/>
         </scene>
+        <!--Sign In View Controller-->
+        <scene sceneID="dQf-mg-Zos">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="alN-VF-e6g" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="XyX-t5-lvK" customClass="SignInViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="juj-tP-wrE"/>
+                        <viewControllerLayoutGuide type="bottom" id="s09-Jq-AdY"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="n43-Of-wmo">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1P4-bF-aeK">
+                                <rect key="frame" x="-25" y="-30" width="97" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9ae-zR-qwR">
+                                <rect key="frame" x="-25" y="-30" width="97" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kup-NS-Q4H">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancelButtonTapped:" destination="XyX-t5-lvK" eventType="touchUpInside" id="urV-ah-pcr"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bt3-w1-qx9">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Sign In"/>
+                                <connections>
+                                    <action selector="signInButtonTapped:" destination="XyX-t5-lvK" eventType="touchUpInside" id="lVE-Au-wzl"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="9ae-zR-qwR" secondAttribute="trailing" constant="131" id="6ML-1g-mGV">
+                                <variation key="heightClass=regular-widthClass=compact" constant="40"/>
+                            </constraint>
+                            <constraint firstItem="Kup-NS-Q4H" firstAttribute="top" secondItem="9ae-zR-qwR" secondAttribute="bottom" constant="32" id="8No-Zp-nlU">
+                                <variation key="heightClass=regular-widthClass=compact" constant="10"/>
+                            </constraint>
+                            <constraint firstItem="Kup-NS-Q4H" firstAttribute="leading" secondItem="n43-Of-wmo" secondAttribute="leadingMargin" constant="86" id="8S1-lk-rRN">
+                                <variation key="heightClass=regular-widthClass=compact" constant="40"/>
+                            </constraint>
+                            <constraint firstItem="Bt3-w1-qx9" firstAttribute="top" secondItem="9ae-zR-qwR" secondAttribute="bottom" constant="50" id="CF6-ed-XMk">
+                                <variation key="heightClass=regular-widthClass=compact" constant="10"/>
+                            </constraint>
+                            <constraint firstAttribute="trailingMargin" secondItem="1P4-bF-aeK" secondAttribute="trailing" constant="119" id="EZS-Ye-LLW">
+                                <variation key="heightClass=regular-widthClass=compact" constant="40"/>
+                            </constraint>
+                            <constraint firstItem="1P4-bF-aeK" firstAttribute="top" secondItem="juj-tP-wrE" secondAttribute="bottom" constant="96" id="eaf-DK-mzb">
+                                <variation key="heightClass=regular-widthClass=compact" constant="80"/>
+                            </constraint>
+                            <constraint firstAttribute="trailingMargin" secondItem="Bt3-w1-qx9" secondAttribute="trailing" constant="100" id="hAp-sG-h4x">
+                                <variation key="heightClass=regular-widthClass=compact" constant="40"/>
+                            </constraint>
+                            <constraint firstItem="9ae-zR-qwR" firstAttribute="leading" secondItem="n43-Of-wmo" secondAttribute="leadingMargin" constant="132" id="pgs-GG-f1a">
+                                <variation key="heightClass=regular-widthClass=compact" constant="40"/>
+                            </constraint>
+                            <constraint firstItem="9ae-zR-qwR" firstAttribute="top" secondItem="1P4-bF-aeK" secondAttribute="bottom" constant="15" id="sHC-IP-vcs">
+                                <variation key="heightClass=regular-widthClass=compact" constant="10"/>
+                            </constraint>
+                            <constraint firstItem="1P4-bF-aeK" firstAttribute="leading" secondItem="n43-Of-wmo" secondAttribute="leadingMargin" constant="70" id="vV8-fE-jB3">
+                                <variation key="heightClass=regular-widthClass=compact" constant="40"/>
+                            </constraint>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="1P4-bF-aeK"/>
+                                <exclude reference="9ae-zR-qwR"/>
+                                <exclude reference="Kup-NS-Q4H"/>
+                                <exclude reference="Bt3-w1-qx9"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="EZS-Ye-LLW"/>
+                                <exclude reference="eaf-DK-mzb"/>
+                                <exclude reference="vV8-fE-jB3"/>
+                                <exclude reference="6ML-1g-mGV"/>
+                                <exclude reference="pgs-GG-f1a"/>
+                                <exclude reference="sHC-IP-vcs"/>
+                                <exclude reference="8No-Zp-nlU"/>
+                                <exclude reference="8S1-lk-rRN"/>
+                                <exclude reference="CF6-ed-XMk"/>
+                                <exclude reference="hAp-sG-h4x"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="1P4-bF-aeK"/>
+                                <include reference="9ae-zR-qwR"/>
+                                <include reference="Kup-NS-Q4H"/>
+                                <include reference="Bt3-w1-qx9"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="EZS-Ye-LLW"/>
+                                <include reference="eaf-DK-mzb"/>
+                                <include reference="vV8-fE-jB3"/>
+                                <include reference="6ML-1g-mGV"/>
+                                <include reference="pgs-GG-f1a"/>
+                                <include reference="sHC-IP-vcs"/>
+                                <include reference="8No-Zp-nlU"/>
+                                <include reference="8S1-lk-rRN"/>
+                                <include reference="CF6-ed-XMk"/>
+                                <include reference="hAp-sG-h4x"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="emailTextField" destination="1P4-bF-aeK" id="13q-ZP-PXS"/>
+                        <outlet property="passwordTextField" destination="9ae-zR-qwR" id="Hpd-gV-93O"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="-1243.5" y="-1812.75"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="ffj-fG-ZMG">
             <objects>
@@ -3771,7 +3893,7 @@ Photo</string>
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email Address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Xi4-38-XWj">
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Xi4-38-XWj">
                                                 <rect key="frame" x="-25" y="-30" width="97" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
@@ -4432,17 +4554,11 @@ Photo</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
-                                                <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="30" y="314" width="53" height="17"/>
-                                                </variation>
                                             </label>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Province" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="APb-H2-gnx">
                                                 <rect key="frame" x="-25" y="-30" width="97" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
-                                                <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="40" y="351" width="320" height="30"/>
-                                                </variation>
                                                 <connections>
                                                     <outlet property="delegate" destination="Jr2-bc-xAn" id="unR-IM-3zN"/>
                                                 </connections>
@@ -4451,9 +4567,6 @@ Photo</string>
                                                 <rect key="frame" x="-25" y="-30" width="97" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
-                                                <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="40" y="391" width="320" height="30"/>
-                                                </variation>
                                                 <connections>
                                                     <outlet property="delegate" destination="Jr2-bc-xAn" id="4wR-Sf-HG2"/>
                                                 </connections>
@@ -4462,9 +4575,6 @@ Photo</string>
                                                 <rect key="frame" x="-25" y="-30" width="97" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
-                                                <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="40" y="431" width="320" height="30"/>
-                                                </variation>
                                                 <connections>
                                                     <outlet property="delegate" destination="Jr2-bc-xAn" id="tVV-nZ-N5X"/>
                                                 </connections>
@@ -4473,9 +4583,6 @@ Photo</string>
                                                 <rect key="frame" x="-25" y="-30" width="97" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
-                                                <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="40" y="471" width="320" height="30"/>
-                                                </variation>
                                                 <connections>
                                                     <outlet property="delegate" destination="Jr2-bc-xAn" id="oad-ZC-zih"/>
                                                 </connections>
@@ -4749,6 +4856,9 @@ Photo</string>
                                                 <exclude reference="erB-40-nA7"/>
                                             </mask>
                                         </variation>
+                                        <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
+                                            <rect key="frame" x="0.0" y="0.0" width="400" height="540"/>
+                                        </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="subviews">
                                                 <include reference="r8G-wE-5gR"/>
@@ -4835,7 +4945,8 @@ Photo</string>
                                         <exclude reference="YqG-y5-xES"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact">
+                                <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="20" width="400" height="580"/>
                                     <mask key="constraints">
                                         <include reference="YqG-y5-xES"/>
                                     </mask>
@@ -4895,9 +5006,9 @@ Photo</string>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="i3m-7f-ANh"/>
-        <segue reference="JvB-e1-eF0"/>
-        <segue reference="rcA-bd-JiX"/>
-        <segue reference="MC4-7o-Ble"/>
+        <segue reference="x9m-QM-WVL"/>
+        <segue reference="Dx0-iJ-XQZ"/>
+        <segue reference="gHM-KO-YzH"/>
         <segue reference="HhT-ui-Mnu"/>
     </inferredMetricsTieBreakers>
 </document>
