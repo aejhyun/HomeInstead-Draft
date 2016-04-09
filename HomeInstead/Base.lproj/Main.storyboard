@@ -3646,16 +3646,16 @@ Photo</string>
                                 <exclude reference="axA-Sg-hw4"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="S1A-QG-qTq"/>
-                                <exclude reference="sVs-br-XAa"/>
-                                <exclude reference="7CD-AG-z02"/>
-                                <exclude reference="Pbk-Ha-hMm"/>
                                 <exclude reference="5S0-qz-sYe"/>
                                 <exclude reference="Hr6-Vd-RIx"/>
-                                <exclude reference="0sD-FV-NUy"/>
-                                <exclude reference="YGf-pY-x1f"/>
                                 <exclude reference="6tF-C5-sad"/>
                                 <exclude reference="Kxq-zu-bPM"/>
+                                <exclude reference="7CD-AG-z02"/>
+                                <exclude reference="Pbk-Ha-hMm"/>
+                                <exclude reference="0sD-FV-NUy"/>
+                                <exclude reference="YGf-pY-x1f"/>
+                                <exclude reference="S1A-QG-qTq"/>
+                                <exclude reference="sVs-br-XAa"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -3667,16 +3667,16 @@ Photo</string>
                                 <include reference="axA-Sg-hw4"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="S1A-QG-qTq"/>
-                                <include reference="sVs-br-XAa"/>
-                                <include reference="7CD-AG-z02"/>
-                                <include reference="Pbk-Ha-hMm"/>
                                 <include reference="5S0-qz-sYe"/>
                                 <include reference="Hr6-Vd-RIx"/>
-                                <include reference="0sD-FV-NUy"/>
-                                <include reference="YGf-pY-x1f"/>
                                 <include reference="6tF-C5-sad"/>
                                 <include reference="Kxq-zu-bPM"/>
+                                <include reference="7CD-AG-z02"/>
+                                <include reference="Pbk-Ha-hMm"/>
+                                <include reference="0sD-FV-NUy"/>
+                                <include reference="YGf-pY-x1f"/>
+                                <include reference="S1A-QG-qTq"/>
+                                <include reference="sVs-br-XAa"/>
                             </mask>
                         </variation>
                     </view>
@@ -3706,16 +3706,10 @@ Photo</string>
                                 <rect key="frame" x="-25" y="-30" width="97" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="60" y="100" width="280" height="30"/>
-                                </variation>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RqG-K4-Ss2">
                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                 <state key="normal" title="Sign In"/>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="60" y="180" width="47" height="30"/>
-                                </variation>
                                 <connections>
                                     <action selector="signInButtonTapped:" destination="XyX-t5-lvK" eventType="touchUpInside" id="APf-a1-TKE"/>
                                 </connections>
@@ -3724,9 +3718,6 @@ Photo</string>
                                 <rect key="frame" x="-25" y="-30" width="97" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="60" y="140" width="280" height="30"/>
-                                </variation>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome :)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HY1-MH-gmh">
                                 <rect key="frame" x="-42" y="-21" width="42" height="21"/>
@@ -4035,13 +4026,6 @@ Photo</string>
                                                     <action selector="editButtonTapped:" destination="kqo-Jg-mM2" eventType="touchUpInside" id="BYO-65-acl"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BLa-jn-30Z">
-                                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                                <state key="normal" title="Client Sign Up"/>
-                                                <connections>
-                                                    <action selector="clientSignUpButtonTapped:" destination="kqo-Jg-mM2" eventType="touchUpInside" id="QEv-tf-FCn"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="mZn-xL-dJO" firstAttribute="leading" secondItem="pb8-Aw-5RL" secondAttribute="trailing" constant="110" id="28s-qs-2Xn">
@@ -4051,7 +4035,6 @@ Photo</string>
                                             <constraint firstAttribute="trailing" secondItem="B8Y-zs-3ob" secondAttribute="trailing" constant="43" id="4BH-tx-Ncg">
                                                 <variation key="heightClass=regular-widthClass=compact" constant="40"/>
                                             </constraint>
-                                            <constraint firstAttribute="trailing" secondItem="BLa-jn-30Z" secondAttribute="trailing" constant="40" id="5na-pp-GfW"/>
                                             <constraint firstItem="gOZ-fy-mRg" firstAttribute="leading" secondItem="O2T-91-yza" secondAttribute="leading" constant="40" id="89Z-sU-gEZ"/>
                                             <constraint firstItem="9Zq-EK-mpJ" firstAttribute="top" secondItem="pb8-Aw-5RL" secondAttribute="bottom" constant="1" id="8PW-HW-nyR">
                                                 <variation key="heightClass=regular-widthClass=compact" constant="-1"/>
@@ -4102,9 +4085,6 @@ Photo</string>
                                             <constraint firstItem="4b4-MD-g4D" firstAttribute="top" secondItem="O2T-91-yza" secondAttribute="top" constant="30" id="VpC-Ro-9Mr">
                                                 <variation key="widthClass=compact" constant="20"/>
                                             </constraint>
-                                            <constraint firstItem="BLa-jn-30Z" firstAttribute="top" secondItem="EUz-9f-38U" secondAttribute="bottom" constant="14" id="X8E-rE-hEc">
-                                                <variation key="heightClass=regular-widthClass=compact" constant="10"/>
-                                            </constraint>
                                             <constraint firstAttribute="trailing" secondItem="Xi4-38-XWj" secondAttribute="trailing" constant="273" id="YhB-UW-dTS">
                                                 <variation key="widthClass=compact" constant="40"/>
                                             </constraint>
@@ -4145,9 +4125,6 @@ Photo</string>
                                             <constraint firstItem="B8Y-zs-3ob" firstAttribute="top" secondItem="EUz-9f-38U" secondAttribute="bottom" constant="8" id="q1o-Uf-fI8">
                                                 <variation key="heightClass=regular-widthClass=compact" constant="10"/>
                                             </constraint>
-                                            <constraint firstAttribute="bottom" secondItem="BLa-jn-30Z" secondAttribute="bottom" constant="16" id="qCs-QC-UIy">
-                                                <variation key="heightClass=regular-widthClass=compact" constant="20"/>
-                                            </constraint>
                                             <constraint firstItem="pb8-Aw-5RL" firstAttribute="top" secondItem="4b4-MD-g4D" secondAttribute="bottom" constant="8" id="qkw-mt-r2Q">
                                                 <variation key="widthClass=compact" constant="20"/>
                                             </constraint>
@@ -4185,7 +4162,6 @@ Photo</string>
                                                 <exclude reference="EUz-9f-38U"/>
                                                 <exclude reference="B8Y-zs-3ob"/>
                                                 <exclude reference="9Zq-EK-mpJ"/>
-                                                <exclude reference="BLa-jn-30Z"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="Kvl-Sn-V9m"/>
@@ -4230,9 +4206,6 @@ Photo</string>
                                                 <exclude reference="4BH-tx-Ncg"/>
                                                 <exclude reference="dfe-GR-dFu"/>
                                                 <exclude reference="q1o-Uf-fI8"/>
-                                                <exclude reference="5na-pp-GfW"/>
-                                                <exclude reference="X8E-rE-hEc"/>
-                                                <exclude reference="qCs-QC-UIy"/>
                                                 <exclude reference="Jyg-Gi-BGq"/>
                                                 <exclude reference="gAM-5D-ayb"/>
                                                 <exclude reference="VZi-CK-JEw"/>
@@ -4315,7 +4288,6 @@ Photo</string>
                                                 <include reference="EUz-9f-38U"/>
                                                 <include reference="B8Y-zs-3ob"/>
                                                 <include reference="9Zq-EK-mpJ"/>
-                                                <include reference="BLa-jn-30Z"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="AAU-HF-JbC"/>
@@ -4332,9 +4304,6 @@ Photo</string>
                                                 <include reference="4BH-tx-Ncg"/>
                                                 <include reference="dfe-GR-dFu"/>
                                                 <include reference="q1o-Uf-fI8"/>
-                                                <include reference="5na-pp-GfW"/>
-                                                <include reference="X8E-rE-hEc"/>
-                                                <include reference="qCs-QC-UIy"/>
                                                 <include reference="IzV-Cg-sJh"/>
                                                 <include reference="m6V-ho-Ejx"/>
                                                 <include reference="VJI-Fa-m5I"/>
@@ -4397,7 +4366,6 @@ Photo</string>
                     <connections>
                         <outlet property="addPhotoButton" destination="Z8N-UP-XeW" id="z1L-4Y-DQw"/>
                         <outlet property="cityTextField" destination="gOZ-fy-mRg" id="9oQ-fd-Jeo"/>
-                        <outlet property="clientSignUpButton" destination="BLa-jn-30Z" id="jVY-Id-TpY"/>
                         <outlet property="confirmPasswordTextField" destination="krQ-pB-6eI" id="Ba4-Ri-U62"/>
                         <outlet property="editButton" destination="9Zq-EK-mpJ" id="fdg-DQ-Jdf"/>
                         <outlet property="emailTextField" destination="Xi4-38-XWj" id="KAw-Pe-1oA"/>

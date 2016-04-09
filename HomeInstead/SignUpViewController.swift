@@ -31,7 +31,6 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     var numberOfTimesViewLaidOutSubviews: Int = 0
     
     @IBOutlet weak var signUpButton: UIButton!
-    @IBOutlet weak var clientSignUpButton: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
     
     var activeTextField: UITextField?
@@ -42,9 +41,9 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         self.firstNameTextField.text = "Jae"
         self.lastNameTextField.text = "Kim"
         self.emailTextField.text = "test6@gmail.com"
-        self.passwordTextField.text = "password"
-        self.confirmPasswordTextField.text = "password"
-        self.verificationCodeTextField.text = "cathy"
+        self.passwordTextField.text = self.userTypeSelected.rawValue
+        self.confirmPasswordTextField.text = self.userTypeSelected.rawValue
+        self.verificationCodeTextField.text = self.userTypeSelected.rawValue
         self.provinceTextField.text = "湖北"
         self.cityTextField.text = "武汉"
         self.streetTextField.text = "19300 Nassau St."
@@ -68,15 +67,11 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     func setNavigationBarTitle() {
         
         if self.userTypeSelected == UserType.cathy {
-            self.signUpButton.hidden = true
             self.navigationItem.title = "Cathy Sign Up"
-        } else {
-            if self.userTypeSelected == UserType.careGiver {
-                self.navigationItem.title = "CareGiver Sign Up"
-            } else if self.userTypeSelected == UserType.office {
-                self.navigationItem.title = "Office Sign Up"
-            }
-            self.clientSignUpButton.hidden = true
+        } else if self.userTypeSelected == UserType.careGiver {
+            self.navigationItem.title = "CareGiver Sign Up"
+        } else if self.userTypeSelected == UserType.office {
+            self.navigationItem.title = "Office Sign Up"
         }
         
     }
@@ -223,14 +218,6 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
 //Keyboard functions end here.
 //SignUp functions start here.
     
-    @IBAction func clientSignUpButtonTapped(sender: AnyObject) {
-        
-        if self.allRequiredFieldsAreNotEmpty() && self.passwordConfirmed() && self.isValidVerificationCode() {
-            self.performSegueWithIdentifier("signUpToClientSignUp", sender: nil)
-        }
-        
-    }
-    
     @IBAction func signUpButtonTapped(sender: AnyObject) {
         
         if self.allRequiredFieldsAreNotEmpty() && self.passwordConfirmed() && self.isValidVerificationCode() {
@@ -239,11 +226,21 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
                     
                     if self.userTypeSelected == UserType.office {
                         self.uploadUserInformationToCloudWithClassName("OfficeUser", completion: { (uploadSuccessful) -> Void in
-                            print("segue1")
+                            if uploadSuccessful {
+                                print("segue1")
+                            }
                         })
                     } else if self.userTypeSelected == UserType.careGiver {
                         self.uploadUserInformationToCloudWithClassName("CareGiverUser", completion: { (uploadSuccessful) -> Void in
-                            print("segue2")
+                            if uploadSuccessful {
+                                print("segue2")
+                            }
+                        })
+                    } else if self.userTypeSelected == UserType.cathy {
+                        self.uploadUserInformationToCloudWithClassName("CathyUser", completion: { (uploadSuccessful) -> Void in
+                            if uploadSuccessful {
+                                print("segue3")
+                            }
                         })
                     }
                     
@@ -271,6 +268,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         user.signUpInBackgroundWithBlock {
             (succeeded: Bool, error: NSError?) -> Void in
             if let error = error {
+                print(error)
                 self.presentAlertControllerWithMessage("\(self.emailErrorMessage(error))")
                 completion(uploadSuccessful: false)
             } else {
@@ -292,28 +290,6 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
     }
     
-    func returnCathyUserInformationInDictionary() -> Dictionary <String, NSObject> {
-        
-        let fullName: String = self.firstNameTextField.text! + " " + self.lastNameTextField.text!
-        let imageFile: NSData? = self.getImageFile()
-        
-        var cathyUserInformation = [String: NSObject]()
-        cathyUserInformation["id"] = PFUser.currentUser()?.objectId
-        cathyUserInformation["name"] = fullName
-        cathyUserInformation["email"] = self.emailTextField.text
-        cathyUserInformation["province"] = self.provinceTextField.text
-        cathyUserInformation["city"] = self.cityTextField.text
-        cathyUserInformation["street"] = self.streetTextField.text
-        cathyUserInformation["postalCode"] = self.postalCodeTextField.text
-        cathyUserInformation["phoneNumber"] = self.phoneNumberTextField.text
-        cathyUserInformation["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
-        cathyUserInformation["imageFile"] = imageFile
-        cathyUserInformation["alreadyAddedByOfficeUser"] = false
-        
-        return cathyUserInformation
-        
-    }
-    
     func uploadUserInformationToCloudWithClassName(className: String, completion: (uploadSuccessful: Bool) -> Void) {
         
         let fullName: String = self.firstNameTextField.text! + " " + self.lastNameTextField.text!
@@ -321,7 +297,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         let object = PFObject(className: className)
         object["name"] = fullName
-        object["id"] = PFUser.currentUser()?.objectId
+        object["userId"] = PFUser.currentUser()?.objectId!
         object["email"] = self.emailTextField.text!
         object["province"] = self.provinceTextField.text
         object["city"] = self.cityTextField.text
@@ -329,6 +305,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         object["postalCode"] = self.postalCodeTextField.text
         object["phoneNumber"] = self.phoneNumberTextField.text
         object["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
+
         if imageFile != nil {
             object["imageFile"] = imageFile
         }
@@ -435,16 +412,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "signUpToClientSignUp" {
-            if let clientSignUpViewController = segue.destinationViewController as? ClientSignUpViewController {
-            
-                let cathyUserInformation: [String: NSObject] = self.returnCathyUserInformationInDictionary()
-                clientSignUpViewController.cathyUserInformation = cathyUserInformation
-                
-            } else {
-                print("clientSignUpViewController returned nil")
-            }
-        }
+
         
     }
 
