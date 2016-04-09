@@ -15,7 +15,7 @@ class SignUpSignInViewController: UIViewController {
     @IBOutlet weak var cathyButton: UIButton!
     
     var showSignUpAccountOptions: Bool = false
-    var accountTypeSelected: AccountType!
+    var userTypeSelected: UserType!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,13 +37,13 @@ class SignUpSignInViewController: UIViewController {
             self.careGiverButton.hidden = false
             self.cathyButton.hidden = false
             
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
                 self.officeButton.alpha = 1.0
             })
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
                 self.cathyButton.alpha = 1.0
             })
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
                 self.careGiverButton.alpha = 1.0
             })
             
@@ -51,17 +51,17 @@ class SignUpSignInViewController: UIViewController {
             
         } else {
             
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
                 self.officeButton.alpha = 0.0
                 }, completion: { (completed: Bool) -> Void in
                     self.officeButton.hidden = true
             })
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
                 self.careGiverButton.alpha = 0.0
                 }, completion: { (completed: Bool) -> Void in
                     self.careGiverButton.hidden = true
             })
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
                 self.cathyButton.alpha = 0.0
                 }, completion: { (completed: Bool) -> Void in
                     self.cathyButton.hidden = true
@@ -74,15 +74,15 @@ class SignUpSignInViewController: UIViewController {
     }
     
     @IBAction func officeButtonTapped(sender: AnyObject) {
-        self.accountTypeSelected = AccountType.Office
+        self.userTypeSelected = UserType.office
     }
     
     @IBAction func careGiverButtonTapped(sender: AnyObject) {
-        self.accountTypeSelected = AccountType.CareGiver
+        self.userTypeSelected = UserType.careGiver
     }
     
     @IBAction func cathyButtonTapped(sender: AnyObject) {
-        self.accountTypeSelected = AccountType.Cathy
+        self.userTypeSelected = UserType.cathy
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -90,7 +90,7 @@ class SignUpSignInViewController: UIViewController {
         if let navigationController = segue.destinationViewController as? UINavigationController {
             if let signUpViewController = navigationController.topViewController as? SignUpViewController {
                 
-                signUpViewController.accountTypeSelected = self.accountTypeSelected
+                signUpViewController.userTypeSelected = self.userTypeSelected
                 
             } else {
                 print("signUpViewController returned nil")

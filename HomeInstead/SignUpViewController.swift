@@ -35,7 +35,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBOutlet weak var scrollView: UIScrollView!
     
     var activeTextField: UITextField?
-    var accountTypeSelected: AccountType!
+    var userTypeSelected: UserType!
     
     func setDefaultTextFieldValues() {
         
@@ -44,7 +44,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         self.emailTextField.text = "test6@gmail.com"
         self.passwordTextField.text = "password"
         self.confirmPasswordTextField.text = "password"
-        self.verificationCodeTextField.text = "office"
+        self.verificationCodeTextField.text = "cathy"
         self.provinceTextField.text = "湖北"
         self.cityTextField.text = "武汉"
         self.streetTextField.text = "19300 Nassau St."
@@ -65,22 +65,27 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    func setNavigationBarTitle() {
         
-        self.setDefaultTextFieldValues()
-        
-        if self.accountTypeSelected == AccountType.Cathy {
+        if self.userTypeSelected == UserType.cathy {
             self.signUpButton.hidden = true
             self.navigationItem.title = "Cathy Sign Up"
         } else {
-            if self.accountTypeSelected == AccountType.CareGiver {
+            if self.userTypeSelected == UserType.careGiver {
                 self.navigationItem.title = "CareGiver Sign Up"
-            } else if self.accountTypeSelected == AccountType.Office {
+            } else if self.userTypeSelected == UserType.office {
                 self.navigationItem.title = "Office Sign Up"
             }
             self.clientSignUpButton.hidden = true
         }
+        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.setDefaultTextFieldValues()
+        self.setNavigationBarTitle()
         
         self.addPhotoButton.titleLabel?.textAlignment = .Center
         self.editButton.hidden = true
@@ -232,11 +237,11 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             self.uploadUserInformationToCloud({ (uploadSuccessful) -> Void in
                 if uploadSuccessful {
                     
-                    if self.accountTypeSelected == AccountType.Office {
+                    if self.userTypeSelected == UserType.office {
                         self.uploadUserInformationToCloudWithClassName("OfficeUser", completion: { (uploadSuccessful) -> Void in
                             print("segue1")
                         })
-                    } else if self.accountTypeSelected == AccountType.CareGiver {
+                    } else if self.userTypeSelected == UserType.careGiver {
                         self.uploadUserInformationToCloudWithClassName("CareGiverUser", completion: { (uploadSuccessful) -> Void in
                             print("segue2")
                         })
@@ -258,7 +263,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         let user = PFUser()
         user["firstName"] = self.firstNameTextField.text
         user["lastName"] = self.lastNameTextField.text
-        user["accountType"] = self.accountTypeSelected.rawValue
+        user["userType"] = self.userTypeSelected.rawValue
         user.email = self.emailTextField.text
         user.password = self.passwordTextField.text
         user.username = self.emailTextField.text
@@ -266,7 +271,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         user.signUpInBackgroundWithBlock {
             (succeeded: Bool, error: NSError?) -> Void in
             if let error = error {
-                self.setAlertController("\(self.emailErrorMessage(error))")
+                self.presentAlertControllerWithMessage("\(self.emailErrorMessage(error))")
                 completion(uploadSuccessful: false)
             } else {
                 completion(uploadSuccessful: true)
@@ -334,7 +339,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
                 print("Successfully uploaded \(self.firstNameTextField.text!)'s information to cloud under the class name \"\(className)\".")
                 completion(uploadSuccessful: true)
             } else {
-                self.setAlertController("\(error?.description)")
+                self.presentAlertControllerWithMessage("\(error?.description)")
                 print(error?.description)
                 completion(uploadSuccessful: false)
             }
@@ -358,27 +363,27 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     func allRequiredFieldsAreNotEmpty() -> Bool {
         
         if self.firstNameTextField.text == "" {
-            self.setAlertController("Please enter your first name")
+            self.presentAlertControllerWithMessage("Please enter your first name")
         } else if self.lastNameTextField.text == "" {
-            self.setAlertController("Please enter your last name")
+            self.presentAlertControllerWithMessage("Please enter your last name")
         } else if self.emailTextField.text == "" {
-            self.setAlertController("Please enter your email")
+            self.presentAlertControllerWithMessage("Please enter your email")
         } else if self.passwordTextField.text == "" {
-            self.setAlertController("Please enter your password")
+            self.presentAlertControllerWithMessage("Please enter your password")
         } else if self.confirmPasswordTextField.text == "" {
-            self.setAlertController("Please enter your confirmation password")
+            self.presentAlertControllerWithMessage("Please enter your confirmation password")
         } else if self.verificationCodeTextField.text == "" {
-            self.setAlertController("Please enter your verification code")
+            self.presentAlertControllerWithMessage("Please enter your verification code")
         } else if self.provinceTextField.text == "" {
-            self.setAlertController("Please enter your province")
+            self.presentAlertControllerWithMessage("Please enter your province")
         } else if self.cityTextField.text == "" {
-            self.setAlertController("Please enter your city")
+            self.presentAlertControllerWithMessage("Please enter your city")
         } else if self.streetTextField.text == "" {
-            self.setAlertController("Please enter your street")
+            self.presentAlertControllerWithMessage("Please enter your street")
         } else if self.postalCodeTextField.text == "" {
-            self.setAlertController("Please enter your postal code")
+            self.presentAlertControllerWithMessage("Please enter your postal code")
         } else if self.phoneNumberTextField.text == "" {
-            self.setAlertController("Please enter your phone number")
+            self.presentAlertControllerWithMessage("Please enter your phone number")
         } else {
             return true
         }
@@ -388,7 +393,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     func passwordConfirmed() -> Bool {
         if self.passwordTextField.text != self.confirmPasswordTextField.text {
-            self.setAlertController("Passwords do not match.")
+            self.presentAlertControllerWithMessage("Passwords do not match.")
             return false
         }
         return true
@@ -398,25 +403,25 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         let verificationCode = VerificationCode()
         
-        if self.accountTypeSelected == AccountType.Office {
+        if self.userTypeSelected == UserType.office {
             if self.verificationCodeTextField.text == verificationCode.office {
                 return true
             }
-        } else if self.accountTypeSelected == AccountType.CareGiver {
+        } else if self.userTypeSelected == UserType.careGiver {
             if self.verificationCodeTextField.text == verificationCode.careGiver {
                 return true
             }
-        } else if self.accountTypeSelected == AccountType.Cathy {
+        } else if self.userTypeSelected == UserType.cathy {
             if self.verificationCodeTextField.text == verificationCode.cathy {
                 return true
             }
         }
-        self.setAlertController("Incorrect verification code")
+        self.presentAlertControllerWithMessage("Incorrect verification code")
         return false
         
     }
     
-    func setAlertController(message: String) {
+    func presentAlertControllerWithMessage(message: String) {
         
         let alertController = UIAlertController(title: "", message: "\(message)", preferredStyle: UIAlertControllerStyle.Alert)
         let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)

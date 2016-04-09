@@ -190,6 +190,9 @@
 		84D930FF1C197DB1003C1688 /* HomeInstead */ = {
 			isa = PBXGroup;
 			children = (
+				84D931831C199840003C1688 /* OlderSignUpSignInViewController.swift */,
+				846762921CAFECB800506C30 /* OlderSignUpViewController.swift */,
+				84D931A11C19A600003C1688 /* OlderSignInViewController.swift */,
 				84B3C1A51C7D93BA00C879E6 /* AKImageViewerViewController.h */,
 				84B3C1A61C7D93BA00C879E6 /* AKImageViewerViewController.m */,
 				849F8A8A1C7C6EAD00A38E73 /* HomeInstead-Bridging-Header.h */,
@@ -205,9 +208,6 @@
 				84D931A31C19A616003C1688 /* SignUpViewController.swift */,
 				840E72D41CB1074400F24F00 /* ClientSignUpViewController.swift */,
 				84C462AB1C202C1400FA82F9 /* FirstPageViewController.swift */,
-				84D931831C199840003C1688 /* OlderSignUpSignInViewController.swift */,
-				846762921CAFECB800506C30 /* OlderSignUpViewController.swift */,
-				84D931A11C19A600003C1688 /* OlderSignInViewController.swift */,
 				84F3FE621CB66EC700693E31 /* SignInViewController.swift */,
 				84B53A7C1C48CC18008CAB8A /* GiveClientListTableViewCell.swift */,
 				84C462A91C20232A00FA82F9 /* GiverClientListTableViewController.swift */,

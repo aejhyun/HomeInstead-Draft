@@ -16,12 +16,51 @@ import Foundation
 //Set activity indicator for when deleting because if you exit the app before the delete is complete, the update won't occur on parse.
 
 
+//func returnCathyUserInformationInDictionary() -> Dictionary <String, NSObject> {
+//    
+//    let fullName: String = self.firstNameTextField.text! + " " + self.lastNameTextField.text!
+//    let imageFile: NSData? = self.getImageFile()
+//    
+//    var cathyUserInformation = [String: NSObject]()
+//    cathyUserInformation["id"] = PFUser.currentUser()?.objectId
+//    cathyUserInformation["name"] = fullName
+//    cathyUserInformation["email"] = self.emailTextField.text
+//    cathyUserInformation["province"] = self.provinceTextField.text
+//    cathyUserInformation["city"] = self.cityTextField.text
+//    cathyUserInformation["street"] = self.streetTextField.text
+//    cathyUserInformation["postalCode"] = self.postalCodeTextField.text
+//    cathyUserInformation["phoneNumber"] = self.phoneNumberTextField.text
+//    cathyUserInformation["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
+//    cathyUserInformation["imageFile"] = imageFile
+//    cathyUserInformation["alreadyAddedByOfficeUser"] = false
+//    
+//    return cathyUserInformation
+//    
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 //override func viewDidLoad() {
 //    super.viewDidLoad()
-//    
+//
 //    tableViewHeader.layer.borderWidth = 1
 //    tableViewHeader.layer.borderColor = UIColor.lightGrayColor().CGColor
 //    

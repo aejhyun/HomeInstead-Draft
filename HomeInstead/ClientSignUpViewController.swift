@@ -10,9 +10,6 @@ import UIKit
 import Parse
 
 class ClientSignUpViewController: SignUpViewController {
-
-    @IBOutlet weak var previousButton: UIButton!
-    @IBOutlet weak var nextButton: UIButton!
     
     var cathyUserInformation: [String: NSObject] = [String: NSObject]()
     
@@ -33,11 +30,6 @@ class ClientSignUpViewController: SignUpViewController {
         
         self.setDefaultTextFieldValues()
         
-        self.previousButton.hidden = true
-        self.previousButton.alpha = 0.0
-        self.nextButton.hidden = true
-        self.nextButton.alpha = 0.0
-        
         self.addPhotoButton.titleLabel?.textAlignment = .Center
         self.editButton.hidden = true
         self.firstNameTextField.becomeFirstResponder()
@@ -47,6 +39,8 @@ class ClientSignUpViewController: SignUpViewController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
+        
+        print(self.cathyUserInformation)
         
     }
     
@@ -63,9 +57,9 @@ class ClientSignUpViewController: SignUpViewController {
     override func allRequiredFieldsAreNotEmpty() -> Bool {
         
         if self.firstNameTextField.text == "" {
-            self.setAlertController("Please enter your first name")
+            self.presentAlertControllerWithMessage("Please enter your first name")
         } else if self.lastNameTextField.text == "" {
-            self.setAlertController("Please enter your last name")
+            self.presentAlertControllerWithMessage("Please enter your last name")
         } else {
             return true
         }
@@ -78,7 +72,7 @@ class ClientSignUpViewController: SignUpViewController {
         let user = PFUser()
         user["firstName"] = self.cathyUserInformation["firstName"]
         user["lastName"] = self.cathyUserInformation["lastName"]
-        user["accountType"] = self.accountTypeSelected.rawValue
+        user["userType"] = self.userTypeSelected.rawValue
         user.email = self.cathyUserInformation["email"] as? String
         user.password = self.cathyUserInformation["password"] as? String
         user.username = self.cathyUserInformation["email"] as? String
@@ -86,7 +80,7 @@ class ClientSignUpViewController: SignUpViewController {
         user.signUpInBackgroundWithBlock {
             (succeeded: Bool, error: NSError?) -> Void in
             if let error = error {
-                self.setAlertController("\(self.emailErrorMessage(error))")
+                self.presentAlertControllerWithMessage("\(self.emailErrorMessage(error))")
                 completion(uploadSuccessful: false)
             } else {
                 completion(uploadSuccessful: true)
@@ -120,7 +114,7 @@ class ClientSignUpViewController: SignUpViewController {
                 print("Successfully uploaded \(self.firstNameTextField.text!)'s information to cloud under the class name \"\(className)\".")
                 completion(uploadSuccessful: true)
             } else {
-                self.setAlertController("\(error?.description)")
+                self.presentAlertControllerWithMessage("\(error?.description)")
                 print(error?.description)
                 completion(uploadSuccessful: false)
             }

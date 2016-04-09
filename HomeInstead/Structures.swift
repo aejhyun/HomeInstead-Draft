@@ -36,3 +36,17 @@ struct VerificationCode {
         return verificationCode
     }
 }
+
+struct HelperFunctions {
+    
+    func setBasicAlertController(title: String?, message: String) -> UIAlertController {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alertController.addAction(defaultAction)
+        
+        return alertController
+    }
+    
+}
+

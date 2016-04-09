@@ -8,6 +8,6 @@
 
 import Foundation
 
-enum AccountType: String {
-    case Office, CareGiver, Cathy
+enum UserType: String {
+    case office, careGiver, cathy
 }
