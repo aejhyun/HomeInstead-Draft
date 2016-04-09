@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ZqQ-Mr-6XC">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="n1A-FM-OMx">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -3564,7 +3564,23 @@ Photo</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xyx-ah-N92" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1243.5" y="-1827"/>
+            <point key="canvasLocation" x="-478.5" y="-2960"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="oJg-WZ-97X">
+            <objects>
+                <navigationController id="n1A-FM-OMx" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2bN-X2-Ac9">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="ZqQ-Mr-6XC" kind="relationship" relationship="rootViewController" id="vNS-sR-e6L"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x0z-GA-1XB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2157" y="-2263"/>
         </scene>
         <!--Sign Up Sign In View Controller-->
         <scene sceneID="txY-ol-82Q">
@@ -3584,7 +3600,6 @@ Photo</string>
                                 <state key="normal" title="Caregiver"/>
                                 <connections>
                                     <action selector="careGiverButtonTapped:" destination="ZqQ-Mr-6XC" eventType="touchUpInside" id="I50-Qa-gxD"/>
-                                    <segue destination="i06-L2-mqU" kind="presentation" id="1Es-jR-emj"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a66-xn-g38">
@@ -3607,7 +3622,6 @@ Photo</string>
                                 <state key="normal" title="Cathy"/>
                                 <connections>
                                     <action selector="cathyButtonTapped:" destination="ZqQ-Mr-6XC" eventType="touchUpInside" id="jcG-5i-9df"/>
-                                    <segue destination="i06-L2-mqU" kind="presentation" id="PZe-2G-ZAe"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="axA-Sg-hw4">
@@ -3616,7 +3630,6 @@ Photo</string>
                                 <state key="normal" title="Office"/>
                                 <connections>
                                     <action selector="officeButtonTapped:" destination="ZqQ-Mr-6XC" eventType="touchUpInside" id="iHB-Nl-2Ki"/>
-                                    <segue destination="i06-L2-mqU" kind="presentation" id="v8l-ku-XEN"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -3680,15 +3693,18 @@ Photo</string>
                             </mask>
                         </variation>
                     </view>
+                    <navigationItem key="navigationItem" id="34Y-nY-tUW"/>
                     <connections>
                         <outlet property="careGiverButton" destination="Dub-07-bvL" id="9LI-X0-flu"/>
                         <outlet property="cathyButton" destination="SLg-Ef-kfd" id="gcN-lm-qfo"/>
                         <outlet property="officeButton" destination="axA-Sg-hw4" id="P6D-gI-5VM"/>
+                        <segue destination="i06-L2-mqU" kind="presentation" identifier="signUpSignInToSignUp" id="U4J-yK-SQR"/>
+                        <segue destination="0Cq-27-KFy" kind="show" identifier="signInToOfficeChooseUserType" id="7FP-Fw-4N3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TCX-FI-1TH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1243.5" y="-1109.25"/>
+            <point key="canvasLocation" x="-1291.5" y="-2264"/>
         </scene>
         <!--Sign In-->
         <scene sceneID="dQf-mg-Zos">
@@ -3725,6 +3741,16 @@ Photo</string>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LJh-Lg-Gut">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="138" y="241" width="46" height="30"/>
+                                </variation>
+                                <connections>
+                                    <segue destination="n3n-eC-xDv" kind="unwind" unwindAction="unwindToSegue:" id="5GC-Vh-vS9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -3759,6 +3785,7 @@ Photo</string>
                                 <exclude reference="RqG-K4-Ss2"/>
                                 <exclude reference="rBW-CZ-as1"/>
                                 <exclude reference="HY1-MH-gmh"/>
+                                <exclude reference="LJh-Lg-Gut"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="7Qd-12-3Xa"/>
@@ -3779,6 +3806,7 @@ Photo</string>
                                 <include reference="RqG-K4-Ss2"/>
                                 <include reference="rBW-CZ-as1"/>
                                 <include reference="HY1-MH-gmh"/>
+                                <include reference="LJh-Lg-Gut"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="7Qd-12-3Xa"/>
@@ -3804,11 +3832,55 @@ Photo</string>
                     <connections>
                         <outlet property="emailTextField" destination="GuN-mc-rPg" id="hSp-Um-cNr"/>
                         <outlet property="passwordTextField" destination="rBW-CZ-as1" id="pXc-Au-Ycl"/>
+                        <segue destination="n3n-eC-xDv" kind="unwind" unwindAction="unwindToSegue:" id="k2U-QS-XF3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="alN-VF-e6g" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="n3n-eC-xDv" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-430.5" y="-1827"/>
+            <point key="canvasLocation" x="258" y="-2966"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="4Jh-HW-CXk">
+            <objects>
+                <navigationController id="B3G-tL-qjU" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="AhM-YB-MXo">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="0Cq-27-KFy" kind="relationship" relationship="rootViewController" id="Aib-1f-X6l"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9zp-cq-hvR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1062" y="-3734"/>
+        </scene>
+        <!--Office Choose User Type Table View Controller-->
+        <scene sceneID="YI4-JT-SCA">
+            <objects>
+                <tableViewController id="0Cq-27-KFy" customClass="OfficeChooseUserTypeTableViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="3pN-Lq-y0O">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Dqr-k5-lb5">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dqr-k5-lb5" id="8x0-cO-zCO">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="0Cq-27-KFy" id="crY-eq-7Lm"/>
+                            <outlet property="delegate" destination="0Cq-27-KFy" id="gdB-Jd-FeV"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="Vw3-d1-iXp"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="E3n-bg-awd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1849.5" y="-3734"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ffj-fG-ZMG">
@@ -3824,7 +3896,7 @@ Photo</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d38-mt-waf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-430.5" y="-1109"/>
+            <point key="canvasLocation" x="-478.5" y="-2263"/>
         </scene>
         <!--Sign Up-->
         <scene sceneID="bTr-Ii-M3R">
@@ -4382,12 +4454,11 @@ Photo</string>
                         <outlet property="signUpButton" destination="B8Y-zs-3ob" id="9Zu-dO-HbC"/>
                         <outlet property="streetTextField" destination="s1S-yV-dte" id="hax-zB-X4r"/>
                         <outlet property="verificationCodeTextField" destination="RmQ-zf-qo3" id="7EO-1H-MD0"/>
-                        <segue destination="Jr2-bc-xAn" kind="show" identifier="signUpToClientSignUp" id="bXe-bl-Pv0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a0K-4C-UQi" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="375" y="-1109.25"/>
+            <point key="canvasLocation" x="258" y="-2264"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="jmR-Ec-SIm">
@@ -4878,7 +4949,7 @@ Photo</string>
                                         <exclude reference="YqG-y5-xES"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
+                                <variation key="widthClass=compact" ambiguous="YES">
                                     <rect key="frame" x="0.0" y="20" width="400" height="580"/>
                                     <mask key="constraints">
                                         <include reference="YqG-y5-xES"/>
@@ -4929,17 +5000,17 @@ Photo</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Byk-bD-2hA" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1183.5" y="-1109.25"/>
+            <point key="canvasLocation" x="-1291.5" y="-2960"/>
         </scene>
     </scenes>
     <resources>
         <image name="defaultPicture" width="540" height="540"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="x9m-QM-WVL"/>
-        <segue reference="gHM-KO-YzH"/>
-        <segue reference="Dx0-iJ-XQZ"/>
+        <segue reference="CPS-1T-8Nc"/>
+        <segue reference="KS2-cD-Ng0"/>
+        <segue reference="JvB-e1-eF0"/>
         <segue reference="i3m-7f-ANh"/>
-        <segue reference="v8l-ku-XEN"/>
+        <segue reference="Aib-1f-X6l"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -35,6 +35,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     var activeTextField: UITextField?
     var userTypeSelected: UserType!
+    var segueDelegate: SegueBehindModalViewControllerWithUserTypeDelegate?
     
     func setDefaultTextFieldValues() {
         
@@ -228,21 +229,27 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
                         self.uploadUserInformationToCloudWithClassName("OfficeUser", completion: { (uploadSuccessful) -> Void in
                             if uploadSuccessful {
                                 print("segue1")
+                                self.segueDelegate?.segueBehindModalViewControllerWithUserType(self.userTypeSelected)
+                                self.dismissViewControllerAnimated(true, completion: nil)
                             }
                         })
                     } else if self.userTypeSelected == UserType.careGiver {
                         self.uploadUserInformationToCloudWithClassName("CareGiverUser", completion: { (uploadSuccessful) -> Void in
                             if uploadSuccessful {
                                 print("segue2")
+                                self.segueDelegate?.segueBehindModalViewControllerWithUserType(self.userTypeSelected)
                             }
                         })
                     } else if self.userTypeSelected == UserType.cathy {
                         self.uploadUserInformationToCloudWithClassName("CathyUser", completion: { (uploadSuccessful) -> Void in
                             if uploadSuccessful {
                                 print("segue3")
+                                self.segueDelegate?.segueBehindModalViewControllerWithUserType(self.userTypeSelected)
                             }
                         })
                     }
+                    
+                    
                     
                 } else {
                     print("Upload was not successful")

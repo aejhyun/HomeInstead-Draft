@@ -37,6 +37,12 @@ protocol SegueBehindModalViewControllerDelegate {
     
 }
 
+protocol SegueBehindModalViewControllerWithUserTypeDelegate {
+    
+    func segueBehindModalViewControllerWithUserType(userType: UserType)
+    
+}
+
 protocol OfficeClientProfileViewControllerDelegate {
     
     func getClientFirstName(firstName: String)

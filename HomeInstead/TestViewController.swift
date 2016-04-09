@@ -15,21 +15,8 @@ class TestViewController: UIViewController {
         super.viewDidLoad()
 
         
-        
-        //self.subView.bounds.width = self.view.bounds.width
-       
-        
-        
-        
-        
-//        self.subView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height + 500))
-//        self.scrollView = UIScrollView(frame: self.view.frame)
-//        self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.width)
-//        self.scrollView.contentSize = self.subView.bounds.size
-//        self.scrollView.scrollEnabled = true
-//        self.scrollView.addSubview(self.subView)
-//        self.scrollView.addSubview(self.label)
-//        self.view.addSubview(self.scrollView)
+        self.navigationController?.navigationBarHidden = false
+        self.navigationItem.setHidesBackButton(true, animated: false)
 
         
     }
@@ -45,7 +32,7 @@ class TestViewController: UIViewController {
         
     }
     
-
+    @IBAction func unwindToSegue (segue : UIStoryboardSegue) {}
    
 
 
