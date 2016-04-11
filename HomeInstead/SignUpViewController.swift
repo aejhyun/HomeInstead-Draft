@@ -11,6 +11,8 @@ import Parse
 
 class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
+// If there is a problem uploading the imageFile to the cloud, then the other fields will also not get uploaded. Fix this problem. 
+    
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
@@ -34,17 +36,16 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBOutlet weak var scrollView: UIScrollView!
     
     var activeTextField: UITextField?
-    var userTypeSelected: UserType!
-    var segueDelegate: SegueBehindModalViewControllerWithUserTypeDelegate?
+    var selectedUserType: UserType!
     
     func setDefaultTextFieldValues() {
         
         self.firstNameTextField.text = "Jae"
         self.lastNameTextField.text = "Kim"
-        self.emailTextField.text = "test6@gmail.com"
-        self.passwordTextField.text = self.userTypeSelected.rawValue
-        self.confirmPasswordTextField.text = self.userTypeSelected.rawValue
-        self.verificationCodeTextField.text = self.userTypeSelected.rawValue
+        self.emailTextField.text = "careGiver0@gmail.com"
+        self.passwordTextField.text = self.selectedUserType.rawValue
+        self.confirmPasswordTextField.text = self.selectedUserType.rawValue
+        self.verificationCodeTextField.text = self.selectedUserType.rawValue
         self.provinceTextField.text = "湖北"
         self.cityTextField.text = "武汉"
         self.streetTextField.text = "19300 Nassau St."
@@ -67,11 +68,11 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     func setNavigationBarTitle() {
         
-        if self.userTypeSelected == UserType.cathy {
+        if self.selectedUserType == UserType.cathy {
             self.navigationItem.title = "Cathy Sign Up"
-        } else if self.userTypeSelected == UserType.careGiver {
+        } else if self.selectedUserType == UserType.careGiver {
             self.navigationItem.title = "CareGiver Sign Up"
-        } else if self.userTypeSelected == UserType.office {
+        } else if self.selectedUserType == UserType.office {
             self.navigationItem.title = "Office Sign Up"
         }
         
@@ -225,34 +226,30 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             self.uploadUserInformationToCloud({ (uploadSuccessful) -> Void in
                 if uploadSuccessful {
                     
-                    if self.userTypeSelected == UserType.office {
+                    if self.selectedUserType == UserType.office {
                         self.uploadUserInformationToCloudWithClassName("OfficeUser", completion: { (uploadSuccessful) -> Void in
                             if uploadSuccessful {
-                                print("segue1")
-                                self.segueDelegate?.segueBehindModalViewControllerWithUserType(self.userTypeSelected)
                                 self.dismissViewControllerAnimated(true, completion: nil)
                             }
                         })
-                    } else if self.userTypeSelected == UserType.careGiver {
+                    } else if self.selectedUserType == UserType.careGiver {
                         self.uploadUserInformationToCloudWithClassName("CareGiverUser", completion: { (uploadSuccessful) -> Void in
                             if uploadSuccessful {
                                 print("segue2")
-                                self.segueDelegate?.segueBehindModalViewControllerWithUserType(self.userTypeSelected)
+                                self.dismissViewControllerAnimated(true, completion: nil)
                             }
                         })
-                    } else if self.userTypeSelected == UserType.cathy {
+                    } else if self.selectedUserType == UserType.cathy {
                         self.uploadUserInformationToCloudWithClassName("CathyUser", completion: { (uploadSuccessful) -> Void in
                             if uploadSuccessful {
                                 print("segue3")
-                                self.segueDelegate?.segueBehindModalViewControllerWithUserType(self.userTypeSelected)
+                                self.dismissViewControllerAnimated(true, completion: nil)
                             }
                         })
                     }
                     
-                    
-                    
                 } else {
-                    print("Upload was not successful")
+                    self.presentAlertControllerWithMessage("There was an error while trying to sign up")
                 }
             })
         }
@@ -267,7 +264,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         let user = PFUser()
         user["firstName"] = self.firstNameTextField.text
         user["lastName"] = self.lastNameTextField.text
-        user["userType"] = self.userTypeSelected.rawValue
+        user["userType"] = self.selectedUserType.rawValue
         user.email = self.emailTextField.text
         user.password = self.passwordTextField.text
         user.username = self.emailTextField.text
@@ -320,10 +317,9 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         object.saveInBackgroundWithBlock {
             (success: Bool, error: NSError?) -> Void in
             if (success) {
-                print("Successfully uploaded \(self.firstNameTextField.text!)'s information to cloud under the class name \"\(className)\".")
+                print("Successfully uploaded \(self.firstNameTextField.text!)'s information to the cloud under the class name \"\(className)\".")
                 completion(uploadSuccessful: true)
             } else {
-                self.presentAlertControllerWithMessage("\(error?.description)")
                 print(error?.description)
                 completion(uploadSuccessful: false)
             }
@@ -387,15 +383,15 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         let verificationCode = VerificationCode()
         
-        if self.userTypeSelected == UserType.office {
+        if self.selectedUserType == UserType.office {
             if self.verificationCodeTextField.text == verificationCode.office {
                 return true
             }
-        } else if self.userTypeSelected == UserType.careGiver {
+        } else if self.selectedUserType == UserType.careGiver {
             if self.verificationCodeTextField.text == verificationCode.careGiver {
                 return true
             }
-        } else if self.userTypeSelected == UserType.cathy {
+        } else if self.selectedUserType == UserType.cathy {
             if self.verificationCodeTextField.text == verificationCode.cathy {
                 return true
             }
@@ -419,7 +415,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-
+        
         
     }
 

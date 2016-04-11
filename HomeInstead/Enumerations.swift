@@ -9,5 +9,5 @@
 import Foundation
 
 enum UserType: String {
-    case office, careGiver, cathy
+    case office, careGiver, cathy, client
 }

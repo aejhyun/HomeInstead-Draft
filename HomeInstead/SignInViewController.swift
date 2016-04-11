@@ -9,15 +9,22 @@
 import UIKit
 import Parse
 
-class SignInViewController: UIViewController {
+class SignInViewController: UIViewController, DismissViewControllerDelegate {
 
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
-    var segueDelegate: SegueBehindModalViewControllerWithUserTypeDelegate?
+    func setDefaultValues() {
+        
+        self.emailTextField.text = "office0@gmail.com"
+        self.passwordTextField.text = "office"
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.setDefaultValues()
         
         self.emailTextField.becomeFirstResponder()
 
@@ -42,15 +49,12 @@ class SignInViewController: UIViewController {
                         if querySuccessful {
                             
                             if userType == UserType.office.rawValue {
-                                self.segueDelegate?.segueBehindModalViewControllerWithUserType(UserType.office)
-                                print("segue to office's first view controller")
+                                self.performSegueWithIdentifier("signInToOfficeChooseUserType", sender: nil)
                             } else if userType == UserType.careGiver.rawValue {
                                 print("segue to careGiver's first view controller")
                             } else if userType == UserType.cathy.rawValue {
                                 print("segue to cathy's first view controller")
                             }
-                            
-                            self.dismissViewControllerAnimated(true, completion: nil)
                             
                         } else {
                             self.presentAlertControllerWithMessage("An error has occurred.")
@@ -124,10 +128,13 @@ class SignInViewController: UIViewController {
         
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+
+    }
     
-    
-    
-    
+    func dismissViewController() {
+        self.dismissViewControllerAnimated(false, completion: nil)
+    }
     
     
     

@@ -72,7 +72,7 @@ class ClientSignUpViewController: SignUpViewController {
         let user = PFUser()
         user["firstName"] = self.cathyUserInformation["firstName"]
         user["lastName"] = self.cathyUserInformation["lastName"]
-        user["userType"] = self.userTypeSelected.rawValue
+        user["userType"] = self.selectedUserType.rawValue
         user.email = self.cathyUserInformation["email"] as? String
         user.password = self.cathyUserInformation["password"] as? String
         user.username = self.cathyUserInformation["email"] as? String

@@ -37,17 +37,13 @@ protocol SegueBehindModalViewControllerDelegate {
     
 }
 
-protocol SegueBehindModalViewControllerWithUserTypeDelegate {
+protocol DismissViewControllerDelegate {
     
-    func segueBehindModalViewControllerWithUserType(userType: UserType)
+    func dismissViewController()
     
 }
 
-protocol OfficeClientProfileViewControllerDelegate {
-    
-    func getClientFirstName(firstName: String)
-    
-}
+
 
 
 

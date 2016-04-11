@@ -8,18 +8,18 @@
 
 import UIKit
 
-class SignUpSignInViewController: UIViewController, SegueBehindModalViewControllerWithUserTypeDelegate {
-
+class SignUpSignInViewController: UIViewController {
+    
     @IBOutlet weak var officeButton: UIButton!
     @IBOutlet weak var careGiverButton: UIButton!
     @IBOutlet weak var cathyButton: UIButton!
     
     var showSignUpAccountOptions: Bool = false
-    var userTypeSelected: UserType!
-
+    var selectedUserType: UserType!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.officeButton.hidden = true
         self.careGiverButton.hidden = true
         self.cathyButton.hidden = true
@@ -27,10 +27,8 @@ class SignUpSignInViewController: UIViewController, SegueBehindModalViewControll
         self.careGiverButton.alpha = 0.0
         self.cathyButton.alpha = 0.0
         
-        self.navigationController?.navigationBarHidden = true
-        
     }
-
+    
     @IBAction func signUpButtonTapped(sender: AnyObject) {
         
         if self.showSignUpAccountOptions == false {
@@ -76,17 +74,17 @@ class SignUpSignInViewController: UIViewController, SegueBehindModalViewControll
     }
     
     @IBAction func officeButtonTapped(sender: AnyObject) {
-        self.userTypeSelected = UserType.office
+        self.selectedUserType = UserType.office
         self.performSegueWithIdentifier("signUpSignInToSignUp", sender: nil)
     }
     
     @IBAction func careGiverButtonTapped(sender: AnyObject) {
-        self.userTypeSelected = UserType.careGiver
+        self.selectedUserType = UserType.careGiver
         self.performSegueWithIdentifier("signUpSignInToSignUp", sender: nil)
     }
     
     @IBAction func cathyButtonTapped(sender: AnyObject) {
-        self.userTypeSelected = UserType.cathy
+        self.selectedUserType = UserType.cathy
         self.performSegueWithIdentifier("signUpSignInToSignUp", sender: nil)
     }
     
@@ -97,8 +95,8 @@ class SignUpSignInViewController: UIViewController, SegueBehindModalViewControll
             if let navigationController = segue.destinationViewController as? UINavigationController {
                 if let signUpViewController = navigationController.topViewController as? SignUpViewController {
                     
-                    signUpViewController.userTypeSelected = self.userTypeSelected
-                    signUpViewController.segueDelegate = self
+                    signUpViewController.selectedUserType = self.selectedUserType
+                    
                     
                 } else {
                     print("signUpViewController returned nil")
@@ -110,9 +108,9 @@ class SignUpSignInViewController: UIViewController, SegueBehindModalViewControll
         } else if segue.identifier == "signUpSignInToSignIn" {
             
             if let navigationController = segue.destinationViewController as? UINavigationController {
-                if let signInViewController = navigationController.topViewController as? SignInViewController {
+                if let _ = navigationController.topViewController as? SignInViewController {
                     
-                    signInViewController.segueDelegate = self
+                    
                     
                 } else {
                     print("signInViewController returned nil")
@@ -125,20 +123,9 @@ class SignUpSignInViewController: UIViewController, SegueBehindModalViewControll
         
     }
 
-//Protocal function starts here.
     
-    func segueBehindModalViewControllerWithUserType(userType: UserType) {
-
-        if userType == UserType.office {
-            
-           
-            self.performSegueWithIdentifier("signInToOfficeChooseUserType", sender: nil)
-        }
-        
-    }
     
-//Protocal function ends here.
-
-
-
+    
+    
+    
 }
