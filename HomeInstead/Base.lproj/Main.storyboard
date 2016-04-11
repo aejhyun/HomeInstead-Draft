@@ -5138,6 +5138,7 @@ Photo</string>
                                                 </mask>
                                             </variation>
                                             <connections>
+                                                <action selector="nameButtonTapped:" destination="4Qw-gq-aUv" eventType="touchUpInside" id="34N-42-Ujx"/>
                                                 <segue destination="VCR-vU-sTM" kind="show" id="rTN-DC-eoA"/>
                                             </connections>
                                         </button>
@@ -5385,8 +5386,10 @@ Photo</string>
                         </variation>
                     </view>
                     <connections>
-                        <outlet property="image" destination="RkH-xb-9r7" id="KWz-Bx-Skf"/>
+                        <outlet property="imageView" destination="RkH-xb-9r7" id="uz1-cU-RtD"/>
+                        <outlet property="imageViewHeightLayoutConstraint" destination="81Z-H9-0ZF" id="gqL-6Y-e37"/>
                         <outlet property="nameLabel" destination="jT1-UR-93B" id="ws6-Ks-bPf"/>
+                        <outlet property="noPhotoLabel" destination="DmO-6z-UzN" id="SRC-7T-vqT"/>
                         <outlet property="scrollView" destination="jTX-Fn-zVp" id="USB-mL-mu6"/>
                         <outlet property="textField" destination="aHu-GS-zh4" id="kk4-ph-CdD"/>
                     </connections>

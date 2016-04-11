@@ -12,8 +12,9 @@ import Parse
 class OfficeAddUserTableViewController: UITableViewController {
 
     var selectedUserType: UserType!
-    var users: [[String: String]] = [[String: String]]()
+    var users: [[String: NSObject?]] = [[String: NSObject?]]()
     var checkedRows: [Bool] = [Bool]()
+    var nameButtonSelectedRow: Int = -1
     
     func setNavigationBarTitle() {
         
@@ -38,6 +39,7 @@ class OfficeAddUserTableViewController: UITableViewController {
                 
                 if querySuccessful {
                     // self.checkedRows is to keep track of which rows are checked by the user.
+                    
                     self.checkedRows = [Bool](count: self.users.count, repeatedValue: false)
                     self.tableView.reloadData()
                 }
@@ -54,7 +56,7 @@ class OfficeAddUserTableViewController: UITableViewController {
     
     func attemptQueryUserInformationFromCloudWithClassName(className: String, completion: (querySuccessful: Bool) -> Void) {
         
-        var userInformation: [String: String] = [String: String]()
+        var userInformation: [String: NSObject?] = [String: NSObject?]()
         let query = PFQuery(className:className)
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
@@ -83,6 +85,15 @@ class OfficeAddUserTableViewController: UITableViewController {
         
     }
 
+    @IBAction func nameButtonTapped(sender: AnyObject) {
+        
+        let nameButton = sender as! UIButton
+        let superView = nameButton.superview!
+        let officeAddUserTableViewCell = superView.superview as! OfficeAddUserTableViewCell
+        let indexPath = tableView.indexPathForCell(officeAddUserTableViewCell)
+        self.nameButtonSelectedRow = (indexPath?.row)!
+        
+    }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -95,6 +106,7 @@ class OfficeAddUserTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+
         if let cell = tableView.cellForRowAtIndexPath(indexPath) {
             if cell.accessoryType == .Checkmark {
                 cell.accessoryType = .None
@@ -116,13 +128,23 @@ class OfficeAddUserTableViewController: UITableViewController {
             cell.accessoryType = .Checkmark
         }
         
-        cell.nameButton.setTitle(self.users[indexPath.row]["name"], forState: UIControlState.Normal)
-        cell.emailLabel.text = self.users[indexPath.row]["email"]
-
+        cell.nameButton.setTitle(self.users[indexPath.row]["name"] as? String, forState: UIControlState.Normal)
+        cell.emailLabel.text = self.users[indexPath.row]["email"] as? String
+        
         return cell
+        
     }
     
-
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let destinationViewController = segue.destinationViewController as? UserProfileViewController {
+            destinationViewController.user = self.users[self.nameButtonSelectedRow]
+            
+        } else {
+            print("destinationViewController returned nil")
+        }
+        
+    }
+    
     @IBAction func doneButtonTapped(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
