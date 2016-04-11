@@ -10,7 +10,7 @@ import UIKit
 
 class OfficeAddUserTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var nameButton: UIButton!
     @IBOutlet weak var emailLabel: UILabel!
     
     override func awakeFromNib() {

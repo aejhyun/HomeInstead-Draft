@@ -67,7 +67,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     @IBAction func segmentedControlIndexChanged(sender: UISegmentedControl) {
         
         if self.segmentedControl.selectedSegmentIndex == 0 {
-            print("a")
             self.selectedUserType = UserType.careGiver
         } else if self.segmentedControl.selectedSegmentIndex == 1 {
             self.selectedUserType = UserType.cathy
@@ -124,9 +123,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             if let error = error {
                 print(error)
             } else {
-                self.dismissViewControllerAnimated(true, completion: { () -> Void in
-                    //self.dismissViewControllerAnimated(false, completion: nil)
-                })
+                self.dismissViewControllerAnimated(true, completion: nil)
                 
             }
         }

@@ -50,3 +50,36 @@ struct HelperFunctions {
     
 }
 
+struct ClassNameForCloud {
+    
+    let officeUser: String
+    let careGiverUser: String
+    let cathyUser: String
+    let clientUser: String
+    
+    init() {
+        
+        self.officeUser = "OfficeUser"
+        self.careGiverUser = "CareGiverUser"
+        self.cathyUser = "CathyUser"
+        self.clientUser = "ClientUser"
+    }
+    
+    
+    func getClassName(selectedUserType: UserType) -> String? {
+        
+        if selectedUserType == UserType.office {
+            return self.officeUser
+        } else if selectedUserType == UserType.careGiver {
+            return self.careGiverUser
+        } else if selectedUserType == UserType.cathy {
+            return self.cathyUser
+        } else if selectedUserType == UserType.client {
+            return self.clientUser
+        }
+        return nil
+        
+    }
+    
+}
+
