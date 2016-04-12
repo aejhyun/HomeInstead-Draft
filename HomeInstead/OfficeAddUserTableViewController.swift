@@ -65,6 +65,7 @@ class OfficeAddUserTableViewController: UITableViewController {
                     for object in objects {
                         userInformation["imageFile"] = nil
                         userInformation["name"] = object.objectForKey("name") as? String
+                        userInformation["notes"] = object.objectForKey("notes") as? String
                         userInformation["email"] = object.objectForKey("email") as? String
                         userInformation["province"] = object.objectForKey("province") as? String
                         userInformation["city"] = object.objectForKey("city") as? String

@@ -49,6 +49,7 @@
 		84C475E21CBBA85D0043A84E /* OfficeConnectUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C475E11CBBA85D0043A84E /* OfficeConnectUserViewController.swift */; };
 		84C475E41CBBC1960043A84E /* OfficeAddUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C475E31CBBC1960043A84E /* OfficeAddUserTableViewCell.swift */; };
 		84C475E61CBBF7600043A84E /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C475E51CBBF7600043A84E /* UserProfileViewController.swift */; };
+		84C475EA1CBD125C0043A84E /* OfficeEditUserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C475E91CBD125C0043A84E /* OfficeEditUserProfileViewController.swift */; };
 		84D203D01C2E627400746066 /* GiverCathyListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D203CF1C2E627400746066 /* GiverCathyListTableViewCell.swift */; };
 		84D931011C197DB1003C1688 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D931001C197DB1003C1688 /* AppDelegate.swift */; };
 		84D931061C197DB1003C1688 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84D931041C197DB1003C1688 /* Main.storyboard */; };
@@ -124,6 +125,7 @@
 		84C475E11CBBA85D0043A84E /* OfficeConnectUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeConnectUserViewController.swift; sourceTree = "<group>"; };
 		84C475E31CBBC1960043A84E /* OfficeAddUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeAddUserTableViewCell.swift; sourceTree = "<group>"; };
 		84C475E51CBBF7600043A84E /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		84C475E91CBD125C0043A84E /* OfficeEditUserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeEditUserProfileViewController.swift; sourceTree = "<group>"; };
 		84D203CF1C2E627400746066 /* GiverCathyListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiverCathyListTableViewCell.swift; sourceTree = "<group>"; };
 		84D930FD1C197DB1003C1688 /* HomeInstead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HomeInstead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84D931001C197DB1003C1688 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				84C475DF1CBB986F0043A84E /* OfficeAddUserTableViewController.swift */,
 				84C475E31CBBC1960043A84E /* OfficeAddUserTableViewCell.swift */,
 				84C475E51CBBF7600043A84E /* UserProfileViewController.swift */,
+				84C475E91CBD125C0043A84E /* OfficeEditUserProfileViewController.swift */,
 				84B53A7C1C48CC18008CAB8A /* GiveClientListTableViewCell.swift */,
 				84C462A91C20232A00FA82F9 /* GiverClientListTableViewController.swift */,
 				84B74CDB1C219A1B00A2C914 /* TaskListViewController.swift */,
@@ -396,6 +399,7 @@
 				84FD3E581C225B82007D2C31 /* MyActivityIndicator.swift in Sources */,
 				8479A8EF1C2FBCA30069A046 /* OfficeClientListTableViewController.swift in Sources */,
 				84B74CDC1C219A1B00A2C914 /* TaskListViewController.swift in Sources */,
+				84C475EA1CBD125C0043A84E /* OfficeEditUserProfileViewController.swift in Sources */,
 				84D203D01C2E627400746066 /* GiverCathyListTableViewCell.swift in Sources */,
 				84AA8CAA1C44C8C3002892DF /* AddCathyTableViewController.swift in Sources */,
 				840E72D51CB1074400F24F00 /* ClientSignUpViewController.swift in Sources */,

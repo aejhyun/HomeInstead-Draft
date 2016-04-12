@@ -226,26 +226,14 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             self.uploadUserInformationToCloud({ (uploadSuccessful) -> Void in
                 if uploadSuccessful {
                     
-                    if self.selectedUserType == UserType.office {
-                        self.uploadUserInformationToCloudWithClassName("OfficeUser", completion: { (uploadSuccessful) -> Void in
+                    if let className = ClassNameForCloud().getClassName(self.selectedUserType) {
+                        
+                        self.uploadUserInformationToCloudWithClassName(className, completion: { (uploadSuccessful) -> Void in
                             if uploadSuccessful {
                                 self.dismissViewControllerAnimated(true, completion: nil)
                             }
                         })
-                    } else if self.selectedUserType == UserType.careGiver {
-                        self.uploadUserInformationToCloudWithClassName("CareGiverUser", completion: { (uploadSuccessful) -> Void in
-                            if uploadSuccessful {
-                                print("segue2")
-                                self.dismissViewControllerAnimated(true, completion: nil)
-                            }
-                        })
-                    } else if self.selectedUserType == UserType.cathy {
-                        self.uploadUserInformationToCloudWithClassName("CathyUser", completion: { (uploadSuccessful) -> Void in
-                            if uploadSuccessful {
-                                print("segue3")
-                                self.dismissViewControllerAnimated(true, completion: nil)
-                            }
-                        })
+                        
                     }
                     
                 } else {
@@ -309,6 +297,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         object["postalCode"] = self.postalCodeTextField.text
         object["phoneNumber"] = self.phoneNumberTextField.text
         object["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
+        object["notes"] = ""
 
         if imageFile != nil {
             object["imageFile"] = imageFile

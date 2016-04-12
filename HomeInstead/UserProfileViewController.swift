@@ -12,13 +12,35 @@ class UserProfileViewController: UIViewController {
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var textField: UITextView!
+    @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var noPhotoLabel: UILabel!
+    @IBOutlet weak var phoneNumberLabel: UILabel!
+    @IBOutlet weak var emergencyPhoneNumberLabel: UILabel!
+    @IBOutlet weak var streetCityLabel: UILabel!
+    @IBOutlet weak var postalCodeProvinceLabel: UILabel!
+    
+    @IBOutlet weak var phoneButton: UIButton!
+    @IBOutlet weak var emergencyButton: UIButton!
+    @IBOutlet weak var addressButton: UIButton!
+    @IBOutlet weak var phoneCallButton: UIButton!
+    @IBOutlet weak var emergencyCallButton: UIButton!
+    
+    @IBOutlet weak var streetCityLabelTopSpaceLayoutConstraint: NSLayoutConstraint!
+    @IBOutlet weak var streetCityLabelBottomSpaceLayoutConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageViewHeightLayoutConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
     
     var user: [String: NSObject?] = [String: NSObject?]()
     var image: UIImage?
+    
+    var name: String!
+    var phoneNumber: String!
+    var emergencyPhoneNumber: String!
+    var street: String!
+    var city: String!
+    var postalCode: String!
+    var province: String!
+    var notes: String!
     
     func setImageView() {
         
@@ -38,12 +60,92 @@ class UserProfileViewController: UIViewController {
         
     }
     
+    func unpackUserInformation() {
+        
+        self.name = self.user["name"]! as? String
+        self.phoneNumber = self.user["phoneNumber"]! as? String
+        self.emergencyPhoneNumber = self.user["emergencyPhoneNumber"]! as? String
+        self.street = self.user["street"]! as? String
+        self.city = self.user["city"]! as? String
+        self.postalCode = self.user["postalCode"]! as? String
+        self.province = self.user["province"]! as? String
+        self.notes = self.user["notes"]! as? String
+        
+    }
+    
+    func setUserInformation() {
+        
+        if self.name != "" {
+            self.nameLabel.text = self.name
+        } else {
+            self.nameLabel.text = ""
+        }
+        
+        if self.phoneNumber != "" {
+            self.phoneButton.enabled = true
+            self.phoneCallButton.enabled = true
+            self.phoneNumberLabel.text = self.phoneNumber
+        } else {
+            self.phoneButton.enabled = false
+            self.phoneCallButton.enabled = false
+            self.phoneNumberLabel.text = "None"
+        }
+        
+        if self.emergencyPhoneNumber != "" {
+            self.emergencyButton.enabled = true
+            self.emergencyCallButton.enabled = true
+            self.emergencyPhoneNumberLabel.text = self.emergencyPhoneNumber
+        } else {
+            self.emergencyButton.enabled = false
+            self.emergencyCallButton.enabled = false
+            self.emergencyPhoneNumberLabel.text = "None"
+        }
+        
+        if self.street == "" && self.city == "" && self.postalCode == "" && self.province == "" {
+            self.streetCityLabel.text = "None"
+            self.streetCityLabelBottomSpaceLayoutConstraint.constant = 0
+        }
+        
+        if self.street == "" || self.city == "" {
+            if self.street == "" && self.city == "" {
+                self.streetCityLabelTopSpaceLayoutConstraint.constant = 0
+            } else {
+                if self.street == "" {
+                    self.streetCityLabel.text = self.street
+                } else {
+                    self.streetCityLabel.text = self.city
+                }
+            }
+        } else if self.street != "" && self.city != "" {
+            self.streetCityLabel.text = "\(self.street)" + ", " + "\(self.city)"
+        }
+        
+        if self.postalCode == "" || self.province == "" {
+            if self.postalCode == "" && self.province == "" {
+                self.streetCityLabelBottomSpaceLayoutConstraint.constant = 0
+            } else {
+                if self.street == "" {
+                    self.postalCodeProvinceLabel.text = self.postalCode
+                } else {
+                    self.postalCodeProvinceLabel.text = self.province
+                }
+            }
+        } else if self.postalCode != "" && self.province != "" {
+            self.postalCodeProvinceLabel.text = "\(self.postalCode)" + " " + "\(self.province)"
+        }
+        
+        self.textView.text = self.notes
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.unpackUserInformation()
+        self.setUserInformation()
         self.automaticallyAdjustsScrollViewInsets = false
-        print(self.user["pictureFile"])
-        // Do any additional setup after loading the view.
+        self.navigationItem.title = "User Profile"
+        
     }
     
     override func viewWillAppear(animated: Bool) {
