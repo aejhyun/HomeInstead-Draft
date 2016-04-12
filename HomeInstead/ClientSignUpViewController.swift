@@ -15,11 +15,12 @@ class ClientSignUpViewController: SignUpViewController {
     
     override func setDefaultTextFieldValues() {
         
-        self.firstNameTextField.text = "Meong"
-        self.lastNameTextField.text = "Choi"
+        self.nameTextField.text = "Meong Choi"
         self.provinceTextField.text = "Hubei Province"
         self.cityTextField.text = "Hanyang"
-        self.streetTextField.text = "31342 Washing St."
+        self.streetOneTextField.text = "31342 Washing St."
+        self.streetTwoTextField.text = ""
+        self.streetThreeTextField.text = ""
         self.postalCodeTextField.text = "94542"
         self.phoneNumberTextField.text = "9535136902"
         self.emergencyPhoneNumberTextField.text = "4312047283"
@@ -32,7 +33,7 @@ class ClientSignUpViewController: SignUpViewController {
         
         self.addPhotoButton.titleLabel?.textAlignment = .Center
         self.editButton.hidden = true
-        self.firstNameTextField.becomeFirstResponder()
+        self.nameTextField.becomeFirstResponder()
         self.automaticallyAdjustsScrollViewInsets = false
         
         self.navigationItem.title = "Client Sign Up"
@@ -56,10 +57,8 @@ class ClientSignUpViewController: SignUpViewController {
 
     override func allRequiredFieldsAreNotEmpty() -> Bool {
         
-        if self.firstNameTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your first name")
-        } else if self.lastNameTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your last name")
+        if self.nameTextField.text == "" {
+            self.presentAlertControllerWithMessage("Please enter your name")
         } else {
             return true
         }
@@ -91,16 +90,17 @@ class ClientSignUpViewController: SignUpViewController {
     
     override func uploadUserInformationToCloudWithClassName(className: String, completion: (uploadSuccessful: Bool) -> Void) {
         
-        let fullName: String = self.firstNameTextField.text! + " " + self.lastNameTextField.text!
         let imageFile: NSData? = self.getImageFile()
         
         let object = PFObject(className: className)
-        object["name"] = fullName
+        object["name"] = self.nameTextField.text
         object["id"] = PFUser.currentUser()?.objectId
         object["email"] = self.emailTextField.text!
         object["province"] = self.provinceTextField.text
         object["city"] = self.cityTextField.text
-        object["street"] = self.streetTextField.text
+        object["streetOne"] = self.streetOneTextField.text
+        object["streetTwo"] = self.streetTwoTextField.text
+        object["streetThree"] = self.streetThreeTextField.text
         object["postalCode"] = self.postalCodeTextField.text
         object["phoneNumber"] = self.phoneNumberTextField.text
         object["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
@@ -111,7 +111,7 @@ class ClientSignUpViewController: SignUpViewController {
         object.saveInBackgroundWithBlock {
             (success: Bool, error: NSError?) -> Void in
             if (success) {
-                print("Successfully uploaded \(self.firstNameTextField.text!)'s information to cloud under the class name \"\(className)\".")
+                print("Successfully uploaded \(self.nameTextField)'s information to cloud under the class name \"\(className)\".")
                 completion(uploadSuccessful: true)
             } else {
                 self.presentAlertControllerWithMessage("\(error?.description)")
@@ -135,19 +135,7 @@ class ClientSignUpViewController: SignUpViewController {
     
     @IBAction func addAnotherClientButtonTapped(sender: AnyObject) {
         
-        if self.allRequiredFieldsAreNotEmpty() {
-            self.setImageView()
-            self.editButton.hidden = true
-            self.addPhotoButton.hidden = false
-            self.firstNameTextField.text = ""
-            self.lastNameTextField.text = ""
-            self.provinceTextField.text = ""
-            self.cityTextField.text = ""
-            self.streetTextField.text = ""
-            self.postalCodeTextField.text = ""
-            self.phoneNumberTextField.text = ""
-            self.emergencyPhoneNumberTextField.text = ""
-        }
+
         
     }
    

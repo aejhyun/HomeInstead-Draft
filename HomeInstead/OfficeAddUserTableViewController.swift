@@ -69,7 +69,9 @@ class OfficeAddUserTableViewController: UITableViewController {
                         userInformation["email"] = object.objectForKey("email") as? String
                         userInformation["province"] = object.objectForKey("province") as? String
                         userInformation["city"] = object.objectForKey("city") as? String
-                        userInformation["street"] = object.objectForKey("street") as? String
+                        userInformation["streetOne"] = object.objectForKey("streetOne") as? String
+                        userInformation["streetTwo"] = object.objectForKey("streetTwo") as? String
+                        userInformation["streetThree"] = object.objectForKey("streetThree") as? String
                         userInformation["postalCode"] = object.objectForKey("postalCode") as? String
                         userInformation["phoneNumber"] = object.objectForKey("phoneNumber") as? String
                         userInformation["emergencyPhoneNumber"] = object.objectForKey("emergencyPhoneNumber") as? String

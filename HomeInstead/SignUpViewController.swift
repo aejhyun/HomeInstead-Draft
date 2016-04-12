@@ -13,15 +13,17 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
 // If there is a problem uploading the imageFile to the cloud, then the other fields will also not get uploaded. Fix this problem. 
     
-    @IBOutlet weak var firstNameTextField: UITextField!
-    @IBOutlet weak var lastNameTextField: UITextField!
+    
+    @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var confirmPasswordTextField: UITextField!
     @IBOutlet weak var verificationCodeTextField: UITextField!
     @IBOutlet weak var provinceTextField: UITextField!
     @IBOutlet weak var cityTextField: UITextField!
-    @IBOutlet weak var streetTextField: UITextField!
+    @IBOutlet weak var streetOneTextField: UITextField!
+    @IBOutlet weak var streetTwoTextField: UITextField!
+    @IBOutlet weak var streetThreeTextField: UITextField!
     @IBOutlet weak var postalCodeTextField: UITextField!
     @IBOutlet weak var phoneNumberTextField: UITextField!
     @IBOutlet weak var emergencyPhoneNumberTextField: UITextField!
@@ -40,15 +42,16 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     func setDefaultTextFieldValues() {
         
-        self.firstNameTextField.text = "Jae"
-        self.lastNameTextField.text = "Kim"
+        self.nameTextField.text = "Jae Kim"
         self.emailTextField.text = "careGiver0@gmail.com"
         self.passwordTextField.text = self.selectedUserType.rawValue
         self.confirmPasswordTextField.text = self.selectedUserType.rawValue
         self.verificationCodeTextField.text = self.selectedUserType.rawValue
         self.provinceTextField.text = "湖北"
         self.cityTextField.text = "武汉"
-        self.streetTextField.text = "19300 Nassau St."
+        self.streetOneTextField.text = "19300 Nassau St."
+        self.streetTwoTextField.text = ""
+        self.streetThreeTextField.text = ""
         self.postalCodeTextField.text = "92508"
         self.phoneNumberTextField.text = "9518077192"
         self.emergencyPhoneNumberTextField.text = "4350937283"
@@ -86,7 +89,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         self.addPhotoButton.titleLabel?.textAlignment = .Center
         self.editButton.hidden = true
-        self.firstNameTextField.becomeFirstResponder()
+        self.nameTextField.becomeFirstResponder()
         self.automaticallyAdjustsScrollViewInsets = false
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
@@ -250,8 +253,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     func uploadUserInformationToCloud(completion: (uploadSuccessful: Bool) -> Void) {
         
         let user = PFUser()
-        user["firstName"] = self.firstNameTextField.text
-        user["lastName"] = self.lastNameTextField.text
+        user["name"] = self.nameTextField.text
         user["userType"] = self.selectedUserType.rawValue
         user.email = self.emailTextField.text
         user.password = self.passwordTextField.text
@@ -284,16 +286,17 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     func uploadUserInformationToCloudWithClassName(className: String, completion: (uploadSuccessful: Bool) -> Void) {
         
-        let fullName: String = self.firstNameTextField.text! + " " + self.lastNameTextField.text!
         let imageFile: NSData? = self.getImageFile()
         
         let object = PFObject(className: className)
-        object["name"] = fullName
+        object["name"] = self.nameTextField.text
         object["userId"] = PFUser.currentUser()?.objectId!
         object["email"] = self.emailTextField.text!
         object["province"] = self.provinceTextField.text
         object["city"] = self.cityTextField.text
-        object["street"] = self.streetTextField.text
+        object["streetOne"] = self.streetOneTextField.text
+        object["streetTwo"] = self.streetTwoTextField.text
+        object["streetThree"] = self.streetThreeTextField.text
         object["postalCode"] = self.postalCodeTextField.text
         object["phoneNumber"] = self.phoneNumberTextField.text
         object["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
@@ -306,7 +309,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         object.saveInBackgroundWithBlock {
             (success: Bool, error: NSError?) -> Void in
             if (success) {
-                print("Successfully uploaded \(self.firstNameTextField.text!)'s information to the cloud under the class name \"\(className)\".")
+                print("Successfully uploaded \(self.nameTextField.text!)'s information to the cloud under the class name \"\(className)\".")
                 completion(uploadSuccessful: true)
             } else {
                 print(error?.description)
@@ -331,10 +334,8 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     func allRequiredFieldsAreNotEmpty() -> Bool {
         
-        if self.firstNameTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your first name")
-        } else if self.lastNameTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your last name")
+        if self.nameTextField.text == "" {
+            self.presentAlertControllerWithMessage("Please enter your name")
         } else if self.emailTextField.text == "" {
             self.presentAlertControllerWithMessage("Please enter your email")
         } else if self.passwordTextField.text == "" {
@@ -347,7 +348,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             self.presentAlertControllerWithMessage("Please enter your province")
         } else if self.cityTextField.text == "" {
             self.presentAlertControllerWithMessage("Please enter your city")
-        } else if self.streetTextField.text == "" {
+        } else if self.streetOneTextField.text == "" {
             self.presentAlertControllerWithMessage("Please enter your street")
         } else if self.postalCodeTextField.text == "" {
             self.presentAlertControllerWithMessage("Please enter your postal code")

@@ -96,8 +96,7 @@ class SignUpSignInViewController: UIViewController {
                 if let signUpViewController = navigationController.topViewController as? SignUpViewController {
                     
                     signUpViewController.selectedUserType = self.selectedUserType
-                    
-                    
+
                 } else {
                     print("signUpViewController returned nil")
                 }
