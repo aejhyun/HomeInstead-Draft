@@ -83,7 +83,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("hello")
         self.setDefaultTextFieldValues()
         self.setNavigationBarTitle()
         
@@ -198,7 +198,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     func keyboardDidShow(notification: NSNotification) {
         
-        if let activeTextField = self.self.activeTextField, keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+        if let activeTextField = self.activeTextField, keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
             
             let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardSize.height, right: 0.0)
             self.scrollView.contentInset = contentInsets
