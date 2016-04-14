@@ -58,6 +58,7 @@ class OfficeAddUserTableViewController: UITableViewController {
         
         var userInformation: [String: NSObject?] = [String: NSObject?]()
         let query = PFQuery(className:className)
+        //query.fromLocalDatastore()
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             if error == nil {
@@ -76,7 +77,10 @@ class OfficeAddUserTableViewController: UITableViewController {
                         userInformation["phoneNumber"] = object.objectForKey("phoneNumber") as? String
                         userInformation["emergencyPhoneNumber"] = object.objectForKey("emergencyPhoneNumber") as? String
                         userInformation["userId"] = object.objectForKey("userId") as? String
+                        userInformation["userType"] = object.objectForKey("userType") as? String
+                        userInformation["objectId"] = object.objectId
                         self.users.append(userInformation)
+                        object.pinInBackground()
                     }
                     completion(querySuccessful: true)
                 }

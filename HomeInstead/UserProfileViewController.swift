@@ -34,8 +34,8 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     
     var user: [String: NSObject?] = [String: NSObject?]()
-    var image: UIImage?
     
+    var image: UIImage?
     var name: String!
     var phoneNumber: String!
     var emergencyPhoneNumber: String!
@@ -46,24 +46,6 @@ class UserProfileViewController: UIViewController {
     var postalCode: String!
     var province: String!
     var notes: String!
-    
-    func setImageView() {
-        
-        //The reason for self.imageViewHeightLayoutConstraint is because the imageView's correct height only became available in viewWillDidLoad(). But if I put the setImageView() inside viewWillDidLoad(), you can see the imageView circle being drawn.
-        self.imageView.layer.masksToBounds = false
-        self.imageView.clipsToBounds = true
-        self.imageView.layer.cornerRadius = self.imageViewHeightLayoutConstraint.constant / 2
-        if let image = self.image {
-            self.imageView.image = image
-            self.noPhotoLabel.hidden = true
-            self.imageView.layer.borderWidth = 0.0
-        } else {
-            self.imageView.layer.borderWidth = 1.0
-            self.imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
-            self.noPhotoLabel.textAlignment = .Center
-        }
-        
-    }
     
     func unpackUserInformation() {
         
@@ -80,7 +62,29 @@ class UserProfileViewController: UIViewController {
         
     }
     
+    func setImageView() {
+        
+        //The reason for self.imageViewHeightLayoutConstraint is because the imageView's correct height only became available in viewWillDidLoad(). But if I put the setImageView() inside viewWillDidLoad(), you can see the imageView circle being drawn.
+        self.imageView.layer.masksToBounds = false
+        self.imageView.clipsToBounds = true
+        self.imageView.layer.cornerRadius = self.imageViewHeightLayoutConstraint.constant / 2
+        
+    }
+    
     func setUserInformation() {
+        self.setImageView()
+        
+        if let image = self.user["image"] {
+            self.image = image! as? UIImage
+            self.imageView.image = self.image
+            self.noPhotoLabel.hidden = true
+            self.imageView.layer.borderWidth = 0.0
+        } else {
+            self.imageView.layer.borderWidth = 1.0
+            self.imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
+            self.imageView.image = nil
+            self.noPhotoLabel.hidden = false
+        }
         
         if self.name != "" {
             self.nameLabel.text = self.name
@@ -195,14 +199,42 @@ class UserProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.unpackUserInformation()
-        self.setUserInformation()
         self.automaticallyAdjustsScrollViewInsets = false
         self.navigationItem.title = "User Profile"
+        self.noPhotoLabel.textAlignment = .Center
+
         
     }
     
     override func viewWillAppear(animated: Bool) {
+        
         self.setImageView()
+        self.unpackUserInformation()
+        self.setUserInformation()
+
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if let navigationController = segue.destinationViewController as? UINavigationController {
+            if let officeEditUserProfileViewController = navigationController.topViewController as? OfficeEditUserProfileViewController {
+                
+                officeEditUserProfileViewController.user = self.user
+
+            } else {
+                print("officeAddUserTableViewController returned nil")
+            }
+        } else {
+            print("navigationController returned nil")
+        }
+        
+    }
+    
+    @IBAction func unwindToSegue (segue : UIStoryboardSegue) {
+        
+        if let officeEditUserProfileViewController = segue.sourceViewController as? OfficeEditUserProfileViewController {
+            self.user = officeEditUserProfileViewController.user
+        }
+        
     }
 }

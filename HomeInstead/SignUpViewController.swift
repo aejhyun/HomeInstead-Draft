@@ -28,6 +28,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBOutlet weak var phoneNumberTextField: UITextField!
     @IBOutlet weak var emergencyPhoneNumberTextField: UITextField!
     
+    @IBOutlet weak var borderImageView: UIImageView!
     @IBOutlet weak var addPhotoButton: UIButton!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var imageView: UIImageView!
@@ -61,11 +62,23 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     func setImageView() {
         
         self.imageView.image = nil
-        self.imageView.layer.borderWidth = 1
+        self.imageView.alpha = 0.0
+        self.imageView.layer.borderWidth = 0
         self.imageView.layer.masksToBounds = false
-        self.imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
         self.imageView.layer.cornerRadius = self.imageViewHeightLayoutConstraint.constant / 2
         self.imageView.clipsToBounds = true
+        
+    }
+    
+    func setBorderImageView() {
+        
+        self.borderImageView.image = nil
+        self.borderImageView.alpha = 1.0
+        self.borderImageView.layer.borderWidth = 1
+        self.borderImageView.layer.masksToBounds = false
+        self.borderImageView.layer.borderColor = UIColor.lightGrayColor().CGColor
+        self.borderImageView.layer.cornerRadius = self.imageViewHeightLayoutConstraint.constant / 2
+        self.borderImageView.clipsToBounds = true
         
     }
     
@@ -83,12 +96,15 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("hello")
+
         self.setDefaultTextFieldValues()
         self.setNavigationBarTitle()
         
         self.addPhotoButton.titleLabel?.textAlignment = .Center
+        self.addPhotoButton.alpha = 1.0
         self.editButton.hidden = true
+        self.editButton.alpha = 0.0
+        
         self.nameTextField.becomeFirstResponder()
         self.automaticallyAdjustsScrollViewInsets = false
         
@@ -103,6 +119,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             //The imageView set up is inside self.numberOfTimesViewLaidOutSubviews == 1 check because the code below will be called more than once. And the imageView set up is not in viewDidLoad() because, self.imageView.frame returned was the incorrect value. It returns the correct self.imageView.frame value either in the viewDidLayoutSubviews and viewWillAppear functions. But in the viewWillAppear function causes the image to show up visibly late.
             
             self.setImageView()
+            self.setBorderImageView()
         }
         self.numberOfTimesViewLaidOutSubviews++
         
@@ -137,11 +154,15 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
         let selectedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-        self.imageView.image = selectedImage
-        self.imageView.layer.borderWidth = 0
-        self.addPhotoButton.hidden = true
-        self.editButton.hidden = false
         
+        print(selectedImage)
+        self.imageView.image = selectedImage
+        self.imageView.alpha = 1.0
+        self.borderImageView.alpha = 0.0
+        self.addPhotoButton.hidden = true
+        self.addPhotoButton.alpha = 0.0
+        self.editButton.hidden = false
+        self.editButton.alpha = 1.0
         dismissViewControllerAnimated(true, completion: nil)
         
     }
@@ -184,6 +205,30 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             imagePickerController.delegate = self
             
             self.presentViewController(imagePickerController, animated: true, completion: nil)
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Delete Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            
+            self.addPhotoButton.hidden = false
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                 self.addPhotoButton.alpha = 1.0
+            })
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.editButton.alpha = 0.0
+                }, completion: { (Bool) -> Void in
+                    self.editButton.hidden = true
+            })
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.imageView.alpha = 0.0
+                }, completion: { (Bool) -> Void in
+                    self.imageView.image = nil
+            })
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.borderImageView.alpha = 1.0
+            })
+            
+            
         }
         alertController.addAction(alertAction)
         
@@ -291,6 +336,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         let object = PFObject(className: className)
         object["name"] = self.nameTextField.text
         object["userId"] = PFUser.currentUser()?.objectId!
+        object["userType"] = self.selectedUserType.rawValue
         object["email"] = self.emailTextField.text!
         object["province"] = self.provinceTextField.text
         object["city"] = self.cityTextField.text
