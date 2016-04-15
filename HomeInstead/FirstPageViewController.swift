@@ -27,7 +27,7 @@ class FirstPageViewController: UIViewController {
             } else if userType == UserType.careGiver.rawValue {
                 self.performSegueWithIdentifier("firstPageToOffice", sender: nil)
             } else if userType == UserType.cathy.rawValue {
-                self.performSegueWithIdentifier("firstPageToCathy", sender: nil)
+                self.performSegueWithIdentifier("firstPageToOffice", sender: nil)
             }
         } else {
             self.performSegueWithIdentifier("firstPageToSignUpSignIn", sender: nil)

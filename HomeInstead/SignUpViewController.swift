@@ -21,6 +21,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBOutlet weak var verificationCodeTextField: UITextField!
     @IBOutlet weak var provinceTextField: UITextField!
     @IBOutlet weak var cityTextField: UITextField!
+    @IBOutlet weak var districtTextField: UITextField!
     @IBOutlet weak var streetOneTextField: UITextField!
     @IBOutlet weak var streetTwoTextField: UITextField!
     @IBOutlet weak var streetThreeTextField: UITextField!
@@ -44,7 +45,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     func setDefaultTextFieldValues() {
         
         self.nameTextField.text = "Jae Kim"
-        self.emailTextField.text = "careGiver0@gmail.com"
+        self.emailTextField.text = "cathy1@gmail.com"
         self.passwordTextField.text = self.selectedUserType.rawValue
         self.confirmPasswordTextField.text = self.selectedUserType.rawValue
         self.verificationCodeTextField.text = self.selectedUserType.rawValue
@@ -278,6 +279,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
                         
                         self.uploadUserInformationToCloudWithClassName(className, completion: { (uploadSuccessful) -> Void in
                             if uploadSuccessful {
+                                
                                 self.dismissViewControllerAnimated(true, completion: nil)
                             }
                         })
@@ -340,6 +342,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         object["email"] = self.emailTextField.text!
         object["province"] = self.provinceTextField.text
         object["city"] = self.cityTextField.text
+        object["district"] = self.districtTextField.text
         object["streetOne"] = self.streetOneTextField.text
         object["streetTwo"] = self.streetTwoTextField.text
         object["streetThree"] = self.streetThreeTextField.text
@@ -394,8 +397,10 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             self.presentAlertControllerWithMessage("Please enter your province")
         } else if self.cityTextField.text == "" {
             self.presentAlertControllerWithMessage("Please enter your city")
+        } else if self.districtTextField.text == "" {
+            self.presentAlertControllerWithMessage("Please enter your district")
         } else if self.streetOneTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your street")
+            self.presentAlertControllerWithMessage("Please enter your street for street 1")
         } else if self.postalCodeTextField.text == "" {
             self.presentAlertControllerWithMessage("Please enter your postal code")
         } else if self.phoneNumberTextField.text == "" {

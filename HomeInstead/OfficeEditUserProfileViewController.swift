@@ -20,12 +20,13 @@ class OfficeEditUserProfileViewController: SignUpViewController {
     var name: String!
     var phoneNumber: String!
     var emergencyPhoneNumber: String!
+    var province: String!
+    var city: String!
+    var district: String!
     var streetOne: String!
     var streetTwo: String!
     var streetThree: String!
-    var city: String!
     var postalCode: String!
-    var province: String!
     var notes: String!
     var userType: UserType!
     var objectId: String!
@@ -38,12 +39,13 @@ class OfficeEditUserProfileViewController: SignUpViewController {
         self.name = self.user["name"]! as? String
         self.phoneNumber = self.user["phoneNumber"]! as? String
         self.emergencyPhoneNumber = self.user["emergencyPhoneNumber"]! as? String
+        self.province = self.user["province"]! as? String
+        self.city = self.user["city"]! as? String
+        self.district = self.user["district"]! as? String
         self.streetOne = self.user["streetOne"]! as? String
         self.streetTwo = self.user["streetTwo"]! as? String
         self.streetThree = self.user["streetThree"] as? String
-        self.city = self.user["city"]! as? String
         self.postalCode = self.user["postalCode"]! as? String
-        self.province = self.user["province"]! as? String
         self.notes = self.user["notes"]! as? String
         self.userType = UserType(rawValue: (self.user["userType"]! as? String)!)
         self.objectId = self.user["objectId"]! as? String
@@ -58,6 +60,7 @@ class OfficeEditUserProfileViewController: SignUpViewController {
         self.emergencyPhoneNumberTextField.text = self.emergencyPhoneNumber
         self.provinceTextField.text = self.province
         self.cityTextField.text = self.city
+        self.districtTextField.text = self.district
         self.streetOneTextField.text = self.streetOne
         self.streetTwoTextField.text = self.streetTwo
         self.streetThreeTextField.text = self.streetThree
@@ -189,6 +192,7 @@ class OfficeEditUserProfileViewController: SignUpViewController {
                 object["name"] = self.nameTextField.text
                 object["province"] = self.provinceTextField.text
                 object["city"] = self.cityTextField.text
+                object["district"] = self.districtTextField.text
                 object["streetOne"] = self.streetOneTextField.text
                 object["streetTwo"] = self.streetTwoTextField.text
                 object["streetThree"] = self.streetThreeTextField.text
@@ -223,6 +227,7 @@ class OfficeEditUserProfileViewController: SignUpViewController {
         self.user["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
         self.user["province"] = self.provinceTextField.text
         self.user["city"] = self.cityTextField.text
+        self.user["district"] = self.districtTextField.text
         self.user["streetOne"] = self.streetOneTextField.text
         self.user["streetTwo"] = self.streetTwoTextField.text
         self.user["streetThree"] = self.streetThreeTextField.text

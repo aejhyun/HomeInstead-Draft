@@ -17,13 +17,14 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var phoneNumberLabel: UILabel!
     @IBOutlet weak var emergencyPhoneNumberLabel: UILabel!
     
+    @IBOutlet weak var provinceLabel: UILabel!
+    @IBOutlet weak var cityLabel: UILabel!
+    @IBOutlet weak var districtLabel: UILabel!
     @IBOutlet weak var streetOneLabel: UILabel!
     @IBOutlet weak var streetTwoLabel: UILabel!
     @IBOutlet weak var streetThreeLabel: UILabel!
-    @IBOutlet weak var cityLabel: UILabel!
-    @IBOutlet weak var provinceLabel: UILabel!
     @IBOutlet weak var postalCodeLabel: UILabel!
-    
+
     @IBOutlet weak var phoneButton: UIButton!
     @IBOutlet weak var emergencyButton: UIButton!
     @IBOutlet weak var addressButton: UIButton!
@@ -39,25 +40,29 @@ class UserProfileViewController: UIViewController {
     var name: String!
     var phoneNumber: String!
     var emergencyPhoneNumber: String!
+    var province: String!
+    var city: String!
+    var district: String!
     var streetOne: String!
     var streetTwo: String!
     var streetThree: String!
-    var city: String!
     var postalCode: String!
-    var province: String!
     var notes: String!
+    
+    var passUserInformationDelegate: PassUserInformationDelegate?
     
     func unpackUserInformation() {
         
         self.name = self.user["name"]! as? String
         self.phoneNumber = self.user["phoneNumber"]! as? String
         self.emergencyPhoneNumber = self.user["emergencyPhoneNumber"]! as? String
+        self.province = self.user["province"]! as? String
+        self.city = self.user["city"]! as? String
+        self.district = self.user["district"] as? String
         self.streetOne = self.user["streetOne"]! as? String
         self.streetTwo = self.user["streetTwo"]! as? String
         self.streetThree = self.user["streetThree"] as? String
-        self.city = self.user["city"]! as? String
         self.postalCode = self.user["postalCode"]! as? String
-        self.province = self.user["province"]! as? String
         self.notes = self.user["notes"]! as? String
         
     }
@@ -94,27 +99,45 @@ class UserProfileViewController: UIViewController {
         
         if self.phoneNumber != "" {
             self.phoneButton.enabled = true
-            self.phoneCallButton.enabled = true
+            self.phoneCallButton.hidden = false
             self.phoneNumberLabel.text = self.phoneNumber
         } else {
             self.phoneButton.enabled = false
-            self.phoneCallButton.enabled = false
-            self.phoneNumberLabel.text = "None"
+            self.phoneCallButton.hidden = true
+            self.phoneNumberLabel.text = " "
         }
         
         if self.emergencyPhoneNumber != "" {
             self.emergencyButton.enabled = true
-            self.emergencyCallButton.enabled = true
+            self.emergencyCallButton.hidden = false
             self.emergencyPhoneNumberLabel.text = self.emergencyPhoneNumber
         } else {
             self.emergencyButton.enabled = false
-            self.emergencyCallButton.enabled = false
+            self.emergencyCallButton.hidden = true
             self.emergencyPhoneNumberLabel.text = " "
         }
         
         if self.streetOne == "" && self.streetTwo == "" && self.streetThree == "" && self.city == "" && self.province == "" && self.postalCode == "" {
             self.addressButton.enabled = false
         } else {
+            
+            if self.province == "" {
+                self.provinceLabel.text = ""
+            } else {
+                self.provinceLabel.text = self.province
+            }
+            
+            if self.city == "" {
+                self.cityLabel.text = ""
+            } else {
+                self.cityLabel.text = self.city
+            }
+            
+            if self.district == "" {
+                self.districtLabel.text = ""
+            } else {
+                self.districtLabel.text = self.district
+            }
             
             if self.streetOne == "" {
                 self.streetOneLabel.text = ""
@@ -134,18 +157,6 @@ class UserProfileViewController: UIViewController {
                 self.streetThreeLabel.text = self.streetThree
             }
             
-            if self.city == "" {
-                self.cityLabel.text = ""
-            } else {
-                self.cityLabel.text = self.city
-            }
-            
-            if self.province == "" {
-                self.provinceLabel.text = ""
-            } else {
-                self.provinceLabel.text = self.province
-            }
-            
             if self.postalCode == "" {
                 self.postalCodeLabel.text = ""
             } else {
@@ -155,42 +166,6 @@ class UserProfileViewController: UIViewController {
             self.addressButton.enabled = true
             
         }
-        
-        
-        
-        
-//        if self.street == "" && self.city == "" && self.postalCode == "" && self.province == "" {
-//            self.streetCityLabel.text = " "
-//            self.streetCityLabelBottomSpaceLayoutConstraint.constant = 0
-//        }
-//        
-//        if self.street == "" || self.city == "" {
-//            if self.street == "" && self.city == "" {
-//                self.streetCityLabelTopSpaceLayoutConstraint.constant = 0
-//            } else {
-//                if self.street == "" {
-//                    self.streetCityLabel.text = self.street
-//                } else {
-//                    self.streetCityLabel.text = self.city
-//                }
-//            }
-//        } else if self.street != "" && self.city != "" {
-//            self.streetCityLabel.text = "\(self.street)" + ", " + "\(self.city)"
-//        }
-//        
-//        if self.postalCode == "" || self.province == "" {
-//            if self.postalCode == "" && self.province == "" {
-//                self.streetCityLabelBottomSpaceLayoutConstraint.constant = 0
-//            } else {
-//                if self.street == "" {
-//                    self.postalCodeProvinceLabel.text = self.postalCode
-//                } else {
-//                    self.postalCodeProvinceLabel.text = self.province
-//                }
-//            }
-//        } else if self.postalCode != "" && self.province != "" {
-//            self.postalCodeProvinceLabel.text = "\(self.postalCode)" + " " + "\(self.province)"
-//        }
         
         self.textView.text = self.notes
         
@@ -202,7 +177,6 @@ class UserProfileViewController: UIViewController {
         self.automaticallyAdjustsScrollViewInsets = false
         self.navigationItem.title = "User Profile"
         self.noPhotoLabel.textAlignment = .Center
-
         
     }
     
@@ -230,11 +204,26 @@ class UserProfileViewController: UIViewController {
         
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        self.passUserInformationDelegate?.passUserInformation(self.user)
+    }
+    
     @IBAction func unwindToSegue (segue : UIStoryboardSegue) {
         
         if let officeEditUserProfileViewController = segue.sourceViewController as? OfficeEditUserProfileViewController {
             self.user = officeEditUserProfileViewController.user
+            
         }
         
     }
+
+    
+
+    
+    
+    
+    
+    
+    
+    
 }

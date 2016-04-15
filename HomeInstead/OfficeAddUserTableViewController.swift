@@ -9,12 +9,14 @@
 import UIKit
 import Parse
 
-class OfficeAddUserTableViewController: UITableViewController {
+class OfficeAddUserTableViewController: UITableViewController, PassUserInformationDelegate {
 
     var selectedUserType: UserType!
     var users: [[String: NSObject?]] = [[String: NSObject?]]()
+    var user: [String: NSObject?] = [String: NSObject?]()
     var checkedRows: [Bool] = [Bool]()
     var nameButtonSelectedRow: Int = -1
+    var numberOfTimesViewLaidOutSubviews: Int = 0
     
     func setNavigationBarTitle() {
         
@@ -25,32 +27,6 @@ class OfficeAddUserTableViewController: UITableViewController {
         } else if self.selectedUserType == UserType.client {
             self.navigationItem.title = "Add Client"
         }
-        
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.setNavigationBarTitle()
-        
-        if let className = ClassNameForCloud().getClassName(self.selectedUserType) {
-            
-            self.attemptQueryUserInformationFromCloudWithClassName(className) { (querySuccessful) -> Void in
-                
-                if querySuccessful {
-                    // self.checkedRows is to keep track of which rows are checked by the user.
-                    
-                    self.checkedRows = [Bool](count: self.users.count, repeatedValue: false)
-                    self.tableView.reloadData()
-                }
-                
-            }
-            
-        } else {
-            print("className returned nil")
-        }
-        
-        
         
     }
     
@@ -70,6 +46,7 @@ class OfficeAddUserTableViewController: UITableViewController {
                         userInformation["email"] = object.objectForKey("email") as? String
                         userInformation["province"] = object.objectForKey("province") as? String
                         userInformation["city"] = object.objectForKey("city") as? String
+                        userInformation["district"] = object.objectForKey("district") as? String
                         userInformation["streetOne"] = object.objectForKey("streetOne") as? String
                         userInformation["streetTwo"] = object.objectForKey("streetTwo") as? String
                         userInformation["streetThree"] = object.objectForKey("streetThree") as? String
@@ -91,7 +68,45 @@ class OfficeAddUserTableViewController: UITableViewController {
         }
         
     }
-
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.setNavigationBarTitle()
+        
+        if let className = ClassNameForCloud().getClassName(self.selectedUserType) {
+            
+            self.attemptQueryUserInformationFromCloudWithClassName(className) { (querySuccessful) -> Void in
+                
+                if querySuccessful {
+                    // self.checkedRows is to keep track of which rows are checked by the user.
+                    
+                    self.checkedRows = [Bool](count: self.users.count, repeatedValue: false)
+                    self.tableView.reloadData()
+                }
+                
+            }
+            
+        } else {
+            print("className returned nil")
+        }
+        
+    }
+    
+    func updateUserInformationLocally() {
+        // self.user has the data from the previous view controller. The reason why it is not in a viewWillLoad() function is because self.user's data becomes available after the first half of life cycle of a view controller has finished. The reason for the -1 check is because I don't want this to be set the first time this view segues to the next view controller because there is no value to set.
+        
+        if nameButtonSelectedRow != -1 {
+            self.users[nameButtonSelectedRow] = self.user
+            self.tableView.reloadData()
+            
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        self.updateUserInformationLocally()
+    }
+    
     @IBAction func nameButtonTapped(sender: AnyObject) {
         
         let nameButton = sender as! UIButton
@@ -113,7 +128,7 @@ class OfficeAddUserTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-
+        
         if let cell = tableView.cellForRowAtIndexPath(indexPath) {
             if cell.accessoryType == .Checkmark {
                 cell.accessoryType = .None
@@ -122,7 +137,8 @@ class OfficeAddUserTableViewController: UITableViewController {
                 cell.accessoryType = .Checkmark
                 self.checkedRows[indexPath.row] = true
             }
-        }    
+        }
+        
     }
 
     
@@ -142,10 +158,15 @@ class OfficeAddUserTableViewController: UITableViewController {
         
     }
     
+    func passUserInformation(user: [String : NSObject?]) {
+        // Receiving user information from previous view controller.
+        self.user = user
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let destinationViewController = segue.destinationViewController as? UserProfileViewController {
-            destinationViewController.user = self.users[self.nameButtonSelectedRow]
-            
+        if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
+            userProfileViewController.user = self.users[self.nameButtonSelectedRow]
+            userProfileViewController.passUserInformationDelegate = self
         } else {
             print("destinationViewController returned nil")
         }

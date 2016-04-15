@@ -37,10 +37,12 @@ protocol SegueBehindModalViewControllerDelegate {
     
 }
 
+protocol PassUserInformationDelegate {
+    func passUserInformation(user: [String: NSObject?])
+}
+
 protocol DismissViewControllerDelegate {
-    
     func dismissViewController()
-    
 }
 
 

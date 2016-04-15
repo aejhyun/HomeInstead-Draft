@@ -13,6 +13,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
 
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var barButtonItem: UIBarButtonItem!
+    
     var selectedUserType: UserType!
 
     var navigationBarLine: UIView = UIView()
@@ -48,7 +49,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.setSegmentedControlWidth()
         self.removeBottomLineFromNavigationBar()
         
-        self.selectedUserType = UserType.careGiver
+        self.selectedUserType = UserType.client
         
     }
     
@@ -67,11 +68,11 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     @IBAction func segmentedControlIndexChanged(sender: UISegmentedControl) {
         
         if self.segmentedControl.selectedSegmentIndex == 0 {
-            self.selectedUserType = UserType.careGiver
+            self.selectedUserType = UserType.client
         } else if self.segmentedControl.selectedSegmentIndex == 1 {
             self.selectedUserType = UserType.cathy
         } else if self.segmentedControl.selectedSegmentIndex == 2 {
-            self.selectedUserType = UserType.client
+            self.selectedUserType = UserType.careGiver
         }
         
     }
