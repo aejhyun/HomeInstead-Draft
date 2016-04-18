@@ -71,8 +71,12 @@ class OfficeEditUserProfileViewController: SignUpViewController {
     
     override func viewDidLoad() {
         
-        self.unpackUserInformation()
-        self.setUserInformation()
+        if self.selectedUserType != UserType.client {
+            
+            self.unpackUserInformation()
+            self.setUserInformation()
+            
+        }
         
         self.addPhotoButton.titleLabel?.textAlignment = .Center
         self.editButton.hidden = true

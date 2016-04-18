@@ -228,16 +228,16 @@ class OfficeGiverListTableViewController: UITableViewController, ClientInformati
             officeClientListTableViewController.passedGiverEmail = giverEmailToBePassed
         } else if segue.identifier == "officeGiverListToOfficeCreateClientProfile" {
 
-            if let navigationController = segue.destinationViewController as? UINavigationController {
-                if let officeCreateClientProfileViewController = navigationController.topViewController as? OfficeCreateClientProfileViewController {
-                    officeCreateClientProfileViewController.clientInformationDelegate = self
-                    officeCreateClientProfileViewController.segueBehindModalViewControllerDelegate = self
-                } else {
-                    print("officeCreateClientProfileViewController is nil")
-                }
-            } else {
-                print("navigationController is nil")
-            }
+//            if let navigationController = segue.destinationViewController as? UINavigationController {
+//                if let officeCreateClientProfileViewController = navigationController.topViewController as? OfficeCreateClientProfileViewController {
+//                    officeCreateClientProfileViewController.clientInformationDelegate = self
+//                    officeCreateClientProfileViewController.segueBehindModalViewControllerDelegate = self
+//                } else {
+//                    print("officeCreateClientProfileViewController is nil")
+//                }
+//            } else {
+//                print("navigationController is nil")
+//            }
         
         } else if segue.identifier == "officeGiverListToOfficeClientProfile" {
             

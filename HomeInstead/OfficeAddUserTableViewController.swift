@@ -174,20 +174,84 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
         if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
             userProfileViewController.user = self.users[self.nameButtonSelectedRow]
             userProfileViewController.passUserInformationDelegate = self
+            userProfileViewController.selectedUserType = self.selectedUserType
         } else {
             print("destinationViewController returned nil")
         }
         
-        if segue.identifier == "createClientUserButtonSegue" {
-            if let officeEditUserProfileViewController = segue.destinationViewController as? OfficeEditUserProfileViewController {
-                officeEditUserProfileViewController.selectedUserType = self.selectedUserType
+    }
+    
+    func attemptAddUserToOfficeUserToCloud (completion: (uploadSuccessful: Bool) -> Void) {
+        
+        for var index = 0; index < self.users.count; index++ {
+            let usersAddedByOfficeUser = PFObject(className:"UsersAddedByOfficeUser")
+            
+            if self.checkedRows[index] == true {
+                
+                usersAddedByOfficeUser["officeUserId"] = PFUser.currentUser()?.objectId
+                usersAddedByOfficeUser["userType"] = self.selectedUserType.rawValue
+//                usersAddedByOfficeUser["userType"] = self.users[index] as? [String: String]
+                usersAddedByOfficeUser["name"] = self.users[index]["name"] as? String
+                usersAddedByOfficeUser["email"] = self.users[index]["email"] as? String
+                usersAddedByOfficeUser["province"] = self.users[index]["province"] as? String
+                usersAddedByOfficeUser["city"] = self.users[index]["city"] as? String
+                usersAddedByOfficeUser["district"] = self.users[index]["district"] as? String
+                usersAddedByOfficeUser["streetOne"] = self.users[index]["streetOne"] as? String
+                usersAddedByOfficeUser["streetTwo"] = self.users[index]["streetTwo"] as? String
+                usersAddedByOfficeUser["streetThree"] = self.users[index]["streetThree"] as? String
+                usersAddedByOfficeUser["postalCode"] = self.users[index]["postalCode"] as? String
+                usersAddedByOfficeUser["phoneNumber"] = self.users[index]["phoneNumber"] as? String
+                usersAddedByOfficeUser["emergencyPhoneNumber"] = self.users[index]["emergencyPhoneNumber"] as? String
+                usersAddedByOfficeUser["userId"] = self.users[index]["userId"] as? String
+                usersAddedByOfficeUser["userType"] = self.users[index]["userType"] as? String
+                usersAddedByOfficeUser["nonOfficeUserObjectId"] = self.users[index]["objectId"] as? String
+                
+                usersAddedByOfficeUser["asdf"] = ["asdf": "asdf", "qwer": "qwer"]
+                
+                usersAddedByOfficeUser.saveInBackgroundWithBlock {
+                    (success: Bool, error: NSError?) -> Void in
+                    if (success) {
+                        completion(uploadSuccessful: true)
+                    } else {
+                        print(error?.description)
+                        completion(uploadSuccessful: false)
+                    }
+                }
             }
+            
         }
+        
+        
         
     }
     
+    func numberOfUsersToBeAddedToCloud() -> Int {
+        
+        var counter: Int = 0
+        for var index: Int = 0; index < self.checkedRows.count; index++ {
+            if self.checkedRows[index] == true {
+                counter++
+            }
+        }
+        return counter
+    }
+    
     @IBAction func doneButtonTapped(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        
+        let numberOfUsersToBeAdded: Int = self.numberOfUsersToBeAddedToCloud()
+        var numberOfUsersAlreadyAdded: Int = 0
+        
+        self.attemptAddUserToOfficeUserToCloud { (uploadSuccessful) -> Void in
+            if uploadSuccessful {
+                numberOfUsersAlreadyAdded++
+                print("Added non-office user to current office user.")
+                if numberOfUsersAlreadyAdded == numberOfUsersToBeAdded {
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                }
+            }
+        }
+
+        
     }
     
     @IBAction func cancelButtonTapped(sender: AnyObject) {

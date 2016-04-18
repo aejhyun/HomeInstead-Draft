@@ -66,7 +66,7 @@ class ClientSignUpViewController: SignUpViewController {
         
     }
     
-    override func uploadUserInformationToCloud(completion: (uploadSuccessful: Bool) -> Void) {
+    override func attemptUploadUserInformationToCloud(completion: (uploadSuccessful: Bool) -> Void) {
         
         let user = PFUser()
         user["firstName"] = self.cathyUserInformation["firstName"]
@@ -88,7 +88,7 @@ class ClientSignUpViewController: SignUpViewController {
         
     }
     
-    override func uploadUserInformationToCloudWithClassName(className: String, completion: (uploadSuccessful: Bool) -> Void) {
+    override func attemptUploadUserInformationToCloudWithClassName(className: String, completion: (uploadSuccessful: Bool) -> Void) {
         
         let imageFile: NSData? = self.getImageFile()
         
@@ -141,7 +141,7 @@ class ClientSignUpViewController: SignUpViewController {
    
     @IBAction override func signUpButtonTapped(sender: AnyObject) {
         if self.allRequiredFieldsAreNotEmpty() {
-            self.uploadUserInformationToCloud({ (uploadSuccessful) -> Void in
+            self.attemptUploadUserInformationToCloud({ (uploadSuccessful) -> Void in
                 print("segue")
             })
         }

@@ -36,6 +36,7 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var imageViewHeightLayoutConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
     
+    var selectedUserType: UserType!
     var user: [String: NSObject?] = [String: NSObject?]()
     
     var image: UIImage?
@@ -57,7 +58,11 @@ class UserProfileViewController: UIViewController {
     func unpackUserInformation() {
         
         self.name = self.user["name"]! as? String
-        self.email = self.user["email"]! as? String
+        if self.selectedUserType == UserType.client {
+            self.email = self.user["objectId"]! as? String
+        } else {
+            self.email = self.user["email"]! as? String
+        }
         self.phoneNumber = self.user["phoneNumber"]! as? String
         self.emergencyPhoneNumber = self.user["emergencyPhoneNumber"]! as? String
         self.province = self.user["province"]! as? String
@@ -72,8 +77,7 @@ class UserProfileViewController: UIViewController {
     }
     
     func setImageView() {
-        
-        //The reason for self.imageViewHeightLayoutConstraint is because the imageView's correct height only became available in viewWillDidLoad(). But if I put the setImageView() inside viewWillDidLoad(), you can see the imageView circle being drawn.
+
         self.imageView.layer.masksToBounds = false
         self.imageView.clipsToBounds = true
         self.imageView.layer.cornerRadius = self.imageViewHeightLayoutConstraint.constant / 2
@@ -175,10 +179,7 @@ class UserProfileViewController: UIViewController {
             self.addressButton.enabled = false
             self.provinceLabel.text = " "
         }
-        
-        
-        
-        
+
         
         self.textView.text = self.notes
         

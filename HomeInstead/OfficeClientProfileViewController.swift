@@ -113,24 +113,24 @@ class OfficeClientProfileViewController: UIViewController, UITableViewDelegate, 
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if let navigationController = segue.destinationViewController as? UINavigationController {
-            if let officeCreateClientProfileViewController = navigationController.viewControllers[0] as? OfficeCreateClientProfileViewController {
-                
-                    officeCreateClientProfileViewController.isInEditingMode = true
-                    officeCreateClientProfileViewController.firstName = self.firstName
-                    officeCreateClientProfileViewController.lastName = self.lastName
-                    officeCreateClientProfileViewController.notes = self.notes
-                    officeCreateClientProfileViewController.image = self.image
-                    officeCreateClientProfileViewController.cathyNames = self.cathyNames
-                    officeCreateClientProfileViewController.cathyEmails = self.cathyEmails
-                    officeCreateClientProfileViewController.clientInformationDelegate = self
-                
-            } else {
-                print("officeCreateClientProfileViewController")
-            }
-        } else {
-            print("navigationController is nil")
-        }
+//        if let navigationController = segue.destinationViewController as? UINavigationController {
+//            if let officeCreateClientProfileViewController = navigationController.viewControllers[0] as? OfficeCreateClientProfileViewController {
+//                
+//                    officeCreateClientProfileViewController.isInEditingMode = true
+//                    officeCreateClientProfileViewController.firstName = self.firstName
+//                    officeCreateClientProfileViewController.lastName = self.lastName
+//                    officeCreateClientProfileViewController.notes = self.notes
+//                    officeCreateClientProfileViewController.image = self.image
+//                    officeCreateClientProfileViewController.cathyNames = self.cathyNames
+//                    officeCreateClientProfileViewController.cathyEmails = self.cathyEmails
+//                    officeCreateClientProfileViewController.clientInformationDelegate = self
+//                
+//            } else {
+//                print("officeCreateClientProfileViewController")
+//            }
+//        } else {
+//            print("navigationController is nil")
+//        }
 
     }
     

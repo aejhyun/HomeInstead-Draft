@@ -272,12 +272,12 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBAction func signUpButtonTapped(sender: AnyObject) {
         
         if self.allRequiredFieldsAreNotEmpty() && self.passwordConfirmed() && self.isValidVerificationCode() {
-            self.uploadUserInformationToCloud({ (uploadSuccessful) -> Void in
+            self.attemptUploadUserInformationToCloud({ (uploadSuccessful) -> Void in
                 if uploadSuccessful {
                     
                     if let className = ClassNameForCloud().getClassName(self.selectedUserType) {
                         
-                        self.uploadUserInformationToCloudWithClassName(className, completion: { (uploadSuccessful) -> Void in
+                        self.attemptUploadUserInformationToCloudWithClassName(className, completion: { (uploadSuccessful) -> Void in
                             if uploadSuccessful {
                                 
                                 self.dismissViewControllerAnimated(true, completion: nil)
@@ -297,7 +297,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
 //SignUp functions end here.
 //Other functions start here.
     
-    func uploadUserInformationToCloud(completion: (uploadSuccessful: Bool) -> Void) {
+    func attemptUploadUserInformationToCloud(completion: (uploadSuccessful: Bool) -> Void) {
         
         let user = PFUser()
         user["name"] = self.nameTextField.text
@@ -331,7 +331,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
     }
     
-    func uploadUserInformationToCloudWithClassName(className: String, completion: (uploadSuccessful: Bool) -> Void) {
+    func attemptUploadUserInformationToCloudWithClassName(className: String, completion: (uploadSuccessful: Bool) -> Void) {
         
         let imageFile: NSData? = self.getImageFile()
         
