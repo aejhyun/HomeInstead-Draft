@@ -49,6 +49,10 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.setSegmentedControlWidth()
         self.removeBottomLineFromNavigationBar()
         
+        
+        
+        
+        // We need to set the initial chosen segment for the segment control. If this is not present, it will cause a crash.
         self.selectedUserType = UserType.client
         
     }

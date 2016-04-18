@@ -233,6 +233,10 @@ class OfficeEditUserProfileViewController: SignUpViewController {
         self.user["streetThree"] = self.streetThreeTextField.text
         self.user["postalCode"] = self.postalCodeTextField.text
         self.user["notes"] = self.notesTextView.text
+        
+        
+        print(self.user)
+        
         self.updateUserInformationToCloudWithClassName(ClassNameForCloud().getClassName(self.userType)!) { (uploadSuccessful) -> Void in
             if uploadSuccessful {
                 self.performSegueWithIdentifier("officeEditUserProfileToUserProfile", sender: nil)

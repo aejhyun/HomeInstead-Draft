@@ -13,6 +13,8 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var textView: UITextView!
+    
+    @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var noPhotoLabel: UILabel!
     @IBOutlet weak var phoneNumberLabel: UILabel!
     @IBOutlet weak var emergencyPhoneNumberLabel: UILabel!
@@ -37,6 +39,7 @@ class UserProfileViewController: UIViewController {
     var user: [String: NSObject?] = [String: NSObject?]()
     
     var image: UIImage?
+    var email: String!
     var name: String!
     var phoneNumber: String!
     var emergencyPhoneNumber: String!
@@ -54,6 +57,7 @@ class UserProfileViewController: UIViewController {
     func unpackUserInformation() {
         
         self.name = self.user["name"]! as? String
+        self.email = self.user["email"]! as? String
         self.phoneNumber = self.user["phoneNumber"]! as? String
         self.emergencyPhoneNumber = self.user["emergencyPhoneNumber"]! as? String
         self.province = self.user["province"]! as? String
@@ -97,6 +101,12 @@ class UserProfileViewController: UIViewController {
             self.nameLabel.text = ""
         }
         
+        if self.email != "" {
+            self.emailLabel.text = self.email
+        } else {
+            self.emailLabel.text = ""
+        }
+        
         if self.phoneNumber != "" {
             self.phoneButton.enabled = true
             self.phoneCallButton.hidden = false
@@ -117,55 +127,58 @@ class UserProfileViewController: UIViewController {
             self.emergencyPhoneNumberLabel.text = " "
         }
         
+        if self.province == "" {
+            self.provinceLabel.text = ""
+        } else {
+            self.provinceLabel.text = self.province
+        }
+        
+        if self.city == "" {
+            self.cityLabel.text = ""
+        } else {
+            self.cityLabel.text = self.city
+        }
+        
+        if self.district == "" {
+            self.districtLabel.text = ""
+        } else {
+            self.districtLabel.text = self.district
+        }
+        
+        if self.streetOne == "" {
+            self.streetOneLabel.text = ""
+        } else {
+            self.streetOneLabel.text = self.streetOne
+        }
+        
+        if self.streetTwo == "" {
+            self.streetTwoLabel.text = ""
+        } else {
+            self.streetTwoLabel.text = self.streetTwo
+        }
+        
+        if self.streetThree == "" {
+            self.streetThreeLabel.text = ""
+        } else {
+            self.streetThreeLabel.text = self.streetThree
+        }
+        
+        if self.postalCode == "" {
+            self.postalCodeLabel.text = ""
+        } else {
+            self.postalCodeLabel.text = self.postalCode
+        }
+        
+        self.addressButton.enabled = true
+        
         if self.streetOne == "" && self.streetTwo == "" && self.streetThree == "" && self.city == "" && self.province == "" && self.postalCode == "" {
             self.addressButton.enabled = false
-        } else {
-            
-            if self.province == "" {
-                self.provinceLabel.text = ""
-            } else {
-                self.provinceLabel.text = self.province
-            }
-            
-            if self.city == "" {
-                self.cityLabel.text = ""
-            } else {
-                self.cityLabel.text = self.city
-            }
-            
-            if self.district == "" {
-                self.districtLabel.text = ""
-            } else {
-                self.districtLabel.text = self.district
-            }
-            
-            if self.streetOne == "" {
-                self.streetOneLabel.text = ""
-            } else {
-                self.streetOneLabel.text = self.streetOne
-            }
-            
-            if self.streetTwo == "" {
-                self.streetTwoLabel.text = ""
-            } else {
-                self.streetTwoLabel.text = self.streetTwo
-            }
-            
-            if self.streetThree == "" {
-                self.streetThreeLabel.text = ""
-            } else {
-                self.streetThreeLabel.text = self.streetThree
-            }
-            
-            if self.postalCode == "" {
-                self.postalCodeLabel.text = ""
-            } else {
-                self.postalCodeLabel.text = self.postalCode
-            }
-
-            self.addressButton.enabled = true
-            
+            self.provinceLabel.text = " "
         }
+        
+        
+        
+        
         
         self.textView.text = self.notes
         

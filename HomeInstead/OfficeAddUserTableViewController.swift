@@ -11,6 +11,7 @@ import Parse
 
 class OfficeAddUserTableViewController: UITableViewController, PassUserInformationDelegate {
 
+    @IBOutlet weak var createClientUserBarButton: UIBarButtonItem!
     var selectedUserType: UserType!
     var users: [[String: NSObject?]] = [[String: NSObject?]]()
     var user: [String: NSObject?] = [String: NSObject?]()
@@ -80,7 +81,6 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
                 
                 if querySuccessful {
                     // self.checkedRows is to keep track of which rows are checked by the user.
-                    
                     self.checkedRows = [Bool](count: self.users.count, repeatedValue: false)
                     self.tableView.reloadData()
                 }
@@ -101,10 +101,17 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
             self.tableView.reloadData()
             
         }
+        
     }
+
     
     override func viewWillAppear(animated: Bool) {
         self.updateUserInformationLocally()
+        
+        if self.selectedUserType != UserType.client {
+            self.createClientUserBarButton.tintColor = UIColor.clearColor()
+        }
+        
     }
     
     @IBAction func nameButtonTapped(sender: AnyObject) {
@@ -169,6 +176,12 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
             userProfileViewController.passUserInformationDelegate = self
         } else {
             print("destinationViewController returned nil")
+        }
+        
+        if segue.identifier == "createClientUserButtonSegue" {
+            if let officeEditUserProfileViewController = segue.destinationViewController as? OfficeEditUserProfileViewController {
+                officeEditUserProfileViewController.selectedUserType = self.selectedUserType
+            }
         }
         
     }
