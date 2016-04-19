@@ -37,7 +37,7 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     
     var selectedUserType: UserType!
-    var user: [String: NSObject?] = [String: NSObject?]()
+    var user: [String: String] = [String: String]()
     
     var image: UIImage?
     var email: String!
@@ -57,22 +57,22 @@ class UserProfileViewController: UIViewController {
     
     func unpackUserInformation() {
         
-        self.name = self.user["name"]! as? String
+        self.name = self.user["name"]
         if self.selectedUserType == UserType.client {
-            self.email = self.user["objectId"]! as? String
+            self.email = self.user["objectId"]
         } else {
-            self.email = self.user["email"]! as? String
+            self.email = self.user["email"]
         }
-        self.phoneNumber = self.user["phoneNumber"]! as? String
-        self.emergencyPhoneNumber = self.user["emergencyPhoneNumber"]! as? String
-        self.province = self.user["province"]! as? String
-        self.city = self.user["city"]! as? String
-        self.district = self.user["district"] as? String
-        self.streetOne = self.user["streetOne"]! as? String
-        self.streetTwo = self.user["streetTwo"]! as? String
-        self.streetThree = self.user["streetThree"] as? String
-        self.postalCode = self.user["postalCode"]! as? String
-        self.notes = self.user["notes"]! as? String
+        self.phoneNumber = self.user["phoneNumber"]
+        self.emergencyPhoneNumber = self.user["emergencyPhoneNumber"]
+        self.province = self.user["province"]
+        self.city = self.user["city"]
+        self.district = self.user["district"]
+        self.streetOne = self.user["streetOne"]
+        self.streetTwo = self.user["streetTwo"]
+        self.streetThree = self.user["streetThree"]
+        self.postalCode = self.user["postalCode"]
+        self.notes = self.user["notes"]
         
     }
     
@@ -88,7 +88,7 @@ class UserProfileViewController: UIViewController {
         self.setImageView()
         
         if let image = self.user["image"] {
-            self.image = image! as? UIImage
+            self.image = image as? UIImage
             self.imageView.image = self.image
             self.noPhotoLabel.hidden = true
             self.imageView.layer.borderWidth = 0.0

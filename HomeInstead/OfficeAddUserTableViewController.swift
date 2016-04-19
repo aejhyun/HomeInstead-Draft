@@ -13,8 +13,8 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
 
     @IBOutlet weak var createClientUserBarButton: UIBarButtonItem!
     var selectedUserType: UserType!
-    var users: [[String: NSObject?]] = [[String: NSObject?]]()
-    var user: [String: NSObject?] = [String: NSObject?]()
+    var users: [[String: String]] = [[String: String]]()
+    var user: [String: String] = [String: String]()
     var checkedRows: [Bool] = [Bool]()
     var nameButtonSelectedRow: Int = -1
     var numberOfTimesViewLaidOutSubviews: Int = 0
@@ -31,9 +31,9 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
         
     }
     
-    func attemptQueryUserInformationFromCloudWithClassName(className: String, completion: (querySuccessful: Bool) -> Void) {
+    func attemptQueryingNonOfficeUserInformationFromCloudWithClassName(className: String, completion: (querySuccessful: Bool) -> Void) {
         
-        var userInformation: [String: NSObject?] = [String: NSObject?]()
+        var userInformation: [String: String] = [String: String]()
         let query = PFQuery(className:className)
         //query.fromLocalDatastore()
         query.findObjectsInBackgroundWithBlock {
@@ -41,7 +41,6 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
             if error == nil {
                 if let objects = objects {
                     for object in objects {
-                        userInformation["imageFile"] = nil
                         userInformation["name"] = object.objectForKey("name") as? String
                         userInformation["notes"] = object.objectForKey("notes") as? String
                         userInformation["email"] = object.objectForKey("email") as? String
@@ -54,8 +53,8 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
                         userInformation["postalCode"] = object.objectForKey("postalCode") as? String
                         userInformation["phoneNumber"] = object.objectForKey("phoneNumber") as? String
                         userInformation["emergencyPhoneNumber"] = object.objectForKey("emergencyPhoneNumber") as? String
-                        userInformation["userId"] = object.objectForKey("userId") as? String
                         userInformation["userType"] = object.objectForKey("userType") as? String
+                        userInformation["userId"] = object.objectForKey("userId") as? String
                         userInformation["objectId"] = object.objectId
                         self.users.append(userInformation)
                         object.pinInBackground()
@@ -77,7 +76,7 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
         
         if let className = ClassNameForCloud().getClassName(self.selectedUserType) {
             
-            self.attemptQueryUserInformationFromCloudWithClassName(className) { (querySuccessful) -> Void in
+            self.attemptQueryingNonOfficeUserInformationFromCloudWithClassName(className) { (querySuccessful) -> Void in
                 
                 if querySuccessful {
                     // self.checkedRows is to keep track of which rows are checked by the user.
@@ -158,14 +157,14 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
             cell.accessoryType = .Checkmark
         }
         
-        cell.nameButton.setTitle(self.users[indexPath.row]["name"] as? String, forState: UIControlState.Normal)
-        cell.emailLabel.text = self.users[indexPath.row]["email"] as? String
+        cell.nameButton.setTitle(self.users[indexPath.row]["name"], forState: UIControlState.Normal)
+        cell.emailLabel.text = self.users[indexPath.row]["email"]
         
         return cell
         
     }
     
-    func passUserInformation(user: [String : NSObject?]) {
+    func passUserInformation(user: [String: String]) {
         // Receiving user information from previous view controller.
         self.user = user
     }
@@ -181,47 +180,86 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
         
     }
     
-    func attemptAddUserToOfficeUserToCloud (completion: (uploadSuccessful: Bool) -> Void) {
+    
+    func attemptQueryingNonOfficeUsersAlreadyAddedToOfficeUser(completion: (querySuccessful: Bool, userIds: [String]) -> Void) {
         
-        for var index = 0; index < self.users.count; index++ {
-            let usersAddedByOfficeUser = PFObject(className:"UsersAddedByOfficeUser")
-            
-            if self.checkedRows[index] == true {
-                
-                usersAddedByOfficeUser["officeUserId"] = PFUser.currentUser()?.objectId
-                usersAddedByOfficeUser["userType"] = self.selectedUserType.rawValue
-//                usersAddedByOfficeUser["userType"] = self.users[index] as? [String: String]
-                usersAddedByOfficeUser["name"] = self.users[index]["name"] as? String
-                usersAddedByOfficeUser["email"] = self.users[index]["email"] as? String
-                usersAddedByOfficeUser["province"] = self.users[index]["province"] as? String
-                usersAddedByOfficeUser["city"] = self.users[index]["city"] as? String
-                usersAddedByOfficeUser["district"] = self.users[index]["district"] as? String
-                usersAddedByOfficeUser["streetOne"] = self.users[index]["streetOne"] as? String
-                usersAddedByOfficeUser["streetTwo"] = self.users[index]["streetTwo"] as? String
-                usersAddedByOfficeUser["streetThree"] = self.users[index]["streetThree"] as? String
-                usersAddedByOfficeUser["postalCode"] = self.users[index]["postalCode"] as? String
-                usersAddedByOfficeUser["phoneNumber"] = self.users[index]["phoneNumber"] as? String
-                usersAddedByOfficeUser["emergencyPhoneNumber"] = self.users[index]["emergencyPhoneNumber"] as? String
-                usersAddedByOfficeUser["userId"] = self.users[index]["userId"] as? String
-                usersAddedByOfficeUser["userType"] = self.users[index]["userType"] as? String
-                usersAddedByOfficeUser["nonOfficeUserObjectId"] = self.users[index]["objectId"] as? String
-                
-                usersAddedByOfficeUser["asdf"] = ["asdf": "asdf", "qwer": "qwer"]
-                
-                usersAddedByOfficeUser.saveInBackgroundWithBlock {
-                    (success: Bool, error: NSError?) -> Void in
-                    if (success) {
-                        completion(uploadSuccessful: true)
-                    } else {
-                        print(error?.description)
-                        completion(uploadSuccessful: false)
+        var userIds: [String] = [String]()
+        let query = PFQuery(className:"UsersAddedByOfficeUser")
+        query.whereKey("officeUserId", equalTo:(PFUser.currentUser()?.objectId)!)
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [PFObject]?, error: NSError?) -> Void in
+            if error == nil {
+                if let objects = objects {
+                    for object in objects {
+                        userIds.append((object.objectForKey("nonOfficeUserId") as! String))
                     }
+                    print(userIds)
+                    completion(querySuccessful: true, userIds: userIds)
+                }
+            } else {
+                completion(querySuccessful: false, userIds: userIds)
+                print("Error: \(error!) \(error!.userInfo)")
+            }
+        }
+        
+    }
+    
+    func returnRowOfNonOfficeUserNotAlreadyAddedToOfficeUser(completion: (row: Int) -> Void) {
+        
+        self.attemptQueryingNonOfficeUsersAlreadyAddedToOfficeUser { (querySuccessful, userIds) -> Void in
+            if querySuccessful {
+                
+                for var row = 0; row < self.users.count; row++ {
+                    if self.checkedRows[row] == true {
+
+                        if !userIds.contains(self.users[row]["userId"]!) {
+                            completion(row: row)
+                        }
+                        
+                    }
+                }
+                
+            } else {
+                print("Querying users already added to the office user was unsuccessful.")
+            }
+        }
+        
+    }
+
+    func attemptAddingUsersToOfficeUserToCloud (completion: (addingUsersSuccessful: Bool) -> Void) {
+        
+        let usersAddedByOfficeUser = PFObject(className:"UsersAddedByOfficeUser")
+        
+        self.returnRowOfNonOfficeUserNotAlreadyAddedToOfficeUser { (row) -> Void in
+
+            usersAddedByOfficeUser["officeUserId"] = PFUser.currentUser()?.objectId
+            usersAddedByOfficeUser["name"] = self.users[row]["name"]
+            usersAddedByOfficeUser["notes"] = self.users[row]["notes"]
+            usersAddedByOfficeUser["email"] = self.users[row]["email"]
+            usersAddedByOfficeUser["province"] = self.users[row]["province"]
+            usersAddedByOfficeUser["city"] = self.users[row]["city"]
+            usersAddedByOfficeUser["district"] = self.users[row]["district"]
+            usersAddedByOfficeUser["streetOne"] = self.users[row]["streetOne"]
+            usersAddedByOfficeUser["streetTwo"] = self.users[row]["streetTwo"]
+            usersAddedByOfficeUser["streetThree"] = self.users[row]["streetThree"]
+            usersAddedByOfficeUser["postalCode"] = self.users[row]["postalCode"]
+            usersAddedByOfficeUser["phoneNumber"] = self.users[row]["phoneNumber"]
+            usersAddedByOfficeUser["emergencyPhoneNumber"] = self.users[row]["emergencyPhoneNumber"]
+            usersAddedByOfficeUser["userType"] = self.users[row]["userType"]
+            usersAddedByOfficeUser["nonOfficeUserId"] = self.users[row]["userId"]
+            usersAddedByOfficeUser["nonOfficeUserObjectId"] = self.users[row]["objectId"]
+            
+            usersAddedByOfficeUser.saveInBackgroundWithBlock {
+                (success: Bool, error: NSError?) -> Void in
+                if (success) {
+                    completion(addingUsersSuccessful: true)
+                } else {
+                    print(error?.description)
+                    completion(addingUsersSuccessful: false)
                 }
             }
             
         }
-        
-        
         
     }
     
@@ -241,8 +279,8 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
         let numberOfUsersToBeAdded: Int = self.numberOfUsersToBeAddedToCloud()
         var numberOfUsersAlreadyAdded: Int = 0
         
-        self.attemptAddUserToOfficeUserToCloud { (uploadSuccessful) -> Void in
-            if uploadSuccessful {
+        self.attemptAddingUsersToOfficeUserToCloud { (addingUsersSuccessful) -> Void in
+            if addingUsersSuccessful {
                 numberOfUsersAlreadyAdded++
                 print("Added non-office user to current office user.")
                 if numberOfUsersAlreadyAdded == numberOfUsersToBeAdded {

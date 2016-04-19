@@ -38,7 +38,7 @@ protocol SegueBehindModalViewControllerDelegate {
 }
 
 protocol PassUserInformationDelegate {
-    func passUserInformation(user: [String: NSObject?])
+    func passUserInformation(user: [String: String])
 }
 
 protocol DismissViewControllerDelegate {
