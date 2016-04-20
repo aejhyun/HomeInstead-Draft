@@ -37,6 +37,8 @@ class OfficeCreateClientUserViewController: OfficeEditUserProfileViewController 
         let object = PFObject(className: "ClientUser")
         object["name"] = self.nameTextField.text
         object["userType"] = "client"
+        object["email"] = ""
+        object["userId"] = ""
         object["province"] = self.provinceTextField.text
         object["city"] = self.cityTextField.text
         object["district"] = self.districtTextField.text
@@ -47,7 +49,7 @@ class OfficeCreateClientUserViewController: OfficeEditUserProfileViewController 
         object["phoneNumber"] = self.phoneNumberTextField.text
         object["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
         object["notes"] = ""
-        
+        object["idsOfOfficeUsersWhoAddedThisUser"] = [""]
         if imageFile != nil {
             object["imageFile"] = imageFile
         }

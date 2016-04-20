@@ -63,8 +63,8 @@ struct ClassNameForCloud {
         self.careGiverUser = "CareGiverUser"
         self.cathyUser = "CathyUser"
         self.clientUser = "ClientUser"
+        
     }
-    
     
     func getClassName(selectedUserType: UserType) -> String? {
         
@@ -82,4 +82,43 @@ struct ClassNameForCloud {
     }
     
 }
+
+struct QuerySuccessCheck {
+    
+    var successfullyQueriedCareGiverUsers: Bool
+    var successfullyQueriedCathyUsers: Bool
+    var successfullyQueriedClientUsers: Bool
+    
+    init() {
+        
+        self.successfullyQueriedCareGiverUsers = false
+        self.successfullyQueriedCathyUsers = false
+        self.successfullyQueriedClientUsers = false
+        
+    }
+    
+    func successfullyQueriedAllUsers () -> Bool {
+        
+        if self.successfullyQueriedClientUsers && self.successfullyQueriedCathyUsers && self.successfullyQueriedCareGiverUsers {
+            return true
+        } else {
+            return false
+        }
+        
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 

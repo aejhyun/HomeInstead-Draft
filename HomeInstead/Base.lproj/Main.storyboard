@@ -5064,13 +5064,93 @@ Photo</string>
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="Wcr-Fc-CkQ">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="Wcr-Fc-CkQ" customClass="OfficeConnectUserTableViewCell" customModule="HomeInstead" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Wcr-Fc-CkQ" id="3BD-JR-ZQW">
                                             <rect key="frame" x="0.0" y="0.0" width="240" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Obf-sF-Sq1">
+                                                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="mFw-5c-mAD"/>
+                                                    </constraints>
+                                                    <state key="normal" title="Name"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="mFw-5c-mAD"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="widthClass=compact">
+                                                        <mask key="constraints">
+                                                            <include reference="mFw-5c-mAD"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <connections>
+                                                        <action selector="nameButtonTapped:" destination="4Qw-gq-aUv" eventType="touchUpInside" id="z46-fA-37Z"/>
+                                                    </connections>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notes" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hr1-Xf-Lmr">
+                                                    <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                    <color key="textColor" red="0.40000000000000002" green="0.59999999999999998" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="11"/>
+                                                    </variation>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="hr1-Xf-Lmr" secondAttribute="bottom" constant="-3" id="9PU-Yd-Np3"/>
+                                                <constraint firstItem="hr1-Xf-Lmr" firstAttribute="leading" secondItem="3BD-JR-ZQW" secondAttribute="leadingMargin" constant="6" id="A3D-ag-Ulr"/>
+                                                <constraint firstItem="Obf-sF-Sq1" firstAttribute="top" secondItem="3BD-JR-ZQW" secondAttribute="topMargin" constant="-8" id="Bsd-w1-yJF">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="-3"/>
+                                                </constraint>
+                                                <constraint firstItem="hr1-Xf-Lmr" firstAttribute="top" secondItem="Obf-sF-Sq1" secondAttribute="bottom" constant="-2" id="daN-4L-uYl"/>
+                                                <constraint firstItem="Obf-sF-Sq1" firstAttribute="top" secondItem="3BD-JR-ZQW" secondAttribute="topMargin" constant="4" id="eKp-n2-DAb"/>
+                                                <constraint firstItem="Obf-sF-Sq1" firstAttribute="leading" secondItem="3BD-JR-ZQW" secondAttribute="leadingMargin" constant="60" id="poK-Vf-uAc">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="6"/>
+                                                </constraint>
+                                                <constraint firstAttribute="trailingMargin" secondItem="hr1-Xf-Lmr" secondAttribute="trailing" constant="347" id="yHQ-AS-FNn">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="6"/>
+                                                </constraint>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="subviews">
+                                                    <exclude reference="Obf-sF-Sq1"/>
+                                                    <exclude reference="hr1-Xf-Lmr"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <exclude reference="Bsd-w1-yJF"/>
+                                                    <exclude reference="eKp-n2-DAb"/>
+                                                    <exclude reference="poK-Vf-uAc"/>
+                                                    <exclude reference="9PU-Yd-Np3"/>
+                                                    <exclude reference="A3D-ag-Ulr"/>
+                                                    <exclude reference="daN-4L-uYl"/>
+                                                    <exclude reference="yHQ-AS-FNn"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="heightClass=regular-widthClass=compact">
+                                                <mask key="subviews">
+                                                    <include reference="Obf-sF-Sq1"/>
+                                                    <include reference="hr1-Xf-Lmr"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <include reference="Bsd-w1-yJF"/>
+                                                    <exclude reference="eKp-n2-DAb"/>
+                                                    <include reference="poK-Vf-uAc"/>
+                                                    <include reference="9PU-Yd-Np3"/>
+                                                    <include reference="A3D-ag-Ulr"/>
+                                                    <include reference="daN-4L-uYl"/>
+                                                    <include reference="yHQ-AS-FNn"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="nameButton" destination="Obf-sF-Sq1" id="Qfk-LN-6cF"/>
+                                            <outlet property="notesLabel" destination="hr1-Xf-Lmr" id="h1b-jc-Osf"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -5137,12 +5217,13 @@ Photo</string>
                     <connections>
                         <outlet property="barButtonItem" destination="fLl-y5-F77" id="Ot1-nk-PQQ"/>
                         <outlet property="segmentedControl" destination="NgT-tK-DmI" id="6Gs-45-AaV"/>
+                        <outlet property="tableView" destination="YDS-Of-YBV" id="nXR-kT-FOz"/>
                         <segue destination="HDG-hs-Nmn" kind="presentation" identifier="officeConnectUserToOfficeAddUser" id="BJa-i0-yO3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gbu-bY-5Rp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2011.5" y="-3794"/>
+            <point key="canvasLocation" x="2011.5" y="-3794.25"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="eYX-qh-ufZ">
@@ -5203,23 +5284,36 @@ Photo</string>
                                                 <segue destination="VCR-vU-sTM" kind="show" id="pqi-4y-KhW"/>
                                             </connections>
                                         </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Already Added" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="brg-n3-hr1">
+                                            <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="Nqb-2x-tsr" firstAttribute="leading" secondItem="RFC-c5-9gl" secondAttribute="leadingMargin" constant="6" id="LXP-08-9OS"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="x4y-Bh-ZN8" secondAttribute="bottom" constant="-3" id="QYS-1I-lOT"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="brg-n3-hr1" secondAttribute="trailing" id="RxJ-wz-3NJ">
+                                            <variation key="heightClass=regular-widthClass=compact" constant="6"/>
+                                        </constraint>
                                         <constraint firstItem="Nqb-2x-tsr" firstAttribute="top" secondItem="RFC-c5-9gl" secondAttribute="topMargin" constant="-3" id="ec6-e3-iKu"/>
+                                        <constraint firstItem="brg-n3-hr1" firstAttribute="centerY" secondItem="RFC-c5-9gl" secondAttribute="centerY" id="nYv-CM-xfy"/>
                                         <constraint firstItem="x4y-Bh-ZN8" firstAttribute="leading" secondItem="RFC-c5-9gl" secondAttribute="leadingMargin" constant="6" id="rNk-0R-Iha"/>
                                     </constraints>
                                     <variation key="default">
                                         <mask key="subviews">
                                             <exclude reference="x4y-Bh-ZN8"/>
                                             <exclude reference="Nqb-2x-tsr"/>
+                                            <exclude reference="brg-n3-hr1"/>
                                         </mask>
                                         <mask key="constraints">
                                             <exclude reference="LXP-08-9OS"/>
                                             <exclude reference="ec6-e3-iKu"/>
                                             <exclude reference="QYS-1I-lOT"/>
                                             <exclude reference="rNk-0R-Iha"/>
+                                            <exclude reference="RxJ-wz-3NJ"/>
+                                            <exclude reference="nYv-CM-xfy"/>
                                         </mask>
                                     </variation>
                                     <variation key="widthClass=compact">
@@ -5234,8 +5328,18 @@ Photo</string>
                                             <include reference="rNk-0R-Iha"/>
                                         </mask>
                                     </variation>
+                                    <variation key="heightClass=regular-widthClass=compact">
+                                        <mask key="subviews">
+                                            <include reference="brg-n3-hr1"/>
+                                        </mask>
+                                        <mask key="constraints">
+                                            <include reference="RxJ-wz-3NJ"/>
+                                            <include reference="nYv-CM-xfy"/>
+                                        </mask>
+                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="alreadyAddedLabel" destination="brg-n3-hr1" id="Cf2-Z0-sqJ"/>
                                     <outlet property="emailLabel" destination="x4y-Bh-ZN8" id="VZ3-Ym-ne6"/>
                                     <outlet property="nameButton" destination="Nqb-2x-tsr" id="wdf-aE-GU5"/>
                                 </connections>
@@ -5271,7 +5375,7 @@ Photo</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jsh-oR-oDB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3712.5" y="-3794"/>
+            <point key="canvasLocation" x="3712.5" y="-3794.25"/>
         </scene>
         <!--User Profile View Controller-->
         <scene sceneID="fOH-yv-xpj">

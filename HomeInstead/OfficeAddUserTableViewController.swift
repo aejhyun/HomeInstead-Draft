@@ -15,9 +15,11 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
     var selectedUserType: UserType!
     var users: [[String: String]] = [[String: String]]()
     var user: [String: String] = [String: String]()
+    var officeUserIds: [[String]] = [[String]]() // This variable is to hold the ids of the office users who added the selected non office user indicated by table row.
     var checkedRows: [Bool] = [Bool]()
     var nameButtonSelectedRow: Int = -1
     var numberOfTimesViewLaidOutSubviews: Int = 0
+    var numberOfNonOfficeUsersToBeAddedToOfficeUser: Int = 0
     
     func setNavigationBarTitle() {
         
@@ -34,6 +36,7 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
     func attemptQueryingNonOfficeUserInformationFromCloudWithClassName(className: String, completion: (querySuccessful: Bool) -> Void) {
         
         var userInformation: [String: String] = [String: String]()
+        var idsOfOfficeUsersWhoAddedThisUser: [String] = [String]()
         let query = PFQuery(className:className)
         //query.fromLocalDatastore()
         query.findObjectsInBackgroundWithBlock {
@@ -41,6 +44,10 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
             if error == nil {
                 if let objects = objects {
                     for object in objects {
+                        
+                        idsOfOfficeUsersWhoAddedThisUser = object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String]
+                        self.officeUserIds.append(idsOfOfficeUsersWhoAddedThisUser)
+                        
                         userInformation["name"] = object.objectForKey("name") as? String
                         userInformation["notes"] = object.objectForKey("notes") as? String
                         userInformation["email"] = object.objectForKey("email") as? String
@@ -109,6 +116,7 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
         
         if self.selectedUserType != UserType.client {
             self.createClientUserBarButton.tintColor = UIColor.clearColor()
+            self.createClientUserBarButton.enabled = false
         }
         
     }
@@ -131,6 +139,17 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return self.users.count
+    }
+    
+    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        
+        if isAlreadyAddedByCurrentOfficeUser(indexPath.row) {
+            return nil
+        } else {
+            return indexPath
+        }
+        
+        
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -157,6 +176,13 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
             cell.accessoryType = .Checkmark
         }
         
+        if isAlreadyAddedByCurrentOfficeUser(indexPath.row) {
+            cell.alreadyAddedLabel.hidden = false
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
+        } else {
+            cell.alreadyAddedLabel.hidden = true
+        }
+        
         cell.nameButton.setTitle(self.users[indexPath.row]["name"], forState: UIControlState.Normal)
         cell.emailLabel.text = self.users[indexPath.row]["email"]
         
@@ -179,6 +205,119 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
         }
         
     }
+    
+    func isAlreadyAddedByCurrentOfficeUser(row: Int) -> Bool {
+
+        if self.officeUserIds[row].contains((PFUser.currentUser()?.objectId)!) {
+            return true
+        } else {
+            return false
+        }
+
+    }
+    
+    func updateIdsOfOfficeUsersWhoAddedThisUserInCloud(row: Int) {
+        
+        self.officeUserIds[row].append((PFUser.currentUser()?.objectId)!)
+        
+        let query = PFQuery(className: ClassNameForCloud().getClassName(self.selectedUserType)!)
+        query.getObjectInBackgroundWithId(self.users[row]["objectId"]!) {
+            (query: PFObject?, error: NSError?) -> Void in
+            if error != nil {
+                print(error)
+            } else if let query = query {
+                query["idsOfOfficeUsersWhoAddedThisUser"] = self.officeUserIds[row]
+                query.saveInBackgroundWithBlock {
+                    (success: Bool, error: NSError?) -> Void in
+                    if (!success) {
+                        print(error?.description)
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    func attemptAddingUsersToOfficeUserToCloud (row: Int, completion: (addingUsersSuccessful: Bool) -> Void) {
+        
+        let usersAddedByOfficeUser = PFObject(className:"UsersAddedByOfficeUser")
+        
+        usersAddedByOfficeUser["officeUserId"] = PFUser.currentUser()?.objectId
+        //usersAddedByOfficeUser["userInformation"] = self.users[row]
+        
+        usersAddedByOfficeUser["name"] = self.users[row]["name"]
+        usersAddedByOfficeUser["notes"] = self.users[row]["notes"]
+        usersAddedByOfficeUser["email"] = self.users[row]["email"]
+        usersAddedByOfficeUser["province"] = self.users[row]["province"]
+        usersAddedByOfficeUser["city"] = self.users[row]["city"]
+        usersAddedByOfficeUser["district"] = self.users[row]["district"]
+        usersAddedByOfficeUser["streetOne"] = self.users[row]["streetOne"]
+        usersAddedByOfficeUser["streetTwo"] = self.users[row]["streetTwo"]
+        usersAddedByOfficeUser["streetThree"] = self.users[row]["streetThree"]
+        usersAddedByOfficeUser["postalCode"] = self.users[row]["postalCode"]
+        usersAddedByOfficeUser["phoneNumber"] = self.users[row]["phoneNumber"]
+        usersAddedByOfficeUser["emergencyPhoneNumber"] = self.users[row]["emergencyPhoneNumber"]
+        usersAddedByOfficeUser["userType"] = self.users[row]["userType"]
+        usersAddedByOfficeUser["nonOfficeUserId"] = self.users[row]["userId"]
+        usersAddedByOfficeUser["nonOfficeUserObjectId"] = self.users[row]["objectId"]
+        
+        usersAddedByOfficeUser.saveInBackgroundWithBlock {
+            (success: Bool, error: NSError?) -> Void in
+            if (success) {
+                completion(addingUsersSuccessful: true)
+            } else {
+                print(error?.description)
+                completion(addingUsersSuccessful: false)
+            }
+        }
+        
+    }
+    
+    
+    @IBAction func doneButtonTapped(sender: AnyObject) {
+        
+        var numberOfNonOfficeUsersAddedToOfficeUser: Int = 0
+        for var row: Int = 0; row < self.users.count; row++ {
+            if self.checkedRows[row] == true {
+                if !self.isAlreadyAddedByCurrentOfficeUser(row) {
+                    self.numberOfNonOfficeUsersToBeAddedToOfficeUser++
+                    self.updateIdsOfOfficeUsersWhoAddedThisUserInCloud(row)
+                    self.attemptAddingUsersToOfficeUserToCloud(row, completion: { (addingUsersSuccessful) -> Void in
+                        numberOfNonOfficeUsersAddedToOfficeUser++
+                        if addingUsersSuccessful {
+                            if numberOfNonOfficeUsersAddedToOfficeUser == self.numberOfNonOfficeUsersToBeAddedToOfficeUser {
+                                self.dismissViewControllerAnimated(true, completion: nil)
+                            }
+                        }
+                    })
+                }
+            }
+        }
+        
+    }
+    
+    @IBAction func cancelButtonTapped(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        func numberOfUsersToBeAddedToCloud() -> Int {
+    
+            var counter: Int = 0
+            for var index: Int = 0; index < self.checkedRows.count; index++ {
+                if self.checkedRows[index] == true {
+                    counter++
+                }
+            }
+            return counter
+        }
     
     
     func attemptQueryingNonOfficeUsersAlreadyAddedToOfficeUser(completion: (querySuccessful: Bool, userIds: [String]) -> Void) {
@@ -211,7 +350,7 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
                 
                 for var row = 0; row < self.users.count; row++ {
                     if self.checkedRows[row] == true {
-
+                        
                         if !userIds.contains(self.users[row]["userId"]!) {
                             completion(row: row)
                         }
@@ -226,73 +365,14 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
         
     }
 
-    func attemptAddingUsersToOfficeUserToCloud (completion: (addingUsersSuccessful: Bool) -> Void) {
-        
-        let usersAddedByOfficeUser = PFObject(className:"UsersAddedByOfficeUser")
-        
-        self.returnRowOfNonOfficeUserNotAlreadyAddedToOfficeUser { (row) -> Void in
-
-            usersAddedByOfficeUser["officeUserId"] = PFUser.currentUser()?.objectId
-            usersAddedByOfficeUser["name"] = self.users[row]["name"]
-            usersAddedByOfficeUser["notes"] = self.users[row]["notes"]
-            usersAddedByOfficeUser["email"] = self.users[row]["email"]
-            usersAddedByOfficeUser["province"] = self.users[row]["province"]
-            usersAddedByOfficeUser["city"] = self.users[row]["city"]
-            usersAddedByOfficeUser["district"] = self.users[row]["district"]
-            usersAddedByOfficeUser["streetOne"] = self.users[row]["streetOne"]
-            usersAddedByOfficeUser["streetTwo"] = self.users[row]["streetTwo"]
-            usersAddedByOfficeUser["streetThree"] = self.users[row]["streetThree"]
-            usersAddedByOfficeUser["postalCode"] = self.users[row]["postalCode"]
-            usersAddedByOfficeUser["phoneNumber"] = self.users[row]["phoneNumber"]
-            usersAddedByOfficeUser["emergencyPhoneNumber"] = self.users[row]["emergencyPhoneNumber"]
-            usersAddedByOfficeUser["userType"] = self.users[row]["userType"]
-            usersAddedByOfficeUser["nonOfficeUserId"] = self.users[row]["userId"]
-            usersAddedByOfficeUser["nonOfficeUserObjectId"] = self.users[row]["objectId"]
-            
-            usersAddedByOfficeUser.saveInBackgroundWithBlock {
-                (success: Bool, error: NSError?) -> Void in
-                if (success) {
-                    completion(addingUsersSuccessful: true)
-                } else {
-                    print(error?.description)
-                    completion(addingUsersSuccessful: false)
-                }
-            }
-            
-        }
-        
-    }
     
-    func numberOfUsersToBeAddedToCloud() -> Int {
-        
-        var counter: Int = 0
-        for var index: Int = 0; index < self.checkedRows.count; index++ {
-            if self.checkedRows[index] == true {
-                counter++
-            }
-        }
-        return counter
-    }
     
-    @IBAction func doneButtonTapped(sender: AnyObject) {
-        
-        let numberOfUsersToBeAdded: Int = self.numberOfUsersToBeAddedToCloud()
-        var numberOfUsersAlreadyAdded: Int = 0
-        
-        self.attemptAddingUsersToOfficeUserToCloud { (addingUsersSuccessful) -> Void in
-            if addingUsersSuccessful {
-                numberOfUsersAlreadyAdded++
-                print("Added non-office user to current office user.")
-                if numberOfUsersAlreadyAdded == numberOfUsersToBeAdded {
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                }
-            }
-        }
-
-        
-    }
     
-    @IBAction func cancelButtonTapped(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
+    
+    
+    
+    
+    
+    
+    
 }

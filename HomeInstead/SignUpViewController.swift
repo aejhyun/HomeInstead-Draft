@@ -51,6 +51,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         self.verificationCodeTextField.text = self.selectedUserType.rawValue
         self.provinceTextField.text = "湖北"
         self.cityTextField.text = "武汉"
+        self.districtTextField.text = "Gangstah District"
         self.streetOneTextField.text = "19300 Nassau St."
         self.streetTwoTextField.text = ""
         self.streetThreeTextField.text = ""
@@ -350,6 +351,10 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         object["phoneNumber"] = self.phoneNumberTextField.text
         object["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
         object["notes"] = ""
+        
+        if className != ClassNameForCloud().officeUser {
+            object["idsOfOfficeUsersWhoAddedThisUser"] = [""]
+        }
 
         if imageFile != nil {
             object["imageFile"] = imageFile
