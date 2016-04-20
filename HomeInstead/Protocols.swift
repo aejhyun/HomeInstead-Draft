@@ -32,9 +32,7 @@ protocol ClientInformationDelegate {
 }
 
 protocol SegueBehindModalViewControllerDelegate {
-    
     func segueBehindModalViewController()
-    
 }
 
 protocol PassUserInformationDelegate {

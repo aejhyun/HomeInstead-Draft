@@ -59,38 +59,15 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         // Need to set the initial chosen segment for the segment control. If this is not present, it will cause a crash.
         self.selectedUserType = UserType.client
         
-        
-        print(PFUser.currentUser()?.objectId)
-        let query = PFQuery(className:"ClientUser")
-        query.whereKey("idsOfOfficeUsersWhoAddedThisUser", containedIn: [(PFUser.currentUser()?.objectId)!])
-        
-        query.findObjectsInBackgroundWithBlock {
-            (objects: [PFObject]?, error: NSError?) -> Void in
-            if error == nil {
-                if let objects = objects {
-                    for object in objects {
-                        
-                        print(object)
-                    
-                }
-            } else {
-
-                print("Error: \(error!) \(error!.userInfo)")
-            }
-            }
-        }
-        
-
-        
     }
     
-    func queryUsersAddedByOfficeUserFromCloud(userType: String, completion: (querySuccessful: Bool, users: [[String: String]]) -> Void) {
+    func queryUsersAddedByOfficeUserFromCloud(className: String, completion: (querySuccessful: Bool, users: [[String: String]]) -> Void) {
         
         var users: [[String: String]] = [[String: String]]()
         var userInformation: [String: String] = [String: String]()
-        let query = PFQuery(className:"UsersAddedByOfficeUser")
-        query.whereKey("officeUserId", equalTo:(PFUser.currentUser()?.objectId)!)
-        query.whereKey("userType", equalTo: userType)
+        let query = PFQuery(className: className)
+        query.whereKey("idsOfOfficeUsersWhoAddedThisUser", containedIn: [(PFUser.currentUser()?.objectId)!])
+        
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             if error == nil {
@@ -130,9 +107,15 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         self.numberOfTimesReloadDataIsCalled = 0
         
-        var querySuccessCheck = QuerySuccessCheck()
+        self.tableView.estimatedRowHeight = 70
+        self.tableView.rowHeight = UITableViewAutomaticDimension
         
-        self.queryUsersAddedByOfficeUserFromCloud(UserType.client.rawValue) { (querySuccessful, users) -> Void in
+        var querySuccessCheck = QuerySuccessCheck()
+        let classNameForCloud = ClassNameForCloud()
+        
+        
+        
+        self.queryUsersAddedByOfficeUserFromCloud(classNameForCloud.getClassName(UserType.client)!) { (querySuccessful, users) -> Void in
             if querySuccessful {
                 self.clientUsers = users
                 querySuccessCheck.successfullyQueriedClientUsers = true
@@ -143,7 +126,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             }
         }
         
-        self.queryUsersAddedByOfficeUserFromCloud(UserType.cathy.rawValue) { (querySuccessful, users) -> Void in
+        self.queryUsersAddedByOfficeUserFromCloud(classNameForCloud.getClassName(UserType.cathy)!) { (querySuccessful, users) -> Void in
             if querySuccessful {
                 self.cathyUsers = users
                 querySuccessCheck.successfullyQueriedCathyUsers = true
@@ -154,7 +137,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             }
         }
         
-        self.queryUsersAddedByOfficeUserFromCloud(UserType.careGiver.rawValue) { (querySuccessful, users) -> Void in
+        self.queryUsersAddedByOfficeUserFromCloud(classNameForCloud.getClassName(UserType.careGiver)!) { (querySuccessful, users) -> Void in
             if querySuccessful {
                 self.careGiverUsers = users
                 querySuccessCheck.successfullyQueriedCareGiverUsers = true
@@ -214,6 +197,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if let cell = cell as? OfficeConnectUserTableViewCell {
             cell.nameButton.setTitle("", forState: UIControlState.Normal)
+            cell.notesLabel.text = ""
         }
         
     }
@@ -223,16 +207,31 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         if self.selectedUserType == UserType.client {
             cell.nameButton.setTitle(self.clientUsers[indexPath.row]["name"], forState: UIControlState.Normal)
-            cell.notesLabel.text = self.clientUsers[indexPath.row]["notes"]
+            if self.clientUsers[indexPath.row]["notes"] == "" {
+                cell.notesLabel.text = " "
+            } else {
+                cell.notesLabel.text = self.clientUsers[indexPath.row]["notes"]
+            }
+            
         } else if self.selectedUserType == UserType.cathy {
             cell.nameButton.setTitle(self.cathyUsers[indexPath.row]["name"], forState: UIControlState.Normal)
-            cell.notesLabel.text = self.cathyUsers[indexPath.row]["notes"]
+            if self.cathyUsers[indexPath.row]["notes"] == "" {
+                cell.notesLabel.text = " "
+            } else {
+                cell.notesLabel.text = self.cathyUsers[indexPath.row]["notes"]
+            }
+
         } else if self.selectedUserType == UserType.careGiver {
             cell.nameButton.setTitle(self.careGiverUsers[indexPath.row]["name"], forState: UIControlState.Normal)
-            cell.notesLabel.text = self.careGiverUsers[indexPath.row]["notes"]
+            if self.careGiverUsers[indexPath.row]["notes"] == "" {
+                cell.notesLabel.text = " "
+            } else {
+                cell.notesLabel.text = self.careGiverUsers[indexPath.row]["notes"]
+            }
+    
         }
         
-        
+        cell.notesLabel.numberOfLines = 0
         cell.nameButton.alpha = 0.0
         cell.notesLabel.alpha = 0.0
 
@@ -248,17 +247,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         UIView.animateWithDuration(1.0, animations: { () -> Void in
             cell.notesLabel.alpha = 1.0
         })
-        
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         return cell
         
