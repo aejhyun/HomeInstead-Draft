@@ -103,6 +103,27 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
+    func queryUsersAddedByOfficeUserFromCloudForSelectedUserType(selectedUserType: UserType, completion: (querySuccessful: Bool) -> Void) {
+        
+        let classNameForCloud = ClassNameForCloud()
+        
+        self.queryUsersAddedByOfficeUserFromCloud(classNameForCloud.getClassName(selectedUserType)!) { (querySuccessful, users) -> Void in
+            if querySuccessful {
+                if selectedUserType
+                
+                
+                self.clientUsers = users
+                querySuccessCheck.successfullyQueriedClientUsers = true
+                if querySuccessCheck.successfullyQueriedAllUsers() {
+                    self.numberOfTimesReloadDataIsCalled++
+                    self.tableView.reloadData()
+                }
+            }
+        }
+        
+        
+    }
+    
     override func viewWillAppear(animated: Bool) {
         
         self.numberOfTimesReloadDataIsCalled = 0
@@ -113,8 +134,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         var querySuccessCheck = QuerySuccessCheck()
         let classNameForCloud = ClassNameForCloud()
         
-        
-        
+
         self.queryUsersAddedByOfficeUserFromCloud(classNameForCloud.getClassName(UserType.client)!) { (querySuccessful, users) -> Void in
             if querySuccessful {
                 self.clientUsers = users
@@ -152,6 +172,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
 
     }
     
+    
+    
     override func viewDidDisappear(animated: Bool) {
         
         self.navigationBarLine.hidden = false
@@ -174,6 +196,46 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
+    func getUsersForSelectedUserType(selectedUserType: UserType) -> [[String: String]] {
+        // Use this function to only read and get the different users. If you want to modify the content of the users, do not use this function because it will not return a reference. So any modification that you make to the return value will not modify the class variables, only the copy of the class variables.
+        if selectedUserType == UserType.client {
+            return self.clientUsers
+        } else if selectedUserType == UserType.cathy {
+            return self.cathyUsers
+       
+        } else if selectedUserType == UserType.careGiver {
+            return self.careGiverUsers
+        }
+        return self.clientUsers
+        
+    }
+    
+    func deleteUserFromOfficeUserInCloud(user: [[String: String]], indexPath: NSIndexPath) {
+        
+    }
+    
+    func deleteRowForSelectedUserType(selectedUserType: UserType, indexPath: NSIndexPath) {
+
+        if selectedUserType == UserType.client {
+            self.clientUsers.removeAtIndex(indexPath.row)
+        } else if selectedUserType == UserType.cathy {
+            self.cathyUsers.removeAtIndex(indexPath.row)
+        } else if selectedUserType == UserType.careGiver {
+            self.careGiverUsers.removeAtIndex(indexPath.row)
+        }
+
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if editingStyle == .Delete {
+            
+            self.deleteRowForSelectedUserType(self.selectedUserType, indexPath: indexPath)
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        }
+        
+    }
+    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
         return 1
@@ -182,71 +244,67 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if self.selectedUserType == UserType.client {
-            return self.clientUsers.count
-        } else if self.selectedUserType == UserType.cathy {
-            return self.cathyUsers.count
-        } else if self.selectedUserType == UserType.careGiver {
-            return self.careGiverUsers.count
-        } else {
-            return 0
-        }
-        
+        return getUsersForSelectedUserType(self.selectedUserType).count
+
     }
     
     func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if let cell = cell as? OfficeConnectUserTableViewCell {
             cell.nameButton.setTitle("", forState: UIControlState.Normal)
-            cell.notesLabel.text = ""
         }
+        
+    }
+    
+    func configureCellForUserType(cell: OfficeConnectUserTableViewCell, userType: UserType, indexPath: NSIndexPath) {
+        var users: [[String: String]] = self.getUsersForSelectedUserType(self.selectedUserType)
+        
+        cell.nameButton.setTitle(users[indexPath.row]["name"], forState: UIControlState.Normal)
+        
+        if users[indexPath.row]["notes"] == "" {
+            //cell.notesTopSpaceLayoutConstraint.constant = 0
+        } else {
+            cell.notesTopSpaceLayoutConstraint.constant = 5
+        }
+        
+        cell.notesLabel.text = users[indexPath.row]["notes"]
+        
+        if userType == UserType.client {
+            cell.userIdLabel.text = users[indexPath.row]["objectId"]
+        } else {
+            cell.userIdLabel.text = users[indexPath.row]["email"]
+        }
+    }
+    
+    func configureCellContentAnimation(cell: OfficeConnectUserTableViewCell) {
+        
+        cell.nameButton.alpha = 0.0
+        cell.notesLabel.alpha = 0.0
+        cell.userIdLabel.alpha = 0.0
+        
+        if self.numberOfTimesReloadDataIsCalled == 1 {
+            cell.nameButton.alpha = 1.0
+            cell.notesLabel.alpha = 1.0
+            cell.userIdLabel.alpha = 1.0
+            
+        }
+        
+        UIView.animateWithDuration(1.0, animations: { () -> Void in
+            cell.nameButton.alpha = 1.0
+        })
+        UIView.animateWithDuration(1.0, animations: { () -> Void in
+            cell.notesLabel.alpha = 1.0
+        })
+        UIView.animateWithDuration(1.0, animations: { () -> Void in
+            cell.userIdLabel.alpha = 1.0
+        })
         
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeConnectUserTableViewCell
         
-        if self.selectedUserType == UserType.client {
-            cell.nameButton.setTitle(self.clientUsers[indexPath.row]["name"], forState: UIControlState.Normal)
-            if self.clientUsers[indexPath.row]["notes"] == "" {
-                cell.notesLabel.text = " "
-            } else {
-                cell.notesLabel.text = self.clientUsers[indexPath.row]["notes"]
-            }
-            
-        } else if self.selectedUserType == UserType.cathy {
-            cell.nameButton.setTitle(self.cathyUsers[indexPath.row]["name"], forState: UIControlState.Normal)
-            if self.cathyUsers[indexPath.row]["notes"] == "" {
-                cell.notesLabel.text = " "
-            } else {
-                cell.notesLabel.text = self.cathyUsers[indexPath.row]["notes"]
-            }
-
-        } else if self.selectedUserType == UserType.careGiver {
-            cell.nameButton.setTitle(self.careGiverUsers[indexPath.row]["name"], forState: UIControlState.Normal)
-            if self.careGiverUsers[indexPath.row]["notes"] == "" {
-                cell.notesLabel.text = " "
-            } else {
-                cell.notesLabel.text = self.careGiverUsers[indexPath.row]["notes"]
-            }
-    
-        }
-        
-        cell.notesLabel.numberOfLines = 0
-        cell.nameButton.alpha = 0.0
-        cell.notesLabel.alpha = 0.0
-
-        if self.numberOfTimesReloadDataIsCalled == 1 {
-            cell.nameButton.alpha = 1.0
-            cell.notesLabel.alpha = 1.0
-     
-        }
-        
-        UIView.animateWithDuration(1.0, animations: { () -> Void in
-            cell.nameButton.alpha = 1.0
-        })
-        UIView.animateWithDuration(1.0, animations: { () -> Void in
-            cell.notesLabel.alpha = 1.0
-        })
+        self.configureCellForUserType(cell, userType: self.selectedUserType, indexPath: indexPath)
+        self.configureCellContentAnimation(cell)
         
         return cell
         

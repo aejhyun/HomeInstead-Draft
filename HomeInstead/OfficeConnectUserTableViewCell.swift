@@ -11,10 +11,13 @@ import UIKit
 class OfficeConnectUserTableViewCell: UITableViewCell {
 
     @IBOutlet weak var nameButton: UIButton!
+    @IBOutlet weak var userIdLabel: UILabel!
     @IBOutlet weak var notesLabel: UILabel!
+    @IBOutlet weak var notesTopSpaceLayoutConstraint: NSLayoutConstraint!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
