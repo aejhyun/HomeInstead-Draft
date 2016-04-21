@@ -5068,7 +5068,7 @@ Photo</string>
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Wcr-Fc-CkQ" id="3BD-JR-ZQW">
-                                            <rect key="frame" x="0.0" y="0.0" width="240" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="240" height="74"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Obf-sF-Sq1">
@@ -5088,7 +5088,9 @@ Photo</string>
                                                         </mask>
                                                     </variation>
                                                     <connections>
+                                                        <action selector="nameButtonTapped:" destination="jhU-fc-GJK" eventType="touchUpInside" id="SFE-hg-yob"/>
                                                         <action selector="nameButtonTapped:" destination="4Qw-gq-aUv" eventType="touchUpInside" id="z46-fA-37Z"/>
+                                                        <segue destination="VCR-vU-sTM" kind="show" identifier="officeConnectUsersToUserProfile" id="7JA-N5-nQk"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notes" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hr1-Xf-Lmr">
@@ -5194,32 +5196,49 @@ Photo</string>
                                     <outlet property="delegate" destination="jhU-fc-GJK" id="pwL-V4-LAZ"/>
                                 </connections>
                             </tableView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g4h-DD-Jbc">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <items>
+                                    <barButtonItem title="Disconnect" id="oNK-oH-zhX"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="JH3-hh-pnK"/>
+                                    <barButtonItem title="Connect" id="bGj-BC-zJp"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="7Xq-bU-KsZ" firstAttribute="top" secondItem="g4h-DD-Jbc" secondAttribute="bottom" id="Bie-9q-fvN"/>
                             <constraint firstItem="YDS-Of-YBV" firstAttribute="top" secondItem="bow-LN-ZPW" secondAttribute="bottom" id="Jyl-9l-Rfj">
                                 <variation key="widthClass=compact" constant="1"/>
                             </constraint>
                             <constraint firstItem="bow-LN-ZPW" firstAttribute="top" secondItem="hAy-5L-CWE" secondAttribute="bottom" id="N5o-5M-CpB"/>
                             <constraint firstItem="bow-LN-ZPW" firstAttribute="leading" secondItem="Tbf-sJ-Uxy" secondAttribute="leadingMargin" constant="-20" id="Pv1-RJ-Y0K"/>
                             <constraint firstAttribute="trailingMargin" secondItem="YDS-Of-YBV" secondAttribute="trailing" constant="-20" id="WIH-sf-nQY"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="g4h-DD-Jbc" secondAttribute="trailing" constant="-20" id="Ynp-Si-buf"/>
                             <constraint firstItem="YDS-Of-YBV" firstAttribute="leading" secondItem="Tbf-sJ-Uxy" secondAttribute="leadingMargin" constant="-20" id="a1v-ii-ACz"/>
-                            <constraint firstItem="7Xq-bU-KsZ" firstAttribute="top" secondItem="YDS-Of-YBV" secondAttribute="bottom" id="hrD-1m-0P5"/>
+                            <constraint firstItem="g4h-DD-Jbc" firstAttribute="leading" secondItem="Tbf-sJ-Uxy" secondAttribute="leadingMargin" constant="-20" id="e4g-Hi-5ao"/>
+                            <constraint firstItem="g4h-DD-Jbc" firstAttribute="top" secondItem="YDS-Of-YBV" secondAttribute="bottom" id="eII-YO-qRH">
+                                <variation key="heightClass=regular-widthClass=compact" constant="1"/>
+                            </constraint>
                             <constraint firstAttribute="trailingMargin" secondItem="bow-LN-ZPW" secondAttribute="trailing" constant="-20" id="zHV-1t-bR8"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="bow-LN-ZPW"/>
                                 <exclude reference="YDS-Of-YBV"/>
+                                <exclude reference="g4h-DD-Jbc"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="hrD-1m-0P5"/>
                                 <exclude reference="N5o-5M-CpB"/>
                                 <exclude reference="Pv1-RJ-Y0K"/>
                                 <exclude reference="zHV-1t-bR8"/>
                                 <exclude reference="Jyl-9l-Rfj"/>
                                 <exclude reference="WIH-sf-nQY"/>
                                 <exclude reference="a1v-ii-ACz"/>
+                                <exclude reference="Ynp-Si-buf"/>
+                                <exclude reference="e4g-Hi-5ao"/>
+                                <exclude reference="eII-YO-qRH"/>
+                                <exclude reference="Bie-9q-fvN"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -5228,13 +5247,23 @@ Photo</string>
                                 <include reference="YDS-Of-YBV"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="hrD-1m-0P5"/>
                                 <include reference="N5o-5M-CpB"/>
                                 <include reference="Pv1-RJ-Y0K"/>
                                 <include reference="zHV-1t-bR8"/>
                                 <include reference="Jyl-9l-Rfj"/>
                                 <include reference="WIH-sf-nQY"/>
                                 <include reference="a1v-ii-ACz"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="g4h-DD-Jbc"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="Ynp-Si-buf"/>
+                                <include reference="e4g-Hi-5ao"/>
+                                <include reference="eII-YO-qRH"/>
+                                <include reference="Bie-9q-fvN"/>
                             </mask>
                         </variation>
                     </view>
@@ -5801,7 +5830,8 @@ Photo</string>
                                                 <exclude reference="xGZ-So-260"/>
                                             </mask>
                                         </variation>
-                                        <variation key="widthClass=compact">
+                                        <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
+                                            <rect key="frame" x="0.0" y="0.0" width="400" height="540"/>
                                             <mask key="subviews">
                                                 <include reference="kWf-wj-pFp"/>
                                                 <include reference="6Ss-YI-8jc"/>
@@ -5968,7 +5998,8 @@ Photo</string>
                                         <exclude reference="vds-c5-Gf5"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact">
+                                <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="20" width="400" height="580"/>
                                     <mask key="subviews">
                                         <include reference="RkH-xb-9r7"/>
                                         <include reference="DmO-6z-UzN"/>
@@ -7190,10 +7221,11 @@ Photo</string>
         <image name="phoneImage" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="HLy-lk-jYv"/>
-        <segue reference="JvB-e1-eF0"/>
-        <segue reference="CPS-1T-8Nc"/>
-        <segue reference="KS2-cD-Ng0"/>
         <segue reference="i3m-7f-ANh"/>
+        <segue reference="JvB-e1-eF0"/>
+        <segue reference="KS2-cD-Ng0"/>
+        <segue reference="CPS-1T-8Nc"/>
+        <segue reference="7JA-N5-nQk"/>
+        <segue reference="HLy-lk-jYv"/>
     </inferredMetricsTieBreakers>
 </document>

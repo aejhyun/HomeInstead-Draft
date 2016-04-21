@@ -15,17 +15,23 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     @IBOutlet weak var barButtonItem: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
     
-    var careGiverUsers: [[String: String]] = [[String: String]]()
-    var cathyUsers: [[String: String]] = [[String: String]]()
     var clientUsers: [[String: String]] = [[String: String]]()
+    var cathyUsers: [[String: String]] = [[String: String]]()
+    var careGiverUsers: [[String: String]] = [[String: String]]()
     
-    var careGiverOfficeUserIds: [[String]] = [[String]]() // These variables are to hold the ids of the office users who added the non office user.
-    var clientOfficeUserIds: [[String]] = [[String]]()
+    var clientOfficeUserIds: [[String]] = [[String]]() // These variables are to hold the ids of the office users who added the non office user.
     var cathyOfficeUserIds: [[String]] = [[String]]()
+    var careGiverOfficeUserIds: [[String]] = [[String]]()
+    
+    var clientCheckedRows: [Bool] = [Bool]()
+    var cathyCheckedRows: [Bool] = [Bool]()
+    var careGiverCheckedRows: [Bool] = [Bool]()
     
     var selectedUserType: UserType!
 
     var navigationBarLine: UIView = UIView()
+    
+    var nameButtonSelectedRow: Int = -1
     
     var numberOfTimesReloadDataIsCalled: Int = 0
     
@@ -135,6 +141,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.queryUsersAddedByOfficeUserFromCloud(UserType.client) { (querySuccessful, users) -> Void in
             if querySuccessful {
                 self.clientUsers = users
+                self.clientCheckedRows = [Bool](count: self.clientUsers.count, repeatedValue: false) // This is for checked rows.
                 querySuccessCheck.successfullyQueriedClientUsers = true
                 if querySuccessCheck.successfullyQueriedAllUsers() {
                     self.numberOfTimesReloadDataIsCalled++
@@ -146,6 +153,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.queryUsersAddedByOfficeUserFromCloud(UserType.cathy) { (querySuccessful, users) -> Void in
             if querySuccessful {
                 self.cathyUsers = users
+                self.cathyCheckedRows = [Bool](count: self.cathyUsers.count, repeatedValue: false)
                 querySuccessCheck.successfullyQueriedCathyUsers = true
                 if querySuccessCheck.successfullyQueriedAllUsers() {
                     self.numberOfTimesReloadDataIsCalled++
@@ -157,6 +165,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.queryUsersAddedByOfficeUserFromCloud(UserType.careGiver) { (querySuccessful, users) -> Void in
             if querySuccessful {
                 self.careGiverUsers = users
+                self.careGiverCheckedRows = [Bool](count: self.careGiverUsers.count, repeatedValue: false)
                 querySuccessCheck.successfullyQueriedCareGiverUsers = true
                 if querySuccessCheck.successfullyQueriedAllUsers() {
                     self.numberOfTimesReloadDataIsCalled++
@@ -235,9 +244,34 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         } else if selectedUserType == UserType.careGiver {
             self.deleteUserFromOfficeUserInCloud(self.careGiverUsers, officeUserIdsForUser: self.careGiverOfficeUserIds, indexPath: indexPath)
             self.careGiverUsers.removeAtIndex(indexPath.row)
-            
         }
 
+    }
+    
+    func setCheckedRowsForSelectedUserType(selectedUserType: UserType, rowChecked: Bool, indexPath: NSIndexPath) {
+        
+        if selectedUserType == UserType.client {
+            self.clientCheckedRows[indexPath.row] = rowChecked
+        } else if selectedUserType == UserType.cathy {
+            self.cathyCheckedRows[indexPath.row] = rowChecked
+        } else if selectedUserType == UserType.careGiver {
+            self.careGiverCheckedRows[indexPath.row] = rowChecked
+        }
+        
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+            if cell.accessoryType == .Checkmark {
+                cell.accessoryType = .None
+                self.setCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: false, indexPath: indexPath)
+            } else {
+                cell.accessoryType = .Checkmark
+                self.setCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: true, indexPath: indexPath)
+            }
+        }
+        
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -314,16 +348,46 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
+    func configureCellForCheckedRows(cell: OfficeConnectUserTableViewCell, selectedUserType: UserType, indexPath: NSIndexPath) {
+        
+        var checkedRows: [Bool] = [Bool]()
+        
+        if selectedUserType == UserType.client {
+            checkedRows = self.clientCheckedRows
+        } else if selectedUserType == UserType.cathy {
+            checkedRows = self.cathyCheckedRows
+        } else if selectedUserType == UserType.careGiver {
+            checkedRows = self.careGiverCheckedRows
+        }
+        
+        if !checkedRows[indexPath.row] {
+            cell.accessoryType = .None
+        } else if checkedRows[indexPath.row] {
+            cell.accessoryType = .Checkmark
+        }
+        
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeConnectUserTableViewCell
         
         self.configureCellForUserType(cell, userType: self.selectedUserType, indexPath: indexPath)
         self.configureCellContentAnimation(cell)
+        self.configureCellForCheckedRows(cell, selectedUserType: self.selectedUserType, indexPath: indexPath)
         
         return cell
         
     }
     
+    @IBAction func nameButtonTapped(sender: AnyObject) {
+        
+        let nameButton = sender as! UIButton
+        let superView = nameButton.superview!
+        let officeConnectUserTableViewCell = superView.superview as! OfficeConnectUserTableViewCell
+        let indexPath = tableView.indexPathForCell(officeConnectUserTableViewCell)
+        self.nameButtonSelectedRow = (indexPath?.row)!
+        
+    }
     
     @IBAction func addButtonTapped(sender: AnyObject) {
         self.performSegueWithIdentifier("officeConnectUserToOfficeAddUser", sender: nil)
@@ -345,6 +409,13 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                 print("navigationController returned nil")
             }
             
+        } else if segue.identifier == "officeConnectUsersToUserProfile" {
+            if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
+                userProfileViewController.user = self.getUsersForSelectedUserType(self.selectedUserType)[self.nameButtonSelectedRow]
+                userProfileViewController.selectedUserType = self.selectedUserType
+            } else {
+                print("destinationViewController returned nil")
+            }
         }
         
     }
