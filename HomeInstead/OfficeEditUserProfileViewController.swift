@@ -207,7 +207,7 @@ class OfficeEditUserProfileViewController: SignUpViewController {
                 if imageFile != nil {
                     object["imageFile"] = imageFile
                 }
-                
+                object.pinInBackground()
                 object.saveInBackgroundWithBlock({ (success: Bool, error: NSError?) -> Void in
                     if let error = error {
                         print(error)

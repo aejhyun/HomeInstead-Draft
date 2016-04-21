@@ -9,7 +9,7 @@
 import UIKit
 import Parse
 
-class OfficeAddUserTableViewController: UITableViewController, PassUserInformationDelegate {
+class OfficeAddUserTableViewController: UITableViewController {
 
     @IBOutlet weak var createClientUserBarButton: UIBarButtonItem!
     var selectedUserType: UserType!
@@ -19,6 +19,7 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
     var checkedRows: [Bool] = [Bool]()
     var nameButtonSelectedRow: Int = -1
     var numberOfTimesViewLaidOutSubviews: Int = 0
+    var numberOfTimesViewWillAppearIsCalled: Int = 0
     
     func setNavigationBarTitle() {
         
@@ -32,12 +33,16 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
         
     }
     
-    func attemptQueryingNonOfficeUserInformationFromCloudWithClassName(className: String, completion: (querySuccessful: Bool) -> Void) {
+    func attemptQueryingNonOfficeUserInformationFromCloudWithClassName(queryFromLocalDateStore: Bool, className: String, completion: (querySuccessful: Bool) -> Void) {
         
         var userInformation: [String: String] = [String: String]()
         var idsOfOfficeUsersWhoAddedThisUser: [String] = [String]()
         let query = PFQuery(className:className)
-        //query.fromLocalDatastore()
+        
+        if queryFromLocalDateStore {
+            query.fromLocalDatastore()
+        }
+        
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             if error == nil {
@@ -85,37 +90,40 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
             self.createClientUserBarButton.enabled = false
         }
         
-        self.attemptQueryingNonOfficeUserInformationFromCloudWithClassName(ClassNameForCloud().getClassName(self.selectedUserType)!) { (querySuccessful) -> Void in
-            
-            if querySuccessful {
-                // self.checkedRows is to keep track of which rows are checked by the user.
-                self.checkedRows = [Bool](count: self.users.count, repeatedValue: false)
-                self.tableView.reloadData()
-            }
-            
-        }
-        
-        
+//        self.attemptQueryingNonOfficeUserInformationFromCloudWithClassName(false, className: ClassNameForCloud().getClassName(self.selectedUserType)!) { (querySuccessful) -> Void in
+//            
+//            if querySuccessful {
+//                // self.checkedRows is to keep track of which rows are checked by the user.
+//                self.checkedRows = [Bool](count: self.users.count, repeatedValue: false)
+//                self.tableView.reloadData()
+//            }
+//            
+//        }
         
     }
     
-    func updateUserInformationLocally() {
-        // self.user has the data from the previous view controller. The reason why it is not in a viewWillLoad() function is because self.user's data becomes available after the first half of life cycle of a view controller has finished. The reason for the -1 check is because I don't want this to be set the first time this view segues to the next view controller because there is no value to set.
-        
-        if nameButtonSelectedRow != -1 {
-            self.users[nameButtonSelectedRow] = self.user
-            self.tableView.reloadData()
-            
-        }
-        
-    }
 
     
     override func viewWillAppear(animated: Bool) {
-        self.updateUserInformationLocally()
         
+        if self.numberOfTimesViewWillAppearIsCalled >= 0 {
+            
+            self.users.removeAll()
+            
+            self.attemptQueryingNonOfficeUserInformationFromCloudWithClassName(false, className: ClassNameForCloud().getClassName(self.selectedUserType)!) { (querySuccessful) -> Void in
+                
+                if querySuccessful {
+                    // self.checkedRows is to keep track of which rows are checked by the user.
+                    self.checkedRows = [Bool](count: self.users.count, repeatedValue: false)
+                    self.tableView.reloadData()
+                }
+                
+            }
+           
+        }
         
-        
+        self.numberOfTimesViewWillAppearIsCalled++
+
     }
     
     @IBAction func nameButtonTapped(sender: AnyObject) {
@@ -183,22 +191,38 @@ class OfficeAddUserTableViewController: UITableViewController, PassUserInformati
         cell.nameButton.setTitle(self.users[indexPath.row]["name"], forState: UIControlState.Normal)
         cell.emailLabel.text = self.users[indexPath.row]["email"]
         
+        if self.selectedUserType == UserType.client {
+            cell.emailLabel.text = self.users[indexPath.row]["objectId"]
+        }
+        
         return cell
         
     }
     
-    func passUserInformation(user: [String: String]) {
-        // Receiving user information from previous view controller.
-        self.user = user
-    }
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
-            userProfileViewController.user = self.users[self.nameButtonSelectedRow]
-            userProfileViewController.passUserInformationDelegate = self
-            userProfileViewController.selectedUserType = self.selectedUserType
-        } else {
-            print("destinationViewController returned nil")
+        
+        if segue.identifier == "officeAddUsersToUserProfile" {
+            
+            if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
+                userProfileViewController.user = self.users[self.nameButtonSelectedRow]
+                userProfileViewController.selectedUserType = self.selectedUserType
+            } else {
+                print("destinationViewController returned nil")
+            }
+            
+        } else if segue.identifier == "officeAddUsersToOfficeCreateClientProfile" {
+            
+            if let navigationController = segue.destinationViewController as? UINavigationController {
+                if let officeCreateClientUserViewController = navigationController.topViewController as? OfficeCreateClientUserViewController {
+                    print(officeCreateClientUserViewController)
+        
+                } else {
+                    print("officeAddUserTableViewController returned nil")
+                }
+            } else {
+                print("navigationController returned nil")
+            }
+            
         }
         
     }

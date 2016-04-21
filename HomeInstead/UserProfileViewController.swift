@@ -53,8 +53,6 @@ class UserProfileViewController: UIViewController {
     var postalCode: String!
     var notes: String!
     
-    var passUserInformationDelegate: PassUserInformationDelegate?
-    
     func unpackUserInformation() {
         
         self.name = self.user["name"]
@@ -216,10 +214,6 @@ class UserProfileViewController: UIViewController {
             print("navigationController returned nil")
         }
         
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        self.passUserInformationDelegate?.passUserInformation(self.user)
     }
     
     @IBAction func unwindToSegue (segue : UIStoryboardSegue) {

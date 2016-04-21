@@ -10,7 +10,7 @@ import UIKit
 import Parse
 
 class OfficeCreateClientUserViewController: OfficeEditUserProfileViewController {
-
+    
     override func viewDidLoad() {
         
         self.addPhotoButton.titleLabel?.textAlignment = .Center
@@ -27,7 +27,6 @@ class OfficeCreateClientUserViewController: OfficeEditUserProfileViewController 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
 
-    
     }
     
     func uploadClientUserInformationToCloud(completion: (uploadSuccessful: Bool) -> Void) {
