@@ -19,11 +19,19 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var cathyUsers: [[String: String]] = [[String: String]]()
     var clientUsers: [[String: String]] = [[String: String]]()
     
+    var careGiverOfficeUserIds: [[String]] = [[String]]() // These variables are to hold the ids of the office users who added the non office user.
+    var clientOfficeUserIds: [[String]] = [[String]]()
+    var cathyOfficeUserIds: [[String]] = [[String]]()
+    
     var selectedUserType: UserType!
 
     var navigationBarLine: UIView = UIView()
     
     var numberOfTimesReloadDataIsCalled: Int = 0
+    
+    let classNameForCloud = ClassNameForCloud()
+    
+    
 
 // Navigation bar line functions start here.
     
@@ -61,19 +69,29 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func queryUsersAddedByOfficeUserFromCloud(className: String, completion: (querySuccessful: Bool, users: [[String: String]]) -> Void) {
+    func queryUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, users: [[String: String]]) -> Void) {
         
+        var idsOfOfficeUsersWhoAddedThisUser: [String] = [String]()
         var users: [[String: String]] = [[String: String]]()
         var userInformation: [String: String] = [String: String]()
-        let query = PFQuery(className: className)
-        query.whereKey("idsOfOfficeUsersWhoAddedThisUser", containedIn: [(PFUser.currentUser()?.objectId)!])
         
+        let query = PFQuery(className: classNameForCloud.getClassName(userType)!)
+        query.whereKey("idsOfOfficeUsersWhoAddedThisUser", containedIn: [(PFUser.currentUser()?.objectId)!])
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             if error == nil {
                 if let objects = objects {
                     for object in objects {
                         
+                        idsOfOfficeUsersWhoAddedThisUser = object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String]
+                        if userType == UserType.client {
+                            self.clientOfficeUserIds.append(idsOfOfficeUsersWhoAddedThisUser)
+                        } else if userType == UserType.cathy {
+                            self.cathyOfficeUserIds.append(idsOfOfficeUsersWhoAddedThisUser)
+                        } else if userType == UserType.careGiver {
+                            self.careGiverOfficeUserIds.append(idsOfOfficeUsersWhoAddedThisUser)
+                        }
+
                         userInformation["name"] = object.objectForKey("name") as? String
                         userInformation["notes"] = object.objectForKey("notes") as? String
                         userInformation["email"] = object.objectForKey("email") as? String
@@ -103,26 +121,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func queryUsersAddedByOfficeUserFromCloudForSelectedUserType(selectedUserType: UserType, completion: (querySuccessful: Bool) -> Void) {
-        
-        let classNameForCloud = ClassNameForCloud()
-        
-        self.queryUsersAddedByOfficeUserFromCloud(classNameForCloud.getClassName(selectedUserType)!) { (querySuccessful, users) -> Void in
-            if querySuccessful {
-                if selectedUserType
-                
-                
-                self.clientUsers = users
-                querySuccessCheck.successfullyQueriedClientUsers = true
-                if querySuccessCheck.successfullyQueriedAllUsers() {
-                    self.numberOfTimesReloadDataIsCalled++
-                    self.tableView.reloadData()
-                }
-            }
-        }
-        
-        
-    }
     
     override func viewWillAppear(animated: Bool) {
         
@@ -132,10 +130,9 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
         var querySuccessCheck = QuerySuccessCheck()
-        let classNameForCloud = ClassNameForCloud()
         
 
-        self.queryUsersAddedByOfficeUserFromCloud(classNameForCloud.getClassName(UserType.client)!) { (querySuccessful, users) -> Void in
+        self.queryUsersAddedByOfficeUserFromCloud(UserType.client) { (querySuccessful, users) -> Void in
             if querySuccessful {
                 self.clientUsers = users
                 querySuccessCheck.successfullyQueriedClientUsers = true
@@ -146,18 +143,18 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             }
         }
         
-        self.queryUsersAddedByOfficeUserFromCloud(classNameForCloud.getClassName(UserType.cathy)!) { (querySuccessful, users) -> Void in
+        self.queryUsersAddedByOfficeUserFromCloud(UserType.cathy) { (querySuccessful, users) -> Void in
             if querySuccessful {
                 self.cathyUsers = users
                 querySuccessCheck.successfullyQueriedCathyUsers = true
-                if querySuccessCheck.successfullyQueriedAllUsers(){
+                if querySuccessCheck.successfullyQueriedAllUsers() {
                     self.numberOfTimesReloadDataIsCalled++
                     self.tableView.reloadData()
                 }
             }
         }
         
-        self.queryUsersAddedByOfficeUserFromCloud(classNameForCloud.getClassName(UserType.careGiver)!) { (querySuccessful, users) -> Void in
+        self.queryUsersAddedByOfficeUserFromCloud(UserType.careGiver) { (querySuccessful, users) -> Void in
             if querySuccessful {
                 self.careGiverUsers = users
                 querySuccessCheck.successfullyQueriedCareGiverUsers = true
@@ -210,18 +207,35 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func deleteUserFromOfficeUserInCloud(user: [[String: String]], indexPath: NSIndexPath) {
+    func deleteUserFromOfficeUserInCloud(user: [[String: String]], officeUserIdsForUser: [[String]], indexPath: NSIndexPath) {
         
+        let newOfficeUserIdsForUser: [String] = officeUserIdsForUser[indexPath.row].filter { $0 != PFUser.currentUser()?.objectId }
+        
+        let query = PFQuery(className: classNameForCloud.getClassName(self.selectedUserType)!)
+        
+        query.getObjectInBackgroundWithId(user[indexPath.row]["objectId"]!) {
+            (objects: PFObject?, error: NSError?) -> Void in
+            if error != nil {
+                print(error)
+            } else if let object = objects {
+                object["idsOfOfficeUsersWhoAddedThisUser"] = newOfficeUserIdsForUser
+                object.saveInBackground()
+            }
+        }
     }
     
     func deleteRowForSelectedUserType(selectedUserType: UserType, indexPath: NSIndexPath) {
 
         if selectedUserType == UserType.client {
+            self.deleteUserFromOfficeUserInCloud(self.clientUsers, officeUserIdsForUser: self.clientOfficeUserIds, indexPath: indexPath)
             self.clientUsers.removeAtIndex(indexPath.row)
         } else if selectedUserType == UserType.cathy {
+            self.deleteUserFromOfficeUserInCloud(self.cathyUsers, officeUserIdsForUser: self.cathyOfficeUserIds, indexPath: indexPath)
             self.cathyUsers.removeAtIndex(indexPath.row)
         } else if selectedUserType == UserType.careGiver {
+            self.deleteUserFromOfficeUserInCloud(self.careGiverUsers, officeUserIdsForUser: self.careGiverOfficeUserIds, indexPath: indexPath)
             self.careGiverUsers.removeAtIndex(indexPath.row)
+            
         }
 
     }
@@ -348,3 +362,41 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
 
 
 }
+
+
+
+
+
+
+
+
+
+//    func queryUsersAddedByOfficeUserFromCloudForSelectedUserType(selectedUserType: UserType, completion: (querySuccessful: Bool) -> Void) {
+//
+//        let classNameForCloud = ClassNameForCloud()
+//        var querySuccessCheck = QuerySuccessCheck()
+//
+//        self.queryUsersAddedByOfficeUserFromCloud(classNameForCloud.getClassName(selectedUserType)!) { (querySuccessful, users) -> Void in
+//            if querySuccessful {
+//                if selectedUserType == UserType.client {
+//                    self.clientUsers = users
+//                    querySuccessCheck.successfullyQueriedClientUsers = true
+//                } else if selectedUserType == UserType.cathy {
+//                    self.cathyUsers = users
+//                    querySuccessCheck.successfullyQueriedCathyUsers = true
+//                } else if selectedUserType == UserType.careGiver {
+//                    self.careGiverUsers = users
+//                    querySuccessCheck.successfullyQueriedCareGiverUsers = true
+//                }
+//
+//
+//                if querySuccessCheck.successfullyQueriedAllUsers() {
+//                    self.numberOfTimesReloadDataIsCalled++
+//                    self.tableView.reloadData()
+//                }
+//            }
+//        }
+//
+//
+//    }
+

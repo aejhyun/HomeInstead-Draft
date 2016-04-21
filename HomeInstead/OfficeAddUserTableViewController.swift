@@ -117,7 +117,7 @@ class OfficeAddUserTableViewController: UITableViewController {
                     // self.checkedRows is to keep track of which rows are checked by the user.
                     self.checkedRows = [Bool](count: self.users.count, repeatedValue: false)
                     self.tableView.reloadData()
-                    print(self.officeUserIds)
+        
                 }
                 
             }
