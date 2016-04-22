@@ -14,6 +14,7 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
     @IBOutlet weak var userIdLabel: UILabel!
     @IBOutlet weak var notesLabel: UILabel!
     @IBOutlet weak var notesTopSpaceLayoutConstraint: NSLayoutConstraint!
+    @IBOutlet weak var expandButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

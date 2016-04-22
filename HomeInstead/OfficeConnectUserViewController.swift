@@ -34,7 +34,9 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
 
     var navigationBarLine: UIView = UIView()
     
-    var nameButtonSelectedRow: Int = -1
+    var nameButtonTappedRow: Int = -1
+    
+    var expandButtonTappedIndexPath: NSIndexPath? = nil
     
     var numberOfTimesReloadDataIsCalled: Int = 0
     
@@ -288,6 +290,22 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        let originalHeight: CGFloat = UITableViewAutomaticDimension
+        let expandedHeight: CGFloat = 100.0
+        let ip = indexPath
+        if self.expandButtonTappedIndexPath != nil {
+            if ip == self.expandButtonTappedIndexPath! {
+                return expandedHeight
+            } else {
+                return originalHeight
+            }
+        } else {
+            return originalHeight
+        }
+    }
+    
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
         if editingStyle == .Delete {
@@ -399,9 +417,35 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         let superView = nameButton.superview!
         let officeConnectUserTableViewCell = superView.superview as! OfficeConnectUserTableViewCell
         let indexPath = tableView.indexPathForCell(officeConnectUserTableViewCell)
-        self.nameButtonSelectedRow = (indexPath?.row)!
+        self.nameButtonTappedRow = (indexPath?.row)!
         
     }
+    
+    
+    @IBAction func expandButtonTapped(sender: AnyObject) {
+        
+        let expandButton = sender as! UIButton
+        let superView = expandButton.superview!
+        let officeConnectUserTableViewCell = superView.superview as! OfficeConnectUserTableViewCell
+        let indexPath = tableView.indexPathForCell(officeConnectUserTableViewCell)
+
+        switch self.expandButtonTappedIndexPath {
+        case nil:
+            self.expandButtonTappedIndexPath = indexPath
+        default:
+            if self.expandButtonTappedIndexPath! == indexPath {
+                self.expandButtonTappedIndexPath = nil
+            } else {
+                self.expandButtonTappedIndexPath = indexPath
+            }
+        }
+
+        self.tableView.beginUpdates()
+        self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
+        self.tableView.endUpdates()
+        
+    }
+
     
     func presentAlertControllerWithMessage(message: String) {
         
@@ -500,8 +544,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     func connectUsersForUserTypeInCloud(selectedUserType: UserType, checkedClientObjectId: [String], checkedCathysObjectIds: [String], checkedCareGiversObjectIds: [String]) {
         
         var objectIdsForQuery: [String] = [String]()
-        var firstSetOfObjectIdsToBeSaved: [String] = [String]()
-        var secondSetOfObjectIdsToBeSaved: [String] = [String]()
+        var firstSetOfObjectIdsToBeUploaded: [String] = [String]()
+        var secondSetOfObjectIdsToBeUploaded: [String] = [String]()
         var nameOfFirstField: String = String()
         var nameOfSecondField: String = String()
         
@@ -509,20 +553,20 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             objectIdsForQuery = checkedClientObjectId
             nameOfFirstField = "cathyConnections"
             nameOfSecondField = "careGiverConnections"
-            firstSetOfObjectIdsToBeSaved = checkedCathysObjectIds
-            secondSetOfObjectIdsToBeSaved = checkedCareGiversObjectIds
+            firstSetOfObjectIdsToBeUploaded = checkedCathysObjectIds
+            secondSetOfObjectIdsToBeUploaded = checkedCareGiversObjectIds
         } else if selectedUserType == UserType.cathy {
             objectIdsForQuery = checkedCathysObjectIds
             nameOfFirstField = "clientConnections"
             nameOfSecondField = "careGiverConnections"
-            firstSetOfObjectIdsToBeSaved = checkedClientObjectId
-            secondSetOfObjectIdsToBeSaved = checkedCareGiversObjectIds
+            firstSetOfObjectIdsToBeUploaded = checkedClientObjectId
+            secondSetOfObjectIdsToBeUploaded = checkedCareGiversObjectIds
         } else if selectedUserType == UserType.careGiver {
             objectIdsForQuery = checkedCareGiversObjectIds
             nameOfFirstField = "clientConnections"
             nameOfSecondField = "cathyConnections"
-            firstSetOfObjectIdsToBeSaved = checkedClientObjectId
-            secondSetOfObjectIdsToBeSaved = checkedCathysObjectIds
+            firstSetOfObjectIdsToBeUploaded = checkedClientObjectId
+            secondSetOfObjectIdsToBeUploaded = checkedCathysObjectIds
         }
         
         for var index: Int = 0; index < objectIdsForQuery.count; index++ {
@@ -533,8 +577,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                 if error != nil {
                     print(error)
                 } else if let object = objects {
-                    object[nameOfFirstField] = firstSetOfObjectIdsToBeSaved
-                    object[nameOfSecondField] = secondSetOfObjectIdsToBeSaved
+                    object[nameOfFirstField] = firstSetOfObjectIdsToBeUploaded
+                    object[nameOfSecondField] = secondSetOfObjectIdsToBeUploaded
                     object.saveInBackground()
                     object.pinInBackground()
                 }
@@ -558,7 +602,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             }
             
         }
-         
+        
     }
     
     @IBAction func addButtonTapped(sender: AnyObject) {
@@ -583,7 +627,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             
         } else if segue.identifier == "officeConnectUsersToUserProfile" {
             if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
-                userProfileViewController.user = self.getUsersForSelectedUserType(self.selectedUserType)![self.nameButtonSelectedRow]
+                userProfileViewController.user = self.getUsersForSelectedUserType(self.selectedUserType)![self.nameButtonTappedRow]
                 userProfileViewController.selectedUserType = self.selectedUserType
             } else {
                 print("destinationViewController returned nil")

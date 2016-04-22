@@ -5121,6 +5121,14 @@ Photo</string>
                                                         </mask>
                                                     </variation>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nta-RU-RYA">
+                                                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                    <state key="normal" title="Expand"/>
+                                                    <connections>
+                                                        <action selector="expandButtonTapped:" destination="jhU-fc-GJK" eventType="touchUpInside" id="gnZ-W4-iQ0"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="JbF-zJ-2Fe" firstAttribute="top" secondItem="Obf-sF-Sq1" secondAttribute="bottom" constant="8" id="5zX-gf-R5M">
@@ -5131,10 +5139,14 @@ Photo</string>
                                                 <constraint firstItem="Obf-sF-Sq1" firstAttribute="top" secondItem="3BD-JR-ZQW" secondAttribute="topMargin" constant="-8" id="Bsd-w1-yJF">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="-3"/>
                                                 </constraint>
+                                                <constraint firstItem="nta-RU-RYA" firstAttribute="centerY" secondItem="Obf-sF-Sq1" secondAttribute="centerY" id="DbT-xw-Opu"/>
                                                 <constraint firstItem="hr1-Xf-Lmr" firstAttribute="top" secondItem="JbF-zJ-2Fe" secondAttribute="bottom" constant="60" id="Lkb-5b-SWd">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="5"/>
                                                 </constraint>
                                                 <constraint firstItem="JbF-zJ-2Fe" firstAttribute="leading" secondItem="3BD-JR-ZQW" secondAttribute="leadingMargin" constant="6" id="RHJ-yi-uhs"/>
+                                                <constraint firstItem="nta-RU-RYA" firstAttribute="leading" secondItem="Obf-sF-Sq1" secondAttribute="trailing" constant="51" id="d2D-VH-VXB">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="10"/>
+                                                </constraint>
                                                 <constraint firstItem="hr1-Xf-Lmr" firstAttribute="top" secondItem="Obf-sF-Sq1" secondAttribute="bottom" constant="-2" id="daN-4L-uYl"/>
                                                 <constraint firstItem="Obf-sF-Sq1" firstAttribute="top" secondItem="3BD-JR-ZQW" secondAttribute="topMargin" constant="4" id="eKp-n2-DAb"/>
                                                 <constraint firstItem="Obf-sF-Sq1" firstAttribute="leading" secondItem="3BD-JR-ZQW" secondAttribute="leadingMargin" constant="60" id="poK-Vf-uAc">
@@ -5149,6 +5161,7 @@ Photo</string>
                                                     <exclude reference="Obf-sF-Sq1"/>
                                                     <exclude reference="hr1-Xf-Lmr"/>
                                                     <exclude reference="JbF-zJ-2Fe"/>
+                                                    <exclude reference="nta-RU-RYA"/>
                                                 </mask>
                                                 <mask key="constraints">
                                                     <exclude reference="Bsd-w1-yJF"/>
@@ -5161,6 +5174,8 @@ Photo</string>
                                                     <exclude reference="Lkb-5b-SWd"/>
                                                     <exclude reference="daN-4L-uYl"/>
                                                     <exclude reference="yHQ-AS-FNn"/>
+                                                    <exclude reference="DbT-xw-Opu"/>
+                                                    <exclude reference="d2D-VH-VXB"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
@@ -5168,6 +5183,7 @@ Photo</string>
                                                     <include reference="Obf-sF-Sq1"/>
                                                     <include reference="hr1-Xf-Lmr"/>
                                                     <include reference="JbF-zJ-2Fe"/>
+                                                    <include reference="nta-RU-RYA"/>
                                                 </mask>
                                                 <mask key="constraints">
                                                     <include reference="Bsd-w1-yJF"/>
@@ -5180,10 +5196,13 @@ Photo</string>
                                                     <include reference="Lkb-5b-SWd"/>
                                                     <exclude reference="daN-4L-uYl"/>
                                                     <include reference="yHQ-AS-FNn"/>
+                                                    <include reference="DbT-xw-Opu"/>
+                                                    <include reference="d2D-VH-VXB"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="expandButton" destination="nta-RU-RYA" id="FnY-ej-neA"/>
                                             <outlet property="nameButton" destination="Obf-sF-Sq1" id="Qfk-LN-6cF"/>
                                             <outlet property="notesLabel" destination="hr1-Xf-Lmr" id="h1b-jc-Osf"/>
                                             <outlet property="notesTopSpaceLayoutConstraint" destination="Lkb-5b-SWd" id="Tuz-Q8-us1"/>
