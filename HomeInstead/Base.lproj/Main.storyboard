@@ -5199,15 +5199,23 @@ Photo</string>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g4h-DD-Jbc">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <items>
-                                    <barButtonItem title="Disconnect" id="oNK-oH-zhX"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="sHc-Md-MQi"/>
+                                    <barButtonItem title="Connect" id="oNK-oH-zhX">
+                                        <connections>
+                                            <action selector="connectButtonTapped:" destination="jhU-fc-GJK" id="f40-09-dfG"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="JH3-hh-pnK"/>
-                                    <barButtonItem title="Connect" id="bGj-BC-zJp"/>
+                                    <barButtonItem title="Disconnect" id="bGj-BC-zJp"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="pwd-GY-UcK"/>
                                 </items>
                             </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="7Xq-bU-KsZ" firstAttribute="top" secondItem="g4h-DD-Jbc" secondAttribute="bottom" id="Bie-9q-fvN"/>
+                            <constraint firstItem="7Xq-bU-KsZ" firstAttribute="top" secondItem="g4h-DD-Jbc" secondAttribute="bottom" id="Bie-9q-fvN">
+                                <variation key="heightClass=regular-widthClass=compact" constant="-1"/>
+                            </constraint>
                             <constraint firstItem="YDS-Of-YBV" firstAttribute="top" secondItem="bow-LN-ZPW" secondAttribute="bottom" id="Jyl-9l-Rfj">
                                 <variation key="widthClass=compact" constant="1"/>
                             </constraint>
@@ -5218,7 +5226,7 @@ Photo</string>
                             <constraint firstItem="YDS-Of-YBV" firstAttribute="leading" secondItem="Tbf-sJ-Uxy" secondAttribute="leadingMargin" constant="-20" id="a1v-ii-ACz"/>
                             <constraint firstItem="g4h-DD-Jbc" firstAttribute="leading" secondItem="Tbf-sJ-Uxy" secondAttribute="leadingMargin" constant="-20" id="e4g-Hi-5ao"/>
                             <constraint firstItem="g4h-DD-Jbc" firstAttribute="top" secondItem="YDS-Of-YBV" secondAttribute="bottom" id="eII-YO-qRH">
-                                <variation key="heightClass=regular-widthClass=compact" constant="1"/>
+                                <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
                             </constraint>
                             <constraint firstAttribute="trailingMargin" secondItem="bow-LN-ZPW" secondAttribute="trailing" constant="-20" id="zHV-1t-bR8"/>
                         </constraints>
@@ -5229,16 +5237,16 @@ Photo</string>
                                 <exclude reference="g4h-DD-Jbc"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="Bie-9q-fvN"/>
                                 <exclude reference="N5o-5M-CpB"/>
                                 <exclude reference="Pv1-RJ-Y0K"/>
                                 <exclude reference="zHV-1t-bR8"/>
-                                <exclude reference="Jyl-9l-Rfj"/>
-                                <exclude reference="WIH-sf-nQY"/>
-                                <exclude reference="a1v-ii-ACz"/>
                                 <exclude reference="Ynp-Si-buf"/>
                                 <exclude reference="e4g-Hi-5ao"/>
                                 <exclude reference="eII-YO-qRH"/>
-                                <exclude reference="Bie-9q-fvN"/>
+                                <exclude reference="Jyl-9l-Rfj"/>
+                                <exclude reference="WIH-sf-nQY"/>
+                                <exclude reference="a1v-ii-ACz"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -5260,10 +5268,10 @@ Photo</string>
                                 <include reference="g4h-DD-Jbc"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="Bie-9q-fvN"/>
                                 <include reference="Ynp-Si-buf"/>
                                 <include reference="e4g-Hi-5ao"/>
                                 <include reference="eII-YO-qRH"/>
-                                <include reference="Bie-9q-fvN"/>
                             </mask>
                         </variation>
                     </view>
@@ -5283,6 +5291,7 @@ Photo</string>
                         <outlet property="barButtonItem" destination="fLl-y5-F77" id="Ot1-nk-PQQ"/>
                         <outlet property="segmentedControl" destination="NgT-tK-DmI" id="6Gs-45-AaV"/>
                         <outlet property="tableView" destination="YDS-Of-YBV" id="nXR-kT-FOz"/>
+                        <outlet property="toolBar" destination="g4h-DD-Jbc" id="EMV-Ph-WfT"/>
                         <segue destination="HDG-hs-Nmn" kind="presentation" identifier="officeConnectUserToOfficeAddUser" id="BJa-i0-yO3"/>
                     </connections>
                 </viewController>

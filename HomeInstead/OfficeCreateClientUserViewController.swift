@@ -47,8 +47,12 @@ class OfficeCreateClientUserViewController: OfficeEditUserProfileViewController 
         object["postalCode"] = self.postalCodeTextField.text
         object["phoneNumber"] = self.phoneNumberTextField.text
         object["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
-        object["notes"] = ""
-        object["idsOfOfficeUsersWhoAddedThisUser"] = [""]
+        object["notes"] = self.notesTextView.text
+        object["idsOfOfficeUsersWhoAddedThisUser"] = []
+        object["clientConnections"] = []
+        object["cathyConnections"] = []
+        object["careGiverConnections"] = []
+        
         if imageFile != nil {
             object["imageFile"] = imageFile
         }
@@ -75,10 +79,5 @@ class OfficeCreateClientUserViewController: OfficeEditUserProfileViewController 
         }
         
     }
-
-
-    
-
-
 
 }

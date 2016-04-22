@@ -14,6 +14,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var barButtonItem: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var toolBar: UIToolbar!
     
     var clientUsers: [[String: String]] = [[String: String]]()
     var cathyUsers: [[String: String]] = [[String: String]]()
@@ -28,6 +29,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var careGiverCheckedRows: [Bool] = [Bool]()
     
     var selectedUserType: UserType!
+    
+    var userTypes: [UserType] = [UserType.client, UserType.cathy, UserType.careGiver]
 
     var navigationBarLine: UIView = UIView()
     
@@ -44,6 +47,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
         return UIBarPosition.TopAttached
     }
+    
+
     
     func removeBottomLineFromNavigationBar() {
         
@@ -64,11 +69,20 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.barButtonItem.width = viewWidth - 20.0
     }
     
+    func setToolBar() {
+        
+        self.toolBar.layer.borderWidth = 1.0
+        self.toolBar.clipsToBounds = true
+        self.toolBar.layer.borderColor = UIColor(red: 163.0/255.0, green: 163.0/255.0, blue: 163.0/255.0, alpha: 1.0).CGColor
+        self.toolBar.layer.borderWidth = 1.0
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setSegmentedControlWidth()
         self.removeBottomLineFromNavigationBar()
+        self.setToolBar()
         
         // Need to set the initial chosen segment for the segment control. If this is not present, it will cause a crash.
         self.selectedUserType = UserType.client
@@ -202,7 +216,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func getUsersForSelectedUserType(selectedUserType: UserType) -> [[String: String]] {
+    func getUsersForSelectedUserType(selectedUserType: UserType) -> [[String: String]]? {
         // Use this function to only read and get the different users. If you want to modify the content of the users, do not use this function because it will not return a reference. So any modification that you make to the return value will not modify the class variables, only the copy of the class variables.
         if selectedUserType == UserType.client {
             return self.clientUsers
@@ -212,7 +226,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         } else if selectedUserType == UserType.careGiver {
             return self.careGiverUsers
         }
-        return self.clientUsers
+        return nil
         
     }
     
@@ -292,7 +306,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return getUsersForSelectedUserType(self.selectedUserType).count
+        return getUsersForSelectedUserType(self.selectedUserType)!.count
 
     }
     
@@ -304,7 +318,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     }
     
     func configureCellForUserType(cell: OfficeConnectUserTableViewCell, userType: UserType, indexPath: NSIndexPath) {
-        var users: [[String: String]] = self.getUsersForSelectedUserType(self.selectedUserType)
+        var users: [[String: String]] = self.getUsersForSelectedUserType(self.selectedUserType)!
         
         cell.nameButton.setTitle(users[indexPath.row]["name"], forState: UIControlState.Normal)
         
@@ -389,6 +403,164 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
+    func presentAlertControllerWithMessage(message: String) {
+        
+        let alertController = UIAlertController(title: "", message: "\(message)", preferredStyle: UIAlertControllerStyle.Alert)
+        let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alertController.addAction(defaultAction)
+        presentViewController(alertController, animated: true, completion: nil)
+        
+    }
+    
+    func correctNumberOfUsersAreChecked() -> Bool {
+        
+        var clientNumberOfRowsChecked: Int = 0
+        var oneClientUserIsChecked: Bool = false
+        for var row = 0; row < self.clientCheckedRows.count; row++ {
+            if self.clientCheckedRows[row] == true {
+                clientNumberOfRowsChecked++
+            }
+        }
+        
+        var cathyNumberOfRowsChecked: Int = 0
+        var atLeastOneCathyUserIsChecked: Bool = false
+        for var row = 0; row < self.cathyCheckedRows.count; row++ {
+            if self.cathyCheckedRows[row] == true {
+                cathyNumberOfRowsChecked++
+            }
+        }
+        
+        var careGiverNumberOfRowsChecked: Int = 0
+        var atLeastOneCareGiverUserIsChecked: Bool = false
+        for var row = 0; row < self.careGiverCheckedRows.count; row++ {
+            if self.careGiverCheckedRows[row] == true {
+                careGiverNumberOfRowsChecked++
+            }
+        }
+        
+        if clientNumberOfRowsChecked == 1 {
+            oneClientUserIsChecked = true
+            
+            if cathyNumberOfRowsChecked > 0 {
+                atLeastOneCathyUserIsChecked = true
+                
+                if careGiverNumberOfRowsChecked > 0 {
+                    atLeastOneCareGiverUserIsChecked = true
+                } else {
+                    self.presentAlertControllerWithMessage("Please select at least one care giver")
+                }
+                
+            } else {
+                self.presentAlertControllerWithMessage("Please select at least one cathy")
+            }
+            
+        } else {
+            self.presentAlertControllerWithMessage("Please select one client")
+        }
+        
+        if oneClientUserIsChecked && atLeastOneCathyUserIsChecked && atLeastOneCareGiverUserIsChecked {
+            return true
+        } else {
+            return false
+        }
+        
+    }
+    
+    func getUserCheckedRowsForSelectedUserType(selectedUserType: UserType) -> [Bool]? {
+        
+        if selectedUserType == UserType.client {
+            return self.clientCheckedRows
+        } else if selectedUserType == UserType.cathy {
+            return self.cathyCheckedRows
+            
+        } else if selectedUserType == UserType.careGiver {
+            return self.careGiverCheckedRows
+        }
+        return nil
+        
+    }
+    
+    func getCheckedUsersObjectIds(userType: UserType) -> [String] {
+        
+        var objectIds: [String] = [String]()
+        var users: [[String: String]] = self.getUsersForSelectedUserType(userType)!
+        let userCheckedRows: [Bool] = self.getUserCheckedRowsForSelectedUserType(userType)!
+        
+        var userNumberOfRowsChecked: Int = 0
+        for var row = 0; row < userCheckedRows.count; row++ {
+            if userCheckedRows[row] == true {
+                objectIds.append(users[row]["objectId"]!)
+                userNumberOfRowsChecked++
+            }
+        }
+
+        return objectIds
+    }
+    
+    func connectUsersForUserTypeInCloud(selectedUserType: UserType, checkedClientObjectId: [String], checkedCathysObjectIds: [String], checkedCareGiversObjectIds: [String]) {
+        
+        var objectIdsForQuery: [String] = [String]()
+        var firstSetOfObjectIdsToBeSaved: [String] = [String]()
+        var secondSetOfObjectIdsToBeSaved: [String] = [String]()
+        var nameOfFirstField: String = String()
+        var nameOfSecondField: String = String()
+        
+        if selectedUserType == UserType.client {
+            objectIdsForQuery = checkedClientObjectId
+            nameOfFirstField = "cathyConnections"
+            nameOfSecondField = "careGiverConnections"
+            firstSetOfObjectIdsToBeSaved = checkedCathysObjectIds
+            secondSetOfObjectIdsToBeSaved = checkedCareGiversObjectIds
+        } else if selectedUserType == UserType.cathy {
+            objectIdsForQuery = checkedCathysObjectIds
+            nameOfFirstField = "clientConnections"
+            nameOfSecondField = "careGiverConnections"
+            firstSetOfObjectIdsToBeSaved = checkedClientObjectId
+            secondSetOfObjectIdsToBeSaved = checkedCareGiversObjectIds
+        } else if selectedUserType == UserType.careGiver {
+            objectIdsForQuery = checkedCareGiversObjectIds
+            nameOfFirstField = "clientConnections"
+            nameOfSecondField = "cathyConnections"
+            firstSetOfObjectIdsToBeSaved = checkedClientObjectId
+            secondSetOfObjectIdsToBeSaved = checkedCathysObjectIds
+        }
+        
+        for var index: Int = 0; index < objectIdsForQuery.count; index++ {
+            
+            let query = PFQuery(className: classNameForCloud.getClassName(selectedUserType)!)
+            query.getObjectInBackgroundWithId(objectIdsForQuery[index]) {
+                (objects: PFObject?, error: NSError?) -> Void in
+                if error != nil {
+                    print(error)
+                } else if let object = objects {
+                    object[nameOfFirstField] = firstSetOfObjectIdsToBeSaved
+                    object[nameOfSecondField] = secondSetOfObjectIdsToBeSaved
+                    object.saveInBackground()
+                    object.pinInBackground()
+                }
+            }
+
+        }
+        
+    }
+    
+    @IBAction func connectButtonTapped(sender: AnyObject) {
+
+        
+        if self.correctNumberOfUsersAreChecked() {
+            
+            let checkedClientObjectId: [String] = self.getCheckedUsersObjectIds(UserType.client)
+            let checkedCathysObjectIds: [String]  = self.getCheckedUsersObjectIds(UserType.cathy)
+            let checkedCareGiversObjectIds: [String] = self.getCheckedUsersObjectIds(UserType.careGiver)
+            
+            for userType in userTypes {
+                self.connectUsersForUserTypeInCloud(userType, checkedClientObjectId: checkedClientObjectId, checkedCathysObjectIds: checkedCathysObjectIds, checkedCareGiversObjectIds: checkedCareGiversObjectIds)
+            }
+            
+        }
+         
+    }
+    
     @IBAction func addButtonTapped(sender: AnyObject) {
         self.performSegueWithIdentifier("officeConnectUserToOfficeAddUser", sender: nil)
     }
@@ -411,7 +583,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             
         } else if segue.identifier == "officeConnectUsersToUserProfile" {
             if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
-                userProfileViewController.user = self.getUsersForSelectedUserType(self.selectedUserType)[self.nameButtonSelectedRow]
+                userProfileViewController.user = self.getUsersForSelectedUserType(self.selectedUserType)![self.nameButtonSelectedRow]
                 userProfileViewController.selectedUserType = self.selectedUserType
             } else {
                 print("destinationViewController returned nil")
