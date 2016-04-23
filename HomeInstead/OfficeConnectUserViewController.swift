@@ -38,7 +38,11 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     var expandButtonTappedIndexPath: NSIndexPath? = nil
     
+    var expandButtonTapped: Bool = false
+    
     var numberOfTimesReloadDataIsCalled: Int = 0
+    
+    var rowHeights: [CGFloat] = [CGFloat]()
     
     let classNameForCloud = ClassNameForCloud()
     
@@ -49,9 +53,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
         return UIBarPosition.TopAttached
     }
-    
 
-    
     func removeBottomLineFromNavigationBar() {
         
         for parent in self.navigationController!.navigationBar.subviews {
@@ -189,7 +191,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                 }
             }
         }
-     
+        
         self.navigationBarLine.hidden = true
 
     }
@@ -292,8 +294,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        let originalHeight: CGFloat = UITableViewAutomaticDimension
-        let expandedHeight: CGFloat = 100.0
+        let originalHeight = UITableViewAutomaticDimension
+        let expandedHeight: CGFloat = 200.0
         let ip = indexPath
         if self.expandButtonTappedIndexPath != nil {
             if ip == self.expandButtonTappedIndexPath! {
@@ -304,6 +306,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         } else {
             return originalHeight
         }
+        
+       
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -400,12 +404,31 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
+   
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeConnectUserTableViewCell
+        let names = ["Jae Kimepqrij", "Baby John", "Obama Presidententadf"]
+        
+        
+        // The reason for self.expandButtonTapped == true is because self.rowHeights doesn't get initialized until expandButton is tapped. So without this check, it will cause the app to crash.
+        if self.expandButtonTapped == true {
+            
+            cell.width = self.tableView.frame.width
+            cell.height = self.rowHeights[indexPath.row]
+            cell.removeConnectedUserNameButtons()
+            cell.createConnectedUserNameButtons(names)
+            self.expandButtonTapped = false
+            
+        }
+        
+        
         
         self.configureCellForUserType(cell, userType: self.selectedUserType, indexPath: indexPath)
         self.configureCellContentAnimation(cell)
         self.configureCellForCheckedRows(cell, selectedUserType: self.selectedUserType, indexPath: indexPath)
+        
+        
         
         return cell
         
@@ -421,8 +444,15 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    
     @IBAction func expandButtonTapped(sender: AnyObject) {
+        
+        self.expandButtonTapped = true
+        
+        // I use the code below to get the row height for each cell so that xcode knows where to add the connected names, that is, right below the notes in the cell. I can't use the row height in the cell for row index path because it is not returning the correct row height. In order to get the correct heights, I have to put the function in the expandButtonTapped function.
+        for visibleCell in tableView.visibleCells {
+            let rowHeight = CGRectGetHeight(visibleCell.bounds)
+            self.rowHeights.append(rowHeight)
+        }
         
         let expandButton = sender as! UIButton
         let superView = expandButton.superview!
@@ -444,6 +474,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
         self.tableView.endUpdates()
         
+        // It will continue to append the row heights so the elements in the array does not reflect the actual row heights of the rows in the table view. Only by removing all, could we get the correct values.
+        self.rowHeights.removeAll()
     }
 
     

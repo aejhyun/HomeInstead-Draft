@@ -5098,8 +5098,9 @@ Photo</string>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
-                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
                                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                                                        <rect key="frame" x="14" y="43" width="212" height="14"/>
                                                     </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UserId" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JbF-zJ-2Fe">
@@ -5126,7 +5127,7 @@ Photo</string>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <state key="normal" title="Expand"/>
                                                     <connections>
-                                                        <action selector="expandButtonTapped:" destination="jhU-fc-GJK" eventType="touchUpInside" id="gnZ-W4-iQ0"/>
+                                                        <action selector="expandButtonTapped:" destination="jhU-fc-GJK" eventType="touchUpInside" id="Izd-nf-aN0"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -5167,6 +5168,8 @@ Photo</string>
                                                     <exclude reference="Bsd-w1-yJF"/>
                                                     <exclude reference="eKp-n2-DAb"/>
                                                     <exclude reference="poK-Vf-uAc"/>
+                                                    <exclude reference="DbT-xw-Opu"/>
+                                                    <exclude reference="d2D-VH-VXB"/>
                                                     <exclude reference="5zX-gf-R5M"/>
                                                     <exclude reference="RHJ-yi-uhs"/>
                                                     <exclude reference="9PU-Yd-Np3"/>
@@ -5174,8 +5177,6 @@ Photo</string>
                                                     <exclude reference="Lkb-5b-SWd"/>
                                                     <exclude reference="daN-4L-uYl"/>
                                                     <exclude reference="yHQ-AS-FNn"/>
-                                                    <exclude reference="DbT-xw-Opu"/>
-                                                    <exclude reference="d2D-VH-VXB"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
@@ -5189,6 +5190,8 @@ Photo</string>
                                                     <include reference="Bsd-w1-yJF"/>
                                                     <exclude reference="eKp-n2-DAb"/>
                                                     <include reference="poK-Vf-uAc"/>
+                                                    <include reference="DbT-xw-Opu"/>
+                                                    <include reference="d2D-VH-VXB"/>
                                                     <include reference="5zX-gf-R5M"/>
                                                     <include reference="RHJ-yi-uhs"/>
                                                     <include reference="9PU-Yd-Np3"/>
@@ -5196,8 +5199,6 @@ Photo</string>
                                                     <include reference="Lkb-5b-SWd"/>
                                                     <exclude reference="daN-4L-uYl"/>
                                                     <include reference="yHQ-AS-FNn"/>
-                                                    <include reference="DbT-xw-Opu"/>
-                                                    <include reference="d2D-VH-VXB"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
