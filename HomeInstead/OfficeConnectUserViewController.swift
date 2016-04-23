@@ -416,8 +416,11 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             
             cell.width = self.tableView.frame.width
             cell.height = self.rowHeights[indexPath.row]
+            cell.createCareGiverLabel()
+            cell.createCathyLabel()
             cell.removeConnectedUserNameButtons()
-            cell.createConnectedUserNameButtons(names)
+            cell.createConnectedCareGiverNameButtons(names)
+            cell.createConnectedCathyNameButtons(names)
             self.expandButtonTapped = false
             
         }
