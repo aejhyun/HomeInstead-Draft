@@ -11,10 +11,15 @@ import Parse
 
 class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegate, UITableViewDelegate, UITableViewDataSource {
 
+    var navigationBarLine: UIView = UIView()
+    
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var barButtonItem: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var toolBar: UIToolbar!
+    
+    var selectedUserType: UserType!
+    var userTypes: [UserType] = [UserType.client, UserType.cathy, UserType.careGiver]
     
     var clientUsers: [[String: String]] = [[String: String]]()
     var cathyUsers: [[String: String]] = [[String: String]]()
@@ -28,26 +33,25 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var cathyCheckedRows: [Bool] = [Bool]()
     var careGiverCheckedRows: [Bool] = [Bool]()
     
-    var selectedUserType: UserType!
-    
-    var userTypes: [UserType] = [UserType.client, UserType.cathy, UserType.careGiver]
-
-    var navigationBarLine: UIView = UIView()
+    var connectedCareGiverNames: [String] = ["Jae Kimepqrij", "Baby John", "Obama Presidententadf"]
+    var connectedCathyNames: [String] = ["Prince Lawlz", "Brandon Custer", "Jon Davis", "Chris Park", "Obama Presidententadf"]
     
     var nameButtonTappedRow: Int = -1
-    
     var expandButtonTappedIndexPath: NSIndexPath? = nil
     
     var expandButtonTapped: Bool = false
     
     var numberOfTimesReloadDataIsCalled: Int = 0
     
-    var rowHeights: [CGFloat] = [CGFloat]()
+    var originalRowHeights: [CGFloat] = [CGFloat]()
+    var expandedRowHeights: [CGFloat] = [CGFloat]() // Depending on the number of connected care givers or cathys, the row of expanded cells will vary.
     
     let classNameForCloud = ClassNameForCloud()
     
     
-
+    
+    
+    
 // Navigation bar line functions start here.
     
     func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
@@ -293,9 +297,13 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        
+    
         let originalHeight = UITableViewAutomaticDimension
-        let expandedHeight: CGFloat = 200.0
+        var expandedHeight: CGFloat = 200
+        if self.expandButtonTapped == true {
+            expandedHeight = self.expandedRowHeights[indexPath.row]
+            
+        }
         let ip = indexPath
         if self.expandButtonTappedIndexPath != nil {
             if ip == self.expandButtonTappedIndexPath! {
@@ -408,19 +416,18 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeConnectUserTableViewCell
-        let names = ["Jae Kimepqrij", "Baby John", "Obama Presidententadf"]
-        
         
         // The reason for self.expandButtonTapped == true is because self.rowHeights doesn't get initialized until expandButton is tapped. So without this check, it will cause the app to crash.
         if self.expandButtonTapped == true {
             
             cell.width = self.tableView.frame.width
-            cell.height = self.rowHeights[indexPath.row]
+            cell.height = self.originalRowHeights[indexPath.row]
+            cell.removeUserTypeLabels()
             cell.createCareGiverLabel()
             cell.createCathyLabel()
             cell.removeConnectedUserNameButtons()
-            cell.createConnectedCareGiverNameButtons(names)
-            cell.createConnectedCathyNameButtons(names)
+            cell.createConnectedCareGiverNameButtons(self.connectedCareGiverNames)
+            cell.createConnectedCathyNameButtons(self.connectedCathyNames)
             self.expandButtonTapped = false
             
         }
@@ -454,8 +461,23 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         // I use the code below to get the row height for each cell so that xcode knows where to add the connected names, that is, right below the notes in the cell. I can't use the row height in the cell for row index path because it is not returning the correct row height. In order to get the correct heights, I have to put the function in the expandButtonTapped function.
         for visibleCell in tableView.visibleCells {
             let rowHeight = CGRectGetHeight(visibleCell.bounds)
-            self.rowHeights.append(rowHeight)
+            self.originalRowHeights.append(rowHeight)
         }
+        
+        for originalRowHeight in self.originalRowHeights {
+            var newHeight: CGFloat
+            if self.connectedCathyNames.count > self.connectedCareGiverNames.count {
+                newHeight = originalRowHeight + CGFloat(20.0 + (20.0 * Double(self.connectedCathyNames.count)))
+                self.expandedRowHeights.append(newHeight)
+            } else if self.connectedCathyNames.count <= self.connectedCareGiverNames.count {
+                newHeight = originalRowHeight + CGFloat(20.0 + (20.0 * Double(self.connectedCareGiverNames.count)))
+                self.expandedRowHeights.append(newHeight)
+            }
+            
+        }
+        
+        print("yo1")
+        
         
         let expandButton = sender as! UIButton
         let superView = expandButton.superview!
@@ -478,7 +500,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.tableView.endUpdates()
         
         // It will continue to append the row heights so the elements in the array does not reflect the actual row heights of the rows in the table view. Only by removing all, could we get the correct values.
-        self.rowHeights.removeAll()
+        self.originalRowHeights.removeAll()
+        self.expandedRowHeights.removeAll()
     }
 
     
