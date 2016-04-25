@@ -35,25 +35,24 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var cathyCheckedRows: [Bool] = [Bool]()
     var careGiverCheckedRows: [Bool] = [Bool]()
     
-    var connectedCareGiverNames: [String] = ["Jae Kimepqrij", "Baby John", "Obama Presidententadf"]
+    var connectedCathyUsers: [[String: String]] = [[String: String]]()
+    var connectedCareGiverUsers: [[String: String]] = [[String: String]]()
     var connectedCathyNames: [String] = ["Prince Lawlz", "Brandon Custer", "Jon Davis", "Chris Park", "Obama Presidententadf"]
+    var connectedCareGiverNames: [String] = ["Jae Kimepqrij", "Baby John", "Obama Presidententadf"]
     
     var nameButtonTappedRow: Int = -1
     var expandButtonTappedIndexPath: NSIndexPath? = nil
     
-    var expandButtonTappedOnce: Bool = false
+    var expandButtonTappedAfterViewAppears: Bool = false
     
     var numberOfTimesReloadDataIsCalled: Int = 0
     
-    var originalRowHeights: [CGFloat] = [CGFloat]()
-    var expandedRowHeights: [CGFloat] = [CGFloat]() // Depending on the number of connected care givers or cathys, the row of expanded cells will vary.
+    var originalRowHeights: [CGFloat] = [CGFloat]() // Depending on the number of connected care givers or cathys, the row of expanded cells will vary.
+    var expandedRowHeights: [CGFloat] = [CGFloat]()
     
     let classNameForCloud = ClassNameForCloud()
     
-    
-    
-    
-    
+
 // Navigation bar line functions start here.
     
     func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
@@ -99,6 +98,10 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
+    func queryConnectedUsersFromCloud(userType: UserType, completion: (querySuccessful: Bool, users: [[String: String]]) -> Void) {
+        
+    }
+    
     func queryUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, users: [[String: String]]) -> Void) {
         
         var idsOfOfficeUsersWhoAddedThisUser: [String] = [String]()
@@ -107,6 +110,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         let query = PFQuery(className: classNameForCloud.getClassName(userType)!)
         query.whereKey("idsOfOfficeUsersWhoAddedThisUser", containedIn: [(PFUser.currentUser()?.objectId)!])
+        query.fromLocalDatastore()
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             if error == nil {
@@ -137,6 +141,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                         userInformation["userType"] = object.objectForKey("userType") as? String
                         userInformation["userId"] = object.objectForKey("userId") as? String
                         userInformation["objectId"] = object.objectId
+                        object.pinInBackground()
                         users.append(userInformation)
                         
                     }
@@ -151,6 +156,9 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        //self.expandButtonTappedAfterViewAppears = false
+    }
     
     override func viewWillAppear(animated: Bool) {
         
@@ -160,7 +168,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
         var querySuccessCheck = QuerySuccessCheck()
-        
 
         self.queryUsersAddedByOfficeUserFromCloud(UserType.client) { (querySuccessful, users) -> Void in
             if querySuccessful {
@@ -227,7 +234,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     }
     
     func setUsersForSelectedUserType(selectedUserType: UserType) {
-        // Use this function to only read and get the different users. If you want to modify the content of the users, do not use this function because it will not return a reference. So any modification that you make to the return value will not modify the class variables, only the copy of the class variables.
+       
         if selectedUserType == UserType.client {
             self.users = self.clientUsers
         } else if selectedUserType == UserType.cathy {
@@ -298,11 +305,12 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-
-        let originalHeight = UITableViewAutomaticDimension
-        var expandedHeight: CGFloat = 200
         
-        if self.expandButtonTappedOnce == true {
+        let originalHeight = UITableViewAutomaticDimension
+        var expandedHeight: CGFloat = CGFloat(20.0 + (20.0 * Double(self.connectedCathyNames.count)))
+        
+        if self.expandButtonTappedAfterViewAppears == true {
+            print(self.expandedRowHeights[indexPath.row])
             expandedHeight = self.expandedRowHeights[indexPath.row]
         }
         
@@ -419,7 +427,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeConnectUserTableViewCell
         
         // The reason for self.expandButtonTapped == true is because self.rowHeights doesn't get initialized until expandButton is tapped. So without this check, it will cause the app to crash.
-        if self.expandButtonTappedOnce == true {
+        if self.expandButtonTappedAfterViewAppears == true {
 
             cell.width = self.tableView.frame.width
             cell.height = self.originalRowHeights[indexPath.row]
@@ -429,7 +437,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             cell.removeConnectedUserNameButtons()
             cell.createConnectedCareGiverNameButtons(self.connectedCareGiverNames)
             cell.createConnectedCathyNameButtons(self.connectedCathyNames)
-            
             
         }
         
@@ -455,7 +462,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     @IBAction func expandButtonTapped(sender: AnyObject) {
         
-        self.expandButtonTappedOnce = true
+        self.expandButtonTappedAfterViewAppears = true
         
         // I use the code below to get the row height for each cell so that xcode knows where to add the connected names, that is, right below the notes in the cell. I can't use the row height in the cell for row index path because it is not returning the correct row height. In order to get the correct heights, I have to put the function in the expandButtonTapped function.
         for visibleCell in tableView.visibleCells {
