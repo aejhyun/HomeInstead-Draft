@@ -41,7 +41,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var nameButtonTappedRow: Int = -1
     var expandButtonTappedIndexPath: NSIndexPath? = nil
     
-    var expandButtonTapped: Bool = false
+    var expandButtonTappedOnce: Bool = false
     
     var numberOfTimesReloadDataIsCalled: Int = 0
     
@@ -226,17 +226,16 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func getUsersForSelectedUserType(selectedUserType: UserType) -> [[String: String]]? {
+    func setUsersForSelectedUserType(selectedUserType: UserType) {
         // Use this function to only read and get the different users. If you want to modify the content of the users, do not use this function because it will not return a reference. So any modification that you make to the return value will not modify the class variables, only the copy of the class variables.
         if selectedUserType == UserType.client {
-            return self.clientUsers
+            self.users = self.clientUsers
         } else if selectedUserType == UserType.cathy {
-            return self.cathyUsers
-       
+            self.users = self.cathyUsers
+            
         } else if selectedUserType == UserType.careGiver {
-            return self.careGiverUsers
+            self.users = self.careGiverUsers
         }
-        return nil
         
     }
     
@@ -299,13 +298,14 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-    
+
         let originalHeight = UITableViewAutomaticDimension
         var expandedHeight: CGFloat = 200
-        if self.expandButtonTapped == true {
+        
+        if self.expandButtonTappedOnce == true {
             expandedHeight = self.expandedRowHeights[indexPath.row]
-            
         }
+        
         let ip = indexPath
         if self.expandButtonTappedIndexPath != nil {
             if ip == self.expandButtonTappedIndexPath! {
@@ -317,7 +317,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             return originalHeight
         }
         
-       
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -337,8 +336,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return getUsersForSelectedUserType(self.selectedUserType)!.count
+        self.setUsersForSelectedUserType(self.selectedUserType)
+        return self.users.count
 
     }
     
@@ -350,22 +349,22 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     }
     
     func configureCellForUserType(cell: OfficeConnectUserTableViewCell, userType: UserType, indexPath: NSIndexPath) {
-        var users: [[String: String]] = self.getUsersForSelectedUserType(self.selectedUserType)!
+        self.setUsersForSelectedUserType(self.selectedUserType)
         
         cell.nameButton.setTitle(users[indexPath.row]["name"], forState: UIControlState.Normal)
         
-        if users[indexPath.row]["notes"] == "" {
+        if self.users[indexPath.row]["notes"] == "" {
             //cell.notesTopSpaceLayoutConstraint.constant = 0
         } else {
             cell.notesTopSpaceLayoutConstraint.constant = 5
         }
         
-        cell.notesLabel.text = users[indexPath.row]["notes"]
+        cell.notesLabel.text = self.users[indexPath.row]["notes"]
         
         if userType == UserType.client {
-            cell.userIdLabel.text = users[indexPath.row]["objectId"]
+            cell.userIdLabel.text = self.users[indexPath.row]["objectId"]
         } else {
-            cell.userIdLabel.text = users[indexPath.row]["email"]
+            cell.userIdLabel.text = self.users[indexPath.row]["email"]
         }
     }
     
@@ -420,8 +419,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeConnectUserTableViewCell
         
         // The reason for self.expandButtonTapped == true is because self.rowHeights doesn't get initialized until expandButton is tapped. So without this check, it will cause the app to crash.
-        if self.expandButtonTapped == true {
-            
+        if self.expandButtonTappedOnce == true {
+
             cell.width = self.tableView.frame.width
             cell.height = self.originalRowHeights[indexPath.row]
             cell.removeUserTypeLabels()
@@ -430,7 +429,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             cell.removeConnectedUserNameButtons()
             cell.createConnectedCareGiverNameButtons(self.connectedCareGiverNames)
             cell.createConnectedCathyNameButtons(self.connectedCathyNames)
-            self.expandButtonTapped = false
+            
             
         }
         
@@ -439,8 +438,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.configureCellForUserType(cell, userType: self.selectedUserType, indexPath: indexPath)
         self.configureCellContentAnimation(cell)
         self.configureCellForCheckedRows(cell, selectedUserType: self.selectedUserType, indexPath: indexPath)
-        
-        
         
         return cell
         
@@ -458,7 +455,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     @IBAction func expandButtonTapped(sender: AnyObject) {
         
-        self.expandButtonTapped = true
+        self.expandButtonTappedOnce = true
         
         // I use the code below to get the row height for each cell so that xcode knows where to add the connected names, that is, right below the notes in the cell. I can't use the row height in the cell for row index path because it is not returning the correct row height. In order to get the correct heights, I have to put the function in the expandButtonTapped function.
         for visibleCell in tableView.visibleCells {
@@ -477,9 +474,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             }
             
         }
-        
-        print("yo1")
-        
         
         let expandButton = sender as! UIButton
         let superView = expandButton.superview!
@@ -587,7 +581,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.setUserCheckedRowsForSelectedUserType(userType)
         
         var objectIds: [String] = [String]()
-        var users: [[String: String]] = self.getUsersForSelectedUserType(userType)!
         
         var userNumberOfRowsChecked: Int = 0
         for var row = 0; row < self.userCheckedRows.count; row++ {
@@ -649,7 +642,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     @IBAction func connectButtonTapped(sender: AnyObject) {
 
-        
         if self.correctNumberOfUsersAreChecked() {
             
             let checkedClientObjectId: [String] = self.getCheckedUsersObjectIds(UserType.client)
@@ -686,7 +678,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             
         } else if segue.identifier == "officeConnectUsersToUserProfile" {
             if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
-                userProfileViewController.user = self.getUsersForSelectedUserType(self.selectedUserType)![self.nameButtonTappedRow]
+                self.setUsersForSelectedUserType(self.selectedUserType)
+                userProfileViewController.user = self.users[self.nameButtonTappedRow]
                 userProfileViewController.selectedUserType = self.selectedUserType
             } else {
                 print("destinationViewController returned nil")
