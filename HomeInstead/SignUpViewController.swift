@@ -288,7 +288,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
                     }
                     
                 } else {
-                    self.presentAlertControllerWithMessage("There was an error while trying to sign up")
+                    print("Upload user information to cloud was unsuccessful")
                 }
             })
         }
@@ -312,8 +312,12 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             if let error = error {
                 print(error)
                 self.presentAlertControllerWithMessage("\(self.emailErrorMessage(error))")
+                
+                
+                self.changeTextFieldBorderColorToRed(self.emailTextField)
                 completion(uploadSuccessful: false)
             } else {
+                self.changeTextFieldBorderColorToOriginalColor(self.emailTextField)
                 completion(uploadSuccessful: true)
             }
         }
@@ -389,43 +393,105 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
     }
     
+    func changeTextFieldBorderColorToRed(textField: UITextField) {
+        textField.layer.borderColor = UIColor.redColor().CGColor
+        textField.layer.borderWidth = 1.0
+        textField.layer.cornerRadius = 4.0
+    }
+    
+    func changeTextFieldBorderColorToOriginalColor(textField: UITextField) {
+        textField.layer.borderColor = UIColor(red: 224.0/255.0, green: 224.0/255.0, blue: 224.0/255.0, alpha: 1.0).CGColor
+    }
+    
     func allRequiredFieldsAreNotEmpty() -> Bool {
         
         if self.nameTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your name")
-        } else if self.emailTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your email")
-        } else if self.passwordTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your password")
-        } else if self.confirmPasswordTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your confirmation password")
-        } else if self.verificationCodeTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your verification code")
-        } else if self.provinceTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your province")
-        } else if self.cityTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your city")
-        } else if self.districtTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your district")
-        } else if self.streetOneTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your street for street 1")
-        } else if self.postalCodeTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your postal code")
-        } else if self.phoneNumberTextField.text == "" {
-            self.presentAlertControllerWithMessage("Please enter your phone number")
+            self.changeTextFieldBorderColorToRed(self.nameTextField)
         } else {
-            return true
+            self.changeTextFieldBorderColorToOriginalColor(self.nameTextField)
         }
-        return false
+        
+        if self.emailTextField.text == "" {
+            self.changeTextFieldBorderColorToRed(self.emailTextField)
+        } else {
+            self.changeTextFieldBorderColorToOriginalColor(self.emailTextField)
+        }
+        
+        if self.passwordTextField.text == "" {
+            self.changeTextFieldBorderColorToRed(self.passwordTextField)
+        } else {
+            self.changeTextFieldBorderColorToOriginalColor(self.passwordTextField)
+        }
+        
+        if self.confirmPasswordTextField.text == "" {
+            self.changeTextFieldBorderColorToRed(self.confirmPasswordTextField)
+        } else {
+            self.changeTextFieldBorderColorToOriginalColor(self.confirmPasswordTextField)
+        }
+        
+        if self.verificationCodeTextField.text == "" {
+            self.changeTextFieldBorderColorToRed(self.verificationCodeTextField)
+        } else {
+            self.changeTextFieldBorderColorToOriginalColor(self.verificationCodeTextField)
+        }
+        
+        if self.provinceTextField.text == "" {
+            self.changeTextFieldBorderColorToRed(self.provinceTextField)
+        } else {
+            self.changeTextFieldBorderColorToOriginalColor(self.provinceTextField)
+        }
+        
+        if self.cityTextField.text == "" {
+            self.changeTextFieldBorderColorToRed(self.cityTextField)
+        } else {
+            self.changeTextFieldBorderColorToOriginalColor(self.cityTextField)
+        }
+        
+        if self.districtTextField.text == "" {
+            self.changeTextFieldBorderColorToRed(self.districtTextField)
+        } else {
+            self.changeTextFieldBorderColorToOriginalColor(self.districtTextField)
+        }
+        
+        if self.streetOneTextField.text == "" {
+            self.changeTextFieldBorderColorToRed(self.streetOneTextField)
+        } else {
+            self.changeTextFieldBorderColorToOriginalColor(self.streetOneTextField)
+        }
+        
+        if self.postalCodeTextField.text == "" {
+            self.changeTextFieldBorderColorToRed(self.postalCodeTextField)
+        } else {
+            self.changeTextFieldBorderColorToOriginalColor(self.postalCodeTextField)
+        }
+        
+        if self.phoneNumberTextField.text == "" {
+            self.changeTextFieldBorderColorToRed(self.phoneNumberTextField)
+        } else {
+            self.changeTextFieldBorderColorToOriginalColor(self.phoneNumberTextField)
+        }
+        
+        if self.nameTextField.text != "" && self.emailTextField.text != "" && self.passwordTextField.text != "" && self.confirmPasswordTextField.text != "" && self.verificationCodeTextField.text != "" && self.provinceTextField.text != "" && self.cityTextField.text != "" && self.districtTextField.text != "" && self.streetOneTextField.text != "" && self.postalCodeTextField.text != "" &&  self.phoneNumberTextField.text != "" {
+            return true
+        } else {
+            self.presentAlertControllerWithMessage("Please enter all the required fields")
+            return false
+        }
         
     }
     
     func passwordConfirmed() -> Bool {
+        
         if self.passwordTextField.text != self.confirmPasswordTextField.text {
+            self.changeTextFieldBorderColorToRed(self.passwordTextField)
+            self.changeTextFieldBorderColorToRed(self.confirmPasswordTextField)
             self.presentAlertControllerWithMessage("Passwords do not match.")
             return false
         }
+        self.changeTextFieldBorderColorToOriginalColor(self.passwordTextField)
+        self.changeTextFieldBorderColorToOriginalColor(self.confirmPasswordTextField)
         return true
+        
     }
     
     func isValidVerificationCode() -> Bool {
