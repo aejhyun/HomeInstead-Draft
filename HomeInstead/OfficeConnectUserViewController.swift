@@ -21,6 +21,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var selectedUserType: UserType!
     var userTypes: [UserType] = [UserType.client, UserType.cathy, UserType.careGiver]
     
+    var users: [[String: String]] = [[String: String]]()
     var clientUsers: [[String: String]] = [[String: String]]()
     var cathyUsers: [[String: String]] = [[String: String]]()
     var careGiverUsers: [[String: String]] = [[String: String]]()
@@ -29,6 +30,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var cathyOfficeUserIds: [[String]] = [[String]]()
     var careGiverOfficeUserIds: [[String]] = [[String]]()
     
+    var userCheckedRows: [Bool] = [Bool]()
     var clientCheckedRows: [Bool] = [Bool]()
     var cathyCheckedRows: [Bool] = [Bool]()
     var careGiverCheckedRows: [Bool] = [Bool]()
@@ -568,29 +570,28 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func getUserCheckedRowsForSelectedUserType(selectedUserType: UserType) -> [Bool]? {
+    func setUserCheckedRowsForSelectedUserType(selectedUserType: UserType) {
         
         if selectedUserType == UserType.client {
-            return self.clientCheckedRows
+            self.userCheckedRows = self.clientCheckedRows
         } else if selectedUserType == UserType.cathy {
-            return self.cathyCheckedRows
-            
+            self.userCheckedRows = self.cathyCheckedRows
         } else if selectedUserType == UserType.careGiver {
-            return self.careGiverCheckedRows
+            self.userCheckedRows = self.careGiverCheckedRows
         }
-        return nil
         
     }
     
     func getCheckedUsersObjectIds(userType: UserType) -> [String] {
         
+        self.setUserCheckedRowsForSelectedUserType(userType)
+        
         var objectIds: [String] = [String]()
         var users: [[String: String]] = self.getUsersForSelectedUserType(userType)!
-        let userCheckedRows: [Bool] = self.getUserCheckedRowsForSelectedUserType(userType)!
         
         var userNumberOfRowsChecked: Int = 0
-        for var row = 0; row < userCheckedRows.count; row++ {
-            if userCheckedRows[row] == true {
+        for var row = 0; row < self.userCheckedRows.count; row++ {
+            if self.userCheckedRows[row] == true {
                 objectIds.append(users[row]["objectId"]!)
                 userNumberOfRowsChecked++
             }
