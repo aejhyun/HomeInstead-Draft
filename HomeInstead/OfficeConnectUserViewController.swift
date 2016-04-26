@@ -35,10 +35,11 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var cathyCheckedRows: [Bool] = [Bool]()
     var careGiverCheckedRows: [Bool] = [Bool]()
     
-    var connectedCathyUsers: [[String: String]] = [[String: String]]()
-    var connectedCareGiverUsers: [[String: String]] = [[String: String]]()
-    var connectedCathyNames: [String] = ["Prince Lawlz", "Brandon Custer", "Jon Davis", "Chris Park", "Obama Presidententadf"]
-    var connectedCareGiverNames: [String] = ["Jae Kimepqrij", "Baby John", "Obama Presidententadf"]
+    var clientConnectedCathyNames: [String] = ["Prince Lawlz", "Brandon Custer", "Jon Davis", "Chris Park", "Obama Presidententadf"]
+    var clientConnectedCareGiverNames: [String] = ["Jae Kimepqrij", "Baby John", "Obama Presidententadf"]
+    
+    var clientConnectedCathysIds: [String] = [String]()
+    var clientConnectedCareGiverIds: [String] = [String]()
     
     var nameButtonTappedRow: Int = -1
     var expandButtonTappedIndexPath: NSIndexPath? = nil
@@ -51,7 +52,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var expandedRowHeights: [CGFloat] = [CGFloat]()
     
     let classNameForCloud = ClassNameForCloud()
-    
+    let officeConnectUserHelper = OfficeConnectUserHelper()
 
 // Navigation bar line functions start here.
     
@@ -98,59 +99,19 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func queryConnectedUsersFromCloud(userType: UserType, completion: (querySuccessful: Bool, users: [[String: String]]) -> Void) {
+    func queryConnectedUsersFromCloud(userType: UserType, completion: (querySuccessful: Bool, connectedUsers: [[String: String]]) -> Void) {
         
-    }
-    
-    func queryUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, users: [[String: String]]) -> Void) {
+        for
         
-        var idsOfOfficeUsersWhoAddedThisUser: [String] = [String]()
-        var users: [[String: String]] = [[String: String]]()
-        var userInformation: [String: String] = [String: String]()
-        
-        let query = PFQuery(className: classNameForCloud.getClassName(userType)!)
-        query.whereKey("idsOfOfficeUsersWhoAddedThisUser", containedIn: [(PFUser.currentUser()?.objectId)!])
-        query.fromLocalDatastore()
-        query.findObjectsInBackgroundWithBlock {
-            (objects: [PFObject]?, error: NSError?) -> Void in
-            if error == nil {
-                if let objects = objects {
-                    for object in objects {
-                        
-                        idsOfOfficeUsersWhoAddedThisUser = object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String]
-                        if userType == UserType.client {
-                            self.clientOfficeUserIds.append(idsOfOfficeUsersWhoAddedThisUser)
-                        } else if userType == UserType.cathy {
-                            self.cathyOfficeUserIds.append(idsOfOfficeUsersWhoAddedThisUser)
-                        } else if userType == UserType.careGiver {
-                            self.careGiverOfficeUserIds.append(idsOfOfficeUsersWhoAddedThisUser)
-                        }
-
-                        userInformation["name"] = object.objectForKey("name") as? String
-                        userInformation["notes"] = object.objectForKey("notes") as? String
-                        userInformation["email"] = object.objectForKey("email") as? String
-                        userInformation["province"] = object.objectForKey("province") as? String
-                        userInformation["city"] = object.objectForKey("city") as? String
-                        userInformation["district"] = object.objectForKey("district") as? String
-                        userInformation["streetOne"] = object.objectForKey("streetOne") as? String
-                        userInformation["streetTwo"] = object.objectForKey("streetTwo") as? String
-                        userInformation["streetThree"] = object.objectForKey("streetThree") as? String
-                        userInformation["postalCode"] = object.objectForKey("postalCode") as? String
-                        userInformation["phoneNumber"] = object.objectForKey("phoneNumber") as? String
-                        userInformation["emergencyPhoneNumber"] = object.objectForKey("emergencyPhoneNumber") as? String
-                        userInformation["userType"] = object.objectForKey("userType") as? String
-                        userInformation["userId"] = object.objectForKey("userId") as? String
-                        userInformation["objectId"] = object.objectId
-                        object.pinInBackground()
-                        users.append(userInformation)
-                        
-                    }
-                    completion(querySuccessful: true, users: users)
-                    
-                }
-            } else {
-                completion(querySuccessful: true, users: users)
-                print("Error: \(error!) \(error!.userInfo)")
+        let query = PFQuery(className: self.classNameForCloud.getClassName(self.selectedUserType)!)
+        query.getObjectInBackgroundWithId("xWMyZEGZ") {
+            (gameScore: PFObject?, error: NSError?) -> Void in
+            if error != nil {
+                print(error)
+            } else if let gameScore = gameScore {
+                gameScore["cheatMode"] = true
+                gameScore["score"] = 1338
+                gameScore.saveInBackground()
             }
         }
         
@@ -168,39 +129,30 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
         var querySuccessCheck = QuerySuccessCheck()
-
-        self.queryUsersAddedByOfficeUserFromCloud(UserType.client) { (querySuccessful, users) -> Void in
-            if querySuccessful {
-                self.clientUsers = users
-                self.clientCheckedRows = [Bool](count: self.clientUsers.count, repeatedValue: false) // This is for checked rows.
-                querySuccessCheck.successfullyQueriedClientUsers = true
-                if querySuccessCheck.successfullyQueriedAllUsers() {
-                    self.numberOfTimesReloadDataIsCalled++
-                    self.tableView.reloadData()
-                }
-            }
-        }
         
-        self.queryUsersAddedByOfficeUserFromCloud(UserType.cathy) { (querySuccessful, users) -> Void in
-            if querySuccessful {
-                self.cathyUsers = users
-                self.cathyCheckedRows = [Bool](count: self.cathyUsers.count, repeatedValue: false)
-                querySuccessCheck.successfullyQueriedCathyUsers = true
-                if querySuccessCheck.successfullyQueriedAllUsers() {
-                    self.numberOfTimesReloadDataIsCalled++
-                    self.tableView.reloadData()
-                }
-            }
-        }
-        
-        self.queryUsersAddedByOfficeUserFromCloud(UserType.careGiver) { (querySuccessful, users) -> Void in
-            if querySuccessful {
-                self.careGiverUsers = users
-                self.careGiverCheckedRows = [Bool](count: self.careGiverUsers.count, repeatedValue: false)
-                querySuccessCheck.successfullyQueriedCareGiverUsers = true
-                if querySuccessCheck.successfullyQueriedAllUsers() {
-                    self.numberOfTimesReloadDataIsCalled++
-                    self.tableView.reloadData()
+        for userType in self.userTypes {
+            self.officeConnectUserHelper.queryUsersAddedByOfficeUserFromCloud(userType) { (querySuccessful, users) -> Void in
+                if querySuccessful {
+                    if userType == UserType.client {
+                        self.clientUsers = users
+                        self.clientCheckedRows = [Bool](count: self.clientUsers.count, repeatedValue: false)
+                        self.clientOfficeUserIds = self.officeConnectUserHelper.clientOfficeUserIds // This OfficeConnectUserHelper class queries clientOfficeUserIds and stores them in a class variable. Only get this, clientOfficeUserIds, value from the OfficeConnectUserHelper class AFTER officeConnectUserHelper.queryUsersAddedByOfficeUserFromCloud() is called.
+                        querySuccessCheck.successfullyQueriedClientUsers = true
+                    } else if userType == UserType.cathy {
+                        self.cathyUsers = users
+                        self.cathyCheckedRows = [Bool](count: self.cathyUsers.count, repeatedValue: false)
+                        self.cathyOfficeUserIds = self.officeConnectUserHelper.cathyOfficeUserIds
+                        querySuccessCheck.successfullyQueriedCathyUsers = true
+                    } else if userType == UserType.careGiver {
+                        self.careGiverUsers = users
+                        self.careGiverCheckedRows = [Bool](count: self.careGiverUsers.count, repeatedValue: false)
+                        self.careGiverOfficeUserIds = self.officeConnectUserHelper.careGiverOfficeUserIds
+                        querySuccessCheck.successfullyQueriedCareGiverUsers = true
+                    }
+                    if querySuccessCheck.successfullyQueriedAllUsers() {
+                        self.numberOfTimesReloadDataIsCalled++
+                        self.tableView.reloadData()
+                    }
                 }
             }
         }
@@ -216,8 +168,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.navigationBarLine.hidden = false
         
     }
-    
-    
     
     @IBAction func segmentedControlIndexChanged(sender: UISegmentedControl) {
         
@@ -239,40 +189,24 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             self.users = self.clientUsers
         } else if selectedUserType == UserType.cathy {
             self.users = self.cathyUsers
-            
         } else if selectedUserType == UserType.careGiver {
             self.users = self.careGiverUsers
         }
         
     }
     
-    func deleteUserFromOfficeUserInCloud(user: [[String: String]], officeUserIdsForUser: [[String]], indexPath: NSIndexPath) {
-        
-        let newOfficeUserIdsForUser: [String] = officeUserIdsForUser[indexPath.row].filter { $0 != PFUser.currentUser()?.objectId }
-        
-        let query = PFQuery(className: classNameForCloud.getClassName(self.selectedUserType)!)
-        
-        query.getObjectInBackgroundWithId(user[indexPath.row]["objectId"]!) {
-            (objects: PFObject?, error: NSError?) -> Void in
-            if error != nil {
-                print(error)
-            } else if let object = objects {
-                object["idsOfOfficeUsersWhoAddedThisUser"] = newOfficeUserIdsForUser
-                object.saveInBackground()
-            }
-        }
-    }
-    
     func deleteRowForSelectedUserType(selectedUserType: UserType, indexPath: NSIndexPath) {
+        
+        self.officeConnectUserHelper.selectedUserType = self.selectedUserType // deleteUserFromOfficeUserInCloud needs the correct selectedUserType from this class to execute it's function properly.
 
         if selectedUserType == UserType.client {
-            self.deleteUserFromOfficeUserInCloud(self.clientUsers, officeUserIdsForUser: self.clientOfficeUserIds, indexPath: indexPath)
+            self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.clientUsers, officeUserIdsForUser: self.clientOfficeUserIds, indexPath: indexPath)
             self.clientUsers.removeAtIndex(indexPath.row)
         } else if selectedUserType == UserType.cathy {
-            self.deleteUserFromOfficeUserInCloud(self.cathyUsers, officeUserIdsForUser: self.cathyOfficeUserIds, indexPath: indexPath)
+            self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.cathyUsers, officeUserIdsForUser: self.cathyOfficeUserIds, indexPath: indexPath)
             self.cathyUsers.removeAtIndex(indexPath.row)
         } else if selectedUserType == UserType.careGiver {
-            self.deleteUserFromOfficeUserInCloud(self.careGiverUsers, officeUserIdsForUser: self.careGiverOfficeUserIds, indexPath: indexPath)
+            self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.careGiverUsers, officeUserIdsForUser: self.careGiverOfficeUserIds, indexPath: indexPath)
             self.careGiverUsers.removeAtIndex(indexPath.row)
         }
 
@@ -287,7 +221,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         } else if selectedUserType == UserType.careGiver {
             self.careGiverCheckedRows[indexPath.row] = rowChecked
         }
-        
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -307,10 +240,9 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         let originalHeight = UITableViewAutomaticDimension
-        var expandedHeight: CGFloat = CGFloat(20.0 + (20.0 * Double(self.connectedCathyNames.count)))
+        var expandedHeight: CGFloat = CGFloat(20.0 + (20.0 * Double(self.clientConnectedCathyNames.count)))
         
         if self.expandButtonTappedAfterViewAppears == true {
-            print(self.expandedRowHeights[indexPath.row])
             expandedHeight = self.expandedRowHeights[indexPath.row]
         }
         
@@ -359,7 +291,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     func configureCellForUserType(cell: OfficeConnectUserTableViewCell, userType: UserType, indexPath: NSIndexPath) {
         self.setUsersForSelectedUserType(self.selectedUserType)
         
-        cell.nameButton.setTitle(users[indexPath.row]["name"], forState: UIControlState.Normal)
+        cell.nameButton.setTitle(self.users[indexPath.row]["name"], forState: UIControlState.Normal)
         
         if self.users[indexPath.row]["notes"] == "" {
             //cell.notesTopSpaceLayoutConstraint.constant = 0
@@ -435,8 +367,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             cell.createCareGiverLabel()
             cell.createCathyLabel()
             cell.removeConnectedUserNameButtons()
-            cell.createConnectedCareGiverNameButtons(self.connectedCareGiverNames)
-            cell.createConnectedCathyNameButtons(self.connectedCathyNames)
+            cell.createConnectedCareGiverNameButtons(self.clientConnectedCareGiverNames)
+            cell.createConnectedCathyNameButtons(self.clientConnectedCathyNames)
             
         }
         
@@ -462,25 +394,33 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     @IBAction func expandButtonTapped(sender: AnyObject) {
         
+        var originalRowHeights: [CGFloat] = [CGFloat]()
+        var expandedRowHeights: [CGFloat] = [CGFloat]()
+        
         self.expandButtonTappedAfterViewAppears = true
         
         // I use the code below to get the row height for each cell so that xcode knows where to add the connected names, that is, right below the notes in the cell. I can't use the row height in the cell for row index path because it is not returning the correct row height. In order to get the correct heights, I have to put the function in the expandButtonTapped function.
         for visibleCell in tableView.visibleCells {
             let rowHeight = CGRectGetHeight(visibleCell.bounds)
-            self.originalRowHeights.append(rowHeight)
+            originalRowHeights.append(rowHeight)
         }
         
-        for originalRowHeight in self.originalRowHeights {
+        for originalRowHeight in originalRowHeights {
             var newHeight: CGFloat
-            if self.connectedCathyNames.count > self.connectedCareGiverNames.count {
-                newHeight = originalRowHeight + CGFloat(20.0 + (20.0 * Double(self.connectedCathyNames.count)))
-                self.expandedRowHeights.append(newHeight)
-            } else if self.connectedCathyNames.count <= self.connectedCareGiverNames.count {
-                newHeight = originalRowHeight + CGFloat(20.0 + (20.0 * Double(self.connectedCareGiverNames.count)))
-                self.expandedRowHeights.append(newHeight)
+            if self.clientConnectedCathyNames.count > self.clientConnectedCareGiverNames.count {
+                newHeight = originalRowHeight + CGFloat(20.0 + (20.0 * Double(self.clientConnectedCathyNames.count)))
+                expandedRowHeights.append(newHeight)
+            } else if self.clientConnectedCathyNames.count <= self.clientConnectedCareGiverNames.count {
+                newHeight = originalRowHeight + CGFloat(20.0 + (20.0 * Double(self.clientConnectedCareGiverNames.count)))
+                expandedRowHeights.append(newHeight)
             }
-            
         }
+        
+        self.originalRowHeights = originalRowHeights
+        self.expandedRowHeights = expandedRowHeights
+        
+        originalRowHeights.removeAll()
+        expandedRowHeights.removeAll()
         
         let expandButton = sender as! UIButton
         let superView = expandButton.superview!
@@ -503,8 +443,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.tableView.endUpdates()
         
         // It will continue to append the row heights so the elements in the array does not reflect the actual row heights of the rows in the table view. Only by removing all, could we get the correct values.
-        self.originalRowHeights.removeAll()
-        self.expandedRowHeights.removeAll()
     }
 
     
@@ -586,13 +524,12 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     func getCheckedUsersObjectIds(userType: UserType) -> [String] {
         
         self.setUserCheckedRowsForSelectedUserType(userType)
-        
+        self.setUsersForSelectedUserType(userType)
         var objectIds: [String] = [String]()
-        
         var userNumberOfRowsChecked: Int = 0
         for var row = 0; row < self.userCheckedRows.count; row++ {
             if self.userCheckedRows[row] == true {
-                objectIds.append(users[row]["objectId"]!)
+                objectIds.append(self.users[row]["objectId"]!)
                 userNumberOfRowsChecked++
             }
         }
@@ -600,52 +537,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         return objectIds
     }
     
-    func connectUsersForUserTypeInCloud(selectedUserType: UserType, checkedClientObjectId: [String], checkedCathysObjectIds: [String], checkedCareGiversObjectIds: [String]) {
-        
-        var objectIdsForQuery: [String] = [String]()
-        var firstSetOfObjectIdsToBeUploaded: [String] = [String]()
-        var secondSetOfObjectIdsToBeUploaded: [String] = [String]()
-        var nameOfFirstField: String = String()
-        var nameOfSecondField: String = String()
-        
-        if selectedUserType == UserType.client {
-            objectIdsForQuery = checkedClientObjectId
-            nameOfFirstField = "cathyConnections"
-            nameOfSecondField = "careGiverConnections"
-            firstSetOfObjectIdsToBeUploaded = checkedCathysObjectIds
-            secondSetOfObjectIdsToBeUploaded = checkedCareGiversObjectIds
-        } else if selectedUserType == UserType.cathy {
-            objectIdsForQuery = checkedCathysObjectIds
-            nameOfFirstField = "clientConnections"
-            nameOfSecondField = "careGiverConnections"
-            firstSetOfObjectIdsToBeUploaded = checkedClientObjectId
-            secondSetOfObjectIdsToBeUploaded = checkedCareGiversObjectIds
-        } else if selectedUserType == UserType.careGiver {
-            objectIdsForQuery = checkedCareGiversObjectIds
-            nameOfFirstField = "clientConnections"
-            nameOfSecondField = "cathyConnections"
-            firstSetOfObjectIdsToBeUploaded = checkedClientObjectId
-            secondSetOfObjectIdsToBeUploaded = checkedCathysObjectIds
-        }
-        
-        for var index: Int = 0; index < objectIdsForQuery.count; index++ {
-            
-            let query = PFQuery(className: classNameForCloud.getClassName(selectedUserType)!)
-            query.getObjectInBackgroundWithId(objectIdsForQuery[index]) {
-                (objects: PFObject?, error: NSError?) -> Void in
-                if error != nil {
-                    print(error)
-                } else if let object = objects {
-                    object[nameOfFirstField] = firstSetOfObjectIdsToBeUploaded
-                    object[nameOfSecondField] = secondSetOfObjectIdsToBeUploaded
-                    object.saveInBackground()
-                    object.pinInBackground()
-                }
-            }
-
-        }
-        
-    }
     
     @IBAction func connectButtonTapped(sender: AnyObject) {
 
@@ -655,8 +546,12 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             let checkedCathysObjectIds: [String]  = self.getCheckedUsersObjectIds(UserType.cathy)
             let checkedCareGiversObjectIds: [String] = self.getCheckedUsersObjectIds(UserType.careGiver)
             
+            print(checkedClientObjectId)
+            print(checkedCathysObjectIds)
+            print(checkedCareGiversObjectIds)
+            self.officeConnectUserHelper.selectedUserType = self.selectedUserType // Once again, necessary for self.connectUsersForUserTypeInCloud to work correctly.
             for userType in userTypes {
-                self.connectUsersForUserTypeInCloud(userType, checkedClientObjectId: checkedClientObjectId, checkedCathysObjectIds: checkedCathysObjectIds, checkedCareGiversObjectIds: checkedCareGiversObjectIds)
+                self.officeConnectUserHelper.connectUsersForUserTypeInCloud(userType, checkedClientObjectId: checkedClientObjectId, checkedCathysObjectIds: checkedCathysObjectIds, checkedCareGiversObjectIds: checkedCareGiversObjectIds)
             }
             
         }
@@ -709,40 +604,4 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
 
 }
 
-
-
-
-
-
-
-
-
-//    func queryUsersAddedByOfficeUserFromCloudForSelectedUserType(selectedUserType: UserType, completion: (querySuccessful: Bool) -> Void) {
-//
-//        let classNameForCloud = ClassNameForCloud()
-//        var querySuccessCheck = QuerySuccessCheck()
-//
-//        self.queryUsersAddedByOfficeUserFromCloud(classNameForCloud.getClassName(selectedUserType)!) { (querySuccessful, users) -> Void in
-//            if querySuccessful {
-//                if selectedUserType == UserType.client {
-//                    self.clientUsers = users
-//                    querySuccessCheck.successfullyQueriedClientUsers = true
-//                } else if selectedUserType == UserType.cathy {
-//                    self.cathyUsers = users
-//                    querySuccessCheck.successfullyQueriedCathyUsers = true
-//                } else if selectedUserType == UserType.careGiver {
-//                    self.careGiverUsers = users
-//                    querySuccessCheck.successfullyQueriedCareGiverUsers = true
-//                }
-//
-//
-//                if querySuccessCheck.successfullyQueriedAllUsers() {
-//                    self.numberOfTimesReloadDataIsCalled++
-//                    self.tableView.reloadData()
-//                }
-//            }
-//        }
-//
-//
-//    }
 
