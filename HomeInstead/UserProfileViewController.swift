@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class UserProfileViewController: UIViewController {
     
@@ -14,7 +15,7 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var textView: UITextView!
     
-    @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var userIdLabel: UILabel!
     @IBOutlet weak var noPhotoLabel: UILabel!
     @IBOutlet weak var phoneNumberLabel: UILabel!
     @IBOutlet weak var emergencyPhoneNumberLabel: UILabel!
@@ -38,6 +39,10 @@ class UserProfileViewController: UIViewController {
     
     var selectedUserType: UserType!
     var user: [String: String] = [String: String]()
+    var userInformation: PFObject!
+    var userObjectId: String = String()
+    
+    var classNameForCloud: ClassNameForCloud = ClassNameForCloud()
     
     var image: UIImage?
     var email: String!
@@ -53,49 +58,8 @@ class UserProfileViewController: UIViewController {
     var postalCode: String!
     var notes: String!
     
-    func unpackUserInformation() {
-        
-        self.name = self.user["name"]
-        if self.selectedUserType == UserType.client {
-            self.email = self.user["objectId"]
-        } else {
-            self.email = self.user["email"]
-        }
-        self.phoneNumber = self.user["phoneNumber"]
-        self.emergencyPhoneNumber = self.user["emergencyPhoneNumber"]
-        self.province = self.user["province"]
-        self.city = self.user["city"]
-        self.district = self.user["district"]
-        self.streetOne = self.user["streetOne"]
-        self.streetTwo = self.user["streetTwo"]
-        self.streetThree = self.user["streetThree"]
-        self.postalCode = self.user["postalCode"]
-        self.notes = self.user["notes"]
-        
-    }
-    
-    func setImageView() {
-
-        self.imageView.layer.masksToBounds = false
-        self.imageView.clipsToBounds = true
-        self.imageView.layer.cornerRadius = self.imageViewHeightLayoutConstraint.constant / 2
-        
-    }
-    
     func setUserInformation() {
-        self.setImageView()
-        
-        if let image = self.user["image"] {
-            self.image = image as? UIImage
-            self.imageView.image = self.image
-            self.noPhotoLabel.hidden = true
-            self.imageView.layer.borderWidth = 0.0
-        } else {
-            self.imageView.layer.borderWidth = 1.0
-            self.imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
-            self.imageView.image = nil
-            self.noPhotoLabel.hidden = false
-        }
+
         
         if self.name != "" {
             self.nameLabel.text = self.name
@@ -104,9 +68,9 @@ class UserProfileViewController: UIViewController {
         }
         
         if self.email != "" {
-            self.emailLabel.text = self.email
+            self.userIdLabel.text = self.email
         } else {
-            self.emailLabel.text = ""
+            self.userIdLabel.text = ""
         }
         
         if self.phoneNumber != "" {
@@ -183,20 +147,101 @@ class UserProfileViewController: UIViewController {
         
     }
     
+    func attemptQueryingUserInformationWithUserObjectId(completion: (querySuccessful: Bool, userInformation: PFObject?) -> Void) {
+        
+        let query = PFQuery(className: classNameForCloud.getClassName(self.selectedUserType)!)
+        query.fromLocalDatastore()
+        query.getObjectInBackgroundWithId(self.userObjectId) { (userInformation: PFObject?, error: NSError?) -> Void in
+            if error == nil {
+                userInformation?.pinInBackground()
+                completion(querySuccessful: true, userInformation: userInformation)
+            } else {
+                completion(querySuccessful: false, userInformation: nil)
+                print(error)
+            }
+        }
+
+    }
+    
+    func unpackUserInformation(userInformation: PFObject) {
+        
+        self.name = userInformation["name"] as! String
+        
+        if self.selectedUserType == UserType.client {
+            self.email = userInformation.objectId!
+        } else {
+            self.email = userInformation["email"] as! String
+        }
+        
+        self.phoneNumber = userInformation["phoneNumber"] as! String
+        self.emergencyPhoneNumber = userInformation["emergencyPhoneNumber"] as! String
+        self.province = userInformation["province"] as! String
+        self.city = userInformation["city"] as! String
+        self.district = userInformation["district"] as! String
+        self.streetOne = userInformation["streetOne"] as! String
+        self.streetTwo = userInformation["streetTwo"] as! String
+        self.streetThree = userInformation["streetThree"] as! String
+        self.postalCode = userInformation["postalCode"] as! String
+        self.notes = userInformation["notes"] as! String
+        
+    }
+    
+    func setNavigationBarTitle() {
+        
+        if self.selectedUserType == UserType.client {
+            self.navigationItem.title = "Client User"
+        } else if self.selectedUserType == UserType.cathy {
+            self.navigationItem.title = "Cathy User"
+        } else if self.selectedUserType == UserType.careGiver {
+            self.navigationItem.title = "CareGiver User"
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.automaticallyAdjustsScrollViewInsets = false
         self.navigationItem.title = "User Profile"
         self.noPhotoLabel.textAlignment = .Center
+        self.setNavigationBarTitle()
+
+        
+    }
+    
+    func setImageView() {
+        
+        self.imageView.layer.masksToBounds = false
+        self.imageView.clipsToBounds = true
+        self.imageView.layer.cornerRadius = self.imageViewHeightLayoutConstraint.constant / 2
+        
+        if let image = self.user["image"] {
+            self.image = image as? UIImage
+            self.imageView.image = self.image
+            self.noPhotoLabel.hidden = true
+            self.imageView.layer.borderWidth = 0.0
+        } else {
+            self.imageView.layer.borderWidth = 1.0
+            self.imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
+            self.imageView.image = nil
+            self.noPhotoLabel.hidden = false
+        }
         
     }
     
     override func viewWillAppear(animated: Bool) {
         
+        self.attemptQueryingUserInformationWithUserObjectId { (querySuccessful, userInformation) -> Void in
+            if querySuccessful {
+                self.userInformation = userInformation!
+                self.unpackUserInformation(userInformation!)
+                self.setUserInformation()
+            }
+        }
         self.setImageView()
-        self.unpackUserInformation()
-        self.setUserInformation()
+        
+
+        
 
     }
     
@@ -204,8 +249,8 @@ class UserProfileViewController: UIViewController {
         
         if let navigationController = segue.destinationViewController as? UINavigationController {
             if let officeEditUserProfileViewController = navigationController.topViewController as? OfficeEditUserProfileViewController {
-                
-                officeEditUserProfileViewController.user = self.user
+                officeEditUserProfileViewController.selectedUserType = self.selectedUserType
+                officeEditUserProfileViewController.userInformation = self.userInformation
 
             } else {
                 print("officeAddUserTableViewController returned nil")
@@ -217,11 +262,6 @@ class UserProfileViewController: UIViewController {
     }
     
     @IBAction func unwindToSegue (segue : UIStoryboardSegue) {
-        
-        if let officeEditUserProfileViewController = segue.sourceViewController as? OfficeEditUserProfileViewController {
-            self.user = officeEditUserProfileViewController.user
-            
-        }
         
     }
 

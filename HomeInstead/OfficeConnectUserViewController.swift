@@ -26,6 +26,28 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var cathyUsers: [[String: String]] = [[String: String]]()
     var careGiverUsers: [[String: String]] = [[String: String]]()
     
+    
+    
+    
+    var userNames: [String] = [String]()
+    var clientNames: [String] = [String]()
+    var cathyNames: [String] = [String]()
+    var careGiverNames: [String] = [String]()
+    
+    var userObjectIds: [String] = [String]()
+    var clientObjectIds: [String] = [String]()
+    var cathyObjectIds: [String] = [String]()
+    var careObjectGiverIds: [String] = [String]()
+    
+    var userNotes: [String] = [String]()
+    var clientNotes: [String] = [String]()
+    var cathyNotes: [String] = [String]()
+    var careGiverNotes: [String] = [String]()
+    
+
+    
+    
+    
     var clientOfficeUserIds: [[String]] = [[String]]() // These variables are to hold the ids of the office users who added the non office user.
     var cathyOfficeUserIds: [[String]] = [[String]]()
     var careGiverOfficeUserIds: [[String]] = [[String]]()
@@ -96,28 +118,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func queryConnectedUsersFromCloud(userType: UserType, completion: (querySuccessful: Bool, connectedUsers: [[String: String]]) -> Void) {
-        
-        
-        
-//        let query = PFQuery(className: self.classNameForCloud.getClassName(self.selectedUserType)!)
-//        query.getObjectInBackgroundWithId("xWMyZEGZ") {
-//            (gameScore: PFObject?, error: NSError?) -> Void in
-//            if error != nil {
-//                print(error)
-//            } else if let gameScore = gameScore {
-//                gameScore["cheatMode"] = true
-//                gameScore["score"] = 1338
-//                gameScore.saveInBackground()
-//            }
-//        }
-        
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        //self.expandButtonTappedAfterViewAppears = false
-    }
-    
     override func viewWillAppear(animated: Bool) {
         
         self.numberOfTimesReloadDataIsCalled = 0
@@ -127,39 +127,57 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         var querySuccessCheck = QuerySuccessCheck()
         
-        var clientConnectedCathysIds: [[String]] = [[String]]()
-        var clientConnectedCareGiverIds: [[String]] = [[String]]()
+//        for userType in self.userTypes {
+//            self.officeConnectUserHelper.queryUsersAddedByOfficeUserFromCloud(userType) { (querySuccessful, users) -> Void in
+//                if querySuccessful {
+//                    if userType == UserType.client {
+//                        self.clientUsers = users
+//                        self.clientCheckedRows = [Bool](count: self.clientUsers.count, repeatedValue: false)
+//                        self.clientOfficeUserIds = self.officeConnectUserHelper.clientOfficeUserIds // This OfficeConnectUserHelper class queries clientOfficeUserIds and stores them in a class variable. Only get this, clientOfficeUserIds, value from the OfficeConnectUserHelper class AFTER officeConnectUserHelper.queryUsersAddedByOfficeUserFromCloud() is called.
+//                        querySuccessCheck.successfullyQueriedClientUsers = true
+//                    } else if userType == UserType.cathy {
+//                        self.cathyUsers = users
+//                        self.cathyCheckedRows = [Bool](count: self.cathyUsers.count, repeatedValue: false)
+//                        self.cathyOfficeUserIds = self.officeConnectUserHelper.cathyOfficeUserIds
+//                        querySuccessCheck.successfullyQueriedCathyUsers = true
+//                    } else if userType == UserType.careGiver {
+//                        self.careGiverUsers = users
+//                        self.careGiverCheckedRows = [Bool](count: self.careGiverUsers.count, repeatedValue: false)
+//                        self.careGiverOfficeUserIds = self.officeConnectUserHelper.careGiverOfficeUserIds
+//                        querySuccessCheck.successfullyQueriedCareGiverUsers = true
+//                    }
+//                    if querySuccessCheck.successfullyQueriedAllUsers() {
+//                        self.numberOfTimesReloadDataIsCalled++
+//                        self.tableView.reloadData()
+//                    }
+//                }
+//            }
+//        }
+        
         
         for userType in self.userTypes {
-            self.officeConnectUserHelper.queryUsersAddedByOfficeUserFromCloud(userType) { (querySuccessful, users) -> Void in
+            self.officeConnectUserHelper.attemptQueryingUsersAddedByOfficeUserFromCloud(userType, completion: { (querySuccessful, userNames, userObjectIds, userNotes, userOfficeIds) -> Void in
                 if querySuccessful {
                     if userType == UserType.client {
-                        self.clientUsers = users
-                        self.clientCheckedRows = [Bool](count: self.clientUsers.count, repeatedValue: false)
-                        self.clientOfficeUserIds = self.officeConnectUserHelper.clientOfficeUserIds // This OfficeConnectUserHelper class queries clientOfficeUserIds and stores them in a class variable. Only get this, clientOfficeUserIds, value from the OfficeConnectUserHelper class AFTER officeConnectUserHelper.queryUsersAddedByOfficeUserFromCloud() is called.
-                        clientConnectedCathysIds = self.officeConnectUserHelper.clientConnectedCathysIds
-                        clientConnectedCareGiverIds = self.officeConnectUserHelper.clientConnectedCareGiverIds
-                        
-                        for var i: Int = 0; i < clientConnectedCathysIds.count; i++ {
-                            for var j: Int = 0; j < clientConnectedCathysIds[i].count; j++ {
-                                
-                            }
-                        }
-                        
-                        
-                        
-                        
-                        
+                        self.clientNames = userNames
+                        self.clientObjectIds = userObjectIds
+                        self.clientNotes = userNotes
+                        self.clientOfficeUserIds = userOfficeIds
+                        self.clientCheckedRows = [Bool](count: self.clientNames.count, repeatedValue: false)
                         querySuccessCheck.successfullyQueriedClientUsers = true
                     } else if userType == UserType.cathy {
-                        self.cathyUsers = users
-                        self.cathyCheckedRows = [Bool](count: self.cathyUsers.count, repeatedValue: false)
-                        self.cathyOfficeUserIds = self.officeConnectUserHelper.cathyOfficeUserIds
+                        self.cathyNames = userNames
+                        self.cathyObjectIds = userObjectIds
+                        self.cathyNotes = userNotes
+                        self.cathyOfficeUserIds = userOfficeIds
+                        self.cathyCheckedRows = [Bool](count: self.cathyNames.count, repeatedValue: false)
                         querySuccessCheck.successfullyQueriedCathyUsers = true
                     } else if userType == UserType.careGiver {
-                        self.careGiverUsers = users
-                        self.careGiverCheckedRows = [Bool](count: self.careGiverUsers.count, repeatedValue: false)
-                        self.careGiverOfficeUserIds = self.officeConnectUserHelper.careGiverOfficeUserIds
+                        self.careGiverNames = userNames
+                        self.careObjectGiverIds = userObjectIds
+                        self.careGiverNotes = userNotes
+                        self.careGiverOfficeUserIds = userOfficeIds
+                        self.careGiverCheckedRows = [Bool](count: self.careGiverNames.count, repeatedValue: false)
                         querySuccessCheck.successfullyQueriedCareGiverUsers = true
                     }
                     if querySuccessCheck.successfullyQueriedAllUsers() {
@@ -167,8 +185,13 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                         self.tableView.reloadData()
                     }
                 }
-            }
+            })
         }
+        
+        
+        
+        
+        
         
         self.navigationBarLine.hidden = true
 
@@ -196,16 +219,51 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func setUsersForSelectedUserType(selectedUserType: UserType) {
+    func setUserNamesForSelectedUserType(selectedUserType: UserType) {
        
         if selectedUserType == UserType.client {
-            self.users = self.clientUsers
+            self.userNames = self.clientNames
         } else if selectedUserType == UserType.cathy {
-            self.users = self.cathyUsers
+            self.userNames = self.cathyNames
         } else if selectedUserType == UserType.careGiver {
-            self.users = self.careGiverUsers
+            self.userNames = self.careGiverNames
         }
         
+    }
+    
+    func setUserNotesForSelectedUserType(selectedUserType: UserType) {
+        
+        if selectedUserType == UserType.client {
+            self.userNotes = self.clientNotes
+        } else if selectedUserType == UserType.cathy {
+            self.userNotes = self.cathyNotes
+        } else if selectedUserType == UserType.careGiver {
+            self.userNotes = self.careGiverNotes
+        }
+        
+    }
+    
+    func setUserCheckedRowsForSelectedUserType(selectedUserType: UserType) {
+        
+        if selectedUserType == UserType.client {
+            self.userCheckedRows = self.clientCheckedRows
+        } else if selectedUserType == UserType.cathy {
+            self.userCheckedRows = self.cathyCheckedRows
+        } else if selectedUserType == UserType.careGiver {
+            self.userCheckedRows = self.careGiverCheckedRows
+        }
+        
+    }
+    
+    func setUserObjectIdsForSelectedUserType(selectedUserType: UserType) {
+        
+        if selectedUserType == UserType.client {
+            self.userObjectIds = self.clientObjectIds
+        } else if selectedUserType == UserType.cathy {
+            self.userObjectIds = self.cathyObjectIds
+        } else if selectedUserType == UserType.careGiver {
+            self.userObjectIds = self.careObjectGiverIds
+        }
     }
     
     func deleteRowForSelectedUserType(selectedUserType: UserType, indexPath: NSIndexPath) {
@@ -225,7 +283,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
 
     }
     
-    func setCheckedRowsForSelectedUserType(selectedUserType: UserType, rowChecked: Bool, indexPath: NSIndexPath) {
+    func changeUserCheckedRowsForSelectedUserType(selectedUserType: UserType, rowChecked: Bool, indexPath: NSIndexPath) {
         
         if selectedUserType == UserType.client {
             self.clientCheckedRows[indexPath.row] = rowChecked
@@ -241,10 +299,10 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         if let cell = tableView.cellForRowAtIndexPath(indexPath) {
             if cell.accessoryType == .Checkmark {
                 cell.accessoryType = .None
-                self.setCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: false, indexPath: indexPath)
+                self.changeUserCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: false, indexPath: indexPath)
             } else {
                 cell.accessoryType = .Checkmark
-                self.setCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: true, indexPath: indexPath)
+                self.changeUserCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: true, indexPath: indexPath)
             }
         }
         
@@ -289,8 +347,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.setUsersForSelectedUserType(self.selectedUserType)
-        return self.users.count
+        self.setUserNamesForSelectedUserType(self.selectedUserType)
+        return self.userNames.count
 
     }
     
@@ -302,23 +360,23 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     }
     
     func configureCellForUserType(cell: OfficeConnectUserTableViewCell, userType: UserType, indexPath: NSIndexPath) {
-        self.setUsersForSelectedUserType(self.selectedUserType)
+        self.setUserNamesForSelectedUserType(self.selectedUserType)
+        self.setUserNotesForSelectedUserType(self.selectedUserType)
+        cell.nameButton.setTitle(self.userNames[indexPath.row], forState: UIControlState.Normal)
         
-        cell.nameButton.setTitle(self.users[indexPath.row]["name"], forState: UIControlState.Normal)
-        
-        if self.users[indexPath.row]["notes"] == "" {
+        if self.userNotes[indexPath.row] == "" {
             //cell.notesTopSpaceLayoutConstraint.constant = 0
         } else {
             cell.notesTopSpaceLayoutConstraint.constant = 5
         }
         
-        cell.notesLabel.text = self.users[indexPath.row]["notes"]
+        cell.notesLabel.text = self.userNotes[indexPath.row]
         
-        if userType == UserType.client {
-            cell.userIdLabel.text = self.users[indexPath.row]["objectId"]
-        } else {
-            cell.userIdLabel.text = self.users[indexPath.row]["email"]
-        }
+//        if userType == UserType.client {
+//            cell.userIdLabel.text = self.users[indexPath.row]["objectId"]
+//        } else {
+//            cell.userIdLabel.text = self.users[indexPath.row]["email"]
+//        }
     }
     
     func configureCellContentAnimation(cell: OfficeConnectUserTableViewCell) {
@@ -348,26 +406,16 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     func configureCellForCheckedRows(cell: OfficeConnectUserTableViewCell, selectedUserType: UserType, indexPath: NSIndexPath) {
         
-        var checkedRows: [Bool] = [Bool]()
+        self.setUserCheckedRowsForSelectedUserType(self.selectedUserType)
         
-        if selectedUserType == UserType.client {
-            checkedRows = self.clientCheckedRows
-        } else if selectedUserType == UserType.cathy {
-            checkedRows = self.cathyCheckedRows
-        } else if selectedUserType == UserType.careGiver {
-            checkedRows = self.careGiverCheckedRows
-        }
-        
-        if !checkedRows[indexPath.row] {
+        if !self.userCheckedRows[indexPath.row] {
             cell.accessoryType = .None
-        } else if checkedRows[indexPath.row] {
+        } else {
             cell.accessoryType = .Checkmark
         }
         
     }
     
-   
-
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeConnectUserTableViewCell
         
@@ -522,22 +570,10 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func setUserCheckedRowsForSelectedUserType(selectedUserType: UserType) {
-        
-        if selectedUserType == UserType.client {
-            self.userCheckedRows = self.clientCheckedRows
-        } else if selectedUserType == UserType.cathy {
-            self.userCheckedRows = self.cathyCheckedRows
-        } else if selectedUserType == UserType.careGiver {
-            self.userCheckedRows = self.careGiverCheckedRows
-        }
-        
-    }
-    
     func getCheckedUsersObjectIds(userType: UserType) -> [String] {
         
         self.setUserCheckedRowsForSelectedUserType(userType)
-        self.setUsersForSelectedUserType(userType)
+        //self.setUsersForSelectedUserType(userType)
         var objectIds: [String] = [String]()
         var userNumberOfRowsChecked: Int = 0
         for var row = 0; row < self.userCheckedRows.count; row++ {
@@ -591,8 +627,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             
         } else if segue.identifier == "officeConnectUsersToUserProfile" {
             if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
-                self.setUsersForSelectedUserType(self.selectedUserType)
-                userProfileViewController.user = self.users[self.nameButtonTappedRow]
+                self.setUserObjectIdsForSelectedUserType(self.selectedUserType)
+                userProfileViewController.userObjectId = self.userObjectIds[self.nameButtonTappedRow]
                 userProfileViewController.selectedUserType = self.selectedUserType
             } else {
                 print("destinationViewController returned nil")

@@ -14,7 +14,8 @@ class OfficeEditUserProfileViewController: SignUpViewController {
     @IBOutlet weak var notesTextView: UITextView!
     var gestureRecognizer: UIGestureRecognizer!
     var activeTextView: UITextView!
-    var user: [String: String] = [String: String]()
+    
+    var userInformation: PFObject!
     
     var image: UIImage?
     var name: String!
@@ -32,24 +33,20 @@ class OfficeEditUserProfileViewController: SignUpViewController {
     var objectId: String!
     
     func unpackUserInformation() {
-
-        if let image = self.user["image"] {
-            self.image = image as? UIImage
-        }
-        self.name = self.user["name"]
-        self.phoneNumber = self.user["phoneNumber"]
-        self.emergencyPhoneNumber = self.user["emergencyPhoneNumber"]
-        self.province = self.user["province"]
-        self.city = self.user["city"]
-        self.district = self.user["district"]
-        self.streetOne = self.user["streetOne"]
-        self.streetTwo = self.user["streetTwo"]
-        self.streetThree = self.user["streetThree"]
-        self.postalCode = self.user["postalCode"]
-        self.notes = self.user["notes"]
-        self.userType = UserType(rawValue: (self.user["userType"])!)
-        self.objectId = self.user["objectId"]
         
+        self.image = nil
+        self.name = userInformation["name"] as! String
+        self.phoneNumber = userInformation["phoneNumber"] as! String
+        self.emergencyPhoneNumber = userInformation["emergencyPhoneNumber"] as! String
+        self.province = userInformation["province"] as! String
+        self.city = userInformation["city"] as! String
+        self.district = userInformation["district"] as! String
+        self.streetOne = userInformation["streetOne"] as! String
+        self.streetTwo = userInformation["streetTwo"] as! String
+        self.streetThree = userInformation["streetThree"] as! String
+        self.postalCode = userInformation["postalCode"] as! String
+        self.notes = userInformation["notes"] as! String
+
     }
     
     func setUserInformation() {
@@ -69,15 +66,24 @@ class OfficeEditUserProfileViewController: SignUpViewController {
         
     }
     
-    override func viewDidLoad() {
+    override func setNavigationBarTitle() {
         
-        if self.selectedUserType != UserType.client {
-            
-            self.unpackUserInformation()
-            self.setUserInformation()
-            
+        if self.selectedUserType == UserType.client {
+            self.navigationItem.title = "Client User"
+        } else if self.selectedUserType == UserType.cathy {
+            self.navigationItem.title = "Cathy User"
+        } else if self.selectedUserType == UserType.careGiver {
+            self.navigationItem.title = "CareGiver User"
         }
         
+    }
+    
+    override func viewDidLoad() {
+
+        self.unpackUserInformation()
+        self.setUserInformation()
+        self.setNavigationBarTitle()
+
         self.addPhotoButton.titleLabel?.textAlignment = .Center
         self.editButton.hidden = true
         self.nameTextField.becomeFirstResponder()
@@ -224,21 +230,7 @@ class OfficeEditUserProfileViewController: SignUpViewController {
     }
     
     @IBAction func doneButtonTapped(sender: AnyObject) {
-        
-        //self.user["image"] = self.imageView.image
-        self.user["name"] = self.nameTextField.text
-        self.user["phoneNumber"] = self.phoneNumberTextField.text
-        self.user["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
-        self.user["province"] = self.provinceTextField.text
-        self.user["city"] = self.cityTextField.text
-        self.user["district"] = self.districtTextField.text
-        self.user["streetOne"] = self.streetOneTextField.text
-        self.user["streetTwo"] = self.streetTwoTextField.text
-        self.user["streetThree"] = self.streetThreeTextField.text
-        self.user["postalCode"] = self.postalCodeTextField.text
-        self.user["notes"] = self.notesTextView.text
-        
-        self.updateUserInformationToCloudWithClassName(ClassNameForCloud().getClassName(self.userType)!) { (uploadSuccessful) -> Void in
+    self.updateUserInformationToCloudWithClassName(ClassNameForCloud().getClassName(self.userType)!) { (uploadSuccessful) -> Void in
             if uploadSuccessful {
                 self.performSegueWithIdentifier("officeEditUserProfileToUserProfile", sender: nil)
             }

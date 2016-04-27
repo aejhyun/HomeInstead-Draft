@@ -5529,13 +5529,13 @@ Photo</string>
                                                     </mask>
                                                 </variation>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Id" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o1E-ch-KQh">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Id" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o1E-ch-KQh">
                                                 <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" red="0.40000000000000002" green="0.59999999999999998" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TC9-2I-U2I">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Id" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TC9-2I-U2I">
                                                 <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -6085,7 +6085,6 @@ Photo</string>
                         <outlet property="addressButton" destination="egO-QO-gfB" id="T7r-0T-9vN"/>
                         <outlet property="cityLabel" destination="Gng-Dx-sbJ" id="ngJ-5P-5dW"/>
                         <outlet property="districtLabel" destination="ljJ-9n-mVF" id="mMJ-uL-2nV"/>
-                        <outlet property="emailLabel" destination="TC9-2I-U2I" id="rb8-8z-DdR"/>
                         <outlet property="emergencyButton" destination="FsE-y6-WmV" id="kax-c6-2re"/>
                         <outlet property="emergencyCallButton" destination="zBR-6G-afQ" id="dbz-ng-l6J"/>
                         <outlet property="emergencyPhoneNumberLabel" destination="UDp-2t-Puu" id="ufn-kH-gwR"/>
@@ -6103,6 +6102,7 @@ Photo</string>
                         <outlet property="streetThreeLabel" destination="pre-pe-gaS" id="n87-ix-1Bj"/>
                         <outlet property="streetTwoLabel" destination="cBn-SV-Umz" id="dzP-U3-Gtw"/>
                         <outlet property="textView" destination="aHu-GS-zh4" id="pVU-q9-4JJ"/>
+                        <outlet property="userIdLabel" destination="TC9-2I-U2I" id="BlE-ik-kwc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EUv-wC-2v0" sceneMemberID="firstResponder"/>

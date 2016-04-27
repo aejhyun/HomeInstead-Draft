@@ -13,21 +13,16 @@ class OfficeConnectUserHelper {
     
     let classNameForCloud = ClassNameForCloud()
     
-    var clientOfficeUserIds: [[String]] = [[String]]() // These variables are to hold the ids of the office users who added the non office user.
-    var cathyOfficeUserIds: [[String]] = [[String]]()
-    var careGiverOfficeUserIds: [[String]] = [[String]]()
-    
-    var clientConnectedCathysIds: [[String]] = [[String]]()
-    var clientConnectedCareGiverIds: [[String]] = [[String]]()
-    
-    var connectedUsers: [[[String: String]]] = [[[String: String]]]()
-    
     var selectedUserType: UserType!
     
-    func queryUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, users: [[String: String]]) -> Void) {
+    func attemptQueryingUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, userNames: [String], userObjectIds: [String], userNotes: [String], userOfficeIds: [[String]]) -> Void) {
         
-        var users: [[String: String]] = [[String: String]]()
-        var userInformation: [String: String] = [String: String]()
+        var userNames: [String] = [String]()
+        var userObjectIds: [String] = [String]()
+        var userNotes: [String] = [String]()
+        var userOfficeIds: [[String]] = [[String]]() // These variables are to hold the ids of the office users who added the non office user.
+//        var cathyOfficeUserIds: [[String]] = [[String]]()
+//        var careGiverOfficeUserIds: [[String]] = [[String]]()
         
         let query = PFQuery(className: classNameForCloud.getClassName(userType)!)
         query.whereKey("idsOfOfficeUsersWhoAddedThisUser", containedIn: [(PFUser.currentUser()?.objectId)!])
@@ -38,40 +33,31 @@ class OfficeConnectUserHelper {
                 if let objects = objects {
                     for object in objects {
                         
-                        if userType == UserType.client {
-                            self.clientOfficeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
-                            self.clientConnectedCathysIds.append(object.objectForKey("connectedCathysIds") as! [String])
-                            self.clientConnectedCareGiverIds.append(object.objectForKey("connectedCareGiverIds") as! [String])
-                        } else if userType == UserType.cathy {
-                            self.cathyOfficeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
-                        } else if userType == UserType.careGiver {
-                            self.careGiverOfficeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
-                        }
+//                        if userType == UserType.client {
+//                            clientOfficeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
+//                            self.clientConnectedCathysIds.append(object.objectForKey("connectedCathysIds") as! [String])
+//                            self.clientConnectedCareGiverIds.append(object.objectForKey("connectedCareGiverIds") as! [String])
+//                        } else if userType == UserType.cathy {
+//                            cathyOfficeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
+//                        } else if userType == UserType.careGiver {
+//                            careGiverOfficeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
+//                        }
                         
-                        userInformation["name"] = object.objectForKey("name") as? String
-                        userInformation["notes"] = object.objectForKey("notes") as? String
-                        userInformation["email"] = object.objectForKey("email") as? String
-                        userInformation["province"] = object.objectForKey("province") as? String
-                        userInformation["city"] = object.objectForKey("city") as? String
-                        userInformation["district"] = object.objectForKey("district") as? String
-                        userInformation["streetOne"] = object.objectForKey("streetOne") as? String
-                        userInformation["streetTwo"] = object.objectForKey("streetTwo") as? String
-                        userInformation["streetThree"] = object.objectForKey("streetThree") as? String
-                        userInformation["postalCode"] = object.objectForKey("postalCode") as? String
-                        userInformation["phoneNumber"] = object.objectForKey("phoneNumber") as? String
-                        userInformation["emergencyPhoneNumber"] = object.objectForKey("emergencyPhoneNumber") as? String
-                        userInformation["userType"] = object.objectForKey("userType") as? String
-                        userInformation["userId"] = object.objectForKey("userId") as? String
-                        userInformation["objectId"] = object.objectId
+                        
+                        
+                        userNames.append(object.objectForKey("name") as! String)
+                        userObjectIds.append(object.objectId!)
+                        userNotes.append(object.objectForKey("notes") as! String)
+                        userOfficeIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
                         object.pinInBackground()
-                        users.append(userInformation)
+
                         
                     }
-                    completion(querySuccessful: true, users: users)
+                    completion(querySuccessful: true, userNames: userNames, userObjectIds: userObjectIds, userNotes: userNotes, userOfficeIds: userOfficeIds)
                     
                 }
             } else {
-                completion(querySuccessful: true, users: users)
+                completion(querySuccessful: false, userNames: userNames, userObjectIds: userObjectIds, userNotes: userNotes, userOfficeIds: userOfficeIds)
                 print("Error: \(error!) \(error!.userInfo)")
             }
         }
@@ -112,12 +98,7 @@ class OfficeConnectUserHelper {
             }
             
         }
-        
-        
-        
-        
-        
-        
+            
     }
     
     func deleteUserFromOfficeUserInCloud(user: [[String: String]], officeUserIdsForUser: [[String]], indexPath: NSIndexPath) {

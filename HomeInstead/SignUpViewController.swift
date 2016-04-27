@@ -366,7 +366,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         if imageFile != nil {
             object["imageFile"] = imageFile
         }
-        
+        object.saveInBackground()
         object.saveInBackgroundWithBlock {
             (success: Bool, error: NSError?) -> Void in
             if (success) {
