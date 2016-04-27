@@ -5353,10 +5353,10 @@ Photo</string>
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x4y-Bh-ZN8">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Already Added" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="brg-n3-hr1">
                                             <rect key="frame" x="-42" y="-21" width="42" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                            <color key="textColor" red="0.40000000000000002" green="0.59999999999999998" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nqb-2x-tsr">
@@ -5380,48 +5380,33 @@ Photo</string>
                                                 <segue destination="VCR-vU-sTM" kind="show" identifier="officeAddUsersToUserProfile" id="pqi-4y-KhW"/>
                                             </connections>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Already Added" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="brg-n3-hr1">
-                                            <rect key="frame" x="-42" y="-21" width="42" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="Nqb-2x-tsr" firstAttribute="centerY" secondItem="RFC-c5-9gl" secondAttribute="centerY" id="HsX-Gc-hhR"/>
                                         <constraint firstItem="Nqb-2x-tsr" firstAttribute="leading" secondItem="RFC-c5-9gl" secondAttribute="leadingMargin" constant="6" id="LXP-08-9OS"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="x4y-Bh-ZN8" secondAttribute="bottom" constant="-3" id="QYS-1I-lOT"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="brg-n3-hr1" secondAttribute="trailing" id="RxJ-wz-3NJ">
                                             <variation key="heightClass=regular-widthClass=compact" constant="6"/>
                                         </constraint>
-                                        <constraint firstItem="Nqb-2x-tsr" firstAttribute="top" secondItem="RFC-c5-9gl" secondAttribute="topMargin" constant="-3" id="ec6-e3-iKu"/>
                                         <constraint firstItem="brg-n3-hr1" firstAttribute="centerY" secondItem="RFC-c5-9gl" secondAttribute="centerY" id="nYv-CM-xfy"/>
-                                        <constraint firstItem="x4y-Bh-ZN8" firstAttribute="leading" secondItem="RFC-c5-9gl" secondAttribute="leadingMargin" constant="6" id="rNk-0R-Iha"/>
                                     </constraints>
                                     <variation key="default">
                                         <mask key="subviews">
-                                            <exclude reference="x4y-Bh-ZN8"/>
-                                            <exclude reference="Nqb-2x-tsr"/>
                                             <exclude reference="brg-n3-hr1"/>
+                                            <exclude reference="Nqb-2x-tsr"/>
                                         </mask>
                                         <mask key="constraints">
+                                            <exclude reference="HsX-Gc-hhR"/>
                                             <exclude reference="LXP-08-9OS"/>
-                                            <exclude reference="ec6-e3-iKu"/>
                                             <exclude reference="RxJ-wz-3NJ"/>
                                             <exclude reference="nYv-CM-xfy"/>
-                                            <exclude reference="QYS-1I-lOT"/>
-                                            <exclude reference="rNk-0R-Iha"/>
                                         </mask>
                                     </variation>
                                     <variation key="widthClass=compact">
                                         <mask key="subviews">
-                                            <include reference="x4y-Bh-ZN8"/>
                                             <include reference="Nqb-2x-tsr"/>
                                         </mask>
                                         <mask key="constraints">
                                             <include reference="LXP-08-9OS"/>
-                                            <include reference="ec6-e3-iKu"/>
-                                            <include reference="QYS-1I-lOT"/>
-                                            <include reference="rNk-0R-Iha"/>
                                         </mask>
                                     </variation>
                                     <variation key="heightClass=regular-widthClass=compact">
@@ -5429,6 +5414,7 @@ Photo</string>
                                             <include reference="brg-n3-hr1"/>
                                         </mask>
                                         <mask key="constraints">
+                                            <include reference="HsX-Gc-hhR"/>
                                             <include reference="RxJ-wz-3NJ"/>
                                             <include reference="nYv-CM-xfy"/>
                                         </mask>
@@ -5436,7 +5422,6 @@ Photo</string>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="alreadyAddedLabel" destination="brg-n3-hr1" id="Cf2-Z0-sqJ"/>
-                                    <outlet property="emailLabel" destination="x4y-Bh-ZN8" id="VZ3-Ym-ne6"/>
                                     <outlet property="nameButton" destination="Nqb-2x-tsr" id="wdf-aE-GU5"/>
                                 </connections>
                             </tableViewCell>
@@ -7252,11 +7237,11 @@ Photo</string>
         <image name="phoneImage" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="rcA-bd-JiX"/>
         <segue reference="JvB-e1-eF0"/>
-        <segue reference="i3m-7f-ANh"/>
+        <segue reference="rcA-bd-JiX"/>
         <segue reference="MC4-7o-Ble"/>
+        <segue reference="i3m-7f-ANh"/>
         <segue reference="HLy-lk-jYv"/>
-        <segue reference="7JA-N5-nQk"/>
+        <segue reference="pqi-4y-KhW"/>
     </inferredMetricsTieBreakers>
 </document>

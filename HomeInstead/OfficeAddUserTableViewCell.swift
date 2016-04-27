@@ -11,7 +11,6 @@ import UIKit
 class OfficeAddUserTableViewCell: UITableViewCell {
 
     @IBOutlet weak var nameButton: UIButton!
-    @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var alreadyAddedLabel: UILabel!
     
     override func awakeFromNib() {

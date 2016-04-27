@@ -38,7 +38,6 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     
     var selectedUserType: UserType!
-    var user: [String: String] = [String: String]()
     var userInformation: PFObject!
     var userObjectId: String = String()
     
@@ -215,7 +214,7 @@ class UserProfileViewController: UIViewController {
         self.imageView.clipsToBounds = true
         self.imageView.layer.cornerRadius = self.imageViewHeightLayoutConstraint.constant / 2
         
-        if let image = self.user["image"] {
+        if let image = self.image {
             self.image = image as? UIImage
             self.imageView.image = self.image
             self.noPhotoLabel.hidden = true
