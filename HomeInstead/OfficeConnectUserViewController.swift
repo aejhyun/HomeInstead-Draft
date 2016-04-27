@@ -38,9 +38,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var clientConnectedCathyNames: [String] = ["Prince Lawlz", "Brandon Custer", "Jon Davis", "Chris Park", "Obama Presidententadf"]
     var clientConnectedCareGiverNames: [String] = ["Jae Kimepqrij", "Baby John", "Obama Presidententadf"]
     
-    var clientConnectedCathysIds: [String] = [String]()
-    var clientConnectedCareGiverIds: [String] = [String]()
-    
     var nameButtonTappedRow: Int = -1
     var expandButtonTappedIndexPath: NSIndexPath? = nil
     
@@ -101,19 +98,19 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     func queryConnectedUsersFromCloud(userType: UserType, completion: (querySuccessful: Bool, connectedUsers: [[String: String]]) -> Void) {
         
-        for
         
-        let query = PFQuery(className: self.classNameForCloud.getClassName(self.selectedUserType)!)
-        query.getObjectInBackgroundWithId("xWMyZEGZ") {
-            (gameScore: PFObject?, error: NSError?) -> Void in
-            if error != nil {
-                print(error)
-            } else if let gameScore = gameScore {
-                gameScore["cheatMode"] = true
-                gameScore["score"] = 1338
-                gameScore.saveInBackground()
-            }
-        }
+        
+//        let query = PFQuery(className: self.classNameForCloud.getClassName(self.selectedUserType)!)
+//        query.getObjectInBackgroundWithId("xWMyZEGZ") {
+//            (gameScore: PFObject?, error: NSError?) -> Void in
+//            if error != nil {
+//                print(error)
+//            } else if let gameScore = gameScore {
+//                gameScore["cheatMode"] = true
+//                gameScore["score"] = 1338
+//                gameScore.saveInBackground()
+//            }
+//        }
         
     }
     
@@ -130,6 +127,9 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         var querySuccessCheck = QuerySuccessCheck()
         
+        var clientConnectedCathysIds: [[String]] = [[String]]()
+        var clientConnectedCareGiverIds: [[String]] = [[String]]()
+        
         for userType in self.userTypes {
             self.officeConnectUserHelper.queryUsersAddedByOfficeUserFromCloud(userType) { (querySuccessful, users) -> Void in
                 if querySuccessful {
@@ -137,6 +137,19 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                         self.clientUsers = users
                         self.clientCheckedRows = [Bool](count: self.clientUsers.count, repeatedValue: false)
                         self.clientOfficeUserIds = self.officeConnectUserHelper.clientOfficeUserIds // This OfficeConnectUserHelper class queries clientOfficeUserIds and stores them in a class variable. Only get this, clientOfficeUserIds, value from the OfficeConnectUserHelper class AFTER officeConnectUserHelper.queryUsersAddedByOfficeUserFromCloud() is called.
+                        clientConnectedCathysIds = self.officeConnectUserHelper.clientConnectedCathysIds
+                        clientConnectedCareGiverIds = self.officeConnectUserHelper.clientConnectedCareGiverIds
+                        
+                        for var i: Int = 0; i < clientConnectedCathysIds.count; i++ {
+                            for var j: Int = 0; j < clientConnectedCathysIds[i].count; j++ {
+                                
+                            }
+                        }
+                        
+                        
+                        
+                        
+                        
                         querySuccessCheck.successfullyQueriedClientUsers = true
                     } else if userType == UserType.cathy {
                         self.cathyUsers = users
@@ -546,9 +559,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             let checkedCathysObjectIds: [String]  = self.getCheckedUsersObjectIds(UserType.cathy)
             let checkedCareGiversObjectIds: [String] = self.getCheckedUsersObjectIds(UserType.careGiver)
             
-            print(checkedClientObjectId)
-            print(checkedCathysObjectIds)
-            print(checkedCareGiversObjectIds)
+
             self.officeConnectUserHelper.selectedUserType = self.selectedUserType // Once again, necessary for self.connectUsersForUserTypeInCloud to work correctly.
             for userType in userTypes {
                 self.officeConnectUserHelper.connectUsersForUserTypeInCloud(userType, checkedClientObjectId: checkedClientObjectId, checkedCathysObjectIds: checkedCathysObjectIds, checkedCareGiversObjectIds: checkedCareGiversObjectIds)

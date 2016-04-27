@@ -20,38 +20,33 @@ class OfficeConnectUserHelper {
     var clientConnectedCathysIds: [[String]] = [[String]]()
     var clientConnectedCareGiverIds: [[String]] = [[String]]()
     
+    var connectedUsers: [[[String: String]]] = [[[String: String]]]()
+    
     var selectedUserType: UserType!
     
     func queryUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, users: [[String: String]]) -> Void) {
         
-        var idsOfOfficeUsersWhoAddedThisUser: [String] = [String]()
         var users: [[String: String]] = [[String: String]]()
         var userInformation: [String: String] = [String: String]()
         
         let query = PFQuery(className: classNameForCloud.getClassName(userType)!)
         query.whereKey("idsOfOfficeUsersWhoAddedThisUser", containedIn: [(PFUser.currentUser()?.objectId)!])
-        query.fromLocalDatastore()
+        //query.fromLocalDatastore()
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             if error == nil {
                 if let objects = objects {
                     for object in objects {
                         
-                        idsOfOfficeUsersWhoAddedThisUser = object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String]
                         if userType == UserType.client {
-                            self.clientOfficeUserIds.append(idsOfOfficeUsersWhoAddedThisUser)
-                            //self.clientConnectedCathysIds.append
+                            self.clientOfficeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
+                            self.clientConnectedCathysIds.append(object.objectForKey("connectedCathysIds") as! [String])
+                            self.clientConnectedCareGiverIds.append(object.objectForKey("connectedCareGiverIds") as! [String])
                         } else if userType == UserType.cathy {
-                            self.cathyOfficeUserIds.append(idsOfOfficeUsersWhoAddedThisUser)
+                            self.cathyOfficeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
                         } else if userType == UserType.careGiver {
-                            self.careGiverOfficeUserIds.append(idsOfOfficeUsersWhoAddedThisUser)
+                            self.careGiverOfficeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
                         }
-                        
-                        
-                        
-//                        userInformation["clientConnections"] = object.objectForKey("clientConnections")
-//                        userInformation["cathyConnections"] = object.objectForKey("cathyConnections")
-//                        userInformation["careGiverConnections"] = object.objectForKey("careGiverConnections")
                         
                         userInformation["name"] = object.objectForKey("name") as? String
                         userInformation["notes"] = object.objectForKey("notes") as? String
@@ -83,6 +78,48 @@ class OfficeConnectUserHelper {
         
     }
     
+    func queryConnectedUsersFromCloud(userType: UserType, connectedUsers: [String], completion: (querySuccessful: Bool, connectedUsers: [[String: String]]) -> Void) {
+        
+        var connectedUserInformation: [String: String] = [String: String]()
+        var users: [[String: String]] = [[String: String]]()
+        
+        for var index: Int = 0; index < connectedUsers.count; index++ {
+            
+            let query = PFQuery(className: self.classNameForCloud.getClassName(self.selectedUserType)!)
+            query.getObjectInBackgroundWithId(connectedUsers[index]) {
+                (object: PFObject?, error: NSError?) -> Void in
+                if error != nil {
+                    print(error)
+                } else if let object = object {
+                    connectedUserInformation["name"] = object.objectForKey("name") as? String
+                    connectedUserInformation["notes"] = object.objectForKey("notes") as? String
+                    connectedUserInformation["email"] = object.objectForKey("email") as? String
+                    connectedUserInformation["province"] = object.objectForKey("province") as? String
+                    connectedUserInformation["city"] = object.objectForKey("city") as? String
+                    connectedUserInformation["district"] = object.objectForKey("district") as? String
+                    connectedUserInformation["streetOne"] = object.objectForKey("streetOne") as? String
+                    connectedUserInformation["streetTwo"] = object.objectForKey("streetTwo") as? String
+                    connectedUserInformation["streetThree"] = object.objectForKey("streetThree") as? String
+                    connectedUserInformation["postalCode"] = object.objectForKey("postalCode") as? String
+                    connectedUserInformation["phoneNumber"] = object.objectForKey("phoneNumber") as? String
+                    connectedUserInformation["emergencyPhoneNumber"] = object.objectForKey("emergencyPhoneNumber") as? String
+                    connectedUserInformation["userType"] = object.objectForKey("userType") as? String
+                    connectedUserInformation["userId"] = object.objectForKey("userId") as? String
+                    connectedUserInformation["objectId"] = object.objectId
+                    users.append(connectedUserInformation)
+                    completion(querySuccessful: true, connectedUsers: users)
+                }
+            }
+            
+        }
+        
+        
+        
+        
+        
+        
+    }
+    
     func deleteUserFromOfficeUserInCloud(user: [[String: String]], officeUserIdsForUser: [[String]], indexPath: NSIndexPath) {
         
         let newOfficeUserIdsForUser: [String] = officeUserIdsForUser[indexPath.row].filter { $0 != PFUser.currentUser()?.objectId }
@@ -110,23 +147,27 @@ class OfficeConnectUserHelper {
         
         if selectedUserType == UserType.client {
             objectIdsForQuery = checkedClientObjectId
-            nameOfFirstField = "cathyConnections"
-            nameOfSecondField = "careGiverConnections"
+            nameOfFirstField = "connectedCathysIds"
+            nameOfSecondField = "connectedCareGiverIds"
             firstSetOfObjectIdsToBeUploaded = checkedCathysObjectIds
             secondSetOfObjectIdsToBeUploaded = checkedCareGiversObjectIds
         } else if selectedUserType == UserType.cathy {
             objectIdsForQuery = checkedCathysObjectIds
-            nameOfFirstField = "clientConnections"
-            nameOfSecondField = "careGiverConnections"
+            nameOfFirstField = "connectedClientIds"
+            nameOfSecondField = "connectedCareGiverIds"
             firstSetOfObjectIdsToBeUploaded = checkedClientObjectId
             secondSetOfObjectIdsToBeUploaded = checkedCareGiversObjectIds
         } else if selectedUserType == UserType.careGiver {
             objectIdsForQuery = checkedCareGiversObjectIds
-            nameOfFirstField = "clientConnections"
-            nameOfSecondField = "cathyConnections"
+            nameOfFirstField = "connectedClientIds"
+            nameOfSecondField = "connectedCathysIds"
             firstSetOfObjectIdsToBeUploaded = checkedClientObjectId
             secondSetOfObjectIdsToBeUploaded = checkedCathysObjectIds
         }
+        
+        print(checkedClientObjectId)
+        print(checkedCathysObjectIds)
+        print(checkedCareGiversObjectIds)
         
         for var index: Int = 0; index < objectIdsForQuery.count; index++ {
             
@@ -146,8 +187,6 @@ class OfficeConnectUserHelper {
         }
         
     }
-
-    
     
     
 
