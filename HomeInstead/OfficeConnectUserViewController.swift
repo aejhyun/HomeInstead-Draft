@@ -313,6 +313,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         let originalHeight = UITableViewAutomaticDimension
         var expandedHeight: CGFloat = CGFloat(20.0 + (20.0 * Double(self.clientConnectedCathyNames.count)))
         
+        
         if self.expandButtonTappedAfterViewAppears == true {
             expandedHeight = self.expandedRowHeights[indexPath.row]
         }
@@ -364,11 +365,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.setUserNotesForSelectedUserType(self.selectedUserType)
         cell.nameButton.setTitle(self.userNames[indexPath.row], forState: UIControlState.Normal)
         
-        if self.userNotes[indexPath.row] == "" {
-            //cell.notesTopSpaceLayoutConstraint.constant = 0
-        } else {
-            cell.notesTopSpaceLayoutConstraint.constant = 5
-        }
+
         
         cell.notesLabel.text = self.userNotes[indexPath.row]
         
@@ -383,12 +380,10 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         cell.nameButton.alpha = 0.0
         cell.notesLabel.alpha = 0.0
-        cell.userIdLabel.alpha = 0.0
         
         if self.numberOfTimesReloadDataIsCalled == 1 {
             cell.nameButton.alpha = 1.0
             cell.notesLabel.alpha = 1.0
-            cell.userIdLabel.alpha = 1.0
             
         }
         
@@ -397,9 +392,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         })
         UIView.animateWithDuration(1.0, animations: { () -> Void in
             cell.notesLabel.alpha = 1.0
-        })
-        UIView.animateWithDuration(1.0, animations: { () -> Void in
-            cell.userIdLabel.alpha = 1.0
         })
         
     }
@@ -432,8 +424,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             cell.createConnectedCathyNameButtons(self.clientConnectedCathyNames)
             
         }
-        
-        
         
         self.configureCellForUserType(cell, userType: self.selectedUserType, indexPath: indexPath)
         self.configureCellContentAnimation(cell)
