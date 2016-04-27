@@ -52,21 +52,27 @@ class OfficeAddUserTableViewController: UITableViewController {
                         idsOfOfficeUsersWhoAddedThisUser = object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String]
                         self.officeUserIds.append(idsOfOfficeUsersWhoAddedThisUser)
                         
-                        userInformation["name"] = object.objectForKey("name") as? String
-                        userInformation["notes"] = object.objectForKey("notes") as? String
-                        userInformation["email"] = object.objectForKey("email") as? String
-                        userInformation["province"] = object.objectForKey("province") as? String
-                        userInformation["city"] = object.objectForKey("city") as? String
-                        userInformation["district"] = object.objectForKey("district") as? String
-                        userInformation["streetOne"] = object.objectForKey("streetOne") as? String
-                        userInformation["streetTwo"] = object.objectForKey("streetTwo") as? String
-                        userInformation["streetThree"] = object.objectForKey("streetThree") as? String
-                        userInformation["postalCode"] = object.objectForKey("postalCode") as? String
-                        userInformation["phoneNumber"] = object.objectForKey("phoneNumber") as? String
-                        userInformation["emergencyPhoneNumber"] = object.objectForKey("emergencyPhoneNumber") as? String
-                        userInformation["userType"] = object.objectForKey("userType") as? String
-                        userInformation["userId"] = object.objectForKey("userId") as? String
-                        userInformation["objectId"] = object.objectId
+                        
+                        
+                        
+                        
+                        
+                        
+//                        userInformation["name"] = object.objectForKey("name") as? String
+//                        userInformation["notes"] = object.objectForKey("notes") as? String
+//                        userInformation["email"] = object.objectForKey("email") as? String
+//                        userInformation["province"] = object.objectForKey("province") as? String
+//                        userInformation["city"] = object.objectForKey("city") as? String
+//                        userInformation["district"] = object.objectForKey("district") as? String
+//                        userInformation["streetOne"] = object.objectForKey("streetOne") as? String
+//                        userInformation["streetTwo"] = object.objectForKey("streetTwo") as? String
+//                        userInformation["streetThree"] = object.objectForKey("streetThree") as? String
+//                        userInformation["postalCode"] = object.objectForKey("postalCode") as? String
+//                        userInformation["phoneNumber"] = object.objectForKey("phoneNumber") as? String
+//                        userInformation["emergencyPhoneNumber"] = object.objectForKey("emergencyPhoneNumber") as? String
+//                        userInformation["userType"] = object.objectForKey("userType") as? String
+//                        userInformation["userId"] = object.objectForKey("userId") as? String
+//                        userInformation["objectId"] = object.objectId
                         self.users.append(userInformation)
                         object.pinInBackground()
                     }

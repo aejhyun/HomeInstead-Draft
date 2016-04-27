@@ -29,8 +29,7 @@ class OfficeEditUserProfileViewController: SignUpViewController {
     var streetThree: String!
     var postalCode: String!
     var notes: String!
-    var userType: UserType!
-    var objectId: String!
+    var userObjectId: String!
     
     func unpackUserInformation() {
         
@@ -187,12 +186,12 @@ class OfficeEditUserProfileViewController: SignUpViewController {
         
     }
     
-    func updateUserInformationToCloudWithClassName(className: String, completion: (updateSuccessful: Bool) -> Void) {
+    func attemptUpdatingUserInformationToCloudWithClassName(className: String, completion: (updateSuccessful: Bool) -> Void) {
         
         let imageFile: NSData? = self.getImageFile()
         
         let query = PFQuery(className: className)
-        query.getObjectInBackgroundWithId(self.objectId) {
+        query.getObjectInBackgroundWithId(self.userObjectId) {
             (object: PFObject?, error: NSError?) -> Void in
             if error != nil {
                 print(error)
@@ -230,12 +229,11 @@ class OfficeEditUserProfileViewController: SignUpViewController {
     }
     
     @IBAction func doneButtonTapped(sender: AnyObject) {
-    self.updateUserInformationToCloudWithClassName(ClassNameForCloud().getClassName(self.userType)!) { (uploadSuccessful) -> Void in
+    self.attemptUpdatingUserInformationToCloudWithClassName(ClassNameForCloud().getClassName(self.selectedUserType)!) { (uploadSuccessful) -> Void in
             if uploadSuccessful {
                 self.performSegueWithIdentifier("officeEditUserProfileToUserProfile", sender: nil)
             }
         }
-        
     }
     
     

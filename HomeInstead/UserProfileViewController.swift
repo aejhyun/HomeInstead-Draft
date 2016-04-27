@@ -251,6 +251,7 @@ class UserProfileViewController: UIViewController {
             if let officeEditUserProfileViewController = navigationController.topViewController as? OfficeEditUserProfileViewController {
                 officeEditUserProfileViewController.selectedUserType = self.selectedUserType
                 officeEditUserProfileViewController.userInformation = self.userInformation
+                officeEditUserProfileViewController.userObjectId = self.userObjectId
 
             } else {
                 print("officeAddUserTableViewController returned nil")
