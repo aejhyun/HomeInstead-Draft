@@ -15,14 +15,15 @@ class OfficeConnectUserHelper {
     
     var selectedUserType: UserType!
     
-    func attemptQueryingUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, userNames: [String], userObjectIds: [String], userNotes: [String], userOfficeIds: [[String]]) -> Void) {
+    func attemptQueryingUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, userNames: [String]?, userObjectIds: [String]?, userNotes: [String]?, clientConnectedCathysIds: [[String]]?, clientConnectedCareGiverIds: [[String]]?, userOfficeIds: [[String]]?) -> Void) {
         
         var userNames: [String] = [String]()
         var userObjectIds: [String] = [String]()
         var userNotes: [String] = [String]()
         var userOfficeIds: [[String]] = [[String]]() // These variables are to hold the ids of the office users who added the non office user.
-//        var cathyOfficeUserIds: [[String]] = [[String]]()
-//        var careGiverOfficeUserIds: [[String]] = [[String]]()
+        
+        var clientConnectedCathysIds: [[String]] = [[String]]()
+        var clientConnectedCareGiverIds: [[String]] = [[String]]()
         
         let query = PFQuery(className: classNameForCloud.getClassName(userType)!)
         query.whereKey("idsOfOfficeUsersWhoAddedThisUser", containedIn: [(PFUser.currentUser()?.objectId)!])
@@ -33,31 +34,29 @@ class OfficeConnectUserHelper {
                 if let objects = objects {
                     for object in objects {
                         
-//                        if userType == UserType.client {
-//                            clientOfficeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
-//                            self.clientConnectedCathysIds.append(object.objectForKey("connectedCathysIds") as! [String])
-//                            self.clientConnectedCareGiverIds.append(object.objectForKey("connectedCareGiverIds") as! [String])
-//                        } else if userType == UserType.cathy {
-//                            cathyOfficeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
-//                        } else if userType == UserType.careGiver {
-//                            careGiverOfficeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
-//                        }
-                        
-                        
-                        
+                        if userType == UserType.client {
+                            
+                            clientConnectedCathysIds.append(object.objectForKey("connectedCathysIds") as! [String])
+                            clientConnectedCareGiverIds.append(object.objectForKey("connectedCareGiverIds") as! [String])
+                            
+                        } else if userType == UserType.cathy {
+                            
+                        } else if userType == UserType.careGiver {
+                            
+                        }
+ 
                         userNames.append(object.objectForKey("name") as! String)
                         userObjectIds.append(object.objectId!)
                         userNotes.append(object.objectForKey("notes") as! String)
                         userOfficeIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
                         object.pinInBackground()
 
-                        
                     }
-                    completion(querySuccessful: true, userNames: userNames, userObjectIds: userObjectIds, userNotes: userNotes, userOfficeIds: userOfficeIds)
+                    completion(querySuccessful: true, userNames: userNames, userObjectIds: userObjectIds, userNotes: userNotes, clientConnectedCathysIds: clientConnectedCathysIds, clientConnectedCareGiverIds: clientConnectedCareGiverIds, userOfficeIds: userOfficeIds)
                     
                 }
             } else {
-                completion(querySuccessful: false, userNames: userNames, userObjectIds: userObjectIds, userNotes: userNotes, userOfficeIds: userOfficeIds)
+                completion(querySuccessful: false, userNames: nil, userObjectIds: nil, userNotes: nil, clientConnectedCathysIds: nil, clientConnectedCareGiverIds: nil, userOfficeIds: nil)
                 print("Error: \(error!) \(error!.userInfo)")
             }
         }
@@ -101,13 +100,13 @@ class OfficeConnectUserHelper {
             
     }
     
-    func deleteUserFromOfficeUserInCloud(user: [[String: String]], officeUserIdsForUser: [[String]], indexPath: NSIndexPath) {
+    func deleteUserFromOfficeUserInCloud(userObjectIds: [String], officeUserIdsForUser: [[String]], indexPath: NSIndexPath) {
         
         let newOfficeUserIdsForUser: [String] = officeUserIdsForUser[indexPath.row].filter { $0 != PFUser.currentUser()?.objectId }
         
         let query = PFQuery(className: classNameForCloud.getClassName(self.selectedUserType)!)
         
-        query.getObjectInBackgroundWithId(user[indexPath.row]["objectId"]!) {
+        query.getObjectInBackgroundWithId(userObjectIds[indexPath.row]) {
             (objects: PFObject?, error: NSError?) -> Void in
             if error != nil {
                 print(error)
@@ -118,37 +117,51 @@ class OfficeConnectUserHelper {
         }
     }
     
-    func connectUsersForUserTypeInCloud(selectedUserType: UserType, checkedClientObjectId: [String], checkedCathysObjectIds: [String], checkedCareGiversObjectIds: [String]) {
+    func connectUserIdsForUserTypeInCloud(selectedUserType: UserType, checkedClientObjectIds: [String], checkedCathyObjectIds: [String], checkedCareGiverObjectIds: [String], checkedClientNames: [String], checkedCathyNames: [String], checkedCareGiverNames: [String]) {
         
         var objectIdsForQuery: [String] = [String]()
+        
         var firstSetOfObjectIdsToBeUploaded: [String] = [String]()
         var secondSetOfObjectIdsToBeUploaded: [String] = [String]()
+        var firstSetOfNamesToBeUploaded: [String] = [String]()
+        var secondSetOfNamesToBeUploaded: [String] = [String]()
+        
         var nameOfFirstField: String = String()
         var nameOfSecondField: String = String()
+        var nameOfThirdField: String = String()
+        var nameOfFourthField: String = String()
         
         if selectedUserType == UserType.client {
-            objectIdsForQuery = checkedClientObjectId
+            objectIdsForQuery = checkedClientObjectIds
             nameOfFirstField = "connectedCathysIds"
             nameOfSecondField = "connectedCareGiverIds"
-            firstSetOfObjectIdsToBeUploaded = checkedCathysObjectIds
-            secondSetOfObjectIdsToBeUploaded = checkedCareGiversObjectIds
+            nameOfThirdField = "connectedCathyNames"
+            nameOfFourthField = "connectedCareGiverNames"
+            firstSetOfObjectIdsToBeUploaded = checkedCathyObjectIds
+            secondSetOfObjectIdsToBeUploaded = checkedCareGiverObjectIds
+            firstSetOfNamesToBeUploaded = checkedCathyNames
+            secondSetOfNamesToBeUploaded = checkedCareGiverNames
         } else if selectedUserType == UserType.cathy {
-            objectIdsForQuery = checkedCathysObjectIds
+            objectIdsForQuery = checkedCathyObjectIds
             nameOfFirstField = "connectedClientIds"
             nameOfSecondField = "connectedCareGiverIds"
-            firstSetOfObjectIdsToBeUploaded = checkedClientObjectId
-            secondSetOfObjectIdsToBeUploaded = checkedCareGiversObjectIds
+            nameOfThirdField = "connectedClientNames"
+            nameOfFourthField = "connectedCareGiverNames"
+            firstSetOfObjectIdsToBeUploaded = checkedClientObjectIds
+            secondSetOfObjectIdsToBeUploaded = checkedCareGiverObjectIds
+            firstSetOfNamesToBeUploaded = checkedClientNames
+            secondSetOfNamesToBeUploaded = checkedCareGiverNames
         } else if selectedUserType == UserType.careGiver {
-            objectIdsForQuery = checkedCareGiversObjectIds
+            objectIdsForQuery = checkedCareGiverObjectIds
             nameOfFirstField = "connectedClientIds"
             nameOfSecondField = "connectedCathysIds"
-            firstSetOfObjectIdsToBeUploaded = checkedClientObjectId
-            secondSetOfObjectIdsToBeUploaded = checkedCathysObjectIds
+            nameOfThirdField = "connectedClientNames"
+            nameOfFourthField = "connectedCathyNames"
+            firstSetOfObjectIdsToBeUploaded = checkedClientObjectIds
+            secondSetOfObjectIdsToBeUploaded = checkedCathyObjectIds
+            firstSetOfNamesToBeUploaded = checkedClientNames
+            secondSetOfNamesToBeUploaded = checkedCathyNames
         }
-        
-        print(checkedClientObjectId)
-        print(checkedCathysObjectIds)
-        print(checkedCareGiversObjectIds)
         
         for var index: Int = 0; index < objectIdsForQuery.count; index++ {
             
@@ -160,6 +173,8 @@ class OfficeConnectUserHelper {
                 } else if let object = objects {
                     object[nameOfFirstField] = firstSetOfObjectIdsToBeUploaded
                     object[nameOfSecondField] = secondSetOfObjectIdsToBeUploaded
+                    object[nameOfThirdField] = firstSetOfNamesToBeUploaded
+                    object[nameOfFourthField] = secondSetOfNamesToBeUploaded
                     object.saveInBackground()
                     object.pinInBackground()
                 }
@@ -168,6 +183,20 @@ class OfficeConnectUserHelper {
         }
         
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 

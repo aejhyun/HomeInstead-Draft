@@ -361,6 +361,9 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             object["connectedClientIds"] = []
             object["connectedCathysIds"] = []
             object["connectedCareGiverIds"] = []
+            object["connectedClientNames"] = []
+            object["connectedCathyNames"] = []
+            object["connectedCareGiverNames"] = []
         }
 
         if imageFile != nil {

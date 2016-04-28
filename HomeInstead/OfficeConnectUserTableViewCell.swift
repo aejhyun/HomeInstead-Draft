@@ -19,6 +19,12 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
     var height: CGFloat = 0.0
     var width: CGFloat = 0.0
     
+    var spaceBetweenUsers: CGFloat = 0.0
+    var spaceBetweenUserLabelsAndUsers: CGFloat = 0.0
+    
+    var leftSideSpaceForUsersAndUserLabel: CGFloat = 40.0
+    var rightSideSpaceForUsersAndUserLabel: CGFloat = 0.0
+    
     var connectedUserNameButton: UIButton!
     var connectedUserNameButtons: [UIButton] = [UIButton]()
     
@@ -39,6 +45,11 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
             userNameButton.removeFromSuperview()
         }
     
+    }
+    
+    func calculateRightSideSpace() -> CGFloat {
+        let space: CGFloat = self.width - self.leftSideSpaceForUsersAndUserLabel
+        return space
     }
     
     func createCareGiverLabel() {
@@ -67,7 +78,7 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
     
     func createConnectedCareGiverNameButtons(careGiverNames: [String]) {
         
-        var userNameButtonFrameHeight: CGFloat = self.height + 20
+        var userNameButtonFrameHeight: CGFloat = self.height + self.spaceBetweenUserLabelsAndUsers
 
         for var row: Int = 0; row < careGiverNames.count ; row++ {
             
@@ -79,14 +90,14 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
             self.connectedUserNameButtons.append(self.connectedUserNameButton)
             self.addSubview(self.connectedUserNameButton)
             
-            userNameButtonFrameHeight += 20
+            userNameButtonFrameHeight += self.spaceBetweenUsers
         }
 
     }
     
     func createConnectedCathyNameButtons(cathyNames: [String]) {
         
-        var userNameButtonFrameHeight: CGFloat = self.height + 20
+        var userNameButtonFrameHeight: CGFloat = self.height + self.spaceBetweenUserLabelsAndUsers
         
         for var row: Int = 0; row < cathyNames.count ; row++ {
             
@@ -98,7 +109,7 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
             self.connectedUserNameButtons.append(self.connectedUserNameButton)
             self.addSubview(self.connectedUserNameButton)
             
-            userNameButtonFrameHeight += 20
+            userNameButtonFrameHeight += self.spaceBetweenUsers
         }
         
     }
