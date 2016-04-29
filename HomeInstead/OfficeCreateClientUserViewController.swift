@@ -50,8 +50,11 @@ class OfficeCreateClientUserViewController: OfficeEditUserProfileViewController 
         object["notes"] = self.notesTextView.text
         object["idsOfOfficeUsersWhoAddedThisUser"] = []
         object["connectedClientIds"] = []
-        object["connectedCathysIds"] = []
+        object["connectedCathyIds"] = []
         object["connectedCareGiverIds"] = []
+        object["connectedClientNames"] = []
+        object["connectedCathyNames"] = []
+        object["connectedCareGiverNames"] = []
         
         if imageFile != nil {
             object["imageFile"] = imageFile

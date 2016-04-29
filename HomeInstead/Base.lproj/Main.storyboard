@@ -5106,8 +5106,21 @@ Photo</string>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nta-RU-RYA">
                                                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="Cds-s3-Isr"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <state key="normal" title="Expand"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="Cds-s3-Isr"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="heightClass=regular-widthClass=compact">
+                                                        <mask key="constraints">
+                                                            <include reference="Cds-s3-Isr"/>
+                                                        </mask>
+                                                    </variation>
                                                     <connections>
                                                         <action selector="expandButtonTapped:" destination="jhU-fc-GJK" eventType="touchUpInside" id="Izd-nf-aN0"/>
                                                     </connections>
@@ -5119,18 +5132,27 @@ Photo</string>
                                                 <constraint firstItem="Obf-sF-Sq1" firstAttribute="top" secondItem="3BD-JR-ZQW" secondAttribute="topMargin" constant="-8" id="Bsd-w1-yJF">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="-3"/>
                                                 </constraint>
-                                                <constraint firstItem="nta-RU-RYA" firstAttribute="centerY" secondItem="Obf-sF-Sq1" secondAttribute="centerY" id="DbT-xw-Opu"/>
+                                                <constraint firstItem="nta-RU-RYA" firstAttribute="top" secondItem="3BD-JR-ZQW" secondAttribute="topMargin" constant="-7" id="Knb-iW-YUi">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="-3"/>
+                                                </constraint>
                                                 <constraint firstItem="nta-RU-RYA" firstAttribute="leading" secondItem="Obf-sF-Sq1" secondAttribute="trailing" constant="51" id="d2D-VH-VXB">
-                                                    <variation key="heightClass=regular-widthClass=compact" constant="10"/>
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
                                                 </constraint>
                                                 <constraint firstItem="hr1-Xf-Lmr" firstAttribute="top" secondItem="Obf-sF-Sq1" secondAttribute="bottom" constant="-2" id="daN-4L-uYl"/>
                                                 <constraint firstItem="Obf-sF-Sq1" firstAttribute="top" secondItem="3BD-JR-ZQW" secondAttribute="topMargin" constant="4" id="eKp-n2-DAb"/>
+                                                <constraint firstItem="nta-RU-RYA" firstAttribute="top" secondItem="3BD-JR-ZQW" secondAttribute="topMargin" constant="7" id="m2l-Hk-tzh">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="-3"/>
+                                                </constraint>
                                                 <constraint firstItem="hr1-Xf-Lmr" firstAttribute="top" secondItem="Obf-sF-Sq1" secondAttribute="bottom" constant="17" id="ohQ-19-GVb">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="-2"/>
+                                                </constraint>
+                                                <constraint firstItem="nta-RU-RYA" firstAttribute="top" secondItem="3BD-JR-ZQW" secondAttribute="topMargin" constant="-7" id="pjE-eZ-bIv">
+                                                    <variation key="heightClass=regular-widthClass=compact" constant="-3"/>
                                                 </constraint>
                                                 <constraint firstItem="Obf-sF-Sq1" firstAttribute="leading" secondItem="3BD-JR-ZQW" secondAttribute="leadingMargin" constant="60" id="poK-Vf-uAc">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="6"/>
                                                 </constraint>
+                                                <constraint firstItem="nta-RU-RYA" firstAttribute="leading" secondItem="3BD-JR-ZQW" secondAttribute="leadingMargin" constant="126" id="tmk-rv-DdA"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="hr1-Xf-Lmr" secondAttribute="trailing" constant="347" id="yHQ-AS-FNn">
                                                     <variation key="heightClass=regular-widthClass=compact" constant="6"/>
                                                 </constraint>
@@ -5150,8 +5172,11 @@ Photo</string>
                                                     <exclude reference="daN-4L-uYl"/>
                                                     <exclude reference="ohQ-19-GVb"/>
                                                     <exclude reference="yHQ-AS-FNn"/>
-                                                    <exclude reference="DbT-xw-Opu"/>
+                                                    <exclude reference="Knb-iW-YUi"/>
                                                     <exclude reference="d2D-VH-VXB"/>
+                                                    <exclude reference="m2l-Hk-tzh"/>
+                                                    <exclude reference="pjE-eZ-bIv"/>
+                                                    <exclude reference="tmk-rv-DdA"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
@@ -5169,8 +5194,11 @@ Photo</string>
                                                     <exclude reference="daN-4L-uYl"/>
                                                     <include reference="ohQ-19-GVb"/>
                                                     <include reference="yHQ-AS-FNn"/>
-                                                    <include reference="DbT-xw-Opu"/>
+                                                    <exclude reference="Knb-iW-YUi"/>
                                                     <include reference="d2D-VH-VXB"/>
+                                                    <include reference="m2l-Hk-tzh"/>
+                                                    <exclude reference="pjE-eZ-bIv"/>
+                                                    <exclude reference="tmk-rv-DdA"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -5342,9 +5370,6 @@ Photo</string>
                                                 <mask key="constraints">
                                                     <include reference="pTT-0w-nCO"/>
                                                 </mask>
-                                            </variation>
-                                            <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                <rect key="frame" x="20" y="14" width="41" height="21"/>
                                             </variation>
                                             <connections>
                                                 <action selector="nameButtonTapped:" destination="4Qw-gq-aUv" eventType="touchUpInside" id="34N-42-Ujx"/>

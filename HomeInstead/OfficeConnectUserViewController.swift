@@ -45,11 +45,11 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var cathyCheckedRows: [Bool] = [Bool]()
     var careGiverCheckedRows: [Bool] = [Bool]()
     
-    var clientConnectedCathysIds: [[String]] = [[String]]()
+    var clientConnectedCathyIds: [[String]] = [[String]]()
     var clientConnectedCareGiverIds: [[String]] = [[String]]()
-    
-    var clientConnectedCathyNames: [String] = ["Prince Lawlz", "Brandon Custer", "Jon Davis", "Chris Park", "Obama Presidententadf"]
-    var clientConnectedCareGiverNames: [String] = ["Jae Kimepqrij", "Baby John", "Obama Presidententadf"]
+
+    var clientConnectedCathyNames: [[String]] = [[String]]()
+    var clientConnectedCareGiverNames: [[String]] = [[String]]()
     
     var nameButtonTappedRow: Int = -1
     var expandButtonTappedIndexPath: NSIndexPath? = nil
@@ -98,88 +98,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.toolBar.clipsToBounds = true
         self.toolBar.layer.borderColor = UIColor(red: 163.0/255.0, green: 163.0/255.0, blue: 163.0/255.0, alpha: 1.0).CGColor
         self.toolBar.layer.borderWidth = 1.0
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.setSegmentedControlWidth()
-        self.removeBottomLineFromNavigationBar()
-        self.setToolBar()
-        
-        // Need to set the initial chosen segment for the segment control. If this is not present, it will cause a crash.
-        self.selectedUserType = UserType.client
-        
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        
-        self.numberOfTimesReloadDataIsCalled = 0
-        
-        self.tableView.estimatedRowHeight = 70
-        self.tableView.rowHeight = UITableViewAutomaticDimension
-        
-        var querySuccessCheck = QuerySuccessCheck()
-
-        for userType in self.userTypes {
-            
-            self.officeConnectUserHelper.attemptQueryingUsersAddedByOfficeUserFromCloud(userType, completion: { (querySuccessful, userNames, userObjectIds, userNotes, clientConnectedCathysIds, clientConnectedGiverIds, userOfficeIds) -> Void in
-                if querySuccessful {
-                    if userType == UserType.client {
-                        self.clientNames = userNames!
-                        self.clientObjectIds = userObjectIds!
-                        self.clientNotes = userNotes!
-                        self.clientOfficeUserIds = userOfficeIds!
-                        self.clientCheckedRows = [Bool](count: self.clientNames.count, repeatedValue: false)
-                        self.clientConnectedCathysIds = clientConnectedCathysIds!
-                        self.clientConnectedCareGiverIds = clientConnectedGiverIds!
-                        querySuccessCheck.successfullyQueriedClientUsers = true
-                    } else if userType == UserType.cathy {
-                        self.cathyNames = userNames!
-                        self.cathyObjectIds = userObjectIds!
-                        self.cathyNotes = userNotes!
-                        self.cathyOfficeUserIds = userOfficeIds!
-                        self.cathyCheckedRows = [Bool](count: self.cathyNames.count, repeatedValue: false)
-                        querySuccessCheck.successfullyQueriedCathyUsers = true
-                    } else if userType == UserType.careGiver {
-                        self.careGiverNames = userNames!
-                        self.careGiverObjectIds = userObjectIds!
-                        self.careGiverNotes = userNotes!
-                        self.careGiverOfficeUserIds = userOfficeIds!
-                        self.careGiverCheckedRows = [Bool](count: self.careGiverNames.count, repeatedValue: false)
-                        querySuccessCheck.successfullyQueriedCareGiverUsers = true
-                    }
-                    if querySuccessCheck.successfullyQueriedAllUsers() {
-                        self.numberOfTimesReloadDataIsCalled++
-                        self.tableView.reloadData()
-                    }
-                }
-            })
-            
-        }
-
-        self.navigationBarLine.hidden = true
-
-    }
-    
-    override func viewDidDisappear(animated: Bool) {
-        
-        self.navigationBarLine.hidden = false
-        
-    }
-    
-    @IBAction func segmentedControlIndexChanged(sender: UISegmentedControl) {
-        
-        if self.segmentedControl.selectedSegmentIndex == 0 {
-            self.selectedUserType = UserType.client
-        } else if self.segmentedControl.selectedSegmentIndex == 1 {
-            self.selectedUserType = UserType.cathy
-        } else if self.segmentedControl.selectedSegmentIndex == 2 {
-            self.selectedUserType = UserType.careGiver
-        }
-        self.numberOfTimesReloadDataIsCalled++
-        self.tableView.reloadData()
-        
     }
     
     func setUserNamesForSelectedUserType(selectedUserType: UserType) {
@@ -264,81 +182,41 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
-            if cell.accessoryType == .Checkmark {
-                cell.accessoryType = .None
-                self.changeUserCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: false, indexPath: indexPath)
-            } else {
-                cell.accessoryType = .Checkmark
-                self.changeUserCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: true, indexPath: indexPath)
-            }
-        }
-        
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        
-        let originalHeight = UITableViewAutomaticDimension
-        var expandedHeight: CGFloat = CGFloat(20.0 + (20.0 * Double(self.clientConnectedCathyNames.count)))
-        
-        // The reason for indexPath.row < self.tableView.visibleCells.count is because if self.expandedRowHeights[indexPath.row] only holds row heights of visible cells not cells that have gone off the screen. And since indexPath will call as many times as it is specified  numberOfRowsInSection delegate function, it will cause the app to crash.
-        if self.expandButtonTappedAfterViewAppears == true  && indexPath.row < self.tableView.visibleCells.count {
-            expandedHeight = self.expandedRowHeights[indexPath.row]
-        }
-        
-        let ip = indexPath
-        if self.expandButtonTappedIndexPath != nil {
-            if ip == self.expandButtonTappedIndexPath! {
-                return expandedHeight
-            } else {
-                return originalHeight
-            }
-        } else {
-            return originalHeight
-        }
-        
-    }
-    
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        
-        if editingStyle == .Delete {
-            
-            self.deleteRowForSelectedUserType(self.selectedUserType, indexPath: indexPath)
-            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        }
-        
-    }
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
-        return 1
-        
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.setUserNamesForSelectedUserType(self.selectedUserType)
-        return self.userNames.count
-
-    }
-    
-    func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if let cell = cell as? OfficeConnectUserTableViewCell {
-            cell.nameButton.setTitle("", forState: UIControlState.Normal)
-        }
-        
-    }
-    
     func configureCellForUserType(cell: OfficeConnectUserTableViewCell, userType: UserType, indexPath: NSIndexPath) {
         self.setUserNamesForSelectedUserType(self.selectedUserType)
         self.setUserNotesForSelectedUserType(self.selectedUserType)
         cell.nameButton.setTitle(self.userNames[indexPath.row], forState: UIControlState.Normal)
+        
         if self.userNotes[indexPath.row] == "" {
             cell.notesLabel.text = "No notes"
         } else {
             cell.notesLabel.text = self.userNotes[indexPath.row]
         }
+        
+        if self.selectedUserType == UserType.client {
+            if self.clientConnectedCareGiverNames[indexPath.row].count == 0 {
+                cell.expandButton.hidden = true
+            } else {
+                cell.expandButton.hidden = false
+                cell.careGiverLabel.hidden = false
+                cell.cathyLabel.hidden = false
+                
+                for connectedUserNameButton in cell.connectedUserNameButtons {
+                    connectedUserNameButton.hidden = false
+                }
+                cell.expandButton.setTitle("(\(self.clientConnectedCareGiverNames[indexPath.row].count))", forState: UIControlState.Normal)
+                
+            }
+        } else {
+
+            for connectedUserNameButton in cell.connectedUserNameButtons {
+                connectedUserNameButton.hidden = true
+            }
+            cell.expandButton.hidden = true
+            cell.careGiverLabel.hidden = true
+            cell.cathyLabel.hidden = true
+        }
+        
     }
     
     func configureCellContentAnimation(cell: OfficeConnectUserTableViewCell) {
@@ -372,97 +250,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         }
         
     }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeConnectUserTableViewCell
-        
-        // The reason for self.expandButtonTapped == true is because self.rowHeights doesn't get initialized until expandButton is tapped. So without this check, it will cause the app to crash.
-        if self.expandButtonTappedAfterViewAppears == true && indexPath.row < self.tableView.visibleCells.count {
-
-            cell.width = self.tableView.frame.width
-            cell.height = self.originalRowHeights[indexPath.row]
-            cell.spaceBetweenUserLabelsAndUsers = self.spaceBetweenUserLabelsAndUsersInExpandedCell
-            cell.spaceBetweenUsers = self.spaceBetweenUsersInExpandedCell
-            cell.removeUserTypeLabels()
-            cell.createCareGiverLabel()
-            cell.createCathyLabel()
-            cell.removeConnectedUserNameButtons()
-            cell.createConnectedCareGiverNameButtons(self.clientConnectedCareGiverNames)
-            cell.createConnectedCathyNameButtons(self.clientConnectedCathyNames)
-            
-        }
-        
-        self.configureCellForUserType(cell, userType: self.selectedUserType, indexPath: indexPath)
-        self.configureCellContentAnimation(cell)
-        self.configureCellForCheckedRows(cell, selectedUserType: self.selectedUserType, indexPath: indexPath)
-        
-        return cell
-        
-    }
-    
-    @IBAction func nameButtonTapped(sender: AnyObject) {
-        
-        let nameButton = sender as! UIButton
-        let superView = nameButton.superview!
-        let officeConnectUserTableViewCell = superView.superview as! OfficeConnectUserTableViewCell
-        let indexPath = tableView.indexPathForCell(officeConnectUserTableViewCell)
-        self.nameButtonTappedRow = (indexPath?.row)!
-        
-    }
-    
-    @IBAction func expandButtonTapped(sender: AnyObject) {
-        
-        var originalRowHeights: [CGFloat] = [CGFloat]()
-        var expandedRowHeights: [CGFloat] = [CGFloat]()
-        
-        self.expandButtonTappedAfterViewAppears = true
-        
-        // I use the code below to get the row height for each cell so that xcode knows where to add the connected names, that is, right below the notes in the cell. I can't use the row height in the cell for row index path because it is not returning the correct row height. In order to get the correct heights, I have to put the function in the expandButtonTapped function.
-        for visibleCell in self.tableView.visibleCells {
-            let rowHeight = CGRectGetHeight(visibleCell.bounds)
-            originalRowHeights.append(rowHeight)
-        }
-    
-        for originalRowHeight in originalRowHeights {
-            var newHeight: CGFloat
-            if self.clientConnectedCathyNames.count > self.clientConnectedCareGiverNames.count {
-                newHeight = originalRowHeight + CGFloat(self.spaceBetweenUserLabelsAndUsersInExpandedCell + (self.spaceBetweenUsersInExpandedCell * CGFloat(self.clientConnectedCathyNames.count)))
-                expandedRowHeights.append(newHeight)
-            } else if self.clientConnectedCathyNames.count <= self.clientConnectedCareGiverNames.count {
-                newHeight = originalRowHeight + CGFloat(self.spaceBetweenUserLabelsAndUsersInExpandedCell + (self.spaceBetweenUsersInExpandedCell * CGFloat(self.clientConnectedCareGiverNames.count)))
-                expandedRowHeights.append(newHeight)
-            }
-        }
-        
-        self.originalRowHeights = originalRowHeights
-        self.expandedRowHeights = expandedRowHeights
-        
-        originalRowHeights.removeAll()
-        expandedRowHeights.removeAll()
-        
-        let expandButton = sender as! UIButton
-        let superView = expandButton.superview!
-        let officeConnectUserTableViewCell = superView.superview as! OfficeConnectUserTableViewCell
-        let indexPath = tableView.indexPathForCell(officeConnectUserTableViewCell)
-
-        switch self.expandButtonTappedIndexPath {
-        case nil:
-            self.expandButtonTappedIndexPath = indexPath
-        default:
-            if self.expandButtonTappedIndexPath! == indexPath {
-                self.expandButtonTappedIndexPath = nil
-            } else {
-                self.expandButtonTappedIndexPath = indexPath
-            }
-        }
-
-        self.tableView.beginUpdates()
-        self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
-        self.tableView.endUpdates()
-        
-        // It will continue to append the row heights so the elements in the array does not reflect the actual row heights of the rows in the table view. Only by removing all, could we get the correct values.
-    }
-
     
     func presentAlertControllerWithMessage(message: String) {
         
@@ -540,7 +327,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                 userNumberOfRowsChecked++
             }
         }
-
+        
         return objectIds
     }
     
@@ -559,9 +346,267 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         }
         
         return names
-    
+        
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.setSegmentedControlWidth()
+        self.removeBottomLineFromNavigationBar()
+        self.setToolBar()
+        
+        // Need to set the initial chosen segment for the segment control. If this is not present, it will cause a crash.
+        self.selectedUserType = UserType.client
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+
+        self.numberOfTimesReloadDataIsCalled = 0
+        
+        self.tableView.estimatedRowHeight = 70
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        
+        var querySuccessCheck = QuerySuccessCheck()
+        
+        for userType in self.userTypes {
+            
+            self.officeConnectUserHelper.attemptQueryingUsersAddedByOfficeUserFromCloud(userType, completion: { (querySuccessful, userNames, userObjectIds, userNotes, clientConnectedCathyIds, clientConnectedCareGiverIds, clientConnectedCathyNames, clientConnectedCareGiverNames, userOfficeIds) -> Void in
+                if querySuccessful {
+                    if userType == UserType.client {
+                        self.clientNames = userNames!
+                        self.clientObjectIds = userObjectIds!
+                        self.clientNotes = userNotes!
+                        self.clientOfficeUserIds = userOfficeIds!
+                        self.clientCheckedRows = [Bool](count: self.clientNames.count, repeatedValue: false)
+                        self.clientConnectedCathyIds = clientConnectedCathyIds!
+                        self.clientConnectedCareGiverIds = clientConnectedCareGiverIds!
+                        self.clientConnectedCathyNames = clientConnectedCathyNames!
+                        self.clientConnectedCareGiverNames = clientConnectedCareGiverNames!
+                        
+//                        print(self.clientConnectedCathyIds)
+//                        print(self.clientConnectedCathyNames)
+//                        print(self.clientConnectedCareGiverIds)
+//                        print(self.clientConnectedCareGiverNames)
+                        querySuccessCheck.successfullyQueriedClientUsers = true
+                    } else if userType == UserType.cathy {
+                        self.cathyNames = userNames!
+                        self.cathyObjectIds = userObjectIds!
+                        self.cathyNotes = userNotes!
+                        self.cathyOfficeUserIds = userOfficeIds!
+                        self.cathyCheckedRows = [Bool](count: self.cathyNames.count, repeatedValue: false)
+                        querySuccessCheck.successfullyQueriedCathyUsers = true
+                    } else if userType == UserType.careGiver {
+                        self.careGiverNames = userNames!
+                        self.careGiverObjectIds = userObjectIds!
+                        self.careGiverNotes = userNotes!
+                        self.careGiverOfficeUserIds = userOfficeIds!
+                        self.careGiverCheckedRows = [Bool](count: self.careGiverNames.count, repeatedValue: false)
+                        querySuccessCheck.successfullyQueriedCareGiverUsers = true
+                    }
+                    if querySuccessCheck.successfullyQueriedAllUsers() {
+                        self.numberOfTimesReloadDataIsCalled++
+                        self.tableView.reloadData()
+                    }
+                }
+            })
+ 
+        }
+        
+        self.navigationBarLine.hidden = true
+        
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        
+        self.navigationBarLine.hidden = false
+        
+    }
+    
+    @IBAction func segmentedControlIndexChanged(sender: UISegmentedControl) {
+        
+        if self.segmentedControl.selectedSegmentIndex == 0 {
+            self.selectedUserType = UserType.client
+        } else if self.segmentedControl.selectedSegmentIndex == 1 {
+            self.selectedUserType = UserType.cathy
+        } else if self.segmentedControl.selectedSegmentIndex == 2 {
+            self.selectedUserType = UserType.careGiver
+        }
+        self.numberOfTimesReloadDataIsCalled++
+        self.tableView.reloadData()
+        
+    }
+
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+            if cell.accessoryType == .Checkmark {
+                cell.accessoryType = .None
+                self.changeUserCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: false, indexPath: indexPath)
+            } else {
+                cell.accessoryType = .Checkmark
+                self.changeUserCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: true, indexPath: indexPath)
+            }
+        }
+        
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        let originalHeight = UITableViewAutomaticDimension
+        var expandedHeight: CGFloat = CGFloat(20.0 + (20.0 * Double(self.clientConnectedCathyNames.count)))
+        
+        // The reason for indexPath.row < self.tableView.visibleCells.count is because if self.expandedRowHeights[indexPath.row] only holds row heights of visible cells not cells that have gone off the screen. And since indexPath will call as many times as it is specified  numberOfRowsInSection delegate function, it will cause the app to crash.
+        
+        if self.selectedUserType == UserType.client {
+
+            if self.expandButtonTappedAfterViewAppears == true  && indexPath.row <= self.tableView.visibleCells.count {
+                expandedHeight = self.expandedRowHeights[indexPath.row]
+            }
+            
+            let indexPath = indexPath
+            if self.expandButtonTappedIndexPath != nil {
+                if indexPath == self.expandButtonTappedIndexPath! {
+                    return expandedHeight
+                } else {
+                    return originalHeight
+                }
+            } else {
+                return originalHeight
+            }
+            
+        } else {
+            return originalHeight
+        }
+        
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if editingStyle == .Delete {
+            
+            self.deleteRowForSelectedUserType(self.selectedUserType, indexPath: indexPath)
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        }
+        
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        
+        return 1
+        
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        self.setUserNamesForSelectedUserType(self.selectedUserType)
+        return self.userNames.count
+
+    }
+    
+    func tableView(tableView: UITableView, didEndDisplayingCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        if let cell = cell as? OfficeConnectUserTableViewCell {
+            cell.nameButton.setTitle("", forState: UIControlState.Normal)
+        }
+
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeConnectUserTableViewCell
+        
+        // The reason for self.expandButtonTapped == true is because self.rowHeights doesn't get initialized until expandButton is tapped. So without this check, it will cause the app to crash.
+        if self.expandButtonTappedAfterViewAppears == true && indexPath.row < self.tableView.visibleCells.count {
+
+            cell.width = self.tableView.frame.width
+            cell.height = self.originalRowHeights[indexPath.row]
+            cell.spaceBetweenUserLabelsAndUsers = self.spaceBetweenUserLabelsAndUsersInExpandedCell
+            cell.spaceBetweenUsers = self.spaceBetweenUsersInExpandedCell
+            cell.removeUserTypeLabels()
+            cell.createCareGiverLabel()
+            cell.createCathyLabel()
+            cell.removeConnectedUserNameButtons()
+            cell.createConnectedCareGiverNameButtons(self.clientConnectedCareGiverNames[indexPath.row])
+            cell.createConnectedCathyNameButtons(self.clientConnectedCathyNames[indexPath.row])
+            
+        }
+        
+        self.configureCellForUserType(cell, userType: self.selectedUserType, indexPath: indexPath)
+        self.configureCellContentAnimation(cell)
+        self.configureCellForCheckedRows(cell, selectedUserType: self.selectedUserType, indexPath: indexPath)
+        
+        return cell
+        
+    }
+    
+    @IBAction func nameButtonTapped(sender: AnyObject) {
+        
+        let nameButton = sender as! UIButton
+        let superView = nameButton.superview!
+        let officeConnectUserTableViewCell = superView.superview as! OfficeConnectUserTableViewCell
+        let indexPath = tableView.indexPathForCell(officeConnectUserTableViewCell)
+        self.nameButtonTappedRow = (indexPath?.row)!
+        
+    }
+    
+    @IBAction func expandButtonTapped(sender: AnyObject) {
+        
+        var originalRowHeights: [CGFloat] = [CGFloat]()
+        var expandedRowHeights: [CGFloat] = [CGFloat]()
+        
+        self.expandButtonTappedAfterViewAppears = true
+        
+        // I use the code below to get the row height for each cell so that xcode knows where to add the connected names, that is, right below the notes in the cell. I can't use the row height in the cell for row index path because it is not returning the correct row height. In order to get the correct heights, I have to put the function in the expandButtonTapped function.
+        for visibleCell in self.tableView.visibleCells {
+            let rowHeight = CGRectGetHeight(visibleCell.bounds)
+            originalRowHeights.append(rowHeight)
+        }
+        
+
+        for var row: Int = 0; row < self.clientNames.count; row++ {
+            
+            var newHeight: CGFloat
+            var clientConnectedUserNames: [[String]] = [[String]]()
+            
+            if self.clientConnectedCathyNames[row].count > self.clientConnectedCareGiverNames[row].count {
+                clientConnectedUserNames = self.clientConnectedCathyNames
+            } else if self.clientConnectedCathyNames[row].count <= self.clientConnectedCareGiverNames[row].count {
+                clientConnectedUserNames = self.clientConnectedCareGiverNames
+            }
+            
+            newHeight = originalRowHeights[row] + CGFloat(self.spaceBetweenUserLabelsAndUsersInExpandedCell + (self.spaceBetweenUsersInExpandedCell * CGFloat(clientConnectedUserNames[row].count)))
+            expandedRowHeights.append(newHeight)
+            
+        }
+        
+        self.originalRowHeights = originalRowHeights
+        self.expandedRowHeights = expandedRowHeights
+        
+        originalRowHeights.removeAll()
+        expandedRowHeights.removeAll()
+        
+        let expandButton = sender as! UIButton
+        let superView = expandButton.superview!
+        let officeConnectUserTableViewCell = superView.superview as! OfficeConnectUserTableViewCell
+        let indexPath = tableView.indexPathForCell(officeConnectUserTableViewCell)
+
+        switch self.expandButtonTappedIndexPath {
+        case nil:
+            self.expandButtonTappedIndexPath = indexPath
+        default:
+            if self.expandButtonTappedIndexPath! == indexPath {
+                self.expandButtonTappedIndexPath = nil
+            } else {
+                self.expandButtonTappedIndexPath = indexPath
+            }
+        }
+
+        self.tableView.beginUpdates()
+        self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
+        self.tableView.endUpdates()
+        
+        // It will continue to append the row heights so the elements in the array does not reflect the actual row heights of the rows in the table view. Only by removing all, could we get the correct values.
+    }
+
     @IBAction func connectButtonTapped(sender: AnyObject) {
 
         if self.correctNumberOfUsersAreChecked() {
@@ -575,8 +620,9 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             let checkedCareGiverNames: [String] = self.getCheckedUserNames(UserType.careGiver)
 
             for userType in userTypes {
-                self.officeConnectUserHelper.connectUserIdsForUserTypeInCloud(userType, checkedClientObjectIds: checkedClientObjectIds, checkedCathyObjectIds: checkedCathyObjectIds, checkedCareGiverObjectIds: checkedCareGiverObjectIds, checkedClientNames: checkedClientNames, checkedCathyNames: checkedCathysNames, checkedCareGiverNames: checkedCareGiverNames)
-                
+                self.officeConnectUserHelper.connectUserIdsForUserTypeInCloud(userType, checkedClientObjectIds: checkedClientObjectIds, checkedCathyObjectIds: checkedCathyObjectIds, checkedCareGiverObjectIds: checkedCareGiverObjectIds, checkedClientNames: checkedClientNames, checkedCathyNames: checkedCathysNames, checkedCareGiverNames: checkedCareGiverNames, completion: { (connectSuccessful) -> Void in
+                    self.tableView.reloadData()
+                })
             }
             
         }

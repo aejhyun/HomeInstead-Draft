@@ -30,13 +30,14 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
     
     var userTypeLabels: [UILabel] = [UILabel]()
     
-    var careGiverLabel: UILabel!
-    var cathyLabel: UILabel!
+    var careGiverLabel: UILabel = UILabel()
+    var cathyLabel: UILabel = UILabel()
     
     func removeUserTypeLabels() {
         for userTypeLabel in self.userTypeLabels {
             userTypeLabel.removeFromSuperview()
         }
+        self.userTypeLabels.removeAll()
     }
     
     func removeConnectedUserNameButtons() {
@@ -44,17 +45,17 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
         for userNameButton in self.connectedUserNameButtons {
             userNameButton.removeFromSuperview()
         }
-    
+        self.connectedUserNameButtons.removeAll()
     }
     
-    func calculateRightSideSpace() -> CGFloat {
-        let space: CGFloat = self.width - self.leftSideSpaceForUsersAndUserLabel
+    func calculateRightSideSpace() -> CGFloat{
+        let space = self.width - self.leftSideSpaceForUsersAndUserLabel * 3.75
         return space
     }
     
     func createCareGiverLabel() {
         
-        self.careGiverLabel = UILabel(frame: CGRectMake(self.width / 9, self.height, 110, 20))
+        self.careGiverLabel = UILabel(frame: CGRectMake(self.leftSideSpaceForUsersAndUserLabel, self.height, 110, 20))
         self.careGiverLabel.font = UIFont(name: "Helvetica", size: 12.0)
         self.careGiverLabel.textAlignment = NSTextAlignment.Center
         self.careGiverLabel.text = "Care Giver(s)"
@@ -66,7 +67,8 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
     
     func createCathyLabel() {
         
-        self.cathyLabel = UILabel(frame: CGRectMake((self.width * 5.5) / 9, self.height, 110, 20))
+        self.rightSideSpaceForUsersAndUserLabel = self.calculateRightSideSpace()
+        self.cathyLabel = UILabel(frame: CGRectMake(self.rightSideSpaceForUsersAndUserLabel, self.height, 110, 20))
         self.cathyLabel.font = UIFont(name: "Helvetica", size: 12.0)
         self.cathyLabel.textAlignment = NSTextAlignment.Center
         self.cathyLabel.text = "Cathy(s)"
@@ -84,7 +86,7 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
             
             self.connectedUserNameButton = UIButton(type: UIButtonType.System) as UIButton
             self.connectedUserNameButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByTruncatingTail
-            self.connectedUserNameButton.frame = CGRectMake(self.width / 9, userNameButtonFrameHeight, 110, 20)
+            self.connectedUserNameButton.frame = CGRectMake(self.leftSideSpaceForUsersAndUserLabel, userNameButtonFrameHeight, 110, 20)
             self.connectedUserNameButton.setTitle(careGiverNames[row], forState: UIControlState.Normal)
             self.connectedUserNameButton.titleLabel!.font = UIFont(name: "Helvetica", size: 12.0)
             self.connectedUserNameButtons.append(self.connectedUserNameButton)
@@ -97,13 +99,14 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
     
     func createConnectedCathyNameButtons(cathyNames: [String]) {
         
+        self.rightSideSpaceForUsersAndUserLabel = self.calculateRightSideSpace()
         var userNameButtonFrameHeight: CGFloat = self.height + self.spaceBetweenUserLabelsAndUsers
         
         for var row: Int = 0; row < cathyNames.count ; row++ {
             
             self.connectedUserNameButton = UIButton(type: UIButtonType.System) as UIButton
             self.connectedUserNameButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByTruncatingTail
-            self.connectedUserNameButton.frame = CGRectMake((self.width * 5.5) / 9, userNameButtonFrameHeight, 110, 20)
+            self.connectedUserNameButton.frame = CGRectMake((self.rightSideSpaceForUsersAndUserLabel), userNameButtonFrameHeight, 110, 20)
             self.connectedUserNameButton.setTitle(cathyNames[row], forState: UIControlState.Normal)
             self.connectedUserNameButton.titleLabel!.font = UIFont(name: "Helvetica", size: 12.0)
             self.connectedUserNameButtons.append(self.connectedUserNameButton)
