@@ -49,10 +49,8 @@ class OfficeCreateClientUserViewController: OfficeEditUserProfileViewController 
         object["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
         object["notes"] = self.notesTextView.text
         object["idsOfOfficeUsersWhoAddedThisUser"] = []
-        object["connectedClientIds"] = []
-        object["connectedCathyIds"] = []
-        object["connectedCareGiverIds"] = []
-        object["connectedClientNames"] = []
+        object["connectedCathyObjectIds"] = []
+        object["connectedCareGiverObjectIds"] = []
         object["connectedCathyNames"] = []
         object["connectedCareGiverNames"] = []
         

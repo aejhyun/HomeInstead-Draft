@@ -358,12 +358,12 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         if className != ClassNameForCloud().officeUser {
             object["idsOfOfficeUsersWhoAddedThisUser"] = []
-            object["connectedClientIds"] = []
-            object["connectedCathysIds"] = []
-            object["connectedCareGiverIds"] = []
-            object["connectedClientNames"] = []
-            object["connectedCathyNames"] = []
-            object["connectedCareGiverNames"] = []
+//            object["connectedClientIds"] = []
+//            object["connectedCathysIds"] = []
+//            object["connectedCareGiverIds"] = []
+//            object["connectedClientNames"] = []
+//            object["connectedCathyNames"] = []
+//            object["connectedCareGiverNames"] = []
         }
 
         if imageFile != nil {

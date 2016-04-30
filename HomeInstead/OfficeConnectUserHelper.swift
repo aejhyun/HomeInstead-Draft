@@ -15,7 +15,7 @@ class OfficeConnectUserHelper {
     
     var selectedUserType: UserType!
     
-    func attemptQueryingUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, userNames: [String]?, userObjectIds: [String]?, userNotes: [String]?, clientConnectedCathyIds: [[String]]?, clientConnectedCareGiverIds: [[String]]?, clientConnectedCathyNames: [[String]]?, clientConnectedCareGiverNames: [[String]]?, userOfficeIds: [[String]]?) -> Void) {
+    func attemptQueryingUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, userNames: [String]?, userObjectIds: [String]?, userNotes: [String]?, clientConnectedCathyObjectIds: [[String]]?, clientConnectedCareGiverObjectIds: [[String]]?, clientConnectedCathyNames: [[String]]?, clientConnectedCareGiverNames: [[String]]?, userOfficeUserIds: [[String]]?) -> Void) {
         
         var userNames: [String] = [String]()
         var userObjectIds: [String] = [String]()
@@ -38,8 +38,8 @@ class OfficeConnectUserHelper {
                     for object in objects {
                         if userType == UserType.client {
 
-                            clientConnectedCathyIds.append(object.objectForKey("connectedCathyIds") as! [String])
-                            clientConnectedCareGiverIds.append(object.objectForKey("connectedCareGiverIds") as! [String])
+                            clientConnectedCathyIds.append(object.objectForKey("connectedCathyObjectIds") as! [String])
+                            clientConnectedCareGiverIds.append(object.objectForKey("connectedCareGiverObjectIds") as! [String])
                             
                             clientConnectedCathyNames.append(object.objectForKey("connectedCathyNames") as! [String])
                             clientConnectedCareGiverNames.append(object.objectForKey("connectedCareGiverNames") as! [String])
@@ -57,10 +57,10 @@ class OfficeConnectUserHelper {
                         object.pinInBackground()
 
                     }
-                    completion(querySuccessful: true, userNames: userNames, userObjectIds: userObjectIds, userNotes: userNotes, clientConnectedCathyIds: clientConnectedCathyIds, clientConnectedCareGiverIds: clientConnectedCareGiverIds, clientConnectedCathyNames: clientConnectedCathyNames, clientConnectedCareGiverNames: clientConnectedCareGiverNames, userOfficeIds: userOfficeIds)
+                    completion(querySuccessful: true, userNames: userNames, userObjectIds: userObjectIds, userNotes: userNotes, clientConnectedCathyObjectIds: clientConnectedCathyIds, clientConnectedCareGiverObjectIds: clientConnectedCareGiverIds, clientConnectedCathyNames: clientConnectedCathyNames, clientConnectedCareGiverNames: clientConnectedCareGiverNames, userOfficeUserIds: userOfficeIds)
                 }
             } else {
-                completion(querySuccessful: false, userNames: nil, userObjectIds: nil, userNotes: nil, clientConnectedCathyIds: nil, clientConnectedCareGiverIds: nil, clientConnectedCathyNames: nil, clientConnectedCareGiverNames: nil, userOfficeIds: nil)
+                completion(querySuccessful: false, userNames: nil, userObjectIds: nil, userNotes: nil, clientConnectedCathyObjectIds: nil, clientConnectedCareGiverObjectIds: nil, clientConnectedCathyNames: nil, clientConnectedCareGiverNames: nil, userOfficeUserIds: nil)
                 print("Error: \(error!) \(error!.userInfo)")
             }
         }
@@ -121,33 +121,30 @@ class OfficeConnectUserHelper {
         }
     }
     
-    func connectUserIdsForUserTypeInCloud(selectedUserType: UserType, checkedClientObjectIds: [String], checkedCathyObjectIds: [String], checkedCareGiverObjectIds: [String], checkedClientNames: [String], checkedCathyNames: [String], checkedCareGiverNames: [String], completion: (connectSuccessful: Bool) -> Void) {
+    func connectUsersWithClientTypeInCloud(selectedUserType: UserType, checkedClientObjectIds: [String], checkedCathyObjectIds: [String], checkedCareGiverObjectIds: [String], checkedClientNames: [String], checkedCathyNames: [String], checkedCareGiverNames: [String], completion: (connectSuccessful: Bool) -> Void) {
         
-
-            let query = PFQuery(className: classNameForCloud.getClassName(selectedUserType)!)
-            query.getObjectInBackgroundWithId(checkedClientObjectIds[0]) {
-                (objects: PFObject?, error: NSError?) -> Void in
-                if error != nil {
-                    print(error)
-                    completion(connectSuccessful: false)
-                } else if let object = objects {
-                    object["connectedCathyObjectIds"] = checkedCathyObjectIds
-                    object["connectedCareGiverObjectIds"] = checkedCareGiverObjectIds
-                    object["connectedCathyNames"] = checkedCathyNames
-                    object["connectedCareGiverNames"] = checkedCareGiverNames
-                    object.saveInBackgroundWithBlock {
-                        (success: Bool, error: NSError?) -> Void in
-                        if (success) {
-                            completion(connectSuccessful: true)
-                        } else {
-                            print(error?.description)
-                        }
+        let query = PFQuery(className: classNameForCloud.getClassName(selectedUserType)!)
+        query.getObjectInBackgroundWithId(checkedClientObjectIds[0]) {
+            (objects: PFObject?, error: NSError?) -> Void in
+            if error != nil {
+                print(error)
+                completion(connectSuccessful: false)
+            } else if let object = objects {
+                object["connectedCathyObjectIds"] = checkedCathyObjectIds
+                object["connectedCareGiverObjectIds"] = checkedCareGiverObjectIds
+                object["connectedCathyNames"] = checkedCathyNames
+                object["connectedCareGiverNames"] = checkedCareGiverNames
+                object.saveInBackgroundWithBlock {
+                    (success: Bool, error: NSError?) -> Void in
+                    if (success) {
+                        completion(connectSuccessful: true)
+                    } else {
+                        print(error?.description)
                     }
-                    object.pinInBackground()
                 }
+                object.pinInBackground()
             }
-        
-        
+        }
         
     }
     
