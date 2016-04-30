@@ -150,22 +150,39 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     func deleteRowForSelectedUserType(selectedUserType: UserType, indexPath: NSIndexPath) {
         
-        self.officeConnectUserHelper.selectedUserType = self.selectedUserType // deleteUserFromOfficeUserInCloud needs the correct selectedUserType from this class to execute it's function properly.
-
+        var keepConnections: Bool = false
+        
+        let alertController = UIAlertController(title: "", message: "Please select from one of the options:", preferredStyle: UIAlertControllerStyle.Alert)
+        var alertAction = UIAlertAction(title: "Disconnect", style: .Default) { (UIAlertAction) -> Void in
+            keepConnections = false
+        }
+        alertController.addAction(alertAction)
+        alertAction = UIAlertAction(title: "Keep Connections", style: .Default, handler: { (UIAlertAction) -> Void in
+            keepConnections = true
+        })
+        alertController.addAction(alertAction)
+        alertAction = UIAlertAction(title: "Cancel", style: .Default, handler: nil)
+        alertController.addAction(alertAction)
+        presentViewController(alertController, animated: true, completion: nil)
+        
+        
+        
+        
+        
         if selectedUserType == UserType.client {
-            self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.clientObjectIds, officeUserIdsForUser: self.clientOfficeUserIds, indexPath: indexPath)
+            self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.selectedUserType, userObjectIds: self.clientObjectIds, officeUserIdsForUser: self.clientOfficeUserIds, indexPath: indexPath)
             self.clientNames.removeAtIndex(indexPath.row)
             self.clientObjectIds.removeAtIndex(indexPath.row)
             self.clientNotes.removeAtIndex(indexPath.row)
             self.clientCheckedRows.removeAtIndex(indexPath.row)
         } else if selectedUserType == UserType.cathy {
-            self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.cathyObjectIds, officeUserIdsForUser: self.cathyOfficeUserIds, indexPath: indexPath)
+            self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.selectedUserType, userObjectIds: self.cathyObjectIds, officeUserIdsForUser: self.cathyOfficeUserIds, indexPath: indexPath)
             self.cathyNames.removeAtIndex(indexPath.row)
             self.cathyObjectIds.removeAtIndex(indexPath.row)
             self.cathyNotes.removeAtIndex(indexPath.row)
             self.cathyCheckedRows.removeAtIndex(indexPath.row)
         } else if selectedUserType == UserType.careGiver {
-            self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.careGiverObjectIds, officeUserIdsForUser: self.careGiverOfficeUserIds, indexPath: indexPath)
+            self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.selectedUserType, userObjectIds: self.careGiverObjectIds, officeUserIdsForUser: self.careGiverOfficeUserIds, indexPath: indexPath)
             self.careGiverNames.removeAtIndex(indexPath.row)
             self.careGiverObjectIds.removeAtIndex(indexPath.row)
             self.careGiverNotes.removeAtIndex(indexPath.row)
@@ -260,7 +277,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func presentAlertControllerWithMessage(message: String) {
+    func presentBasicAlertControllerWithMessage(message: String) {
         
         let alertController = UIAlertController(title: "", message: "\(message)", preferredStyle: UIAlertControllerStyle.Alert)
         let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
@@ -300,26 +317,49 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             
             if cathyNumberOfRowsChecked > 0 {
                 atLeastOneCathyUserIsChecked = true
-                
-                if careGiverNumberOfRowsChecked > 0 {
-                    atLeastOneCareGiverUserIsChecked = true
-                } else {
-                    self.presentAlertControllerWithMessage("Please select at least one care giver")
-                }
-                
-            } else {
-                self.presentAlertControllerWithMessage("Please select at least one cathy")
+            } else if careGiverNumberOfRowsChecked > 0 {
+                atLeastOneCareGiverUserIsChecked = true
+            }
+            
+            if atLeastOneCathyUserIsChecked == false && atLeastOneCareGiverUserIsChecked == false {
+                self.presentBasicAlertControllerWithMessage("Please select at least one cathy or care giver")
             }
             
         } else {
-            self.presentAlertControllerWithMessage("Please select one client")
+            self.presentBasicAlertControllerWithMessage("Please select one client")
         }
         
-        if oneClientUserIsChecked && atLeastOneCathyUserIsChecked && atLeastOneCareGiverUserIsChecked {
+        if oneClientUserIsChecked && (atLeastOneCathyUserIsChecked || atLeastOneCareGiverUserIsChecked) {
             return true
         } else {
             return false
         }
+        
+//        if clientNumberOfRowsChecked == 1 {
+//            oneClientUserIsChecked = true
+//            
+//            if cathyNumberOfRowsChecked > 0 {
+//                atLeastOneCathyUserIsChecked = true
+//                
+//                if careGiverNumberOfRowsChecked > 0 {
+//                    atLeastOneCareGiverUserIsChecked = true
+//                } else {
+//                    self.presentAlertControllerWithMessage("Please select at least one care giver")
+//                }
+//                
+//            } else {
+//                self.presentAlertControllerWithMessage("Please select at least one cathy")
+//            }
+//            
+//        } else {
+//            self.presentAlertControllerWithMessage("Please select one client")
+//        }
+//        
+//        if oneClientUserIsChecked && atLeastOneCathyUserIsChecked && atLeastOneCareGiverUserIsChecked {
+//            return true
+//        } else {
+//            return false
+//        }
         
     }
     
@@ -355,6 +395,59 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         }
         
         return names
+        
+    }
+    
+    func setOriginalAndExpandedRowHeights() {
+        
+        var originalRowHeights: [CGFloat] = [CGFloat]()
+        var expandedRowHeights: [CGFloat] = [CGFloat]()
+        
+        self.expandButtonTappedAfterViewAppears = true
+        
+        // I use the code below to get the row height for each cell so that xcode knows where to add the connected names, that is, right below the notes in the cell. I can't use the row height in the cell for row index path because it is not returning the correct row height. In order to get the correct heights, I have to put the function in the expandButtonTapped function.
+        for visibleCell in self.tableView.visibleCells {
+            let rowHeight = CGRectGetHeight(visibleCell.bounds)
+            originalRowHeights.append(rowHeight)
+        }
+        
+        
+        for var row: Int = 0; row < originalRowHeights.count; row++ {
+            
+            var newHeight: CGFloat
+            var clientConnectedUserNames: [[String]] = [[String]]()
+            
+            if self.clientConnectedCathyNames[row].count > self.clientConnectedCareGiverNames[row].count {
+                clientConnectedUserNames = self.clientConnectedCathyNames
+            } else if self.clientConnectedCathyNames[row].count <= self.clientConnectedCareGiverNames[row].count {
+                clientConnectedUserNames = self.clientConnectedCareGiverNames
+            }
+            
+            newHeight = originalRowHeights[row] + CGFloat(self.spaceBetweenUserLabelsAndUsersInExpandedCell + (self.spaceBetweenUsersInExpandedCell * CGFloat(clientConnectedUserNames[row].count)))
+            expandedRowHeights.append(newHeight)
+            
+        }
+        
+        self.originalRowHeights = originalRowHeights
+        self.expandedRowHeights = expandedRowHeights
+        
+        originalRowHeights.removeAll()
+        expandedRowHeights.removeAll()
+        
+    }
+    
+    
+    func setUserCheckedRowValuesFalse() {
+        
+        for var row: Int = 0; row < self.clientCheckedRows.count; row++ {
+            self.clientCheckedRows[row] = false
+        }
+        for var row: Int = 0; row < self.cathyCheckedRows.count; row++ {
+            self.cathyCheckedRows[row] = false
+        }
+        for var row: Int = 0; row < self.careGiverCheckedRows.count; row++ {
+            self.careGiverCheckedRows[row] = false
+        }
         
     }
     
@@ -447,17 +540,10 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-//        if self.selectedUserType == UserType.client {
-//            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
-//                cell.accessoryType = .None
-//                self.changeUserCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: false, indexPath: indexPath)
-//            }
-//        }
-
     }
-
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         if self.selectedUserType == UserType.client {
@@ -507,7 +593,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         if self.selectedUserType == UserType.client {
 
-            if self.expandButtonTappedAfterViewAppears == true  && indexPath.row <= self.tableView.visibleCells.count {
+            if self.expandButtonTappedAfterViewAppears == true  && indexPath.row < self.originalRowHeights.count {
                 expandedHeight = self.expandedRowHeights[indexPath.row]
             }
             
@@ -554,7 +640,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         if let cell = cell as? OfficeConnectUserTableViewCell {
             cell.nameButton.setTitle("", forState: UIControlState.Normal)
         }
-
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -596,43 +681,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     @IBAction func expandButtonTapped(sender: AnyObject) {
         
-        var originalRowHeights: [CGFloat] = [CGFloat]()
-        var expandedRowHeights: [CGFloat] = [CGFloat]()
-        
-        self.expandButtonTappedAfterViewAppears = true
-        
-        // I use the code below to get the row height for each cell so that xcode knows where to add the connected names, that is, right below the notes in the cell. I can't use the row height in the cell for row index path because it is not returning the correct row height. In order to get the correct heights, I have to put the function in the expandButtonTapped function.
-        for visibleCell in self.tableView.visibleCells {
-            let rowHeight = CGRectGetHeight(visibleCell.bounds)
-            originalRowHeights.append(rowHeight)
-        }
-        
-
-        for var row: Int = 0; row < originalRowHeights.count; row++ {
-            
-            var newHeight: CGFloat
-            var clientConnectedUserNames: [[String]] = [[String]]()
-            
-            if self.clientConnectedCathyNames[row].count > self.clientConnectedCareGiverNames[row].count {
-                clientConnectedUserNames = self.clientConnectedCathyNames
-            } else if self.clientConnectedCathyNames[row].count <= self.clientConnectedCareGiverNames[row].count {
-                clientConnectedUserNames = self.clientConnectedCareGiverNames
-            }
-            
-            print(originalRowHeights.count)
-            print(clientConnectedUserNames[row])
-            newHeight = originalRowHeights[row] + CGFloat(self.spaceBetweenUserLabelsAndUsersInExpandedCell + (self.spaceBetweenUsersInExpandedCell * CGFloat(clientConnectedUserNames[row].count)))
-            expandedRowHeights.append(newHeight)
-
-            
-            
-        }
-        
-        self.originalRowHeights = originalRowHeights
-        self.expandedRowHeights = expandedRowHeights
-        
-        originalRowHeights.removeAll()
-        expandedRowHeights.removeAll()
+        self.setOriginalAndExpandedRowHeights()
         
         let expandButton = sender as! UIButton
         let superView = expandButton.superview!
@@ -676,6 +725,12 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                     self.clientConnectedCareGiverIds[self.clientSelectedRowIndexPath!.row] = checkedCareGiverObjectIds
                     self.clientConnectedCathyNames[self.clientSelectedRowIndexPath!.row] = checkedCathyNames
                     self.clientConnectedCareGiverNames[self.clientSelectedRowIndexPath!.row] = checkedCareGiverNames
+                    self.selectedUserType = UserType.client
+                    
+                    self.setUserCheckedRowValuesFalse()
+
+                    self.segmentedControl.selectedSegmentIndex = 0
+                    self.tableView.reloadData()
                     self.tableView.beginUpdates()
                     self.tableView.reloadRowsAtIndexPaths([self.clientSelectedRowIndexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
                     self.tableView.endUpdates()

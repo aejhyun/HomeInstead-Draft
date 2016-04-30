@@ -104,11 +104,11 @@ class OfficeConnectUserHelper {
             
     }
     
-    func deleteUserFromOfficeUserInCloud(userObjectIds: [String], officeUserIdsForUser: [[String]], indexPath: NSIndexPath) {
+    func deleteUserFromOfficeUserInCloud(selectedUserType: UserType, userObjectIds: [String], officeUserIdsForUser: [[String]], indexPath: NSIndexPath) {
         
         let newOfficeUserIdsForUser: [String] = officeUserIdsForUser[indexPath.row].filter { $0 != PFUser.currentUser()?.objectId }
         
-        let query = PFQuery(className: classNameForCloud.getClassName(self.selectedUserType)!)
+        let query = PFQuery(className: classNameForCloud.getClassName(selectedUserType)!)
         
         query.getObjectInBackgroundWithId(userObjectIds[indexPath.row]) {
             (objects: PFObject?, error: NSError?) -> Void in
