@@ -45,8 +45,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var cathyCheckedRows: [Bool] = [Bool]()
     var careGiverCheckedRows: [Bool] = [Bool]()
     
-    var clientConnectedCathyIds: [[String]] = [[String]]()
-    var clientConnectedCareGiverIds: [[String]] = [[String]]()
+    var clientConnectedCathyObjectIds: [[String]] = [[String]]()
+    var clientConnectedCareGiverObjectIds: [[String]] = [[String]]()
 
     var clientConnectedCathyNames: [[String]] = [[String]]()
     var clientConnectedCareGiverNames: [[String]] = [[String]]()
@@ -148,27 +148,25 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         }
     }
     
-    func deleteRowForSelectedUserType(selectedUserType: UserType, indexPath: NSIndexPath) {
+    
+    
+    func deleteRowForSelectedUserType(indexPath: NSIndexPath) {
         
-        var keepConnections: Bool = false
-        
-        let alertController = UIAlertController(title: "", message: "Please select from one of the options:", preferredStyle: UIAlertControllerStyle.Alert)
-        var alertAction = UIAlertAction(title: "Disconnect", style: .Default) { (UIAlertAction) -> Void in
-            keepConnections = false
-        }
-        alertController.addAction(alertAction)
-        alertAction = UIAlertAction(title: "Keep Connections", style: .Default, handler: { (UIAlertAction) -> Void in
-            keepConnections = true
-        })
-        alertController.addAction(alertAction)
-        alertAction = UIAlertAction(title: "Cancel", style: .Default, handler: nil)
-        alertController.addAction(alertAction)
-        presentViewController(alertController, animated: true, completion: nil)
-        
-        
-        
-        
-        
+//        var keepConnections: Bool = false
+//        
+//        let alertController = UIAlertController(title: "", message: "Please select from one of the options:", preferredStyle: UIAlertControllerStyle.Alert)
+//        var alertAction = UIAlertAction(title: "Disconnect", style: .Default) { (UIAlertAction) -> Void in
+//            keepConnections = false
+//        }
+//        alertController.addAction(alertAction)
+//        alertAction = UIAlertAction(title: "Keep Connections", style: .Default, handler: { (UIAlertAction) -> Void in
+//            keepConnections = true
+//        })
+//        alertController.addAction(alertAction)
+//        alertAction = UIAlertAction(title: "Cancel", style: .Default, handler: nil)
+//        alertController.addAction(alertAction)
+//        presentViewController(alertController, animated: true, completion: nil)
+
         if selectedUserType == UserType.client {
             self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.selectedUserType, userObjectIds: self.clientObjectIds, officeUserIdsForUser: self.clientOfficeUserIds, indexPath: indexPath)
             self.clientNames.removeAtIndex(indexPath.row)
@@ -253,13 +251,13 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             
         }
         
-        UIView.animateWithDuration(1.0, animations: { () -> Void in
+        UIView.animateWithDuration(0.6, animations: { () -> Void in
             cell.nameButton.alpha = 1.0
         })
-        UIView.animateWithDuration(1.0, animations: { () -> Void in
+        UIView.animateWithDuration(0.6, animations: { () -> Void in
             cell.notesLabel.alpha = 1.0
         })
-        UIView.animateWithDuration(1.0, animations: { () -> Void in
+        UIView.animateWithDuration(0.6, animations: { () -> Void in
             cell.expandButton.alpha = 1.0
         })
         
@@ -482,8 +480,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                         self.clientNotes = userNotes!
                         self.clientOfficeUserIds = userOfficeUserIds!
                         self.clientCheckedRows = [Bool](count: self.clientNames.count, repeatedValue: false)
-                        self.clientConnectedCathyIds = clientConnectedCathyObjectIds!
-                        self.clientConnectedCareGiverIds = clientConnectedCareGiverObjectIds!
+                        self.clientConnectedCathyObjectIds = clientConnectedCathyObjectIds!
+                        self.clientConnectedCareGiverObjectIds = clientConnectedCareGiverObjectIds!
                         self.clientConnectedCathyNames = clientConnectedCathyNames!
                         self.clientConnectedCareGiverNames = clientConnectedCareGiverNames!
                         
@@ -618,7 +616,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         if editingStyle == .Delete {
             
-            self.deleteRowForSelectedUserType(self.selectedUserType, indexPath: indexPath)
+            self.deleteRowForSelectedUserType(indexPath)
             self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
         
@@ -705,6 +703,71 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         // It will continue to append the row heights so the elements in the array does not reflect the actual row heights of the rows in the table view. Only by removing all, could we get the correct values.
     }
+    
+    func appendCheckedUserObjectIdsToConnectedUserObjectIds(userType: UserType, checkedUserObjectIds: [String]) {
+        
+        if userType == UserType.cathy {
+            for checkedUserObjectId in checkedUserObjectIds {
+                if !self.clientConnectedCathyObjectIds[self.clientSelectedRowIndexPath!.row].contains(checkedUserObjectId) {
+                    self.clientConnectedCathyObjectIds[self.clientSelectedRowIndexPath!.row].append(checkedUserObjectId)
+                }
+            }
+        } else if userType == UserType.careGiver {
+            for checkedUserObjectId in checkedUserObjectIds {
+                if !self.clientConnectedCareGiverObjectIds[self.clientSelectedRowIndexPath!.row].contains(checkedUserObjectId) {
+                    self.clientConnectedCareGiverObjectIds[self.clientSelectedRowIndexPath!.row].append(checkedUserObjectId)
+                }
+            }
+        }
+        
+    }
+    
+    func getUserObjectIdsToBeConnected(userType: UserType, checkedUserObjectIds: [String]) -> [String]? {
+        
+        if userType == UserType.cathy {
+            var cathyObjectIdsToBeConnected = self.clientConnectedCathyObjectIds
+            for checkedUserObjectId in checkedUserObjectIds {
+                if !cathyObjectIdsToBeConnected[self.clientSelectedRowIndexPath!.row].contains(checkedUserObjectId) {
+                    cathyObjectIdsToBeConnected[self.clientSelectedRowIndexPath!.row].append(checkedUserObjectId)
+                }
+            }
+            return cathyObjectIdsToBeConnected[self.clientSelectedRowIndexPath!.row]
+        } else if userType == UserType.careGiver {
+            var careGiverObjectIdsToBeConnected = self.clientConnectedCareGiverObjectIds
+            for checkedUserObjectId in checkedUserObjectIds {
+                if !careGiverObjectIdsToBeConnected[self.clientSelectedRowIndexPath!.row].contains(checkedUserObjectId) {
+                    careGiverObjectIdsToBeConnected[self.clientSelectedRowIndexPath!.row].append(checkedUserObjectId)
+                }
+            }
+            return careGiverObjectIdsToBeConnected[self.clientSelectedRowIndexPath!.row]
+        }
+        return nil
+        
+    }
+    
+    func getUserNamesToBeConnected(userType: UserType, checkedUserNames: [String]) -> [String]? {
+        
+        if userType == UserType.cathy {
+            var cathyNamesToBeConnected = self.clientConnectedCathyNames
+            for checkedUserName in checkedUserNames {
+                if !cathyNamesToBeConnected[self.clientSelectedRowIndexPath!.row].contains(checkedUserName) {
+                    cathyNamesToBeConnected[self.clientSelectedRowIndexPath!.row].append(checkedUserName)
+                }
+            }
+            return cathyNamesToBeConnected[self.clientSelectedRowIndexPath!.row]
+        } else if userType == UserType.careGiver {
+            var careGiverNamesToBeConnected = self.clientConnectedCareGiverNames
+            for checkedUserName in checkedUserNames {
+                if !careGiverNamesToBeConnected[self.clientSelectedRowIndexPath!.row].contains(checkedUserName) {
+                    careGiverNamesToBeConnected[self.clientSelectedRowIndexPath!.row].append(checkedUserName)
+                }
+            }
+            return careGiverNamesToBeConnected[self.clientSelectedRowIndexPath!.row]
+        }
+        return nil
+    }
+    
+
 
     @IBAction func connectButtonTapped(sender: AnyObject) {
 
@@ -717,12 +780,24 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             let checkedClientNames: [String] = self.getCheckedUserNames(UserType.client)
             let checkedCathyNames: [String]  = self.getCheckedUserNames(UserType.cathy)
             let checkedCareGiverNames: [String] = self.getCheckedUserNames(UserType.careGiver)
+            
+            let cathyObjectIdsToBeConnected: [String] = self.getUserObjectIdsToBeConnected(UserType.cathy, checkedUserObjectIds: checkedCathyObjectIds)!
+            let careGiverObjectIdsToBeConnected: [String] = self.getUserObjectIdsToBeConnected(UserType.careGiver, checkedUserObjectIds: checkedCareGiverObjectIds)!
+            print(cathyObjectIdsToBeConnected)
+            print(careGiverObjectIdsToBeConnected)
+            
+            
+            let cathyNamesToBeConnected: [String] = self.getUserNamesToBeConnected(UserType.cathy, checkedUserNames: checkedClientNames)!
+            let careGiverNamesToBeConnected: [String] = self.getUserNamesToBeConnected(UserType.careGiver, checkedUserNames: checkedCareGiverNames)!
+            
+            print(cathyNamesToBeConnected)
+            print(careGiverNamesToBeConnected)
 
             self.officeConnectUserHelper.connectUsersWithClientTypeInCloud(UserType.client, checkedClientObjectIds: checkedClientObjectIds, checkedCathyObjectIds: checkedCathyObjectIds, checkedCareGiverObjectIds: checkedCareGiverObjectIds, checkedClientNames: checkedClientNames, checkedCathyNames: checkedCathyNames, checkedCareGiverNames: checkedCareGiverNames, completion: { (connectSuccessful) -> Void in
                 
                 if connectSuccessful {
-                    self.clientConnectedCathyIds[self.clientSelectedRowIndexPath!.row] = checkedCathyObjectIds
-                    self.clientConnectedCareGiverIds[self.clientSelectedRowIndexPath!.row] = checkedCareGiverObjectIds
+                    self.clientConnectedCathyObjectIds[self.clientSelectedRowIndexPath!.row] = checkedCathyObjectIds
+                    self.clientConnectedCareGiverObjectIds[self.clientSelectedRowIndexPath!.row] = checkedCareGiverObjectIds
                     self.clientConnectedCathyNames[self.clientSelectedRowIndexPath!.row] = checkedCathyNames
                     self.clientConnectedCareGiverNames[self.clientSelectedRowIndexPath!.row] = checkedCareGiverNames
                     self.selectedUserType = UserType.client
