@@ -57,6 +57,7 @@ class OfficeConnectUserHelper {
                         object.pinInBackground()
 
                     }
+             
                     completion(querySuccessful: true, userNames: userNames, userObjectIds: userObjectIds, userNotes: userNotes, clientConnectedCathyObjectIds: clientConnectedCathyIds, clientConnectedCareGiverObjectIds: clientConnectedCareGiverIds, clientConnectedCathyNames: clientConnectedCathyNames, clientConnectedCareGiverNames: clientConnectedCareGiverNames, userOfficeUserIds: userOfficeIds)
                 }
             } else {

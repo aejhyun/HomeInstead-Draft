@@ -40,10 +40,14 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var cathyOfficeUserIds: [[String]] = [[String]]()
     var careGiverOfficeUserIds: [[String]] = [[String]]()
     
-    var userCheckedRows: [Bool] = [Bool]()
-    var clientCheckedRows: [Bool] = [Bool]()
+    var careGiverCheckedRow: Int = -1
+    var clientCheckedRow: Int = -1
     var cathyCheckedRows: [Bool] = [Bool]()
-    var careGiverCheckedRows: [Bool] = [Bool]()
+    
+    var connectedObjectIds: [String: String] = [String: String]()
+    var connectedNames: [String: String] = [String: String]()
+    
+    
     
     var clientConnectedCathyObjectIds: [[String]] = [[String]]()
     var clientConnectedCareGiverObjectIds: [[String]] = [[String]]()
@@ -54,6 +58,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var nameButtonSelectedRow: Int = -1
     var expandButtonTappedIndexPath: NSIndexPath? = nil
     var clientSelectedRowIndexPath: NSIndexPath? = nil
+    var careGiverSelectedRowIndexPath: NSIndexPath? = nil
     
     var expandButtonTappedAfterViewAppears: Bool = false
     
@@ -127,13 +132,13 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     func setUserCheckedRowsForSelectedUserType(selectedUserType: UserType) {
         
-        if selectedUserType == UserType.client {
-            self.userCheckedRows = self.clientCheckedRows
-        } else if selectedUserType == UserType.cathy {
-            self.userCheckedRows = self.cathyCheckedRows
-        } else if selectedUserType == UserType.careGiver {
-            self.userCheckedRows = self.careGiverCheckedRows
-        }
+//        if selectedUserType == UserType.client {
+//            self.userCheckedRows = self.clientCheckedRows
+//        } else if selectedUserType == UserType.cathy {
+//            self.userCheckedRows = self.cathyCheckedRows
+//        } else if selectedUserType == UserType.careGiver {
+//            self.userCheckedRows = self.careGiverCheckedRows
+//        }
         
     }
     
@@ -172,7 +177,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             self.clientNames.removeAtIndex(indexPath.row)
             self.clientObjectIds.removeAtIndex(indexPath.row)
             self.clientNotes.removeAtIndex(indexPath.row)
-            self.clientCheckedRows.removeAtIndex(indexPath.row)
+            //self.clientCheckedRows.removeAtIndex(indexPath.row)
         } else if selectedUserType == UserType.cathy {
             self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.selectedUserType, userObjectIds: self.cathyObjectIds, officeUserIdsForUser: self.cathyOfficeUserIds, indexPath: indexPath)
             self.cathyNames.removeAtIndex(indexPath.row)
@@ -184,21 +189,10 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             self.careGiverNames.removeAtIndex(indexPath.row)
             self.careGiverObjectIds.removeAtIndex(indexPath.row)
             self.careGiverNotes.removeAtIndex(indexPath.row)
-            self.careGiverCheckedRows.removeAtIndex(indexPath.row)
+            //self.careGiverCheckedRows.removeAtIndex(indexPath.row)
         }
         
         
-    }
-    
-    func changeUserCheckedRowsForSelectedUserType(selectedUserType: UserType, rowChecked: Bool, indexPath: NSIndexPath) {
-        
-        if selectedUserType == UserType.client {
-            self.clientCheckedRows[indexPath.row] = rowChecked
-        } else if selectedUserType == UserType.cathy {
-            self.cathyCheckedRows[indexPath.row] = rowChecked
-        } else if selectedUserType == UserType.careGiver {
-            self.careGiverCheckedRows[indexPath.row] = rowChecked
-        }
     }
     
     func configureCellForUserType(cell: OfficeConnectUserTableViewCell, userType: UserType, indexPath: NSIndexPath) {
@@ -265,14 +259,32 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     func configureCellForCheckedRows(cell: OfficeConnectUserTableViewCell, selectedUserType: UserType, indexPath: NSIndexPath) {
         
-        self.setUserCheckedRowsForSelectedUserType(self.selectedUserType)
+        if self.selectedUserType == UserType.careGiver {
         
-        if !self.userCheckedRows[indexPath.row] {
-            cell.accessoryType = .None
-        } else {
-            cell.accessoryType = .Checkmark
+            if indexPath.row == self.careGiverCheckedRow {
+                cell.accessoryType = .Checkmark
+            } else {
+                cell.accessoryType = .None
+            }
+            
+        } else if self.selectedUserType == UserType.client {
+
+            if indexPath.row == self.clientCheckedRow {
+                cell.accessoryType = .Checkmark
+            } else {
+                cell.accessoryType = .None
+            }
+            
+        } else if self.selectedUserType == UserType.cathy {
+            
+            if !self.cathyCheckedRows[indexPath.row] {
+                cell.accessoryType = .None
+            } else {
+                cell.accessoryType = .Checkmark
+            }
+            
         }
-        
+
     }
     
     func presentBasicAlertControllerWithMessage(message: String) {
@@ -286,115 +298,129 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     func correctNumberOfUsersAreChecked() -> Bool {
         
-        var clientNumberOfRowsChecked: Int = 0
-        var oneClientUserIsChecked: Bool = false
-        for var row = 0; row < self.clientCheckedRows.count; row++ {
-            if self.clientCheckedRows[row] == true {
-                clientNumberOfRowsChecked++
-            }
-        }
-        
-        var cathyNumberOfRowsChecked: Int = 0
-        var atLeastOneCathyUserIsChecked: Bool = false
-        for var row = 0; row < self.cathyCheckedRows.count; row++ {
-            if self.cathyCheckedRows[row] == true {
-                cathyNumberOfRowsChecked++
-            }
-        }
-        
-        var careGiverNumberOfRowsChecked: Int = 0
-        var atLeastOneCareGiverUserIsChecked: Bool = false
-        for var row = 0; row < self.careGiverCheckedRows.count; row++ {
-            if self.careGiverCheckedRows[row] == true {
-                careGiverNumberOfRowsChecked++
-            }
-        }
-        
-        if clientNumberOfRowsChecked == 1 {
-            oneClientUserIsChecked = true
-            
-            if cathyNumberOfRowsChecked > 0 {
-                atLeastOneCathyUserIsChecked = true
-            } else if careGiverNumberOfRowsChecked > 0 {
-                atLeastOneCareGiverUserIsChecked = true
-            }
-            
-            if atLeastOneCathyUserIsChecked == false && atLeastOneCareGiverUserIsChecked == false {
-                self.presentBasicAlertControllerWithMessage("Please select at least one cathy or care giver")
-            }
-            
-        } else {
-            self.presentBasicAlertControllerWithMessage("Please select one client")
-        }
-        
-        if oneClientUserIsChecked && (atLeastOneCathyUserIsChecked || atLeastOneCareGiverUserIsChecked) {
-            return true
-        } else {
+        if self.careGiverCheckedRow == -1 {
+            self.presentBasicAlertControllerWithMessage("Please select a care giver to connect")
+            return false
+        } else if self.clientCheckedRow == -1 {
+            self.presentBasicAlertControllerWithMessage("Please select a client to connect")
+            return false
+        } else if !self.cathyCheckedRows.contains(true) {
+            self.presentBasicAlertControllerWithMessage("Please select at least one cathy to connect")
             return false
         }
         
-//        if clientNumberOfRowsChecked == 1 {
-//            oneClientUserIsChecked = true
-//            
-//            if cathyNumberOfRowsChecked > 0 {
-//                atLeastOneCathyUserIsChecked = true
-//                
-//                if careGiverNumberOfRowsChecked > 0 {
-//                    atLeastOneCareGiverUserIsChecked = true
-//                } else {
-//                    self.presentAlertControllerWithMessage("Please select at least one care giver")
-//                }
-//                
-//            } else {
-//                self.presentAlertControllerWithMessage("Please select at least one cathy")
-//            }
-//            
-//        } else {
-//            self.presentAlertControllerWithMessage("Please select one client")
-//        }
-//        
-//        if oneClientUserIsChecked && atLeastOneCathyUserIsChecked && atLeastOneCareGiverUserIsChecked {
-//            return true
-//        } else {
-//            return false
-//        }
+        if self.careGiverCheckedRow != -1 && self.clientCheckedRow != -1 && self.cathyCheckedRows.contains(true) {
+            return true
+        }
         
+        return false
     }
     
-    func getCheckedUserObjectIds(userType: UserType) -> [String] {
-        
-        self.setUserCheckedRowsForSelectedUserType(userType)
-        self.setUserObjectIdsForSelectedUserType(userType)
+    func getCheckedUserObjectIds(userType: UserType) -> [String]? {
         
         var objectIds: [String] = [String]()
-        var userNumberOfRowsChecked: Int = 0
-        for var row = 0; row < self.userCheckedRows.count; row++ {
-            if self.userCheckedRows[row] == true {
-                objectIds.append(self.userObjectIds[row])
-                userNumberOfRowsChecked++
+        
+        if userType == UserType.careGiver {
+            objectIds.append(self.careGiverObjectIds[self.careGiverCheckedRow])
+            return objectIds
+        } else if userType == UserType.client {
+            objectIds.append(self.clientObjectIds[self.clientCheckedRow])
+            return objectIds
+        } else if userType == UserType.cathy {
+            
+            for var row = 0; row < self.cathyCheckedRows.count; row++ {
+                if self.cathyCheckedRows[row] == true {
+                    objectIds.append(self.cathyObjectIds[row])
+                }
             }
+
+            return objectIds
         }
         
-        return objectIds
+        return nil
+        
     }
     
-    func getCheckedUserNames(userType: UserType) -> [String] {
-        
-        self.setUserCheckedRowsForSelectedUserType(userType)
-        self.setUserNamesForSelectedUserType(userType)
+    func getCheckedUserNames(userType: UserType) -> [String]? {
         
         var names: [String] = [String]()
-        var userNumberOfRowsChecked: Int = 0
-        for var row = 0; row < self.userCheckedRows.count; row++ {
-            if self.userCheckedRows[row] == true {
-                names.append(self.userNames[row])
-                userNumberOfRowsChecked++
+        
+        if userType == UserType.careGiver {
+            names.append(self.careGiverNames[self.careGiverCheckedRow])
+            return names
+        } else if userType == UserType.client {
+            names.append(self.clientNames[self.clientCheckedRow])
+            return names
+        } else if userType == UserType.cathy {
+            
+            for var row = 0; row < self.cathyCheckedRows.count; row++ {
+                if self.cathyCheckedRows[row] == true {
+                    names.append(self.cathyNames[row])
+                }
             }
+            
+            return names
         }
         
-        return names
+        return nil
         
     }
+    
+    func setAccessoryTypeForSelectedUserTypeAtIndexPath(selectedUserType: UserType, tableView: UITableView, indexPath: NSIndexPath) {
+        
+        if self.selectedUserType == UserType.careGiver {
+            
+            self.careGiverCheckedRow = indexPath.row
+            for var row: Int = 0; row < self.careGiverNames.count; row++ {
+                if let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0)) {
+                    if self.careGiverCheckedRow == row {
+                        if cell.accessoryType == .Checkmark {
+                            cell.accessoryType = .None
+                            self.careGiverCheckedRow = -1
+                        } else {
+                            cell.accessoryType = .Checkmark
+                        }
+                    } else {
+                        cell.accessoryType = .None
+                    }
+                }
+            }
+            
+        } else if self.selectedUserType == UserType.client {
+            
+            self.clientCheckedRow = indexPath.row
+            for var row: Int = 0; row < self.clientNames.count; row++ {
+                if let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0)) {
+                    if self.clientCheckedRow == row {
+                        if cell.accessoryType == .Checkmark {
+                            cell.accessoryType = .None
+                            self.clientCheckedRow = -1
+                        } else {
+                            cell.accessoryType = .Checkmark
+                        }
+                    } else {
+                        cell.accessoryType = .None
+                    }
+                }
+            }
+            
+        } else if self.selectedUserType == UserType.cathy {
+            
+            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+                if cell.accessoryType == .Checkmark {
+                    cell.accessoryType = .None
+                    self.cathyCheckedRows[indexPath.row] = false
+                } else {
+                    cell.accessoryType = .Checkmark
+                    self.cathyCheckedRows[indexPath.row] = true
+                }
+            }
+            
+            
+        }
+        
+    }
+
     
     func setOriginalAndExpandedRowHeights() {
         
@@ -437,15 +463,15 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     func setUserCheckedRowValuesFalse() {
         
-        for var row: Int = 0; row < self.clientCheckedRows.count; row++ {
-            self.clientCheckedRows[row] = false
-        }
-        for var row: Int = 0; row < self.cathyCheckedRows.count; row++ {
-            self.cathyCheckedRows[row] = false
-        }
-        for var row: Int = 0; row < self.careGiverCheckedRows.count; row++ {
-            self.careGiverCheckedRows[row] = false
-        }
+//        for var row: Int = 0; row < self.clientCheckedRows.count; row++ {
+//            self.clientCheckedRows[row] = false
+//        }
+//        for var row: Int = 0; row < self.cathyCheckedRows.count; row++ {
+//            self.cathyCheckedRows[row] = false
+//        }
+//        for var row: Int = 0; row < self.careGiverCheckedRows.count; row++ {
+//            self.careGiverCheckedRows[row] = false
+//        }
         
     }
     
@@ -457,7 +483,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.setToolBar()
         
         // Need to set the initial chosen segment for the segment control. If this is not present, it will cause a crash.
-        self.selectedUserType = UserType.client
+        self.selectedUserType = UserType.careGiver
         
     }
     
@@ -479,7 +505,9 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                         self.clientObjectIds = userObjectIds!
                         self.clientNotes = userNotes!
                         self.clientOfficeUserIds = userOfficeUserIds!
-                        self.clientCheckedRows = [Bool](count: self.clientNames.count, repeatedValue: false)
+                        
+    
+                        //self.clientCheckedRows = [Bool](count: self.clientNames.count, repeatedValue: false)
                         self.clientConnectedCathyObjectIds = clientConnectedCathyObjectIds!
                         self.clientConnectedCareGiverObjectIds = clientConnectedCareGiverObjectIds!
                         self.clientConnectedCathyNames = clientConnectedCathyNames!
@@ -502,7 +530,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                         self.careGiverObjectIds = userObjectIds!
                         self.careGiverNotes = userNotes!
                         self.careGiverOfficeUserIds = userOfficeUserIds!
-                        self.careGiverCheckedRows = [Bool](count: self.careGiverNames.count, repeatedValue: false)
+                        //self.careGiverCheckedRows = [Bool](count: self.careGiverNames.count, repeatedValue: false)
                         querySuccessCheck.successfullyQueriedCareGiverUsers = true
                     }
                     if querySuccessCheck.successfullyQueriedAllUsers() {
@@ -527,58 +555,20 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     @IBAction func segmentedControlIndexChanged(sender: UISegmentedControl) {
         
         if self.segmentedControl.selectedSegmentIndex == 0 {
-            self.selectedUserType = UserType.client
-        } else if self.segmentedControl.selectedSegmentIndex == 1 {
-            self.selectedUserType = UserType.cathy
-        } else if self.segmentedControl.selectedSegmentIndex == 2 {
             self.selectedUserType = UserType.careGiver
+        } else if self.segmentedControl.selectedSegmentIndex == 1 {
+            self.selectedUserType = UserType.client
+        } else if self.segmentedControl.selectedSegmentIndex == 2 {
+            self.selectedUserType = UserType.cathy
         }
         self.numberOfTimesReloadDataIsCalled++
         self.tableView.reloadData()
         
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        
-    }
-    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        if self.selectedUserType == UserType.client {
-            self.clientSelectedRowIndexPath = indexPath
-            // When the client user type is selected as segment, then only allow one user to be checked a time.
-            for var row: Int = 0; row < self.clientCheckedRows.count; row++ {
-                if row == indexPath.row {
-                    if let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0)) {
-                        if cell.accessoryType == .Checkmark {
-                            cell.accessoryType = .None
-                            self.changeUserCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: false, indexPath: indexPath)
-                        } else {
-                            cell.accessoryType = .Checkmark
-                            self.changeUserCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: true, indexPath: indexPath)
-                        }
-                    }
-                } else {
-                    if let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: row, inSection: 0)) {
-                        cell.accessoryType = .None
-                        self.changeUserCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: false, indexPath: NSIndexPath(forRow: row, inSection: 0))
-                    }
-                }
-            }
-            
-        } else {
-            
-            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
-                if cell.accessoryType == .Checkmark {
-                    cell.accessoryType = .None
-                    self.changeUserCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: false, indexPath: indexPath)
-                } else {
-                    cell.accessoryType = .Checkmark
-                    self.changeUserCheckedRowsForSelectedUserType(self.selectedUserType, rowChecked: true, indexPath: indexPath)
-                }
-            }
 
-        }
+        self.setAccessoryTypeForSelectedUserTypeAtIndexPath(self.selectedUserType, tableView: tableView, indexPath: indexPath)
         
     }
     
@@ -770,49 +760,60 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
 
 
     @IBAction func connectButtonTapped(sender: AnyObject) {
-
+        
+        
+  
         if self.correctNumberOfUsersAreChecked() {
+        
+            let checkedCareGiverObjectId: String = self.getCheckedUserObjectIds(UserType.careGiver)![0]
+            let checkedClientObjectId: String = self.getCheckedUserObjectIds(UserType.client)![0]
+            let checkedCathyObjectIds: [String]  = self.getCheckedUserObjectIds(UserType.cathy)!
             
-            let checkedClientObjectIds: [String] = self.getCheckedUserObjectIds(UserType.client)
-            let checkedCathyObjectIds: [String]  = self.getCheckedUserObjectIds(UserType.cathy)
-            let checkedCareGiverObjectIds: [String] = self.getCheckedUserObjectIds(UserType.careGiver)
+            print(checkedCareGiverObjectId)
+            print(checkedClientObjectId)
+            print(checkedCathyObjectIds)
             
-            let checkedClientNames: [String] = self.getCheckedUserNames(UserType.client)
-            let checkedCathyNames: [String]  = self.getCheckedUserNames(UserType.cathy)
-            let checkedCareGiverNames: [String] = self.getCheckedUserNames(UserType.careGiver)
+            
+            
+            let checkedCareGiverNames: String = self.getCheckedUserNames(UserType.careGiver)![0]
+            let checkedClientNames: String = self.getCheckedUserNames(UserType.client)![0]
+            let checkedCathyNames: [String]  = self.getCheckedUserNames(UserType.cathy)!
+            
+            print(checkedCareGiverNames)
+            print(checkedClientNames)
+            print(checkedCathyNames)
+            
+            
             
             let cathyObjectIdsToBeConnected: [String] = self.getUserObjectIdsToBeConnected(UserType.cathy, checkedUserObjectIds: checkedCathyObjectIds)!
-            let careGiverObjectIdsToBeConnected: [String] = self.getUserObjectIdsToBeConnected(UserType.careGiver, checkedUserObjectIds: checkedCareGiverObjectIds)!
-            print(cathyObjectIdsToBeConnected)
-            print(careGiverObjectIdsToBeConnected)
-            
-            
-            let cathyNamesToBeConnected: [String] = self.getUserNamesToBeConnected(UserType.cathy, checkedUserNames: checkedClientNames)!
-            let careGiverNamesToBeConnected: [String] = self.getUserNamesToBeConnected(UserType.careGiver, checkedUserNames: checkedCareGiverNames)!
-            
-            print(cathyNamesToBeConnected)
-            print(careGiverNamesToBeConnected)
-
-            self.officeConnectUserHelper.connectUsersWithClientTypeInCloud(UserType.client, checkedClientObjectIds: checkedClientObjectIds, checkedCathyObjectIds: checkedCathyObjectIds, checkedCareGiverObjectIds: checkedCareGiverObjectIds, checkedClientNames: checkedClientNames, checkedCathyNames: checkedCathyNames, checkedCareGiverNames: checkedCareGiverNames, completion: { (connectSuccessful) -> Void in
-                
-                if connectSuccessful {
-                    self.clientConnectedCathyObjectIds[self.clientSelectedRowIndexPath!.row] = checkedCathyObjectIds
-                    self.clientConnectedCareGiverObjectIds[self.clientSelectedRowIndexPath!.row] = checkedCareGiverObjectIds
-                    self.clientConnectedCathyNames[self.clientSelectedRowIndexPath!.row] = checkedCathyNames
-                    self.clientConnectedCareGiverNames[self.clientSelectedRowIndexPath!.row] = checkedCareGiverNames
-                    self.selectedUserType = UserType.client
-                    
-                    self.setUserCheckedRowValuesFalse()
-
-                    self.segmentedControl.selectedSegmentIndex = 0
-                    self.tableView.reloadData()
-                    self.tableView.beginUpdates()
-                    self.tableView.reloadRowsAtIndexPaths([self.clientSelectedRowIndexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
-                    self.tableView.endUpdates()
-                }
-                
-            })
-            
+//            let careGiverObjectIdsToBeConnected: [String] = self.getUserObjectIdsToBeConnected(UserType.careGiver, checkedUserObjectIds: checkedCareGiverObjectIds)!
+//            print(cathyObjectIdsToBeConnected)
+//            print(careGiverObjectIdsToBeConnected)
+//            
+//            
+//            let cathyNamesToBeConnected: [String] = self.getUserNamesToBeConnected(UserType.cathy, checkedUserNames: checkedClientNames)!
+//            let careGiverNamesToBeConnected: [String] = self.getUserNamesToBeConnected(UserType.careGiver, checkedUserNames: checkedCareGiverNames)!
+//            
+//            self.officeConnectUserHelper.connectUsersWithClientTypeInCloud(UserType.client, checkedClientObjectIds: checkedClientObjectIds, checkedCathyObjectIds: checkedCathyObjectIds, checkedCareGiverObjectIds: checkedCareGiverObjectIds, checkedClientNames: checkedClientNames, checkedCathyNames: checkedCathyNames, checkedCareGiverNames: checkedCareGiverNames, completion: { (connectSuccessful) -> Void in
+//                
+//                if connectSuccessful {
+//                    self.clientConnectedCathyObjectIds[self.clientSelectedRowIndexPath!.row] = checkedCathyObjectIds
+//                    self.clientConnectedCareGiverObjectIds[self.clientSelectedRowIndexPath!.row] = checkedCareGiverObjectIds
+//                    self.clientConnectedCathyNames[self.clientSelectedRowIndexPath!.row] = checkedCathyNames
+//                    self.clientConnectedCareGiverNames[self.clientSelectedRowIndexPath!.row] = checkedCareGiverNames
+//                    self.selectedUserType = UserType.client
+//                    
+//                    self.setUserCheckedRowValuesFalse()
+//
+//                    self.segmentedControl.selectedSegmentIndex = 0
+//                    self.tableView.reloadData()
+//                    self.tableView.beginUpdates()
+//                    self.tableView.reloadRowsAtIndexPaths([self.clientSelectedRowIndexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
+//                    self.tableView.endUpdates()
+//                }
+//                
+//            })
+//            
         }
         
     }

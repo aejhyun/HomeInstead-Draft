@@ -356,6 +356,11 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         object["emergencyPhoneNumber"] = self.emergencyPhoneNumberTextField.text
         object["notes"] = ""
         
+        if self.selectedUserType == UserType.careGiver {
+            let emptyDictionaryOfArray: Dictionary<String, [String]> = [:]
+            object["connectedObjectIds"] = emptyDictionaryOfArray
+        }
+        
         if className != ClassNameForCloud().officeUser {
             object["idsOfOfficeUsersWhoAddedThisUser"] = []
 //            object["connectedClientIds"] = []

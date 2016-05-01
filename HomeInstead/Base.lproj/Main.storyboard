@@ -5047,9 +5047,9 @@ Photo</string>
                                             <rect key="frame" x="-60" y="-14" width="121" height="29"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <segments>
+                                                <segment title="Care Giver"/>
                                                 <segment title="Client"/>
                                                 <segment title="Cathy"/>
-                                                <segment title="Care Giver"/>
                                             </segments>
                                             <connections>
                                                 <action selector="segmentedControlIndexChanged:" destination="jhU-fc-GJK" eventType="valueChanged" id="Frd-1y-QdE"/>
@@ -5167,16 +5167,16 @@ Photo</string>
                                                     <exclude reference="Bsd-w1-yJF"/>
                                                     <exclude reference="eKp-n2-DAb"/>
                                                     <exclude reference="poK-Vf-uAc"/>
-                                                    <exclude reference="9PU-Yd-Np3"/>
-                                                    <exclude reference="A3D-ag-Ulr"/>
-                                                    <exclude reference="daN-4L-uYl"/>
-                                                    <exclude reference="ohQ-19-GVb"/>
-                                                    <exclude reference="yHQ-AS-FNn"/>
                                                     <exclude reference="Knb-iW-YUi"/>
                                                     <exclude reference="d2D-VH-VXB"/>
                                                     <exclude reference="m2l-Hk-tzh"/>
                                                     <exclude reference="pjE-eZ-bIv"/>
                                                     <exclude reference="tmk-rv-DdA"/>
+                                                    <exclude reference="9PU-Yd-Np3"/>
+                                                    <exclude reference="A3D-ag-Ulr"/>
+                                                    <exclude reference="daN-4L-uYl"/>
+                                                    <exclude reference="ohQ-19-GVb"/>
+                                                    <exclude reference="yHQ-AS-FNn"/>
                                                 </mask>
                                             </variation>
                                             <variation key="heightClass=regular-widthClass=compact">
@@ -5189,16 +5189,16 @@ Photo</string>
                                                     <include reference="Bsd-w1-yJF"/>
                                                     <exclude reference="eKp-n2-DAb"/>
                                                     <include reference="poK-Vf-uAc"/>
-                                                    <include reference="9PU-Yd-Np3"/>
-                                                    <include reference="A3D-ag-Ulr"/>
-                                                    <exclude reference="daN-4L-uYl"/>
-                                                    <include reference="ohQ-19-GVb"/>
-                                                    <include reference="yHQ-AS-FNn"/>
                                                     <exclude reference="Knb-iW-YUi"/>
                                                     <include reference="d2D-VH-VXB"/>
                                                     <include reference="m2l-Hk-tzh"/>
                                                     <exclude reference="pjE-eZ-bIv"/>
                                                     <exclude reference="tmk-rv-DdA"/>
+                                                    <include reference="9PU-Yd-Np3"/>
+                                                    <include reference="A3D-ag-Ulr"/>
+                                                    <exclude reference="daN-4L-uYl"/>
+                                                    <include reference="ohQ-19-GVb"/>
+                                                    <include reference="yHQ-AS-FNn"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
