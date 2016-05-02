@@ -359,6 +359,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         if self.selectedUserType == UserType.careGiver {
             let emptyDictionaryOfArray: Dictionary<String, [String]> = [:]
             object["connectedObjectIds"] = emptyDictionaryOfArray
+            object["connectedNames"] = emptyDictionaryOfArray
         }
         
         if className != ClassNameForCloud().officeUser {

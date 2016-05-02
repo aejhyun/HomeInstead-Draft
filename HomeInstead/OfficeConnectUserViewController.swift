@@ -44,8 +44,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var clientCheckedRow: Int = -1
     var cathyCheckedRows: [Bool] = [Bool]()
     
-    var connectedObjectIds: [String: String] = [String: String]()
-    var connectedNames: [String: String] = [String: String]()
+    var connectedObjectIds: [Dictionary<String, [String]>] = [Dictionary<String, [String]>]()
+    var connectedNames: [Dictionary<String, [String]>] = [Dictionary<String, [String]>]()
     
     
     
@@ -206,29 +206,32 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             cell.notesLabel.text = self.userNotes[indexPath.row]
         }
         
-        if self.selectedUserType == UserType.client {
-            if self.clientConnectedCareGiverNames[indexPath.row].count == 0 {
-                cell.expandButton.hidden = true
-            } else {
-                cell.expandButton.hidden = false
-                cell.careGiverLabel.hidden = false
-                cell.cathyLabel.hidden = false
-                
-                for connectedUserNameButton in cell.connectedUserNameButtons {
-                    connectedUserNameButton.hidden = false
-                }
-                cell.expandButton.setTitle("(\(self.clientConnectedCareGiverNames[indexPath.row].count))", forState: UIControlState.Normal)
-                
-            }
-        } else {
-
-            for connectedUserNameButton in cell.connectedUserNameButtons {
-                connectedUserNameButton.hidden = true
-            }
-            cell.expandButton.hidden = true
-            cell.careGiverLabel.hidden = true
-            cell.cathyLabel.hidden = true
-        }
+        cell.expandButton.hidden = true
+        
+        
+//        if self.selectedUserType == UserType.client {
+//            if self.clientConnectedCareGiverNames[indexPath.row].count == 0 {
+//                cell.expandButton.hidden = true
+//            } else {
+//                cell.expandButton.hidden = false
+//                cell.careGiverLabel.hidden = false
+//                cell.cathyLabel.hidden = false
+//                
+//                for connectedUserNameButton in cell.connectedUserNameButtons {
+//                    connectedUserNameButton.hidden = false
+//                }
+//                cell.expandButton.setTitle("(\(self.clientConnectedCareGiverNames[indexPath.row].count))", forState: UIControlState.Normal)
+//                
+//            }
+//        } else {
+//
+//            for connectedUserNameButton in cell.connectedUserNameButtons {
+//                connectedUserNameButton.hidden = true
+//            }
+//            cell.expandButton.hidden = true
+//            cell.careGiverLabel.hidden = true
+//            cell.cathyLabel.hidden = true
+//        }
         
     }
     
@@ -498,26 +501,30 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         for userType in self.userTypes {
             
-            self.officeConnectUserHelper.attemptQueryingUsersAddedByOfficeUserFromCloud(userType, completion: { (querySuccessful, userNames, userObjectIds, userNotes, clientConnectedCathyObjectIds, clientConnectedCareGiverObjectIds, clientConnectedCathyNames, clientConnectedCareGiverNames, userOfficeUserIds) -> Void in
+            self.officeConnectUserHelper.attemptQueryingUsersAddedByOfficeUserFromCloud(userType, completion: { (querySuccessful, userNames, userObjectIds, userNotes, connectedNames, connectedObjectIds, userOfficeUserIds) -> Void in
+                
                 if querySuccessful {
-                    if userType == UserType.client {
+                    
+                    if userType == UserType.careGiver {
+                        self.careGiverNames = userNames!
+                        self.careGiverObjectIds = userObjectIds!
+                        self.careGiverNotes = userNotes!
+                        self.careGiverOfficeUserIds = userOfficeUserIds!
+                        self.connectedNames = connectedNames!
+                        self.connectedObjectIds = connectedObjectIds!
+                        //self.careGiverCheckedRows = [Bool](count: self.careGiverNames.count, repeatedValue: false)
+                        querySuccessCheck.successfullyQueriedCareGiverUsers = true
+                        
+                    } else if userType == UserType.client {
+                        
                         self.clientNames = userNames!
                         self.clientObjectIds = userObjectIds!
                         self.clientNotes = userNotes!
                         self.clientOfficeUserIds = userOfficeUserIds!
-                        
-    
                         //self.clientCheckedRows = [Bool](count: self.clientNames.count, repeatedValue: false)
-                        self.clientConnectedCathyObjectIds = clientConnectedCathyObjectIds!
-                        self.clientConnectedCareGiverObjectIds = clientConnectedCareGiverObjectIds!
-                        self.clientConnectedCathyNames = clientConnectedCathyNames!
-                        self.clientConnectedCareGiverNames = clientConnectedCareGiverNames!
                         
-//                        print(self.clientConnectedCathyIds)
-//                        print(self.clientConnectedCathyNames)
-//                        print(self.clientConnectedCareGiverIds)
-//                        print(self.clientConnectedCareGiverNames)
                         querySuccessCheck.successfullyQueriedClientUsers = true
+                        
                     } else if userType == UserType.cathy {
                         self.cathyNames = userNames!
                         self.cathyObjectIds = userObjectIds!
@@ -525,19 +532,16 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                         self.cathyOfficeUserIds = userOfficeUserIds!
                         self.cathyCheckedRows = [Bool](count: self.cathyNames.count, repeatedValue: false)
                         querySuccessCheck.successfullyQueriedCathyUsers = true
-                    } else if userType == UserType.careGiver {
-                        self.careGiverNames = userNames!
-                        self.careGiverObjectIds = userObjectIds!
-                        self.careGiverNotes = userNotes!
-                        self.careGiverOfficeUserIds = userOfficeUserIds!
-                        //self.careGiverCheckedRows = [Bool](count: self.careGiverNames.count, repeatedValue: false)
-                        querySuccessCheck.successfullyQueriedCareGiverUsers = true
+
                     }
                     if querySuccessCheck.successfullyQueriedAllUsers() {
                         self.numberOfTimesReloadDataIsCalled++
                         self.tableView.reloadData()
                     }
+                    
+                    
                 }
+                
             })
  
         }
@@ -735,33 +739,67 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func getUserNamesToBeConnected(userType: UserType, checkedUserNames: [String]) -> [String]? {
+
+    
+    func getNamesToBeConnected(checkedClientName: String, checkedCathyNames: [String]) -> Dictionary<String, [String]>? {
         
-        if userType == UserType.cathy {
-            var cathyNamesToBeConnected = self.clientConnectedCathyNames
-            for checkedUserName in checkedUserNames {
-                if !cathyNamesToBeConnected[self.clientSelectedRowIndexPath!.row].contains(checkedUserName) {
-                    cathyNamesToBeConnected[self.clientSelectedRowIndexPath!.row].append(checkedUserName)
-                }
+        var connectedNames = self.connectedNames[self.careGiverCheckedRow]
+        
+        var clientNameAlreadyConnected: Bool = false
+        
+        for (clientName, _) in connectedNames {
+            if clientName == checkedClientName {
+                clientNameAlreadyConnected = true
+                break
             }
-            return cathyNamesToBeConnected[self.clientSelectedRowIndexPath!.row]
-        } else if userType == UserType.careGiver {
-            var careGiverNamesToBeConnected = self.clientConnectedCareGiverNames
-            for checkedUserName in checkedUserNames {
-                if !careGiverNamesToBeConnected[self.clientSelectedRowIndexPath!.row].contains(checkedUserName) {
-                    careGiverNamesToBeConnected[self.clientSelectedRowIndexPath!.row].append(checkedUserName)
-                }
-            }
-            return careGiverNamesToBeConnected[self.clientSelectedRowIndexPath!.row]
         }
-        return nil
+        
+        if clientNameAlreadyConnected == true {
+            
+            for checkedCathyName in checkedCathyNames {
+                if !connectedNames[checkedClientName]!.contains(checkedCathyName) {
+                    connectedNames[checkedClientName]!.append(checkedCathyName)
+                }
+            }
+            return connectedNames
+            
+        } else {
+            connectedNames[checkedClientName] = checkedCathyNames
+            return connectedNames
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+//        if userType == UserType.cathy {
+//            var cathyNamesToBeConnected = self.clientConnectedCathyNames
+//            for checkedUserName in checkedUserNames {
+//                if !cathyNamesToBeConnected[self.clientSelectedRowIndexPath!.row].contains(checkedUserName) {
+//                    cathyNamesToBeConnected[self.clientSelectedRowIndexPath!.row].append(checkedUserName)
+//                }
+//            }
+//            return cathyNamesToBeConnected[self.clientSelectedRowIndexPath!.row]
+//        } else if userType == UserType.careGiver {
+//            var careGiverNamesToBeConnected = self.clientConnectedCareGiverNames
+//            for checkedUserName in checkedUserNames {
+//                if !careGiverNamesToBeConnected[self.clientSelectedRowIndexPath!.row].contains(checkedUserName) {
+//                    careGiverNamesToBeConnected[self.clientSelectedRowIndexPath!.row].append(checkedUserName)
+//                }
+//            }
+//            return careGiverNamesToBeConnected[self.clientSelectedRowIndexPath!.row]
+//        }
+
     }
     
-
+    
+    
 
     @IBAction func connectButtonTapped(sender: AnyObject) {
-        
-        
   
         if self.correctNumberOfUsersAreChecked() {
         
@@ -773,19 +811,28 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             print(checkedClientObjectId)
             print(checkedCathyObjectIds)
             
-            
-            
-            let checkedCareGiverNames: String = self.getCheckedUserNames(UserType.careGiver)![0]
-            let checkedClientNames: String = self.getCheckedUserNames(UserType.client)![0]
+            let checkedCareGiverName: String = self.getCheckedUserNames(UserType.careGiver)![0]
+            let checkedClientName: String = self.getCheckedUserNames(UserType.client)![0]
             let checkedCathyNames: [String]  = self.getCheckedUserNames(UserType.cathy)!
             
-            print(checkedCareGiverNames)
-            print(checkedClientNames)
+            print(checkedCareGiverName)
+            print(checkedClientName)
             print(checkedCathyNames)
             
+            if let namesToBeConnected = self.getNamesToBeConnected(checkedClientName, checkedCathyNames: checkedCathyNames) {
+                
+                self.officeConnectUserHelper.connectNamesToCareGiverInCloud(checkedCareGiverObjectId, namesToBeConnected: namesToBeConnected, completion: { (connectionSuccessful) -> Void in
+                    if connectionSuccessful {
+                        print("yey")
+                    }
+                })
+                
+            }
             
             
-            let cathyObjectIdsToBeConnected: [String] = self.getUserObjectIdsToBeConnected(UserType.cathy, checkedUserObjectIds: checkedCathyObjectIds)!
+            
+            
+//            let cathyObjectIdsToBeConnected: [String] = self.getUserObjectIdsToBeConnected(UserType.cathy, checkedUserObjectIds: checkedCathyObjectIds)!
 //            let careGiverObjectIdsToBeConnected: [String] = self.getUserObjectIdsToBeConnected(UserType.careGiver, checkedUserObjectIds: checkedCareGiverObjectIds)!
 //            print(cathyObjectIdsToBeConnected)
 //            print(careGiverObjectIdsToBeConnected)
