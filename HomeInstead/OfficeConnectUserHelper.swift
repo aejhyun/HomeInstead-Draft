@@ -113,7 +113,7 @@ class OfficeConnectUserHelper {
     
     
     
-    func connectNamesToCareGiverInCloud(checkedCareGiverObjectId: String, namesToBeConnected: Dictionary<String, [String]>, completion: (connectionSuccessful: Bool) -> Void) {
+    func connectNamesToCareGiverInCloud(checkedCareGiverObjectId: String, namesToBeConnected: Dictionary<String, [String]>, objectIdsToBeConnected: Dictionary<String, [String]>, completion: (connectionSuccessful: Bool) -> Void) {
         
         let query = PFQuery(className: classNameForCloud.getClassName(UserType.careGiver)!)
         query.getObjectInBackgroundWithId(checkedCareGiverObjectId) {
@@ -123,6 +123,7 @@ class OfficeConnectUserHelper {
                 completion(connectionSuccessful: false)
             } else if let object = objects {
                 object["connectedNames"] = namesToBeConnected
+                object["connectedObjectIds"] = objectIdsToBeConnected
                 object.saveInBackgroundWithBlock {
                     (success: Bool, error: NSError?) -> Void in
                     if (success) {
