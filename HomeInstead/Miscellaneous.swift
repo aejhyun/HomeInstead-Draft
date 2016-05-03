@@ -41,6 +41,43 @@ import Foundation
 
 
 
+//        var originalRowHeights: [CGFloat] = [CGFloat]()
+//        var expandedRowHeights: [CGFloat] = [CGFloat]()
+//
+//        self.expandButtonTappedAfterViewAppears = true
+//
+//
+//
+//        // I use the code below to get the row height for each cell so that xcode knows where to add the connected names, that is, right below the notes in the cell. I can't use the row height in the cell for row index path because it is not returning the correct row height. In order to get the correct heights, I have to put the function in the expandButtonTapped function.
+//        for visibleCell in self.tableView.visibleCells {
+//            let rowHeight = CGRectGetHeight(visibleCell.bounds)
+//            originalRowHeights.append(rowHeight)
+//        }
+//
+//        //        print(originalRowHeights)
+//
+//        for var row: Int = 0; row < originalRowHeights.count; row++ {
+//            var newRowHeight: CGFloat = 0.0
+//            var numberOfClients: Int = 0
+//            var numberOfCathys: Int = 0
+//
+//            numberOfClients += self.connectedNames[row].count
+//
+//            for (clientName, _) in self.connectedNames[row] {
+//                numberOfCathys += self.connectedNames[row][clientName]!.count
+//            }
+//            print(originalRowHeights[row])
+//            newRowHeight = originalRowHeights[row] + self.spaceBetweenUserLabelsAndUsersInExpandedCell + (CGFloat(numberOfClients - 1) * self.spaceBetweenCathyGroupsInExpandedCell) + (CGFloat(numberOfCathys) * self.spaceBetweenCathysInExpandedCell)
+//            expandedRowHeights.append(newRowHeight)
+//        }
+//
+//
+//        self.originalRowHeights = originalRowHeights
+//        self.expandedRowHeights = expandedRowHeights
+//
+//        originalRowHeights.removeAll()
+//        expandedRowHeights.removeAll()
+
 
 
 

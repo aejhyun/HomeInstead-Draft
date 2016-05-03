@@ -51,11 +51,10 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var expandButtonTappedIndexPath: NSIndexPath? = nil
     var clientSelectedRowIndexPath: NSIndexPath? = nil
     var careGiverSelectedRowIndexPath: NSIndexPath? = nil
-    
-    var expandButtonTappedAfterViewAppears: Bool = false
-    
+
     var numberOfTimesReloadDataIsCalled: Int = 0
     
+    var originalRowHeight: CGFloat = 43.5
     var originalRowHeights: [CGFloat] = [CGFloat]() // Depending on the number of connected care givers or cathys, the row of expanded cells will vary.
     var expandedRowHeights: [CGFloat] = [CGFloat]()
     
@@ -236,32 +235,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             }
             
         }
-        
-
-        
-//        if self.selectedUserType == UserType.client {
-//            if self.clientConnectedCareGiverNames[indexPath.row].count == 0 {
-//                cell.expandButton.hidden = true
-//            } else {
-//                cell.expandButton.hidden = false
-//                cell.careGiverLabel.hidden = false
-//                cell.cathyLabel.hidden = false
-//                
-//                for connectedUserNameButton in cell.connectedUserNameButtons {
-//                    connectedUserNameButton.hidden = false
-//                }
-//                cell.expandButton.setTitle("(\(self.clientConnectedCareGiverNames[indexPath.row].count))", forState: UIControlState.Normal)
-//                
-//            }
-//        } else {
-//
-//            for connectedUserNameButton in cell.connectedUserNameButtons {
-//                connectedUserNameButton.hidden = true
-//            }
-//            cell.expandButton.hidden = true
-//            cell.careGiverLabel.hidden = true
-//            cell.cathyLabel.hidden = true
-//        }
         
     }
     
@@ -459,23 +432,9 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     func setOriginalAndExpandedRowHeights() {
         
-        print(self.expandButtonTappedIndexPath?.row)
-        var originalRowHeights: [CGFloat] = [CGFloat]()
         var expandedRowHeights: [CGFloat] = [CGFloat]()
         
-        self.expandButtonTappedAfterViewAppears = true
-        
-        
-        
-        // I use the code below to get the row height for each cell so that xcode knows where to add the connected names, that is, right below the notes in the cell. I can't use the row height in the cell for row index path because it is not returning the correct row height. In order to get the correct heights, I have to put the function in the expandButtonTapped function.
-        for visibleCell in self.tableView.visibleCells {
-            let rowHeight = CGRectGetHeight(visibleCell.bounds)
-            originalRowHeights.append(rowHeight)
-        }
-        
-//        print(originalRowHeights)
-        
-        for var row: Int = 0; row < originalRowHeights.count; row++ {
+        for var row: Int = 0; row < connectedNames.count; row++ {
             var newRowHeight: CGFloat = 0.0
             var numberOfClients: Int = 0
             var numberOfCathys: Int = 0
@@ -485,16 +444,12 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             for (clientName, _) in self.connectedNames[row] {
                 numberOfCathys += self.connectedNames[row][clientName]!.count
             }
-            print(originalRowHeights[row])
-            newRowHeight = originalRowHeights[row] + self.spaceBetweenUserLabelsAndUsersInExpandedCell + (CGFloat(numberOfClients - 1) * self.spaceBetweenCathyGroupsInExpandedCell) + (CGFloat(numberOfCathys) * self.spaceBetweenCathysInExpandedCell)
+
+            newRowHeight = self.originalRowHeight + self.spaceBetweenUserLabelsAndUsersInExpandedCell + (CGFloat(numberOfClients - 1) * self.spaceBetweenCathyGroupsInExpandedCell) + (CGFloat(numberOfCathys) * self.spaceBetweenCathysInExpandedCell)
             expandedRowHeights.append(newRowHeight)
         }
-        
-        
-        self.originalRowHeights = originalRowHeights
+
         self.expandedRowHeights = expandedRowHeights
-        
-        originalRowHeights.removeAll()
         expandedRowHeights.removeAll()
         
     }
@@ -622,21 +577,14 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         let originalHeight = UITableViewAutomaticDimension
         var expandedHeight: CGFloat = 200.0
         
-       
-        
-        
         // The reason for indexPath.row < self.tableView.visibleCells.count is because if self.expandedRowHeights[indexPath.row] only holds row heights of visible cells not cells that have gone off the screen. And since indexPath will call as many times as it is specified  numberOfRowsInSection delegate function, it will cause the app to crash.
 
         if self.selectedUserType == UserType.careGiver {
 
-            if self.expandButtonTappedAfterViewAppears == true  && indexPath.row < self.originalRowHeights.count {
-                expandedHeight = self.expandedRowHeights[indexPath.row]
-            }
-            
             let indexPath = indexPath
             if self.expandButtonTappedIndexPath != nil {
                 if indexPath == self.expandButtonTappedIndexPath! {
-
+                    expandedHeight = self.expandedRowHeights[indexPath.row]
                     return expandedHeight
                 } else {
                     return originalHeight
@@ -683,10 +631,10 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeConnectUserTableViewCell
         
         // The reason for self.expandButtonTapped == true is because self.rowHeights doesn't get initialized until expandButton is tapped. So without this check, it will cause the app to crash.
-        if self.expandButtonTappedAfterViewAppears == true && indexPath.row < self.tableView.visibleCells.count {
+        if self.expandButtonTappedIndexPath != nil {
 
             cell.width = self.tableView.frame.width
-            cell.height = self.originalRowHeights[indexPath.row]
+            cell.height = self.originalRowHeight
             cell.spaceBetweenCathyGroups = self.spaceBetweenCathyGroupsInExpandedCell
             cell.spaceBetweenUserLabelsAndUsers = self.spaceBetweenUserLabelsAndUsersInExpandedCell
             cell.spaceBetweenCathys = self.spaceBetweenCathysInExpandedCell
