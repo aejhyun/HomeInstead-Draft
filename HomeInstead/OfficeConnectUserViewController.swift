@@ -667,7 +667,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         let officeConnectUserTableViewCell = superView.superview as! OfficeConnectUserTableViewCell
         let indexPath = tableView.indexPathForCell(officeConnectUserTableViewCell)
         self.nameButtonSelectedRow = (indexPath?.row)!
-        
+        print("dawg")
     }
     
     @IBAction func expandButtonTapped(sender: AnyObject) {
@@ -816,7 +816,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     func connectedNameButtonTapped(sender: IdentifiedButton) {
         
-        print(sender.identifier)
+        self.performSegueWithIdentifier("officeConnectUsersToUserProfile", sender: sender.identifier)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -837,9 +837,17 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             
         } else if segue.identifier == "officeConnectUsersToUserProfile" {
             if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
-                self.setUserObjectIdsForSelectedUserType(self.selectedUserType)
-                userProfileViewController.userObjectId = self.userObjectIds[self.nameButtonSelectedRow]
-                userProfileViewController.selectedUserType = self.selectedUserType
+                print(sender)
+                if sender == nil {
+                    self.setUserObjectIdsForSelectedUserType(self.selectedUserType)
+                    userProfileViewController.userObjectId = self.userObjectIds[self.nameButtonSelectedRow]
+                    userProfileViewController.selectedUserType = self.selectedUserType
+                } else {
+                    userProfileViewController.userObjectId = sender as! String
+                    userProfileViewController.selectedUserType = UserType.client
+                }
+                
+                
             } else {
                 print("destinationViewController returned nil")
             }
