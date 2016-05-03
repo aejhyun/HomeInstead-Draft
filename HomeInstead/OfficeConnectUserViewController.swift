@@ -559,8 +559,10 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         }
         self.numberOfTimesReloadDataIsCalled++
         self.tableView.reloadData()
-        
+    
     }
+    
+
     
     func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
@@ -645,7 +647,9 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             cell.createCathyLabel()
             cell.removeNameButtons()
             cell.createNameButtons(self.connectedObjectIds[indexPath.row])
- 
+            for nameButton in cell.nameButtons {
+                nameButton.addTarget(self, action: "connectedNameButtonTapped:", forControlEvents: .TouchUpInside)
+            }
         }
         
         self.configureCellForUserType(cell, userType: self.selectedUserType, indexPath: indexPath)
@@ -683,9 +687,16 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                 self.expandButtonTappedIndexPath = nil
             } else {
                 self.expandButtonTappedIndexPath = indexPath
+                //self.tableView.scrollToRowAtIndexPath(indexPath!, atScrollPosition: .Top, animated: true)
             }
         }
-
+        
+       
+        
+        
+        
+        
+        
         self.tableView.beginUpdates()
         self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
         self.tableView.endUpdates()
@@ -801,6 +812,11 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     @IBAction func addButtonTapped(sender: AnyObject) {
         self.performSegueWithIdentifier("officeConnectUserToOfficeAddUser", sender: nil)
+    }
+    
+    func connectedNameButtonTapped(sender: IdentifiedButton) {
+        
+        print(sender.identifier)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

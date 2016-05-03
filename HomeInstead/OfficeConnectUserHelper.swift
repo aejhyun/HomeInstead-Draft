@@ -13,7 +13,6 @@ class OfficeConnectUserHelper {
     
     let classNameForCloud = ClassNameForCloud()
     
-    
     func attemptQueryingUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, userNames: [String]?, userObjectIds: [String]?, userNotes: [String]?, connectedNames: [Dictionary<String, [String]>]?, connectedObjectIds: [Dictionary<String, [String]>]?, userOfficeIds: [[String]]?) -> Void) {
 
         var userNames: [String] = [String]()

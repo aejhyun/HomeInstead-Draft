@@ -25,6 +25,7 @@
 		8472A21A1CB029BD0073E8CA /* Enumerations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8472A2191CB029BD0073E8CA /* Enumerations.swift */; };
 		847374E91C37EE5500B4096F /* TaskPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847374E81C37EE5500B4096F /* TaskPictureViewController.swift */; };
 		8475606D1CD8A6D1007AC371 /* OverloadedOperators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8475606C1CD8A6D1007AC371 /* OverloadedOperators.swift */; };
+		8475606F1CD8E07B007AC371 /* IdentifiedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8475606E1CD8E07B007AC371 /* IdentifiedButton.swift */; };
 		8479A8EF1C2FBCA30069A046 /* OfficeClientListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479A8EE1C2FBCA30069A046 /* OfficeClientListTableViewController.swift */; };
 		8479A8F11C2FDDF40069A046 /* OfficeCathyListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8479A8F01C2FDDF40069A046 /* OfficeCathyListTableViewController.swift */; };
 		847D00001C25389C0047505F /* GiverCathyListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847DFFFF1C25389C0047505F /* GiverCathyListTableViewController.swift */; };
@@ -103,6 +104,7 @@
 		8472A2191CB029BD0073E8CA /* Enumerations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enumerations.swift; sourceTree = "<group>"; };
 		847374E81C37EE5500B4096F /* TaskPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskPictureViewController.swift; sourceTree = "<group>"; };
 		8475606C1CD8A6D1007AC371 /* OverloadedOperators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverloadedOperators.swift; sourceTree = "<group>"; };
+		8475606E1CD8E07B007AC371 /* IdentifiedButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifiedButton.swift; sourceTree = "<group>"; };
 		8479A8EE1C2FBCA30069A046 /* OfficeClientListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeClientListTableViewController.swift; sourceTree = "<group>"; };
 		8479A8F01C2FDDF40069A046 /* OfficeCathyListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeCathyListTableViewController.swift; sourceTree = "<group>"; };
 		847DFFFF1C25389C0047505F /* GiverCathyListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiverCathyListTableViewController.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				84C32F7B1C325B3000A245BC /* Miscellaneous.swift */,
 				84D931001C197DB1003C1688 /* AppDelegate.swift */,
 				8475606C1CD8A6D1007AC371 /* OverloadedOperators.swift */,
+				8475606E1CD8E07B007AC371 /* IdentifiedButton.swift */,
 				84C32F7D1C350E4A00A245BC /* Protocols.swift */,
 				8472A2191CB029BD0073E8CA /* Enumerations.swift */,
 				84416F451CB1FF9D00911D09 /* Structures.swift */,
@@ -391,6 +394,7 @@
 				8447AD791C96A5F70076B9E3 /* OlderOfficeCreateClientProfileViewController.swift in Sources */,
 				84C462AA1C20232A00FA82F9 /* GiverClientListTableViewController.swift in Sources */,
 				84C05E1A1C2BC0B2009A137C /* TestViewController.swift in Sources */,
+				8475606F1CD8E07B007AC371 /* IdentifiedButton.swift in Sources */,
 				84C32F7E1C350E4A00A245BC /* Protocols.swift in Sources */,
 				8467628D1CA94E7100506C30 /* OfficeClientProfileViewController.swift in Sources */,
 				84C05E161C2BB016009A137C /* CathyTaskLogOneTableViewCell.swift in Sources */,
