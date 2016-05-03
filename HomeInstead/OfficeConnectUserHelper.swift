@@ -27,7 +27,7 @@ class OfficeConnectUserHelper {
         
         let query = PFQuery(className: classNameForCloud.getClassName(userType)!)
         query.whereKey("idsOfOfficeUsersWhoAddedThisUser", containedIn: [(PFUser.currentUser()?.objectId)!])
-        //query.fromLocalDatastore()
+        query.fromLocalDatastore()
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             if error == nil {
@@ -110,7 +110,6 @@ class OfficeConnectUserHelper {
             }
         }
     }
-    
     
     
     func connectNamesToCareGiverInCloud(checkedCareGiverObjectId: String, namesToBeConnected: Dictionary<String, [String]>, objectIdsToBeConnected: Dictionary<String, [String]>, completion: (connectionSuccessful: Bool) -> Void) {

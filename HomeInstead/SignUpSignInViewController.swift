@@ -17,17 +17,21 @@ class SignUpSignInViewController: UIViewController {
     var showSignUpAccountOptions: Bool = false
     var selectedUserType: UserType!
     
+    // The function viewDidLoad() gets called when the view gets loaded. And it is called only once during a view's life cycle. In this function, I decided to hide and change the visibility of some buttons.
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.officeButton.hidden = true
+        self.officeButton.hidden = true // Hides the buttons.
         self.careGiverButton.hidden = true
         self.cathyButton.hidden = true
-        self.officeButton.alpha = 0.0
+        self.officeButton.alpha = 0.0 // Makes the darkness of the color as light as it can get; 1.0 represents the darkest color it can get.
         self.careGiverButton.alpha = 0.0
         self.cathyButton.alpha = 0.0
         
     }
+    
+    // This functions gets called when I tap the sign up button.
     
     @IBAction func signUpButtonTapped(sender: AnyObject) {
         
@@ -37,8 +41,8 @@ class SignUpSignInViewController: UIViewController {
             self.careGiverButton.hidden = false
             self.cathyButton.hidden = false
             
-            UIView.animateWithDuration(0.3, animations: { () -> Void in
-                self.officeButton.alpha = 1.0
+            UIView.animateWithDuration(0.3, animations: { () -> Void in // This functions makes things fade in and out.
+                self.officeButton.alpha = 1.0 // Remember how we set the office button's alpha to 0.0? Well, this function changes it back to 1.0 but with animation. COOL!
             })
             UIView.animateWithDuration(0.3, animations: { () -> Void in
                 self.cathyButton.alpha = 1.0

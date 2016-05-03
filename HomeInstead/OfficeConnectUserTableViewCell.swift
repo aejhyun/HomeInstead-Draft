@@ -19,18 +19,27 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
     var height: CGFloat = 0.0
     var width: CGFloat = 0.0
     
-    var spaceBetweenUsers: CGFloat = 0.0
+    var spaceBetweenCathys: CGFloat = 0.0
     var spaceBetweenUserLabelsAndUsers: CGFloat = 0.0
+    var spaceBetweenCathyGroups: CGFloat = 0.0
+    
+    var nameButtonHeight: CGFloat = 20.0
+    var nameButtonWidth: CGFloat = 110.0
+    
+    var userLabelHeight: CGFloat = 20.0
+    var userLabelWidth: CGFloat = 110.0
     
     var leftSideSpaceForUsersAndUserLabel: CGFloat = 40.0
     var rightSideSpaceForUsersAndUserLabel: CGFloat = 0.0
     
-    var connectedUserNameButton: UIButton!
-    var connectedUserNameButtons: [UIButton] = [UIButton]()
+    var clientNameButton: UIButton!
+    var nameButtons: [UIButton] = [UIButton]()
+    
+    var careGiverNameButton: UIButton!
     
     var userTypeLabels: [UILabel] = [UILabel]()
     
-    var careGiverLabel: UILabel = UILabel()
+    var clientLabel: UILabel = UILabel()
     var cathyLabel: UILabel = UILabel()
     
     func removeUserTypeLabels() {
@@ -40,12 +49,12 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
         self.userTypeLabels.removeAll()
     }
     
-    func removeConnectedUserNameButtons() {
+    func removeNameButtons() {
 
-        for userNameButton in self.connectedUserNameButtons {
-            userNameButton.removeFromSuperview()
+        for nameButton in self.nameButtons {
+            nameButton.removeFromSuperview()
         }
-        self.connectedUserNameButtons.removeAll()
+        self.nameButtons.removeAll()
     }
     
     func calculateRightSideSpace() -> CGFloat{
@@ -53,22 +62,22 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
         return space
     }
     
-    func createCareGiverLabel() {
+    func createClientLabel() {
         
-        self.careGiverLabel = UILabel(frame: CGRectMake(self.leftSideSpaceForUsersAndUserLabel, self.height, 110, 20))
-        self.careGiverLabel.font = UIFont(name: "Helvetica", size: 12.0)
-        self.careGiverLabel.textAlignment = NSTextAlignment.Center
-        self.careGiverLabel.text = "Care Giver(s)"
-        self.careGiverLabel.textColor = UIColor.darkGrayColor()
-        self.userTypeLabels.append(self.careGiverLabel)
-        self.addSubview(self.careGiverLabel)
+        self.clientLabel = UILabel(frame: CGRectMake(self.leftSideSpaceForUsersAndUserLabel, self.height, self.userLabelWidth, self.userLabelHeight))
+        self.clientLabel.font = UIFont(name: "Helvetica", size: 12.0)
+        self.clientLabel.textAlignment = NSTextAlignment.Center
+        self.clientLabel.text = "Client(s)"
+        self.clientLabel.textColor = UIColor.darkGrayColor()
+        self.userTypeLabels.append(self.clientLabel)
+        self.addSubview(self.clientLabel)
         
     }
     
     func createCathyLabel() {
         
         self.rightSideSpaceForUsersAndUserLabel = self.calculateRightSideSpace()
-        self.cathyLabel = UILabel(frame: CGRectMake(self.rightSideSpaceForUsersAndUserLabel, self.height, 110, 20))
+        self.cathyLabel = UILabel(frame: CGRectMake(self.rightSideSpaceForUsersAndUserLabel, self.height, self.userLabelWidth, self.userLabelHeight))
         self.cathyLabel.font = UIFont(name: "Helvetica", size: 12.0)
         self.cathyLabel.textAlignment = NSTextAlignment.Center
         self.cathyLabel.text = "Cathy(s)"
@@ -78,44 +87,105 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
         
     }
     
-    func createConnectedCareGiverNameButtons(careGiverNames: [String]) {
+    
+    
+    func createNameButtons(connectedNames: Dictionary<String, [String]>) {
         
-        var userNameButtonFrameHeight: CGFloat = self.height + self.spaceBetweenUserLabelsAndUsers
+        var clientNameButtonFrameHeight: CGFloat = self.height + self.spaceBetweenUserLabelsAndUsers
+        var careGiverNameButtonFrameHeight: CGFloat = self.height + self.spaceBetweenUserLabelsAndUsers
+        
+        var numberOfCathys: Int = 0
+        
+        for (clientName, _) in connectedNames {
+       
+            self.clientNameButton = UIButton(type: UIButtonType.System) as UIButton
+            self.clientNameButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+            self.clientNameButton.frame = CGRectMake(self.leftSideSpaceForUsersAndUserLabel, clientNameButtonFrameHeight, self.nameButtonWidth, self.nameButtonHeight)
+            self.clientNameButton.setTitle(clientName, forState: UIControlState.Normal)
+            self.clientNameButton.titleLabel!.font = UIFont(name: "Helvetica", size: 12.0)
+            self.nameButtons.append(self.clientNameButton)
+            self.addSubview(self.clientNameButton)
 
-        for var row: Int = 0; row < careGiverNames.count ; row++ {
+            numberOfCathys = connectedNames[clientName]!.count
+            clientNameButtonFrameHeight += CGFloat(numberOfCathys) * (self.spaceBetweenCathys) + self.spaceBetweenCathyGroups
             
-            self.connectedUserNameButton = UIButton(type: UIButtonType.System) as UIButton
-            self.connectedUserNameButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByTruncatingTail
-            self.connectedUserNameButton.frame = CGRectMake(self.leftSideSpaceForUsersAndUserLabel, userNameButtonFrameHeight, 110, 20)
-            self.connectedUserNameButton.setTitle(careGiverNames[row], forState: UIControlState.Normal)
-            self.connectedUserNameButton.titleLabel!.font = UIFont(name: "Helvetica", size: 12.0)
-            self.connectedUserNameButtons.append(self.connectedUserNameButton)
-            self.addSubview(self.connectedUserNameButton)
+            for careGiverName in connectedNames[clientName]! {
+                self.careGiverNameButton = UIButton(type: UIButtonType.System) as UIButton
+                self.careGiverNameButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+                self.careGiverNameButton.frame = CGRectMake(self.rightSideSpaceForUsersAndUserLabel, careGiverNameButtonFrameHeight, self.nameButtonWidth, self.nameButtonHeight)
+                self.careGiverNameButton.setTitle(careGiverName, forState: UIControlState.Normal)
+                self.careGiverNameButton.titleLabel!.font = UIFont(name: "Helvetica", size: 12.0)
+                self.nameButtons.append(self.careGiverNameButton)
+                self.addSubview(self.careGiverNameButton)
+                careGiverNameButtonFrameHeight += self.spaceBetweenCathys
+            }
+            careGiverNameButtonFrameHeight += self.spaceBetweenCathyGroups
             
-            userNameButtonFrameHeight += self.spaceBetweenUsers
         }
-
+        
+        
+        
+        
+        
+        
+        
+//            newRowHeight = originalRowHeights[row] + self.spaceBetweenUserLabelsAndUsersInExpandedCell + (CGFloat(numberOfClients) * self.spaceBetweenCathyGroupsInExpandedCell) + (CGFloat(numberOfCathys) * self.spaceBetweenCathysInExpandedCell)
+//            expandedRowHeights.append(newRowHeight)
+        
+        
+        
+        
+        
+        
     }
     
-    func createConnectedCathyNameButtons(cathyNames: [String]) {
-        
-        self.rightSideSpaceForUsersAndUserLabel = self.calculateRightSideSpace()
-        var userNameButtonFrameHeight: CGFloat = self.height + self.spaceBetweenUserLabelsAndUsers
-        
-        for var row: Int = 0; row < cathyNames.count ; row++ {
-            
-            self.connectedUserNameButton = UIButton(type: UIButtonType.System) as UIButton
-            self.connectedUserNameButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByTruncatingTail
-            self.connectedUserNameButton.frame = CGRectMake((self.rightSideSpaceForUsersAndUserLabel), userNameButtonFrameHeight, 110, 20)
-            self.connectedUserNameButton.setTitle(cathyNames[row], forState: UIControlState.Normal)
-            self.connectedUserNameButton.titleLabel!.font = UIFont(name: "Helvetica", size: 12.0)
-            self.connectedUserNameButtons.append(self.connectedUserNameButton)
-            self.addSubview(self.connectedUserNameButton)
-            
-            userNameButtonFrameHeight += self.spaceBetweenUsers
-        }
-        
-    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+//    func createConnectedCareGiverNameButtons(careGiverNames: [String]) {
+//        
+//        var userNameButtonFrameHeight: CGFloat = self.height + self.spaceBetweenUserLabelsAndUsers
+//
+//        for var row: Int = 0; row < careGiverNames.count ; row++ {
+//            
+//            self.connectedUserNameButton = UIButton(type: UIButtonType.System) as UIButton
+//            self.connectedUserNameButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+//            self.connectedUserNameButton.frame = CGRectMake(self.leftSideSpaceForUsersAndUserLabel, userNameButtonFrameHeight, 110, 20)
+//            self.connectedUserNameButton.setTitle(careGiverNames[row], forState: UIControlState.Normal)
+//            self.connectedUserNameButton.titleLabel!.font = UIFont(name: "Helvetica", size: 12.0)
+//            self.connectedUserNameButtons.append(self.connectedUserNameButton)
+//            self.addSubview(self.connectedUserNameButton)
+//
+//            userNameButtonFrameHeight += self.spaceBetweenUsers
+//        }
+//
+//    }
+//    
+//    func createConnectedCathyNameButtons(cathyNames: [String]) {
+//        
+//        self.rightSideSpaceForUsersAndUserLabel = self.calculateRightSideSpace()
+//        var userNameButtonFrameHeight: CGFloat = self.height + self.spaceBetweenUserLabelsAndUsers
+//        
+//        for var row: Int = 0; row < cathyNames.count ; row++ {
+//            
+//            self.connectedUserNameButton = UIButton(type: UIButtonType.System) as UIButton
+//            self.connectedUserNameButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+//            self.connectedUserNameButton.frame = CGRectMake((self.rightSideSpaceForUsersAndUserLabel), userNameButtonFrameHeight, 110, 20)
+//            self.connectedUserNameButton.setTitle(cathyNames[row], forState: UIControlState.Normal)
+//            self.connectedUserNameButton.titleLabel!.font = UIFont(name: "Helvetica", size: 12.0)
+//            self.connectedUserNameButtons.append(self.connectedUserNameButton)
+//            self.addSubview(self.connectedUserNameButton)
+//            
+//            userNameButtonFrameHeight += self.spaceBetweenUsers
+//        }
+//        
+//    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
