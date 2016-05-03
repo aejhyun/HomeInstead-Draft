@@ -13,7 +13,6 @@ class OfficeConnectUserHelper {
     
     let classNameForCloud = ClassNameForCloud()
     
-    var selectedUserType: UserType!
     
     func attemptQueryingUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, userNames: [String]?, userObjectIds: [String]?, userNotes: [String]?, connectedNames: [Dictionary<String, [String]>]?, connectedObjectIds: [Dictionary<String, [String]>]?, userOfficeIds: [[String]]?) -> Void) {
 
@@ -47,7 +46,7 @@ class OfficeConnectUserHelper {
                         object.pinInBackground()
 
                     }
-                    completion(querySuccessful: true, userNames: userNames, userObjectIds: userObjectIds, userNotes: userNotes, connectedNames: connectedNames, connectedObjectIds: connectedNames, userOfficeIds: userOfficeIds)
+                    completion(querySuccessful: true, userNames: userNames, userObjectIds: userObjectIds, userNotes: userNotes, connectedNames: connectedNames, connectedObjectIds: connectedObjectIds, userOfficeIds: userOfficeIds)
                 }
             } else {
                 completion(querySuccessful: false, userNames: nil, userObjectIds: nil, userNotes: nil, connectedNames: nil, connectedObjectIds: nil, userOfficeIds: nil)
@@ -57,41 +56,27 @@ class OfficeConnectUserHelper {
         
     }
     
-    func queryConnectedUsersFromCloud(userType: UserType, connectedUsers: [String], completion: (querySuccessful: Bool, connectedUsers: [[String: String]]) -> Void) {
+    func attemptQueryingUsersObjectIdsAndNames(userType: UserType, completion: (querySuccessful: Bool, userObjectIdsAndNames: [String: String]) -> Void) {
         
-        var connectedUserInformation: [String: String] = [String: String]()
-        var users: [[String: String]] = [[String: String]]()
+        var userObjectIdsAndNames: [String: String] = [String: String]()
         
-        for var index: Int = 0; index < connectedUsers.count; index++ {
-            
-            let query = PFQuery(className: self.classNameForCloud.getClassName(self.selectedUserType)!)
-            query.getObjectInBackgroundWithId(connectedUsers[index]) {
-                (object: PFObject?, error: NSError?) -> Void in
-                if error != nil {
-                    print(error)
-                } else if let object = object {
-                    connectedUserInformation["name"] = object.objectForKey("name") as? String
-                    connectedUserInformation["notes"] = object.objectForKey("notes") as? String
-                    connectedUserInformation["email"] = object.objectForKey("email") as? String
-                    connectedUserInformation["province"] = object.objectForKey("province") as? String
-                    connectedUserInformation["city"] = object.objectForKey("city") as? String
-                    connectedUserInformation["district"] = object.objectForKey("district") as? String
-                    connectedUserInformation["streetOne"] = object.objectForKey("streetOne") as? String
-                    connectedUserInformation["streetTwo"] = object.objectForKey("streetTwo") as? String
-                    connectedUserInformation["streetThree"] = object.objectForKey("streetThree") as? String
-                    connectedUserInformation["postalCode"] = object.objectForKey("postalCode") as? String
-                    connectedUserInformation["phoneNumber"] = object.objectForKey("phoneNumber") as? String
-                    connectedUserInformation["emergencyPhoneNumber"] = object.objectForKey("emergencyPhoneNumber") as? String
-                    connectedUserInformation["userType"] = object.objectForKey("userType") as? String
-                    connectedUserInformation["userId"] = object.objectForKey("userId") as? String
-                    connectedUserInformation["objectId"] = object.objectId
-                    users.append(connectedUserInformation)
-                    completion(querySuccessful: true, connectedUsers: users)
+        let query = PFQuery(className: classNameForCloud.getClassName(userType)!)
+        query.whereKey("idsOfOfficeUsersWhoAddedThisUser", containedIn: [(PFUser.currentUser()?.objectId)!])
+        //query.fromLocalDatastore()
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [PFObject]?, error: NSError?) -> Void in
+            if error == nil {
+                if let objects = objects {
+                    for object in objects {
+                        userObjectIdsAndNames[object.objectId!] = object.objectForKey("name") as? String
+                    }
+                    completion(querySuccessful: true, userObjectIdsAndNames: userObjectIdsAndNames)
                 }
+            } else {
+                completion(querySuccessful: false, userObjectIdsAndNames: userObjectIdsAndNames)
             }
-            
         }
-            
+
     }
     
     func deleteUserFromOfficeUserInCloud(selectedUserType: UserType, userObjectIds: [String], officeUserIdsForUser: [[String]], indexPath: NSIndexPath) {
@@ -144,32 +129,7 @@ class OfficeConnectUserHelper {
     
     
     
-    func connectUsersWithClientTypeInCloud(selectedUserType: UserType, checkedClientObjectIds: [String], checkedCathyObjectIds: [String], checkedCareGiverObjectIds: [String], checkedClientNames: [String], checkedCathyNames: [String], checkedCareGiverNames: [String], completion: (connectSuccessful: Bool) -> Void) {
-        
-        let query = PFQuery(className: classNameForCloud.getClassName(selectedUserType)!)
-        query.getObjectInBackgroundWithId(checkedClientObjectIds[0]) {
-            (objects: PFObject?, error: NSError?) -> Void in
-            if error != nil {
-                print(error)
-                completion(connectSuccessful: false)
-            } else if let object = objects {
-                object["connectedCathyObjectIds"] = checkedCathyObjectIds
-                object["connectedCareGiverObjectIds"] = checkedCareGiverObjectIds
-                object["connectedCathyNames"] = checkedCathyNames
-                object["connectedCareGiverNames"] = checkedCareGiverNames
-                object.saveInBackgroundWithBlock {
-                    (success: Bool, error: NSError?) -> Void in
-                    if (success) {
-                        completion(connectSuccessful: true)
-                    } else {
-                        print(error?.description)
-                    }
-                }
-                object.pinInBackground()
-            }
-        }
-        
-    }
+
     
     
     
@@ -191,6 +151,72 @@ class OfficeConnectUserHelper {
 
 
 
+//func connectUsersWithClientTypeInCloud(selectedUserType: UserType, checkedClientObjectIds: [String], checkedCathyObjectIds: [String], checkedCareGiverObjectIds: [String], checkedClientNames: [String], checkedCathyNames: [String], checkedCareGiverNames: [String], completion: (connectSuccessful: Bool) -> Void) {
+//    
+//    let query = PFQuery(className: classNameForCloud.getClassName(selectedUserType)!)
+//    query.getObjectInBackgroundWithId(checkedClientObjectIds[0]) {
+//        (objects: PFObject?, error: NSError?) -> Void in
+//        if error != nil {
+//            print(error)
+//            completion(connectSuccessful: false)
+//        } else if let object = objects {
+//            object["connectedCathyObjectIds"] = checkedCathyObjectIds
+//            object["connectedCareGiverObjectIds"] = checkedCareGiverObjectIds
+//            object["connectedCathyNames"] = checkedCathyNames
+//            object["connectedCareGiverNames"] = checkedCareGiverNames
+//            object.saveInBackgroundWithBlock {
+//                (success: Bool, error: NSError?) -> Void in
+//                if (success) {
+//                    completion(connectSuccessful: true)
+//                } else {
+//                    print(error?.description)
+//                }
+//            }
+//            object.pinInBackground()
+//        }
+//    }
+//    
+//}
+
+
+
+
+//func queryConnectedUsersFromCloud(userType: UserType, connectedUsers: [String], completion: (querySuccessful: Bool, connectedUsers: [[String: String]]) -> Void) {
+//    
+//    var connectedUserInformation: [String: String] = [String: String]()
+//    var users: [[String: String]] = [[String: String]]()
+//    
+//    for var index: Int = 0; index < connectedUsers.count; index++ {
+//        
+//        let query = PFQuery(className: self.classNameForCloud.getClassName(userType)!)
+//        query.getObjectInBackgroundWithId(connectedUsers[index]) {
+//            (object: PFObject?, error: NSError?) -> Void in
+//            if error != nil {
+//                print(error)
+//            } else if let object = object {
+//                connectedUserInformation["name"] = object.objectForKey("name") as? String
+//                connectedUserInformation["notes"] = object.objectForKey("notes") as? String
+//                connectedUserInformation["email"] = object.objectForKey("email") as? String
+//                connectedUserInformation["province"] = object.objectForKey("province") as? String
+//                connectedUserInformation["city"] = object.objectForKey("city") as? String
+//                connectedUserInformation["district"] = object.objectForKey("district") as? String
+//                connectedUserInformation["streetOne"] = object.objectForKey("streetOne") as? String
+//                connectedUserInformation["streetTwo"] = object.objectForKey("streetTwo") as? String
+//                connectedUserInformation["streetThree"] = object.objectForKey("streetThree") as? String
+//                connectedUserInformation["postalCode"] = object.objectForKey("postalCode") as? String
+//                connectedUserInformation["phoneNumber"] = object.objectForKey("phoneNumber") as? String
+//                connectedUserInformation["emergencyPhoneNumber"] = object.objectForKey("emergencyPhoneNumber") as? String
+//                connectedUserInformation["userType"] = object.objectForKey("userType") as? String
+//                connectedUserInformation["userId"] = object.objectForKey("userId") as? String
+//                connectedUserInformation["objectId"] = object.objectId
+//                users.append(connectedUserInformation)
+//                completion(querySuccessful: true, connectedUsers: users)
+//            }
+//        }
+//        
+//    }
+//    
+//}
 
 
 

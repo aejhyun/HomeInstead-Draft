@@ -47,6 +47,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var connectedObjectIds: [Dictionary<String, [String]>] = [Dictionary<String, [String]>]()
     var connectedNames: [Dictionary<String, [String]>] = [Dictionary<String, [String]>]()
     
+    var userObjectIdsAndNames: [String: String] = [String: String]() // I am using the objectIds to get the names associated with those objectIds so that when I am displaying the names for the connected user, I don't have to query both the objectIds and names. Also, it ensure that displaying correct connected client and cathy names is not contingent upon the order of the queries.
+    
     var nameButtonSelectedRow: Int = -1
     var expandButtonTappedIndexPath: NSIndexPath? = nil
     var clientSelectedRowIndexPath: NSIndexPath? = nil
@@ -54,8 +56,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
 
     var numberOfTimesReloadDataIsCalled: Int = 0
     
-    var originalRowHeight: CGFloat = 43.5
-    var originalRowHeights: [CGFloat] = [CGFloat]() // Depending on the number of connected care givers or cathys, the row of expanded cells will vary.
+    var originalRowHeight: CGFloat = 43.5 // Depending on the number of connected care givers or cathys, the row of expanded cells will vary.
     var expandedRowHeights: [CGFloat] = [CGFloat]()
     
     var spaceBetweenUserLabelsAndUsersInExpandedCell: CGFloat = 20.0 // When a row is expanded there are two labels, Care Giver(s) and Client(s) indicating which rows of users are of which user Type. And this variable will determine the space between the two lables and the actual users connected to the clients.
@@ -133,7 +134,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         }
     }
     
-    
+
     
     func deleteRowForSelectedUserType(indexPath: NSIndexPath) {
         
@@ -427,22 +428,19 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-
-
-    
-    func setOriginalAndExpandedRowHeights() {
+    func setExpandedRowHeights() {
         
         var expandedRowHeights: [CGFloat] = [CGFloat]()
         
-        for var row: Int = 0; row < connectedNames.count; row++ {
+        for var row: Int = 0; row < connectedObjectIds.count; row++ {
             var newRowHeight: CGFloat = 0.0
             var numberOfClients: Int = 0
             var numberOfCathys: Int = 0
             
-            numberOfClients += self.connectedNames[row].count
+            numberOfClients += self.connectedObjectIds[row].count
         
-            for (clientName, _) in self.connectedNames[row] {
-                numberOfCathys += self.connectedNames[row][clientName]!.count
+            for (clientObjectId, _) in self.connectedObjectIds[row] {
+                numberOfCathys += self.connectedObjectIds[row][clientObjectId]!.count
             }
 
             newRowHeight = self.originalRowHeight + self.spaceBetweenUserLabelsAndUsersInExpandedCell + (CGFloat(numberOfClients - 1) * self.spaceBetweenCathyGroupsInExpandedCell) + (CGFloat(numberOfCathys) * self.spaceBetweenCathysInExpandedCell)
@@ -529,12 +527,15 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                         self.numberOfTimesReloadDataIsCalled++
                         self.tableView.reloadData()
                     }
-                    
-                    
                 }
-                
             })
- 
+            
+            self.officeConnectUserHelper.attemptQueryingUsersObjectIdsAndNames(userType, completion: { (querySuccessful, userObjectIdsAndNames) -> Void in
+                if querySuccessful {
+                    self.userObjectIdsAndNames += userObjectIdsAndNames
+                }
+            })
+            
         }
         
         self.navigationBarLine.hidden = true
@@ -542,7 +543,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     }
     
     override func viewDidDisappear(animated: Bool) {
-        
+ 
         self.navigationBarLine.hidden = false
         
     }
@@ -576,7 +577,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         let originalHeight = UITableViewAutomaticDimension
         var expandedHeight: CGFloat = 200.0
-        
+
         // The reason for indexPath.row < self.tableView.visibleCells.count is because if self.expandedRowHeights[indexPath.row] only holds row heights of visible cells not cells that have gone off the screen. And since indexPath will call as many times as it is specified  numberOfRowsInSection delegate function, it will cause the app to crash.
 
         if self.selectedUserType == UserType.careGiver {
@@ -632,7 +633,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         // The reason for self.expandButtonTapped == true is because self.rowHeights doesn't get initialized until expandButton is tapped. So without this check, it will cause the app to crash.
         if self.expandButtonTappedIndexPath != nil {
-
+            
+            cell.userObjectIdsAndNames = self.userObjectIdsAndNames
             cell.width = self.tableView.frame.width
             cell.height = self.originalRowHeight
             cell.spaceBetweenCathyGroups = self.spaceBetweenCathyGroupsInExpandedCell
@@ -642,7 +644,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             cell.createClientLabel()
             cell.createCathyLabel()
             cell.removeNameButtons()
-            cell.createNameButtons(self.connectedNames[indexPath.row])
+            cell.createNameButtons(self.connectedObjectIds[indexPath.row])
  
         }
         
@@ -666,7 +668,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     @IBAction func expandButtonTapped(sender: AnyObject) {
 
-        self.setOriginalAndExpandedRowHeights()
+        self.setExpandedRowHeights()
         
         let expandButton = sender as! UIButton
         let superView = expandButton.superview!
@@ -783,7 +785,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                 if connectionSuccessful {
                     self.connectedNames[self.careGiverCheckedRow] = namesToBeConnected
                     self.connectedObjectIds[self.careGiverCheckedRow] = objectIdsToBeConnected
-                    
+                    self.setExpandedRowHeights()
                     if self.selectedUserType == UserType.careGiver {
                         self.tableView.reloadData()
                     }

@@ -42,6 +42,8 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
     var clientLabel: UILabel = UILabel()
     var cathyLabel: UILabel = UILabel()
     
+    var userObjectIdsAndNames: [String: String] = [String: String]()
+    
     func removeUserTypeLabels() {
         for userTypeLabel in self.userTypeLabels {
             userTypeLabel.removeFromSuperview()
@@ -89,31 +91,31 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
     
     
     
-    func createNameButtons(connectedNames: Dictionary<String, [String]>) {
+    func createNameButtons(connectedObjectIds: Dictionary<String, [String]>) {
         
         var clientNameButtonFrameHeight: CGFloat = self.height + self.spaceBetweenUserLabelsAndUsers
         var careGiverNameButtonFrameHeight: CGFloat = self.height + self.spaceBetweenUserLabelsAndUsers
         
         var numberOfCathys: Int = 0
         
-        for (clientName, _) in connectedNames {
+        for (clientObjectId, _) in connectedObjectIds {
        
             self.clientNameButton = UIButton(type: UIButtonType.System) as UIButton
             self.clientNameButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByTruncatingTail
             self.clientNameButton.frame = CGRectMake(self.leftSideSpaceForUsersAndUserLabel, clientNameButtonFrameHeight, self.nameButtonWidth, self.nameButtonHeight)
-            self.clientNameButton.setTitle(clientName, forState: UIControlState.Normal)
+            self.clientNameButton.setTitle(self.userObjectIdsAndNames[clientObjectId], forState: UIControlState.Normal)
             self.clientNameButton.titleLabel!.font = UIFont(name: "Helvetica", size: 12.0)
             self.nameButtons.append(self.clientNameButton)
             self.addSubview(self.clientNameButton)
 
-            numberOfCathys = connectedNames[clientName]!.count
+            numberOfCathys = connectedObjectIds[clientObjectId]!.count
             clientNameButtonFrameHeight += CGFloat(numberOfCathys) * (self.spaceBetweenCathys) + self.spaceBetweenCathyGroups
             
-            for careGiverName in connectedNames[clientName]! {
+            for cathyObjectId in connectedObjectIds[clientObjectId]! {
                 self.careGiverNameButton = UIButton(type: UIButtonType.System) as UIButton
                 self.careGiverNameButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByTruncatingTail
                 self.careGiverNameButton.frame = CGRectMake(self.rightSideSpaceForUsersAndUserLabel, careGiverNameButtonFrameHeight, self.nameButtonWidth, self.nameButtonHeight)
-                self.careGiverNameButton.setTitle(careGiverName, forState: UIControlState.Normal)
+                self.careGiverNameButton.setTitle(self.userObjectIdsAndNames[cathyObjectId], forState: UIControlState.Normal)
                 self.careGiverNameButton.titleLabel!.font = UIFont(name: "Helvetica", size: 12.0)
                 self.nameButtons.append(self.careGiverNameButton)
                 self.addSubview(self.careGiverNameButton)
