@@ -45,7 +45,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var cathyCheckedRows: [Bool] = [Bool]()
     
     var connectedObjectIds: [Dictionary<String, [String]>] = [Dictionary<String, [String]>]()
-    var connectedNames: [Dictionary<String, [String]>] = [Dictionary<String, [String]>]()
     
     var userObjectIdsAndNames: [String: String] = [String: String]() // I am using the objectIds to get the names associated with those objectIds so that when I am displaying the names for the connected user, I don't have to query both the objectIds and names. Also, it ensure that displaying correct connected client and cathy names is not contingent upon the order of the queries.
     var userTypeForConnectedName: UserType! // I wish I didn't have to use this variable but the button's sender isn't working as it should.
@@ -161,7 +160,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             self.careGiverNames.removeAtIndex(indexPath.row)
             self.careGiverObjectIds.removeAtIndex(indexPath.row)
             self.careGiverNotes.removeAtIndex(indexPath.row)
-            self.connectedNames.removeAtIndex(indexPath.row)
             self.connectedObjectIds.removeAtIndex(indexPath.row)
             
             if self.careGiverCheckedRow == indexPath.row {
@@ -209,7 +207,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         cell.expandButton.hidden = true
         
         if self.selectedUserType == UserType.careGiver {
-            if self.connectedNames[indexPath.row].count == 0 {
+            if self.connectedObjectIds[indexPath.row].count == 0 {
                 cell.expandButton.hidden = true
             } else if indexPath == self.expandButtonTappedIndexPath {
                 cell.expandButton.hidden = false
@@ -218,7 +216,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                 for nameButton in cell.nameButtons {
                     nameButton.hidden = false
                 }
-                cell.expandButton.setTitle("(\(self.connectedNames[indexPath.row].count))", forState: UIControlState.Normal)
+                cell.expandButton.setTitle("(\(self.connectedObjectIds[indexPath.row].count))", forState: UIControlState.Normal)
             } else {
                 cell.expandButton.hidden = false
                 cell.clientLabel.hidden = true
@@ -226,7 +224,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                 for nameButton in cell.nameButtons {
                     nameButton.hidden = true
                 }
-                cell.expandButton.setTitle("(\(self.connectedNames[indexPath.row].count))", forState: UIControlState.Normal)
+                cell.expandButton.setTitle("(\(self.connectedObjectIds[indexPath.row].count))", forState: UIControlState.Normal)
             }
         } else {
             cell.expandButton.hidden = true
@@ -349,31 +347,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func getCheckedUserNames(userType: UserType) -> [String]? {
-        
-        var names: [String] = [String]()
-        
-        if userType == UserType.careGiver {
-            names.append(self.careGiverNames[self.careGiverCheckedRow])
-            return names
-        } else if userType == UserType.client {
-            names.append(self.clientNames[self.clientCheckedRow])
-            return names
-        } else if userType == UserType.cathy {
-            
-            for var row = 0; row < self.cathyCheckedRows.count; row++ {
-                if self.cathyCheckedRows[row] == true {
-                    names.append(self.cathyNames[row])
-                }
-            }
-            
-            return names
-        }
-        
-        return nil
-        
-    }
-    
     func setAccessoryTypeForSelectedUserTypeAtIndexPath(selectedUserType: UserType, tableView: UITableView, indexPath: NSIndexPath) {
         
         if self.selectedUserType == UserType.careGiver {
@@ -483,36 +456,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    
-    func getNamesToBeConnected(checkedClientName: String, checkedCathyNames: [String]) -> Dictionary<String, [String]> {
-        
-        var connectedNames = self.connectedNames[self.careGiverCheckedRow]
-        
-        var clientNameAlreadyConnected: Bool = false
-        
-        for (clientName, _) in connectedNames {
-            if clientName == checkedClientName {
-                clientNameAlreadyConnected = true
-                break
-            }
-        }
-        
-        if clientNameAlreadyConnected == true {
-            
-            for checkedCathyName in checkedCathyNames {
-                if !connectedNames[checkedClientName]!.contains(checkedCathyName) {
-                    connectedNames[checkedClientName]!.append(checkedCathyName)
-                }
-            }
-            return connectedNames
-            
-        } else {
-            connectedNames[checkedClientName] = checkedCathyNames
-            return connectedNames
-        }
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -536,7 +479,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         for userType in self.userTypes {
             
-            self.officeConnectUserHelper.attemptQueryingUsersAddedByOfficeUserFromCloud(userType, completion: { (querySuccessful, userNames, userObjectIds, userNotes, connectedNames, connectedObjectIds, userOfficeUserIds) -> Void in
+            self.officeConnectUserHelper.attemptQueryingUsersAddedByOfficeUserFromCloud(userType, completion: { (querySuccessful, userNames, userObjectIds, userNotes, connectedObjectIds, userOfficeUserIds) -> Void in
                 
                 if querySuccessful {
                     
@@ -545,7 +488,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                         self.careGiverObjectIds = userObjectIds!
                         self.careGiverNotes = userNotes!
                         self.careGiverOfficeUserIds = userOfficeUserIds!
-                        self.connectedNames = connectedNames!
                         self.connectedObjectIds = connectedObjectIds!
                         //self.careGiverCheckedRows = [Bool](count: self.careGiverNames.count, repeatedValue: false)
                         querySuccessCheck.successfullyQueriedCareGiverUsers = true
@@ -756,23 +698,16 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
 //            print(checkedClientObjectId)
 //            print(checkedCathyObjectIds)
             
-            let checkedCareGiverName: String = self.getCheckedUserNames(UserType.careGiver)![0]
-            let checkedClientName: String = self.getCheckedUserNames(UserType.client)![0]
-            let checkedCathyNames: [String]  = self.getCheckedUserNames(UserType.cathy)!
+
             
-//            print(checkedCareGiverName)
-//            print(checkedClientName)
-//            print(checkedCathyNames)
-            
-            let namesToBeConnected = self.getNamesToBeConnected(checkedClientName, checkedCathyNames: checkedCathyNames)
+
             let objectIdsToBeConnected = self.getObjectIdsToBeConnected(checkedClientObjectId, checkedCathyObjectIds: checkedCathyObjectIds)
             
 //            print(namesToBeConnected)
 //            print(objectIdsToBeConnected)
             
-            self.officeConnectUserHelper.connectNamesToCareGiverInCloud(checkedCareGiverObjectId, namesToBeConnected: namesToBeConnected, objectIdsToBeConnected: objectIdsToBeConnected, completion: { (connectionSuccessful) -> Void in
+            self.officeConnectUserHelper.connectNamesToCareGiverInCloud(checkedCareGiverObjectId, objectIdsToBeConnected: objectIdsToBeConnected, completion: { (connectionSuccessful) -> Void in
                 if connectionSuccessful {
-                    self.connectedNames[self.careGiverCheckedRow] = namesToBeConnected
                     self.connectedObjectIds[self.careGiverCheckedRow] = objectIdsToBeConnected
                     self.setExpandedRowHeights()
                     if self.selectedUserType == UserType.careGiver {

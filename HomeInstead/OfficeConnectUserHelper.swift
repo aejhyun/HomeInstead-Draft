@@ -13,14 +13,13 @@ class OfficeConnectUserHelper {
     
     let classNameForCloud = ClassNameForCloud()
     
-    func attemptQueryingUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, userNames: [String]?, userObjectIds: [String]?, userNotes: [String]?, connectedNames: [Dictionary<String, [String]>]?, connectedObjectIds: [Dictionary<String, [String]>]?, userOfficeIds: [[String]]?) -> Void) {
+    func attemptQueryingUsersAddedByOfficeUserFromCloud(userType: UserType, completion: (querySuccessful: Bool, userNames: [String]?, userObjectIds: [String]?, userNotes: [String]?, connectedObjectIds: [Dictionary<String, [String]>]?, userOfficeIds: [[String]]?) -> Void) {
 
         var userNames: [String] = [String]()
         var userObjectIds: [String] = [String]()
         var userNotes: [String] = [String]()
         var userOfficeIds: [[String]] = [[String]]() // These variables are to hold the ids of the office users who added the non office user.
         
-        var connectedNames: [Dictionary<String, [String]>] = [Dictionary<String, [String]>]()
         var connectedObjectIds: [Dictionary<String, [String]>] = [Dictionary<String, [String]>]()
         
         let query = PFQuery(className: classNameForCloud.getClassName(userType)!)
@@ -33,7 +32,6 @@ class OfficeConnectUserHelper {
                     for object in objects {
                         if userType == UserType.careGiver {
                             
-                            connectedNames.append(object.objectForKey("connectedNames") as! Dictionary<String, [String]>)
                             connectedObjectIds.append(object.objectForKey("connectedObjectIds") as! Dictionary<String, [String]>)
                             
                         }
@@ -45,10 +43,10 @@ class OfficeConnectUserHelper {
                         object.pinInBackground()
 
                     }
-                    completion(querySuccessful: true, userNames: userNames, userObjectIds: userObjectIds, userNotes: userNotes, connectedNames: connectedNames, connectedObjectIds: connectedObjectIds, userOfficeIds: userOfficeIds)
+                    completion(querySuccessful: true, userNames: userNames, userObjectIds: userObjectIds, userNotes: userNotes, connectedObjectIds: connectedObjectIds, userOfficeIds: userOfficeIds)
                 }
             } else {
-                completion(querySuccessful: false, userNames: nil, userObjectIds: nil, userNotes: nil, connectedNames: nil, connectedObjectIds: nil, userOfficeIds: nil)
+                completion(querySuccessful: false, userNames: nil, userObjectIds: nil, userNotes: nil, connectedObjectIds: nil, userOfficeIds: nil)
                 print("Error: \(error!) \(error!.userInfo)")
             }
         }
@@ -96,7 +94,7 @@ class OfficeConnectUserHelper {
     }
     
     
-    func connectNamesToCareGiverInCloud(checkedCareGiverObjectId: String, namesToBeConnected: Dictionary<String, [String]>, objectIdsToBeConnected: Dictionary<String, [String]>, completion: (connectionSuccessful: Bool) -> Void) {
+    func connectNamesToCareGiverInCloud(checkedCareGiverObjectId: String, objectIdsToBeConnected: Dictionary<String, [String]>, completion: (connectionSuccessful: Bool) -> Void) {
         
         let query = PFQuery(className: classNameForCloud.getClassName(UserType.careGiver)!)
         query.getObjectInBackgroundWithId(checkedCareGiverObjectId) {
@@ -105,7 +103,6 @@ class OfficeConnectUserHelper {
                 print(error)
                 completion(connectionSuccessful: false)
             } else if let object = objects {
-                object["connectedNames"] = namesToBeConnected
                 object["connectedObjectIds"] = objectIdsToBeConnected
                 object.saveInBackgroundWithBlock {
                     (success: Bool, error: NSError?) -> Void in
