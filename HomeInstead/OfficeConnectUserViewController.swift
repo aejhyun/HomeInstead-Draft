@@ -48,6 +48,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var connectedNames: [Dictionary<String, [String]>] = [Dictionary<String, [String]>]()
     
     var userObjectIdsAndNames: [String: String] = [String: String]() // I am using the objectIds to get the names associated with those objectIds so that when I am displaying the names for the connected user, I don't have to query both the objectIds and names. Also, it ensure that displaying correct connected client and cathy names is not contingent upon the order of the queries.
+    var userTypeForConnectedName: UserType! // I wish I didn't have to use this variable but the button's sender isn't working as it should.
     
     var nameButtonSelectedRow: Int = -1
     var expandButtonTappedIndexPath: NSIndexPath? = nil
@@ -303,7 +304,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func correctNumberOfUsersAreChecked() -> Bool {
+    func correctNumberOfUsersAreCheckedForConnecting() -> Bool {
         
         if self.careGiverCheckedRow == -1 {
             self.presentBasicAlertControllerWithMessage("Please select a care giver to connect")
@@ -452,18 +453,63 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    
-    func setUserCheckedRowValuesFalse() {
+    func getObjectIdsToBeConnected(checkedClientObjectId: String, checkedCathyObjectIds: [String]) -> Dictionary<String, [String]> {
         
-//        for var row: Int = 0; row < self.clientCheckedRows.count; row++ {
-//            self.clientCheckedRows[row] = false
-//        }
-//        for var row: Int = 0; row < self.cathyCheckedRows.count; row++ {
-//            self.cathyCheckedRows[row] = false
-//        }
-//        for var row: Int = 0; row < self.careGiverCheckedRows.count; row++ {
-//            self.careGiverCheckedRows[row] = false
-//        }
+        var connectedObjectIds = self.connectedObjectIds[self.careGiverCheckedRow]
+        
+        var clientObjectIdIsAlreadyConnected: Bool = false
+        
+        for (clientName, _) in connectedObjectIds {
+            if clientName == checkedClientObjectId {
+                clientObjectIdIsAlreadyConnected = true
+                break
+            }
+        }
+        
+        if clientObjectIdIsAlreadyConnected == true {
+            
+            for checkedCathyName in checkedCathyObjectIds {
+                if !connectedObjectIds[checkedClientObjectId]!.contains(checkedCathyName) {
+                    connectedObjectIds[checkedClientObjectId]!.append(checkedCathyName)
+                }
+            }
+            return connectedObjectIds
+            
+        } else {
+            connectedObjectIds[checkedClientObjectId] = checkedCathyObjectIds
+            return connectedObjectIds
+        }
+        
+        
+    }
+    
+    
+    func getNamesToBeConnected(checkedClientName: String, checkedCathyNames: [String]) -> Dictionary<String, [String]> {
+        
+        var connectedNames = self.connectedNames[self.careGiverCheckedRow]
+        
+        var clientNameAlreadyConnected: Bool = false
+        
+        for (clientName, _) in connectedNames {
+            if clientName == checkedClientName {
+                clientNameAlreadyConnected = true
+                break
+            }
+        }
+        
+        if clientNameAlreadyConnected == true {
+            
+            for checkedCathyName in checkedCathyNames {
+                if !connectedNames[checkedClientName]!.contains(checkedCathyName) {
+                    connectedNames[checkedClientName]!.append(checkedCathyName)
+                }
+            }
+            return connectedNames
+            
+        } else {
+            connectedNames[checkedClientName] = checkedCathyNames
+            return connectedNames
+        }
         
     }
     
@@ -634,7 +680,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeConnectUserTableViewCell
         
         // The reason for self.expandButtonTapped == true is because self.rowHeights doesn't get initialized until expandButton is tapped. So without this check, it will cause the app to crash.
-        if self.expandButtonTappedIndexPath != nil {
+        if self.expandButtonTappedIndexPath != nil && self.selectedUserType == UserType.careGiver {
             
             cell.userObjectIdsAndNames = self.userObjectIdsAndNames
             cell.width = self.tableView.frame.width
@@ -667,7 +713,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         let officeConnectUserTableViewCell = superView.superview as! OfficeConnectUserTableViewCell
         let indexPath = tableView.indexPathForCell(officeConnectUserTableViewCell)
         self.nameButtonSelectedRow = (indexPath?.row)!
-        print("dawg")
+        self.performSegueWithIdentifier("officeConnectUsersToUserProfile", sender: nil)
     }
     
     @IBAction func expandButtonTapped(sender: AnyObject) {
@@ -690,85 +736,17 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                 //self.tableView.scrollToRowAtIndexPath(indexPath!, atScrollPosition: .Top, animated: true)
             }
         }
-        
-       
-        
-        
-        
-        
-        
+
         self.tableView.beginUpdates()
         self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
         self.tableView.endUpdates()
         
         // It will continue to append the row heights so the elements in the array does not reflect the actual row heights of the rows in the table view. Only by removing all, could we get the correct values.
     }
-    
-
-    
-    func getObjectIdsToBeConnected(checkedClientObjectId: String, checkedCathyObjectIds: [String]) -> Dictionary<String, [String]> {
-        
-        var connectedObjectIds = self.connectedObjectIds[self.careGiverCheckedRow]
-        
-        var clientObjectIdsAlreadyConnected: Bool = false
-        
-        for (clientName, _) in connectedObjectIds {
-            if clientName == checkedClientObjectId {
-                clientObjectIdsAlreadyConnected = true
-                break
-            }
-        }
-        
-        if clientObjectIdsAlreadyConnected == true {
-            
-            for checkedCathyName in checkedCathyObjectIds {
-                if !connectedObjectIds[checkedClientObjectId]!.contains(checkedCathyName) {
-                    connectedObjectIds[checkedClientObjectId]!.append(checkedCathyName)
-                }
-            }
-            return connectedObjectIds
-            
-        } else {
-            connectedObjectIds[checkedClientObjectId] = checkedCathyObjectIds
-            return connectedObjectIds
-        }
-        
-        
-    }
-
-    
-    func getNamesToBeConnected(checkedClientName: String, checkedCathyNames: [String]) -> Dictionary<String, [String]> {
-        
-        var connectedNames = self.connectedNames[self.careGiverCheckedRow]
-        
-        var clientNameAlreadyConnected: Bool = false
-        
-        for (clientName, _) in connectedNames {
-            if clientName == checkedClientName {
-                clientNameAlreadyConnected = true
-                break
-            }
-        }
-        
-        if clientNameAlreadyConnected == true {
-            
-            for checkedCathyName in checkedCathyNames {
-                if !connectedNames[checkedClientName]!.contains(checkedCathyName) {
-                    connectedNames[checkedClientName]!.append(checkedCathyName)
-                }
-            }
-            return connectedNames
-            
-        } else {
-            connectedNames[checkedClientName] = checkedCathyNames
-            return connectedNames
-        }
-
-    }
 
     @IBAction func connectButtonTapped(sender: AnyObject) {
   
-        if self.correctNumberOfUsersAreChecked() {
+        if self.correctNumberOfUsersAreCheckedForConnecting() {
         
             let checkedCareGiverObjectId: String = self.getCheckedUserObjectIds(UserType.careGiver)![0]
             let checkedClientObjectId: String = self.getCheckedUserObjectIds(UserType.client)![0]
@@ -800,14 +778,92 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                     if self.selectedUserType == UserType.careGiver {
                         self.tableView.reloadData()
                     }
-                    
                 }
             })
-
-            
-            
+ 
         }
         
+    }
+    
+    func getObjectIdsToBeConnectedAfterDisconnection(checkedClientObjectId: String, checkedCathyObjectIds: [String]) -> Dictionary<String, [String]>? {
+        
+        var connectedClientObjectIds = self.connectedObjectIds[self.careGiverCheckedRow]
+        
+        var clientObjectIdIsConnected: Bool = false
+        
+        var checkedCathyObjectIds = checkedCathyObjectIds
+        
+        for (clientObjectId, _) in connectedClientObjectIds {
+            if clientObjectId == checkedClientObjectId {
+                clientObjectIdIsConnected = true
+                break
+            }
+        }
+        
+        if clientObjectIdIsConnected == true {
+            
+            if checkedCathyObjectIds.count == 0 {
+                connectedClientObjectIds.removeValueForKey(checkedClientObjectId)
+                return connectedClientObjectIds
+            }
+            
+            var connectedCathyObjectIds = connectedClientObjectIds[checkedClientObjectId]!
+            
+       
+            
+            for var row: Int = 0; row < checkedCathyObjectIds.count; row++ {
+                if connectedCathyObjectIds.contains(checkedCathyObjectIds[row]) {
+                    if connectedCathyObjectIds.count == 1 {
+                        self.presentBasicAlertControllerWithMessage("A client must be connected to at least one cathy")
+                        return nil
+                    }
+                    connectedCathyObjectIds = connectedCathyObjectIds.filter() {$0 != checkedCathyObjectIds[row]}
+                }
+            }
+
+            connectedClientObjectIds[checkedClientObjectId] = connectedCathyObjectIds
+            return connectedClientObjectIds
+            
+            
+        } else {
+           return nil
+        }
+
+    }
+    
+    func correctNumberOfUsersAreCheckedForDisconnecting() -> Bool {
+        
+        if self.careGiverCheckedRow != -1 && self.clientCheckedRow != -1 && self.cathyCheckedRows.contains(true) {
+            return true
+        } else if self.careGiverCheckedRow != -1 && self.clientCheckedRow != -1 {
+            return true
+        } else if self.careGiverCheckedRow == -1 {
+            self.presentBasicAlertControllerWithMessage("Please select a care giver to disconnect")
+            return false
+        } else if self.clientCheckedRow == -1 {
+            self.presentBasicAlertControllerWithMessage("Please select a client to disconnect")
+            return false
+        }
+        return false
+        
+    }
+    
+    
+    
+    @IBAction func disconnectButtonTapped(sender: AnyObject) {
+        
+        //let checkedCareGiverObjectId: String = self.getCheckedUserObjectIds(UserType.careGiver)![0]
+                //let checkedCathyObjectIds: [String]  = self.getCheckedUserObjectIds(UserType.cathy)!
+        
+        if self.correctNumberOfUsersAreCheckedForDisconnecting() {
+            
+            let checkedClientObjectId: String = self.getCheckedUserObjectIds(UserType.client)![0]
+            let checkedCathyObjectIds: [String]  = self.getCheckedUserObjectIds(UserType.cathy)!
+            
+            if self.careGiverCheckedRow != -1 && self.clientCheckedRow != -1 {
+                print(self.getObjectIdsToBeConnectedAfterDisconnection(checkedClientObjectId, checkedCathyObjectIds: checkedCathyObjectIds))
+            }
+        }
     }
     
     @IBAction func addButtonTapped(sender: AnyObject) {
@@ -815,8 +871,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     }
     
     func connectedNameButtonTapped(sender: IdentifiedButton) {
-        
-        self.performSegueWithIdentifier("officeConnectUsersToUserProfile", sender: sender.identifier)
+        self.userTypeForConnectedName = sender.userType
+        self.performSegueWithIdentifier("officeConnectUsersToUserProfile", sender: sender)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -837,14 +893,14 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             
         } else if segue.identifier == "officeConnectUsersToUserProfile" {
             if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
-                print(sender)
+                
                 if sender == nil {
                     self.setUserObjectIdsForSelectedUserType(self.selectedUserType)
                     userProfileViewController.userObjectId = self.userObjectIds[self.nameButtonSelectedRow]
                     userProfileViewController.selectedUserType = self.selectedUserType
                 } else {
-                    userProfileViewController.userObjectId = sender as! String
-                    userProfileViewController.selectedUserType = UserType.client
+                    userProfileViewController.userObjectId = sender!.identifier!!
+                    userProfileViewController.selectedUserType = self.userTypeForConnectedName
                 }
                 
                 

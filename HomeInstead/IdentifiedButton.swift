@@ -8,4 +8,5 @@
 
 class IdentifiedButton: UIButton {
     var identifier: String?
+    var userType: UserType!
 }

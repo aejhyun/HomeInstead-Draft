@@ -5092,7 +5092,6 @@ Photo</string>
                                                     <connections>
                                                         <action selector="nameButtonTapped:" destination="jhU-fc-GJK" eventType="touchUpInside" id="SFE-hg-yob"/>
                                                         <action selector="nameButtonTapped:" destination="4Qw-gq-aUv" eventType="touchUpInside" id="z46-fA-37Z"/>
-                                                        <segue destination="VCR-vU-sTM" kind="show" identifier="officeConnectUsersToUserProfile" id="7JA-N5-nQk"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hr1-Xf-Lmr">
@@ -5224,7 +5223,11 @@ Photo</string>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="JH3-hh-pnK"/>
-                                    <barButtonItem title="Disconnect" id="bGj-BC-zJp"/>
+                                    <barButtonItem title="Disconnect" id="bGj-BC-zJp">
+                                        <connections>
+                                            <action selector="disconnectButtonTapped:" destination="jhU-fc-GJK" id="Abm-nM-wfH"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="pwd-GY-UcK"/>
                                 </items>
                             </toolbar>
@@ -5311,6 +5314,7 @@ Photo</string>
                         <outlet property="tableView" destination="YDS-Of-YBV" id="nXR-kT-FOz"/>
                         <outlet property="toolBar" destination="g4h-DD-Jbc" id="EMV-Ph-WfT"/>
                         <segue destination="HDG-hs-Nmn" kind="presentation" identifier="officeConnectUserToOfficeAddUser" id="BJa-i0-yO3"/>
+                        <segue destination="VCR-vU-sTM" kind="show" identifier="officeConnectUsersToUserProfile" id="cpF-fk-zBw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gbu-bY-5Rp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -7233,11 +7237,11 @@ Photo</string>
         <image name="phoneImage" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="i3m-7f-ANh"/>
         <segue reference="JvB-e1-eF0"/>
         <segue reference="rcA-bd-JiX"/>
         <segue reference="MC4-7o-Ble"/>
-        <segue reference="i3m-7f-ANh"/>
         <segue reference="HLy-lk-jYv"/>
-        <segue reference="7JA-N5-nQk"/>
+        <segue reference="cpF-fk-zBw"/>
     </inferredMetricsTieBreakers>
 </document>

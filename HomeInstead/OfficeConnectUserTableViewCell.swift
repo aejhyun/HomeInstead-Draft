@@ -106,6 +106,7 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
             self.clientNameButton.setTitle(self.userObjectIdsAndNames[clientObjectId], forState: UIControlState.Normal)
             self.clientNameButton.titleLabel!.font = UIFont(name: "Helvetica", size: 12.0)
             self.clientNameButton.identifier = clientObjectId
+            self.clientNameButton.userType = UserType.client
             self.nameButtons.append(self.clientNameButton)
             self.addSubview(self.clientNameButton)
         
@@ -119,6 +120,7 @@ class OfficeConnectUserTableViewCell: UITableViewCell {
                 self.careGiverNameButton.setTitle(self.userObjectIdsAndNames[cathyObjectId], forState: UIControlState.Normal)
                 self.careGiverNameButton.titleLabel!.font = UIFont(name: "Helvetica", size: 12.0)
                 self.careGiverNameButton.identifier = cathyObjectId
+                self.careGiverNameButton.userType = UserType.cathy
                 self.nameButtons.append(self.careGiverNameButton)
                 self.addSubview(self.careGiverNameButton)
                 careGiverNameButtonFrameHeight += self.spaceBetweenCathys
