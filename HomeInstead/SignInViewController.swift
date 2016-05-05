@@ -16,8 +16,8 @@ class SignInViewController: UIViewController, DismissViewControllerDelegate {
     
     func setDefaultValues() {
         
-        self.emailTextField.text = "office0@gmail.com"
-        self.passwordTextField.text = "office"
+        self.emailTextField.text = "careGiver0@gmail.com"
+        self.passwordTextField.text = "careGiver"
         
     }
     
@@ -51,7 +51,7 @@ class SignInViewController: UIViewController, DismissViewControllerDelegate {
                             if userType == UserType.office.rawValue {
                                 self.performSegueWithIdentifier("signInToOfficeChooseUserType", sender: nil)
                             } else if userType == UserType.careGiver.rawValue {
-                                print("segue to careGiver's first view controller")
+                                self.performSegueWithIdentifier("signInToCareGiverClientList", sender: nil)
                             } else if userType == UserType.cathy.rawValue {
                                 print("segue to cathy's first view controller")
                             }

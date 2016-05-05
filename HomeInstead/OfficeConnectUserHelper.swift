@@ -79,14 +79,17 @@ class OfficeConnectUserHelper {
     func deleteUserFromOfficeUserInCloud(selectedUserType: UserType, userObjectIds: [String], officeUserIdsForUser: [[String]], indexPath: NSIndexPath) {
         
         let newOfficeUserIdsForUser: [String] = officeUserIdsForUser[indexPath.row].filter { $0 != PFUser.currentUser()?.objectId }
-        
         let query = PFQuery(className: classNameForCloud.getClassName(selectedUserType)!)
+        let emptyDictionaryOfArray: Dictionary<String, [String]> = [:]
         
         query.getObjectInBackgroundWithId(userObjectIds[indexPath.row]) {
             (objects: PFObject?, error: NSError?) -> Void in
             if error != nil {
                 print(error)
             } else if let object = objects {
+                if selectedUserType == UserType.careGiver {
+                    object["connectedObjectIds"] = emptyDictionaryOfArray
+                }
                 object["idsOfOfficeUsersWhoAddedThisUser"] = newOfficeUserIdsForUser
                 object.saveInBackground()
             }
@@ -94,7 +97,7 @@ class OfficeConnectUserHelper {
     }
     
     
-    func connectNamesToCareGiverInCloud(checkedCareGiverObjectId: String, objectIdsToBeConnected: Dictionary<String, [String]>, completion: (connectionSuccessful: Bool) -> Void) {
+    func connectObjectIdsToCareGiverInCloud(checkedCareGiverObjectId: String, objectIdsToBeConnected: Dictionary<String, [String]>, clientObjectIdsAndNames: [String: String], completion: (connectionSuccessful: Bool) -> Void) {
         
         let query = PFQuery(className: classNameForCloud.getClassName(UserType.careGiver)!)
         query.getObjectInBackgroundWithId(checkedCareGiverObjectId) {
@@ -104,6 +107,7 @@ class OfficeConnectUserHelper {
                 completion(connectionSuccessful: false)
             } else if let object = objects {
                 object["connectedObjectIds"] = objectIdsToBeConnected
+                object["clientObjectIdsAndNames"] = clientObjectIdsAndNames
                 object.saveInBackgroundWithBlock {
                     (success: Bool, error: NSError?) -> Void in
                     if (success) {

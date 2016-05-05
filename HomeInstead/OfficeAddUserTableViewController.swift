@@ -94,6 +94,9 @@ class OfficeAddUserTableViewController: UITableViewController {
                 
                 if querySuccessful {
                     // self.checkedRows is to keep track of which rows are checked by the user.
+                    if self.selectedUserType == UserType.client {
+                        self.createClientUserBarButton.enabled = true
+                    }
                     self.checkedRows = [Bool](count: self.userNames.count, repeatedValue: false)
                     self.tableView.reloadData()
         

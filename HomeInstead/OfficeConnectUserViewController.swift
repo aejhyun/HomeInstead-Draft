@@ -456,6 +456,67 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
+    func getObjectIdsToBeConnectedAfterTheirDisconnection(checkedClientObjectId: String, checkedCathyObjectIds: [String]) -> Dictionary<String, [String]>? {
+        
+        var connectedClientObjectIds = self.connectedObjectIds[self.careGiverCheckedRow]
+        
+        var clientObjectIdIsConnected: Bool = false
+        
+        var checkedCathyObjectIds = checkedCathyObjectIds
+        
+        for (clientObjectId, _) in connectedClientObjectIds {
+            if clientObjectId == checkedClientObjectId {
+                clientObjectIdIsConnected = true
+                break
+            }
+        }
+        
+        if clientObjectIdIsConnected == true {
+            
+            if checkedCathyObjectIds.count == 0 {
+                connectedClientObjectIds.removeValueForKey(checkedClientObjectId)
+                return connectedClientObjectIds
+            }
+            
+            var connectedCathyObjectIds = connectedClientObjectIds[checkedClientObjectId]!
+            
+            for var row: Int = 0; row < checkedCathyObjectIds.count; row++ {
+                if connectedCathyObjectIds.contains(checkedCathyObjectIds[row]) {
+                    if connectedCathyObjectIds.count == 1 {
+                        self.presentBasicAlertControllerWithMessage("A client must be connected to at least one cathy")
+                        return nil
+                    }
+                    connectedCathyObjectIds = connectedCathyObjectIds.filter() {$0 != checkedCathyObjectIds[row]}
+                }
+            }
+            
+            connectedClientObjectIds[checkedClientObjectId] = connectedCathyObjectIds
+            return connectedClientObjectIds
+            
+            
+        } else {
+            return nil
+        }
+        
+    }
+    
+    func correctNumberOfUsersAreCheckedForDisconnecting() -> Bool {
+        
+        if self.careGiverCheckedRow != -1 && self.clientCheckedRow != -1 && self.cathyCheckedRows.contains(true) {
+            return true
+        } else if self.careGiverCheckedRow != -1 && self.clientCheckedRow != -1 {
+            return true
+        } else if self.careGiverCheckedRow == -1 {
+            self.presentBasicAlertControllerWithMessage("Please select a care giver to disconnect")
+            return false
+        } else if self.clientCheckedRow == -1 {
+            self.presentBasicAlertControllerWithMessage("Please select a client to disconnect")
+            return false
+        }
+        return false
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -685,6 +746,15 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         // It will continue to append the row heights so the elements in the array does not reflect the actual row heights of the rows in the table view. Only by removing all, could we get the correct values.
     }
+    
+    func getConnectedClientObjectIdsAndNamesForCareGiver(clientObjectIds: Dictionary<String, [String]>) -> [String: String] {
+        
+        var clientObjectIdAndName: [String: String] = [String: String]()
+        for (clientObjectId, _) in clientObjectIds {
+            clientObjectIdAndName[clientObjectId] = self.userObjectIdsAndNames[clientObjectId]
+        }
+        return clientObjectIdAndName
+    }
 
     @IBAction func connectButtonTapped(sender: AnyObject) {
   
@@ -693,111 +763,56 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             let checkedCareGiverObjectId: String = self.getCheckedUserObjectIds(UserType.careGiver)![0]
             let checkedClientObjectId: String = self.getCheckedUserObjectIds(UserType.client)![0]
             let checkedCathyObjectIds: [String]  = self.getCheckedUserObjectIds(UserType.cathy)!
-            
-//            print(checkedCareGiverObjectId)
-//            print(checkedClientObjectId)
-//            print(checkedCathyObjectIds)
-            
-
-            
 
             let objectIdsToBeConnected = self.getObjectIdsToBeConnected(checkedClientObjectId, checkedCathyObjectIds: checkedCathyObjectIds)
             
-//            print(namesToBeConnected)
-//            print(objectIdsToBeConnected)
+            // The reason for this function is an architectural faulty. Because the way that objectIds are stored, namely, in an array of a dictionary which has another [String] associated to a key, I was not sure if I were to store the names in another row, it would be queried in the same manner. So in order to prevent that from happening, I had to do this, which also means that when the care giver queries her client, she will only be able to get the objectIds of the client. So, I need an efficient way to some how connect the objectIds to the names. This is the best way that I found so far how to do it.
+            let clientObjectIdsAndNames = self.getConnectedClientObjectIdsAndNamesForCareGiver(objectIdsToBeConnected)
             
-            self.officeConnectUserHelper.connectNamesToCareGiverInCloud(checkedCareGiverObjectId, objectIdsToBeConnected: objectIdsToBeConnected, completion: { (connectionSuccessful) -> Void in
+            // The following function also uploads the clientObjectIdsAndNames to the cloud. But the primary function is to connect users in the cloud.
+            self.officeConnectUserHelper.connectObjectIdsToCareGiverInCloud(checkedCareGiverObjectId, objectIdsToBeConnected: objectIdsToBeConnected, clientObjectIdsAndNames: clientObjectIdsAndNames, completion: { (connectionSuccessful) -> Void in
                 if connectionSuccessful {
                     self.connectedObjectIds[self.careGiverCheckedRow] = objectIdsToBeConnected
                     self.setExpandedRowHeights()
                     if self.selectedUserType == UserType.careGiver {
                         self.tableView.reloadData()
+                        
                     }
+              
+                    
                 }
             })
  
         }
         
     }
-    
-    func getObjectIdsToBeConnectedAfterDisconnection(checkedClientObjectId: String, checkedCathyObjectIds: [String]) -> Dictionary<String, [String]>? {
-        
-        var connectedClientObjectIds = self.connectedObjectIds[self.careGiverCheckedRow]
-        
-        var clientObjectIdIsConnected: Bool = false
-        
-        var checkedCathyObjectIds = checkedCathyObjectIds
-        
-        for (clientObjectId, _) in connectedClientObjectIds {
-            if clientObjectId == checkedClientObjectId {
-                clientObjectIdIsConnected = true
-                break
-            }
-        }
-        
-        if clientObjectIdIsConnected == true {
-            
-            if checkedCathyObjectIds.count == 0 {
-                connectedClientObjectIds.removeValueForKey(checkedClientObjectId)
-                return connectedClientObjectIds
-            }
-            
-            var connectedCathyObjectIds = connectedClientObjectIds[checkedClientObjectId]!
-            
-       
-            
-            for var row: Int = 0; row < checkedCathyObjectIds.count; row++ {
-                if connectedCathyObjectIds.contains(checkedCathyObjectIds[row]) {
-                    if connectedCathyObjectIds.count == 1 {
-                        self.presentBasicAlertControllerWithMessage("A client must be connected to at least one cathy")
-                        return nil
-                    }
-                    connectedCathyObjectIds = connectedCathyObjectIds.filter() {$0 != checkedCathyObjectIds[row]}
-                }
-            }
 
-            connectedClientObjectIds[checkedClientObjectId] = connectedCathyObjectIds
-            return connectedClientObjectIds
-            
-            
-        } else {
-           return nil
-        }
-
-    }
-    
-    func correctNumberOfUsersAreCheckedForDisconnecting() -> Bool {
-        
-        if self.careGiverCheckedRow != -1 && self.clientCheckedRow != -1 && self.cathyCheckedRows.contains(true) {
-            return true
-        } else if self.careGiverCheckedRow != -1 && self.clientCheckedRow != -1 {
-            return true
-        } else if self.careGiverCheckedRow == -1 {
-            self.presentBasicAlertControllerWithMessage("Please select a care giver to disconnect")
-            return false
-        } else if self.clientCheckedRow == -1 {
-            self.presentBasicAlertControllerWithMessage("Please select a client to disconnect")
-            return false
-        }
-        return false
-        
-    }
-    
-    
-    
     @IBAction func disconnectButtonTapped(sender: AnyObject) {
-        
-        //let checkedCareGiverObjectId: String = self.getCheckedUserObjectIds(UserType.careGiver)![0]
-                //let checkedCathyObjectIds: [String]  = self.getCheckedUserObjectIds(UserType.cathy)!
         
         if self.correctNumberOfUsersAreCheckedForDisconnecting() {
             
+            let checkedCareGiverObjectId: String = self.getCheckedUserObjectIds(UserType.careGiver)![0]
             let checkedClientObjectId: String = self.getCheckedUserObjectIds(UserType.client)![0]
             let checkedCathyObjectIds: [String]  = self.getCheckedUserObjectIds(UserType.cathy)!
-            
-            if self.careGiverCheckedRow != -1 && self.clientCheckedRow != -1 {
-                print(self.getObjectIdsToBeConnectedAfterDisconnection(checkedClientObjectId, checkedCathyObjectIds: checkedCathyObjectIds))
+
+            if let objectIdsToBeConnected = self.getObjectIdsToBeConnectedAfterTheirDisconnection(checkedClientObjectId, checkedCathyObjectIds: checkedCathyObjectIds) {
+                
+                let clientObjectIdsAndNames = self.getConnectedClientObjectIdsAndNamesForCareGiver(objectIdsToBeConnected)
+    
+                self.officeConnectUserHelper.connectObjectIdsToCareGiverInCloud(checkedCareGiverObjectId, objectIdsToBeConnected: objectIdsToBeConnected, clientObjectIdsAndNames: clientObjectIdsAndNames, completion: { (connectionSuccessful) -> Void in
+                    if connectionSuccessful {
+                        self.connectedObjectIds[self.careGiverCheckedRow] = objectIdsToBeConnected
+                        self.setExpandedRowHeights()
+                        if self.selectedUserType == UserType.careGiver {
+                            self.tableView.reloadData()
+                        }
+                    }
+                })
+                
             }
+            
+
+            
         }
     }
     

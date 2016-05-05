@@ -28,6 +28,7 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var streetThreeLabel: UILabel!
     @IBOutlet weak var postalCodeLabel: UILabel!
 
+    @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var phoneButton: UIButton!
     @IBOutlet weak var emergencyButton: UIButton!
     @IBOutlet weak var addressButton: UIButton!
@@ -36,6 +37,8 @@ class UserProfileViewController: UIViewController {
     
     @IBOutlet weak var imageViewHeightLayoutConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
+    
+    var isBeingViewedByOfficeUser: Bool = true
     
     var selectedUserType: UserType!
     var userInformation: PFObject!
@@ -204,6 +207,11 @@ class UserProfileViewController: UIViewController {
         self.navigationItem.title = "User Profile"
         self.noPhotoLabel.textAlignment = .Center
         self.setNavigationBarTitle()
+        
+        if self.isBeingViewedByOfficeUser == false {
+            self.editButton.tintColor = UIColor.clearColor()
+            self.editButton.enabled = false
+        }
 
         
     }
