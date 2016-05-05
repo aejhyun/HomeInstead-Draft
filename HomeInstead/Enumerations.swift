@@ -12,6 +12,6 @@ enum UserType: String {
     case office, careGiver, cathy, client
 }
 
-enum CloudClassField: String {
-    case name, phoneNumber, emergencyPhoneNumber, street, city, postalCode, province, notes
+enum TaskType: String {
+    case standard, specialized
 }

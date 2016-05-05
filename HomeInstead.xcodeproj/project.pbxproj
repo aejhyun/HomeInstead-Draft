@@ -116,7 +116,7 @@
 		84863F481C414E7F00267E01 /* OfficeGiverListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeGiverListTableViewCell.swift; sourceTree = "<group>"; };
 		8488C9D31CDADDFA0029EBEE /* CareGiverClientListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CareGiverClientListTableViewCell.swift; sourceTree = "<group>"; };
 		8488C9D51CDAE73C0029EBEE /* CareGiverTaskListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CareGiverTaskListViewController.swift; sourceTree = "<group>"; };
-		8488C9D91CDAF49E0029EBEE /* CareGiverTaskListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CareGiverTaskListTableViewCell.swift; path = HomeInstead/CareGiverTaskListTableViewCell.swift; sourceTree = "<group>"; };
+		8488C9D91CDAF49E0029EBEE /* CareGiverTaskListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CareGiverTaskListTableViewCell.swift; sourceTree = "<group>"; };
 		848A05FD1CCE5E2000BAF52B /* OfficeConnectUserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeConnectUserHelper.swift; sourceTree = "<group>"; };
 		8490EFAA1CC4C19800C3CBC9 /* OfficeCreateClientUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeCreateClientUserViewController.swift; sourceTree = "<group>"; };
 		849D64051C310E0300571E47 /* TaskMessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskMessageViewController.swift; sourceTree = "<group>"; };
@@ -206,7 +206,6 @@
 		84D930F41C197DB1003C1688 = {
 			isa = PBXGroup;
 			children = (
-				8488C9D91CDAF49E0029EBEE /* CareGiverTaskListTableViewCell.swift */,
 				84D931431C19945A003C1688 /* Frameworks */,
 				84D930FF1C197DB1003C1688 /* HomeInstead */,
 				84D930FE1C197DB1003C1688 /* Products */,
@@ -260,6 +259,7 @@
 				847560741CDA2166007AC371 /* CareGiverClientListTableViewController.swift */,
 				8488C9D31CDADDFA0029EBEE /* CareGiverClientListTableViewCell.swift */,
 				8488C9D51CDAE73C0029EBEE /* CareGiverTaskListViewController.swift */,
+				8488C9D91CDAF49E0029EBEE /* CareGiverTaskListTableViewCell.swift */,
 				84B53A7C1C48CC18008CAB8A /* GiveClientListTableViewCell.swift */,
 				84C462A91C20232A00FA82F9 /* GiverClientListTableViewController.swift */,
 				84B74CDB1C219A1B00A2C914 /* TaskListViewController.swift */,

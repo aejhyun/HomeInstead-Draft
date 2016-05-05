@@ -9,13 +9,35 @@
 import UIKit
 import Parse
 
-class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegate, UITableViewDelegate, UITableViewDataSource {
+class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
 
     var navigationBarLine: UIView = UIView()
     @IBOutlet weak var barButtonItem: UIBarButtonItem!
     @IBOutlet weak var toolbar: UIToolbar!
     
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
+    
+    var expandButtonTappedIndexPath: NSIndexPath? = nil
+    var addPhotoButtonTappedIndexPath: NSIndexPath? = nil
+    var editButtonTappedIndexPath: NSIndexPath? = nil
+    
+    var standardComments: [String] = [String]()
+    var specializedComments: [String] = [String]()
+    
+    var standardImages: [UIImage?] = [UIImage?]()
+    var specializedImages: [UIImage?] = [UIImage?]()
+    
+    var selectedTaskType: TaskType!
+    
+    var setComments: Bool = true
+    var deletePhotoButtonTapped: Bool = false
+    
+    
+    var tasks: [String] = [String]()
+    var standardTasks = ["Go on a walk", "Give a bath", "Dance", "Give a message", "Practice language", "Excersice", "Go shopping", "Go out to the park", "Look at a flower", "Read a book", "Play piano", "Make a new friend", "Wash clothes", "Paint nails", "Paint"]
+
+    var specializedTasks = ["Eat some food", "Watch TV", "Ride a bike", "Dance", "Give a message", "Practice language", "Excersice", "Go shopping", "Go out to the park", "Look at a flower", "Read a book", "Play piano", "Make a new friend", "Wash clothes", "Paint nails", "Paint"]
     
     func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
         return UIBarPosition.TopAttached
@@ -48,12 +70,174 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
+    func textViewDidChange(textView: UITextView) {
+        
+        if self.selectedTaskType == TaskType.standard {
+            self.standardComments[self.expandButtonTappedIndexPath!.row] = textView.text
+        } else if self.selectedTaskType == TaskType.specialized {
+            self.specializedComments[self.expandButtonTappedIndexPath!.row] = textView.text
+        }
+
+    }
+    
+    @IBAction func segmentedControlIndexChanged(sender: UISegmentedControl) {
+        
+        if self.segmentedControl.selectedSegmentIndex == 0 {
+            self.tasks = self.standardTasks
+            selectedTaskType = TaskType.standard
+        } else if self.segmentedControl.selectedSegmentIndex == 1 {
+            self.tasks = self.specializedTasks
+            selectedTaskType = TaskType.specialized
+        }
+        
+        self.tableView.reloadData()
+        
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        let selectedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        
+        if self.selectedTaskType == TaskType.standard {
+            self.standardImages[(self.addPhotoButtonTappedIndexPath?.row)!] = selectedImage
+        } else if self.selectedTaskType == TaskType.specialized {
+            self.specializedImages[(self.addPhotoButtonTappedIndexPath?.row)!] = selectedImage
+        }
+        
+        self.tableView.beginUpdates()
+        self.tableView.reloadRowsAtIndexPaths([self.addPhotoButtonTappedIndexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
+        self.tableView.endUpdates()
+        
+
+        dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    
+    @IBAction func editButtonTapped(sender: AnyObject) {
+        
+        let editPhotoButton = sender as! UIButton
+        let superView = editPhotoButton.superview!
+        let careGiverTaskListTableViewCell = superView.superview as! CareGiverTaskListTableViewCell
+        let indexPath = self.tableView.indexPathForCell(careGiverTaskListTableViewCell)
+        self.editButtonTappedIndexPath = indexPath
+        
+        let alertController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        var alertAction: UIAlertAction = UIAlertAction(title: "Take Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Choose Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            let imagePickerController: UIImagePickerController = UIImagePickerController()
+            imagePickerController.sourceType = .PhotoLibrary
+            imagePickerController.delegate = self
+            
+            self.presentViewController(imagePickerController, animated: true, completion: nil)
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Delete Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            
+            self.deletePhotoButtonTapped = true
+            
+            if self.selectedTaskType == TaskType.standard {
+                self.standardImages[(self.editButtonTappedIndexPath?.row)!] = nil
+            } else if self.selectedTaskType == TaskType.specialized {
+                self.specializedImages[(self.editButtonTappedIndexPath?.row)!] = nil
+            }
+            
+            self.tableView.beginUpdates()
+            self.tableView.reloadRowsAtIndexPaths([self.editButtonTappedIndexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
+            self.tableView.endUpdates()
+            
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alertController.addAction(alertAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+    }
+
+    
+    @IBAction func addPhotoButtonTapped(sender: AnyObject) {
+        
+        let addPhotoButton = sender as! UIButton
+        let superView = addPhotoButton.superview!
+        let careGiverTaskListTableViewCell = superView.superview as! CareGiverTaskListTableViewCell
+        let indexPath = self.tableView.indexPathForCell(careGiverTaskListTableViewCell)
+        self.addPhotoButtonTappedIndexPath = indexPath
+        
+        let alertController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        var alertAction: UIAlertAction = UIAlertAction(title: "Take Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Choose Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
+            
+            let imagePickerController: UIImagePickerController = UIImagePickerController()
+            imagePickerController.sourceType = .PhotoLibrary
+            imagePickerController.delegate = self
+            
+            self.presentViewController(imagePickerController, animated: true, completion: nil)
+            
+        }
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alertController.addAction(alertAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+        
+    }
+    
+    
+    @IBAction func expandButtonTapped(sender: AnyObject) {
+        
+        let expandButton = sender as! UIButton
+        let superView = expandButton.superview!
+        let careGiverTaskListTableViewCell = superView.superview as! CareGiverTaskListTableViewCell
+        let indexPath = self.tableView.indexPathForCell(careGiverTaskListTableViewCell)
+        
+        switch self.expandButtonTappedIndexPath {
+        case nil:
+            self.expandButtonTappedIndexPath = indexPath
+        default:
+            if self.expandButtonTappedIndexPath! == indexPath {
+                self.expandButtonTappedIndexPath = nil
+            } else {
+                self.expandButtonTappedIndexPath = indexPath
+                //self.tableView.scrollToRowAtIndexPath(indexPath!, atScrollPosition: .Top, animated: true)
+            }
+        }
+        
+        self.tableView.beginUpdates()
+        self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
+        self.tableView.endUpdates()
+        
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setSegmentedControlWidth()
         self.setToolbar()
-        self.navigationItem.title = "Task List"
         self.removeBottomLineFromNavigationBar()
+        self.navigationItem.title = "Task List"
+        
+        self.standardImages = [UIImage?](count: self.standardTasks.count, repeatedValue: nil)
+        self.specializedImages = [UIImage?](count: self.specializedTasks.count, repeatedValue: nil)
+        
+        self.standardComments = [String](count: self.standardTasks.count, repeatedValue: "")
+        self.specializedComments = [String](count: self.specializedTasks.count, repeatedValue: "")
+        
+        self.tasks = self.standardTasks
+        self.selectedTaskType = TaskType.standard
         // Do any additional setup after loading the view.
     }
     
@@ -67,6 +251,21 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         self.navigationBarLine.hidden = false
         
     }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let originalHeight: CGFloat = 44.0
+        let expandedHeight: CGFloat = 135
+        let indexPath = indexPath
+        if self.expandButtonTappedIndexPath != nil {
+            if indexPath == self.expandButtonTappedIndexPath! {
+                return expandedHeight
+            } else {
+                return originalHeight
+            }
+        } else {
+            return originalHeight
+        }
+    }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -75,12 +274,41 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 5
+        return self.tasks.count
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        var images: [UIImage?] = [UIImage?]()
+        var comments: [String] = [String]()
+        if self.selectedTaskType == TaskType.standard {
+            images = self.standardImages
+            comments = self.standardComments
+        } else if self.selectedTaskType == TaskType.specialized {
+            images = self.specializedImages
+            comments = self.specializedComments
+        }
+        
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! CareGiverTaskListTableViewCell
-        cell.taskNameLabel.text = "dawg"
+        
+        if self.deletePhotoButtonTapped == true {
+            cell.deleteImageWithAnimation()
+            self.deletePhotoButtonTapped = false
+        }
+        
+        if self.setComments == true {
+            //cell.textView.text =
+            self.setComments = false
+        } else {
+            
+            self.setComments = true
+        }
+        
+        cell.textView.text = comments[indexPath.row]
+        cell.setCell()
+        cell.setTaskImage(images[indexPath.row])
+        cell.taskDescriptionLabel.text = self.tasks[indexPath.row]
+        
         return cell
     }
 
