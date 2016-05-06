@@ -18,9 +18,17 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
-    var expandButtonTappedIndexPath: NSIndexPath? = nil
     var addPhotoButtonTappedIndexPath: NSIndexPath? = nil
     var editButtonTappedIndexPath: NSIndexPath? = nil
+    
+    var standardExpandButtonTappedIndexPath: NSIndexPath? = nil
+    var specializedExpandButtonTappedIndexPath: NSIndexPath? = nil
+    
+    var standardDoneButtonEnabledRows: [Bool] = [Bool]()
+    var specializedDoneButtonEnabledRows: [Bool] = [Bool]()
+    
+    var standardOptionButtonEnabledRows: [Bool] = [Bool]()
+    var specializedOptionButtonEnabledRows: [Bool] = [Bool]()
     
     var standardComments: [String] = [String]()
     var specializedComments: [String] = [String]()
@@ -73,9 +81,9 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     func textViewDidChange(textView: UITextView) {
         
         if self.selectedTaskType == TaskType.standard {
-            self.standardComments[self.expandButtonTappedIndexPath!.row] = textView.text
+            self.standardComments[self.standardExpandButtonTappedIndexPath!.row] = textView.text
         } else if self.selectedTaskType == TaskType.specialized {
-            self.specializedComments[self.expandButtonTappedIndexPath!.row] = textView.text
+            self.specializedComments[self.standardExpandButtonTappedIndexPath!.row] = textView.text
         }
 
     }
@@ -196,6 +204,56 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
+    @IBAction func doneButtonTapped(sender: AnyObject) {
+        
+        let doneButton = sender as! UIButton
+        let superView = doneButton.superview!
+        let careGiverTaskListTableViewCell = superView.superview as! CareGiverTaskListTableViewCell
+        let indexPath = self.tableView.indexPathForCell(careGiverTaskListTableViewCell)
+        
+        if self.selectedTaskType == TaskType.standard {
+            self.standardDoneButtonEnabledRows[indexPath!.row] = false
+        } else if self.selectedTaskType == TaskType.specialized {
+            self.specializedDoneButtonEnabledRows[indexPath!.row] = false
+        }
+        
+//        self.expandButtonTappedIndexPath = nil
+        self.tableView.beginUpdates()
+        self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
+        self.tableView.endUpdates()
+        
+    }
+    
+    func setExpandButtonTappedIndexPathForTaskType(taskType: TaskType, indexPath: NSIndexPath) {
+        
+        if self.selectedTaskType == TaskType.standard {
+            
+            switch self.standardExpandButtonTappedIndexPath {
+            case nil:
+                self.standardExpandButtonTappedIndexPath = indexPath
+            default:
+                if self.standardExpandButtonTappedIndexPath! == indexPath {
+                    self.standardExpandButtonTappedIndexPath = nil
+                } else {
+                    self.standardExpandButtonTappedIndexPath = indexPath
+                }
+            }
+            
+        } else if self.selectedTaskType == TaskType.specialized {
+            
+            switch self.specializedExpandButtonTappedIndexPath {
+            case nil:
+                self.specializedExpandButtonTappedIndexPath = indexPath
+            default:
+                if self.specializedExpandButtonTappedIndexPath! == indexPath {
+                    self.specializedExpandButtonTappedIndexPath = nil
+                } else {
+                    self.specializedExpandButtonTappedIndexPath = indexPath
+                }
+            }
+        }
+        
+    }
     
     @IBAction func expandButtonTapped(sender: AnyObject) {
         
@@ -203,19 +261,9 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         let superView = expandButton.superview!
         let careGiverTaskListTableViewCell = superView.superview as! CareGiverTaskListTableViewCell
         let indexPath = self.tableView.indexPathForCell(careGiverTaskListTableViewCell)
-        
-        switch self.expandButtonTappedIndexPath {
-        case nil:
-            self.expandButtonTappedIndexPath = indexPath
-        default:
-            if self.expandButtonTappedIndexPath! == indexPath {
-                self.expandButtonTappedIndexPath = nil
-            } else {
-                self.expandButtonTappedIndexPath = indexPath
-                //self.tableView.scrollToRowAtIndexPath(indexPath!, atScrollPosition: .Top, animated: true)
-            }
-        }
-        
+   
+        self.setExpandButtonTappedIndexPathForTaskType(self.selectedTaskType, indexPath: indexPath!)
+
         self.tableView.beginUpdates()
         self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
         self.tableView.endUpdates()
@@ -229,12 +277,20 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         self.setToolbar()
         self.removeBottomLineFromNavigationBar()
         self.navigationItem.title = "Task List"
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.estimatedRowHeight = 70
         
         self.standardImages = [UIImage?](count: self.standardTasks.count, repeatedValue: nil)
         self.specializedImages = [UIImage?](count: self.specializedTasks.count, repeatedValue: nil)
         
         self.standardComments = [String](count: self.standardTasks.count, repeatedValue: "")
         self.specializedComments = [String](count: self.specializedTasks.count, repeatedValue: "")
+        
+        self.standardDoneButtonEnabledRows = [Bool](count: self.standardTasks.count, repeatedValue: true)
+        self.specializedDoneButtonEnabledRows = [Bool](count: self.specializedTasks.count, repeatedValue: true)
+        
+        self.standardOptionButtonEnabledRows = [Bool](count: self.standardTasks.count, repeatedValue: true)
+        self.specializedOptionButtonEnabledRows = [Bool](count: self.specializedTasks.count, repeatedValue: true)
         
         self.tasks = self.standardTasks
         self.selectedTaskType = TaskType.standard
@@ -252,12 +308,34 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        return UITableViewAutomaticDimension
+    }
+    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let originalHeight: CGFloat = 44.0
         let expandedHeight: CGFloat = 135
         let indexPath = indexPath
-        if self.expandButtonTappedIndexPath != nil {
-            if indexPath == self.expandButtonTappedIndexPath! {
+        
+        var expandButtonTappedIndexPath: NSIndexPath? = nil
+        
+        if self.selectedTaskType == TaskType.standard {
+            expandButtonTappedIndexPath = self.standardExpandButtonTappedIndexPath
+        } else if self.selectedTaskType == TaskType.specialized {
+            expandButtonTappedIndexPath = self.specializedExpandButtonTappedIndexPath
+        }
+        
+        
+        if self.selectedTaskType == TaskType.standard {
+          
+        } else if self.selectedTaskType == TaskType.specialized {
+           
+        }
+
+        if expandButtonTappedIndexPath != nil {
+            if indexPath == expandButtonTappedIndexPath {
+                
                 return expandedHeight
             } else {
                 return originalHeight
@@ -274,19 +352,28 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return self.tasks.count
+        
+        if self.selectedTaskType == TaskType.standard {
+           return self.standardTasks.count
+        } else if self.selectedTaskType == TaskType.specialized {
+            return self.specializedTasks.count
+        }
+        return 0
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         var images: [UIImage?] = [UIImage?]()
         var comments: [String] = [String]()
+        var doneButtonEnabledRows: [Bool] = [Bool]()
         if self.selectedTaskType == TaskType.standard {
             images = self.standardImages
             comments = self.standardComments
+            doneButtonEnabledRows = self.standardDoneButtonEnabledRows
         } else if self.selectedTaskType == TaskType.specialized {
             images = self.specializedImages
             comments = self.specializedComments
+            doneButtonEnabledRows = self.specializedDoneButtonEnabledRows
         }
         
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! CareGiverTaskListTableViewCell
@@ -296,13 +383,19 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
             self.deletePhotoButtonTapped = false
         }
         
-        if self.setComments == true {
-            //cell.textView.text =
-            self.setComments = false
+        if self.standardExpandButtonTappedIndexPath != nil {
+            cell.textView.isFirstResponder()
+            print("yo")
         } else {
-            
-            self.setComments = true
+
         }
+
+        if doneButtonEnabledRows[indexPath.row] == false {
+            cell.doneButton.enabled = false
+        } else {
+            cell.doneButton.enabled = true
+        }
+        
         
         cell.textView.text = comments[indexPath.row]
         cell.setCell()

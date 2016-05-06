@@ -68,13 +68,13 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         startButtonEnabled = true
         taskListTableView.reloadData()
         
-        for parent in self.navigationController!.navigationBar.subviews {
-            for childView in parent.subviews {
-                if childView is UIImageView && childView.bounds.size.width == self.navigationController!.navigationBar.frame.size.width {
-                    navigationBarLine = childView
-                }
-            }
-        }
+//        for parent in self.navigationController!.navigationBar.subviews {
+//            for childView in parent.subviews {
+//                if childView is UIImageView && childView.bounds.size.width == self.navigationController!.navigationBar.frame.size.width {
+//                    navigationBarLine = childView
+//                }
+//            }
+//        }
         
         cLLocationManager.delegate = self
         cLLocationManager.desiredAccuracy = kCLLocationAccuracyBest

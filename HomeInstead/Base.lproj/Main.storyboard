@@ -3989,6 +3989,9 @@ Photo</string>
                                                             <include reference="m9l-Fb-kYT"/>
                                                         </mask>
                                                     </variation>
+                                                    <connections>
+                                                        <action selector="doneButtonTapped:" destination="5Rb-dL-KNr" eventType="touchUpInside" id="ArV-wJ-vfD"/>
+                                                    </connections>
                                                 </button>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="I3T-6t-PeC">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
