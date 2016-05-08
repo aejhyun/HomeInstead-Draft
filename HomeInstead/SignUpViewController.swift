@@ -360,6 +360,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             let emptyDictionaryOfArray: Dictionary<String, [String]> = [:]
             object["connectedObjectIds"] = emptyDictionaryOfArray
             object["clientObjectIdsAndNames"] = [:]
+            object["cathyObjectIdsAndUserIds"] = [:]
         }
         
         if className != ClassNameForCloud().officeUser {
@@ -375,7 +376,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         if imageFile != nil {
             object["imageFile"] = imageFile
         }
-        object.saveInBackground()
+        object.pinInBackground()
         object.saveInBackgroundWithBlock {
             (success: Bool, error: NSError?) -> Void in
             if (success) {

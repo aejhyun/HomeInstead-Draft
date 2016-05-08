@@ -47,6 +47,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     var connectedObjectIds: [Dictionary<String, [String]>] = [Dictionary<String, [String]>]()
     
     var userObjectIdsAndNames: [String: String] = [String: String]() // I am using the objectIds to get the names associated with those objectIds so that when I am displaying the names for the connected user, I don't have to query both the objectIds and names. Also, it ensure that displaying correct connected client and cathy names is not contingent upon the order of the queries.
+    var cathyObjectIdsAndUserIds: [String: String] = [String: String]()
+    
     var userTypeForConnectedName: UserType! // I wish I didn't have to use this variable but the button's sender isn't working as it should.
     
     var nameButtonSelectedRow: Int = -1
@@ -538,7 +540,19 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         var querySuccessCheck = QuerySuccessCheck()
         
+        self.officeConnectUserHelper.attemptQueryingCathyObjectIdsAndUserIds { (querySuccessful, cathyObjectIdsAndUserIds) -> Void in
+            if querySuccessful {
+                self.cathyObjectIdsAndUserIds = cathyObjectIdsAndUserIds
+            }
+        }
+        
         for userType in self.userTypes {
+            
+            self.officeConnectUserHelper.attemptQueryingUsersObjectIdsAndNames(userType, completion: { (querySuccessful, userObjectIdsAndNames) -> Void in
+                if querySuccessful {
+                    self.userObjectIdsAndNames += userObjectIdsAndNames
+                }
+            })
             
             self.officeConnectUserHelper.attemptQueryingUsersAddedByOfficeUserFromCloud(userType, completion: { (querySuccessful, userNames, userObjectIds, userNotes, connectedObjectIds, userOfficeUserIds) -> Void in
                 
@@ -576,13 +590,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                         self.numberOfTimesReloadDataIsCalled++
                         self.tableView.reloadData()
                     }
-                }
-            })
-            
-            self.officeConnectUserHelper.attemptQueryingUsersObjectIdsAndNames(userType, completion: { (querySuccessful, userObjectIdsAndNames) -> Void in
-                if querySuccessful {
-                    self.userObjectIdsAndNames += userObjectIdsAndNames
-                    
                 }
             })
             
@@ -770,8 +777,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             // The reason for this function is an architectural faulty. Because the way that objectIds are stored, namely, in an array of a dictionary which has another [String] associated to a key, I was not sure if I were to store the names in another row, it would be queried in the same manner. So in order to prevent that from happening, I had to do this, which also means that when the care giver queries her client, she will only be able to get the objectIds of the client. So, I need an efficient way to some how connect the objectIds to the names. This is the best way that I found so far how to do it.
             let clientObjectIdsAndNames = self.getConnectedClientObjectIdsAndNamesForCareGiver(objectIdsToBeConnected)
             
-            // The following function also uploads the clientObjectIdsAndNames to the cloud. But the primary function is to connect users in the cloud.
-            self.officeConnectUserHelper.connectObjectIdsToCareGiverInCloud(checkedCareGiverObjectId, objectIdsToBeConnected: objectIdsToBeConnected, clientObjectIdsAndNames: clientObjectIdsAndNames, completion: { (connectionSuccessful) -> Void in
+            // The following function also uploads the clientObjectIdsAndNames to the cloud. But the primary function is to connect users in the cloud. Also, right now self.cathyObjectIdsAndUserIds is being uploaded which holds all the cathy object ids and user ids that are added by the user not necessarily the ones that are connected to a certain giver. So I will eventually make this change. But for the sake of finishing the app, I will hold this off for now.
+            self.officeConnectUserHelper.connectObjectIdsToCareGiverInCloud(checkedCareGiverObjectId, objectIdsToBeConnected: objectIdsToBeConnected, clientObjectIdsAndNames: clientObjectIdsAndNames, cathyObjectIdsAndUserIds: self.cathyObjectIdsAndUserIds, completion: { (connectionSuccessful) -> Void in
                 if connectionSuccessful {
                     self.connectedObjectIds[self.careGiverCheckedRow] = objectIdsToBeConnected
                     self.setExpandedRowHeights()
@@ -800,7 +807,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                 
                 let clientObjectIdsAndNames = self.getConnectedClientObjectIdsAndNamesForCareGiver(objectIdsToBeConnected)
     
-                self.officeConnectUserHelper.connectObjectIdsToCareGiverInCloud(checkedCareGiverObjectId, objectIdsToBeConnected: objectIdsToBeConnected, clientObjectIdsAndNames: clientObjectIdsAndNames, completion: { (connectionSuccessful) -> Void in
+                self.officeConnectUserHelper.connectObjectIdsToCareGiverInCloud(checkedCareGiverObjectId, objectIdsToBeConnected: objectIdsToBeConnected, clientObjectIdsAndNames: clientObjectIdsAndNames, cathyObjectIdsAndUserIds: self.cathyObjectIdsAndUserIds, completion: { (connectionSuccessful) -> Void in
                     if connectionSuccessful {
                         self.connectedObjectIds[self.careGiverCheckedRow] = objectIdsToBeConnected
                         self.setExpandedRowHeights()

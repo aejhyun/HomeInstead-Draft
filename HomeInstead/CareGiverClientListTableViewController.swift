@@ -13,13 +13,18 @@ class CareGiverClientListTableViewController: UITableViewController {
 
     var classNameForCloud: ClassNameForCloud = ClassNameForCloud()
     var nameButtonSelectedRow: Int = -1
+    var selectedRowIndexPath: NSIndexPath? = nil
+    var cathyObjectIdsAndUserIds: [String: String] = [String: String]()
     var objectIdsAndNames: [String: String] = [String: String]()
-    var objectIds: [String] = [String]()
+    var clientObjectIds: [String] = [String]()
+    var connectedObjectIds: [String: [String]] = [String: [String]]()
+    var officeUserIds: [String] = [String]()
+    
     var names: [String] = [String]()
     
     func attemptQueryingClientObjectIdsFromCloud(completion: (querySuccessful: Bool, clientObjectIds: [String: [String]]?) -> Void) {
         
-        var objectIds: [String: [String]]? = [String: [String]]()
+        var clientObjectIds: [String: [String]]? = [String: [String]]()
         
         let query = PFQuery(className: self.classNameForCloud.getClassName(UserType.careGiver)!)
         query.whereKey("userId", equalTo: (PFUser.currentUser()?.objectId)!)
@@ -29,12 +34,15 @@ class CareGiverClientListTableViewController: UITableViewController {
             if error == nil {
                 if let objects = objects {
                     for object in objects {
-                        objectIds = object.objectForKey("connectedObjectIds") as! [String: [String]]?
+                        clientObjectIds = object.objectForKey("connectedObjectIds") as? [String: [String]]
+                        self.officeUserIds = object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String]
+                        self.connectedObjectIds = object.objectForKey("connectedObjectIds") as! [String: [String]]
                         self.objectIdsAndNames = object.objectForKey("clientObjectIdsAndNames") as! [String: String]
+                        self.cathyObjectIdsAndUserIds = object.objectForKey("cathyObjectIdsAndUserIds") as! [String: String]
                         object.pinInBackground()
                     }
                 }
-                completion(querySuccessful: true, clientObjectIds: objectIds)
+                completion(querySuccessful: true, clientObjectIds: clientObjectIds)
             } else {
                 completion(querySuccessful: true, clientObjectIds: nil)
             }
@@ -70,7 +78,7 @@ class CareGiverClientListTableViewController: UITableViewController {
                             
                         }
                     })
-                    self.objectIds.append(clientObjectId)
+                    self.clientObjectIds.append(clientObjectId) // The reason why the element to be appended is [String: [String]] and the variable being append to is [String] is because I just want the client object Id and not all the connection. self.connectedObjectIds holds all the connections for the client and the cathy for this care giver.
                 }
                 self.tableView.reloadData()
 
@@ -91,6 +99,7 @@ class CareGiverClientListTableViewController: UITableViewController {
         
     }
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.selectedRowIndexPath = indexPath
         self.performSegueWithIdentifier("careGiverClientListToCareGiverTaskList", sender: nil)
     }
     
@@ -101,7 +110,7 @@ class CareGiverClientListTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return self.objectIds.count
+        return self.clientObjectIds.count
     }
 
     
@@ -110,30 +119,45 @@ class CareGiverClientListTableViewController: UITableViewController {
         
         cell.accessoryType = .DisclosureIndicator
         
-        cell.nameButton.setTitle(self.objectIdsAndNames[self.objectIds[indexPath.row]], forState: UIControlState.Normal)
+        cell.nameButton.setTitle(self.objectIdsAndNames[self.clientObjectIds[indexPath.row]], forState: UIControlState.Normal)
         
 
 
         return cell
     }
     
+    func getCathyUserIds() -> [String] {
+        
+        var cathyUserIds: [String] = [String]()
+        
+        for cathyObjectId in self.connectedObjectIds[self.clientObjectIds[self.selectedRowIndexPath!.row]]! {
+            cathyUserIds.append(self.cathyObjectIdsAndUserIds[cathyObjectId]!)
+        }
+        
+        return cathyUserIds
+        
+    }
+    
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "careGiverClientListToUserProfile" {
             if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
-                
-            
-                userProfileViewController.userObjectId = self.objectIds[self.nameButtonSelectedRow]
+
+                userProfileViewController.userObjectId = self.clientObjectIds[self.nameButtonSelectedRow]
                 userProfileViewController.selectedUserType = UserType.client
                 userProfileViewController.isBeingViewedByOfficeUser = false
-                
-                
-                
+
             } else {
                 print("destinationViewController returned nil")
             }
         } else if segue.identifier == "careGiverClientListToCareGiverTaskList" {
-            
+            if let careGiverTaskListViewController = segue.destinationViewController as? CareGiverTaskListViewController {
+                
+                careGiverTaskListViewController.cathyUserIds = getCathyUserIds()
+                careGiverTaskListViewController.officeUserIds = self.officeUserIds
+            } else {
+                print("destinationViewController returned nil")
+            }
         }
     }
     

@@ -8,9 +8,10 @@
 
 import UIKit
 import Parse
+import CoreLocation
 
-class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
-
+class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, CLLocationManagerDelegate {
+    
     var navigationBarLine: UIView = UIView()
     @IBOutlet weak var barButtonItem: UIBarButtonItem!
     @IBOutlet weak var toolbar: UIToolbar!
@@ -39,6 +40,10 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     var standardOptionButtonEnabledRows: [Bool] = [Bool]()
     var specializedOptionButtonEnabledRows: [Bool] = [Bool]()
     
+    var tasks: [String] = [String]()
+    var standardTasks = ["Go on a walk", "Give a bath", "Dance", "Give a message", "Practice language", "Excersice", "Go shopping", "Go out to the park", "Look at a flower", "Read a book", "Play piano", "Make a new friend", "Wash clothes", "Paint nails", "Paint"]
+    var specializedTasks = ["Eat some food", "Watch TV", "Ride a bike", "Dance", "Give a message", "Practice language", "Excersice", "Go shopping", "Go out to the park", "Look at a flower", "Read a book", "Play piano", "Make a new friend", "Wash clothes", "Paint nails", "Paint"]
+    
     var comments: [String] = [String]()
     var standardComments: [String] = [String]()
     var specializedComments: [String] = [String]()
@@ -52,11 +57,20 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     var setComments: Bool = true
     var deletePhotoButtonTapped: Bool = false
     var tasksStarted: Bool = false
-    
-    var tasks: [String] = [String]()
-    var standardTasks = ["Go on a walk", "Give a bath", "Dance", "Give a message", "Practice language", "Excersice", "Go shopping", "Go out to the park", "Look at a flower", "Read a book", "Play piano", "Make a new friend", "Wash clothes", "Paint nails", "Paint"]
 
-    var specializedTasks = ["Eat some food", "Watch TV", "Ride a bike", "Dance", "Give a message", "Practice language", "Excersice", "Go shopping", "Go out to the park", "Look at a flower", "Read a book", "Play piano", "Make a new friend", "Wash clothes", "Paint nails", "Paint"]
+    var locationManager: CLLocationManager = CLLocationManager()
+    
+    var cathyUserIds: [String] = [String]()
+    var officeUserIds: [String] = [String]()
+    var startTime: String = ""
+    var startDate: String = ""
+    var startAddress: String = ""
+    var commentsToBeUploaded: [String] = [String]()
+    var imagesToBeUploaded: [UIImage?] = [UIImage?]()
+    var taskDescriptionsToBeUploaded: [String] = [String]()
+    var taskTime: [String] = [String]()
+    var finishTime: String = ""
+    var finishAddress: String = ""
     
     func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
         return UIBarPosition.TopAttached
@@ -281,6 +295,94 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
         self.tableView.endUpdates()
         
+        self.setReadOnlyVariablesForTaskType(self.selectedTaskType)
+        
+        self.commentsToBeUploaded.append(self.comments[indexPath!.row])
+        self.imagesToBeUploaded.append(self.images[indexPath!.row])
+        self.taskDescriptionsToBeUploaded.append(self.tasks[indexPath!.row])
+        self.taskTime.append(self.getCurrentTime())
+        
+    }
+    
+    func attemptGettingCurrentAddress(completion: (gotAddressSuccessfully: Bool, address: String?) -> Void) {
+        
+        if CLLocationManager.locationServicesEnabled() {
+      
+            var location = self.locationManager.location
+            let latitude = location?.coordinate.latitude
+            let longitude = location?.coordinate.longitude
+            let cLGeocoder = CLGeocoder()
+            var placemark: CLPlacemark!
+            var address: String = ""
+            
+            if let latitude = latitude {
+                if let longitude = longitude {
+                    location = CLLocation(latitude: latitude, longitude: longitude)
+                    
+                    cLGeocoder.reverseGeocodeLocation(location!) { (placemarks, error) -> Void in
+                        if error == nil {
+                            
+                            placemark = placemarks![0]
+                      
+                            if let subThoroughFare = placemark.addressDictionary!["SubThoroughfare"] as? String {
+                                address = subThoroughFare + " "
+                            }
+                            if let thoroughFare = placemark.addressDictionary!["Thoroughfare"] as? String {
+                                address += thoroughFare
+                            }
+                            if let state = placemark.addressDictionary!["State"] as? String {
+                                address += ", " + state
+                            }
+                            if let city = placemark.addressDictionary!["City"] as? String {
+                                address += ", " + city
+                            }
+                            if let zipCode = placemark.addressDictionary!["ZIP"] as? String {
+                                address += " " + zipCode
+                            }
+                            completion(gotAddressSuccessfully: true, address: address)
+                            
+                        } else {
+                            print("\(error)")
+                            completion(gotAddressSuccessfully: false, address: nil)
+                            return
+                        }
+                    }
+
+                } else {
+                    print("Longitude is nil")
+                    completion(gotAddressSuccessfully: false, address: nil)
+                }
+                
+                
+            } else {
+                print("Latitude and longitude is nil")
+                completion(gotAddressSuccessfully: false, address: nil)
+            }
+            
+            
+        } else {
+            print("location services are not enabled")
+            completion(gotAddressSuccessfully: false, address: nil)
+        }
+        
+    }
+    
+    func getCurrentDate() -> String {
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yy"
+        let dateInFormat = dateFormatter.stringFromDate(NSDate())
+        return dateInFormat
+        
+    }
+    
+    func getCurrentTime() -> String {
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "h:mm a"
+        let timeInFormat = dateFormatter.stringFromDate(NSDate())
+        return timeInFormat
+        
     }
     
     @IBAction func startButtonTapped(sender: AnyObject) {
@@ -290,7 +392,55 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         self.tasksStarted = true
         self.navigationItem.setHidesBackButton(true, animated: true)
         
+        self.attemptGettingCurrentAddress({ (gotAddressSuccessfully, address) -> Void in
+            if gotAddressSuccessfully {
+                self.startAddress = address!
+                print(address)
+            } else {
+                self.startAddress = "Could not find address."
+            }
+        })
+        self.startTime = self.getCurrentTime()
+        self.startDate = self.getCurrentDate()
+        
         self.tableView.reloadData()
+    }
+    
+    func uploadTaskInformationToCloud() {
+        
+        let object = PFObject(className: "TaskInformation")
+        object["startAddress"] = self.startAddress
+        object["startDate"] = self.startDate
+        object["startTime"] = self.startTime
+        object["taskDescriptions"] = self.taskDescriptionsToBeUploaded
+        object[""]
+       
+        
+        var cathyUserIds: [String] = [String]()
+        var officeUserIds: [String] = [String]()
+        var startTime: String = ""
+        var startDate: String = ""
+        var startAddress: String = ""
+        var commentsToBeUploaded: [String] = [String]()
+        var imagesToBeUploaded: [UIImage?] = [UIImage?]()
+        var taskDescriptionsToBeUploaded: [String] = [String]()
+        var taskTimes: [String] = [String]()
+        var finishTime: String = ""
+        var finishAddress: String = ""
+//        if imageFile != nil {
+//            object["imageFile"] = imageFile
+//        }
+        object.pinInBackground()
+        object.saveInBackgroundWithBlock {
+            (success: Bool, error: NSError?) -> Void in
+            if (success) {
+                
+            } else {
+                
+            }
+        }
+        
+        
     }
     
     @IBAction func finishButtonTapped(sender: AnyObject) {
@@ -299,6 +449,17 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         self.startButton.enabled = true
         self.tasksStarted = false
         self.navigationItem.setHidesBackButton(false, animated: true)
+        
+        self.finishTime = self.getCurrentTime()
+        
+        self.attemptGettingCurrentAddress { (gotAddressSuccessfully, address) -> Void in
+            if gotAddressSuccessfully {
+                self.finishAddress = address!
+            } else {
+                self.finishAddress = "Could not find address"
+            }
+        }
+        
         
         
         
@@ -400,6 +561,11 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
 
         self.selectedTaskType = TaskType.standard
+
+        self.locationManager.delegate = self;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.startUpdatingLocation()
         // Do any additional setup after loading the view.
     }
     

@@ -55,9 +55,36 @@ class OfficeConnectUserHelper {
     
     func attemptQueryingUsersObjectIdsAndNames(userType: UserType, completion: (querySuccessful: Bool, userObjectIdsAndNames: [String: String]) -> Void) {
         
-        var userObjectIdsAndNames: [String: String] = [String: String]()
+        if userType != UserType.office {
+            
+            var userObjectIdsAndNames: [String: String] = [String: String]()
+            
+            let query = PFQuery(className: classNameForCloud.getClassName(userType)!)
+            query.whereKey("idsOfOfficeUsersWhoAddedThisUser", containedIn: [(PFUser.currentUser()?.objectId)!])
+            //query.fromLocalDatastore()
+            query.findObjectsInBackgroundWithBlock {
+                (objects: [PFObject]?, error: NSError?) -> Void in
+                if error == nil {
+                    if let objects = objects {
+                        for object in objects {
+                            userObjectIdsAndNames[object.objectId!] = object.objectForKey("name") as? String
+                        }
+                        completion(querySuccessful: true, userObjectIdsAndNames: userObjectIdsAndNames)
+                    }
+                } else {
+                    completion(querySuccessful: false, userObjectIdsAndNames: userObjectIdsAndNames)
+                }
+            }
+            
+        }
+
+    }
+    
+    func attemptQueryingCathyObjectIdsAndUserIds(completion: (querySuccessful: Bool, cathyObjectIdsAndUserIds: [String: String]) -> Void) {
         
-        let query = PFQuery(className: classNameForCloud.getClassName(userType)!)
+        var cathyObjectIdsAndUserIds: [String: String] = [String: String]()
+        
+        let query = PFQuery(className: classNameForCloud.getClassName(UserType.cathy)!)
         query.whereKey("idsOfOfficeUsersWhoAddedThisUser", containedIn: [(PFUser.currentUser()?.objectId)!])
         //query.fromLocalDatastore()
         query.findObjectsInBackgroundWithBlock {
@@ -65,15 +92,15 @@ class OfficeConnectUserHelper {
             if error == nil {
                 if let objects = objects {
                     for object in objects {
-                        userObjectIdsAndNames[object.objectId!] = object.objectForKey("name") as? String
+                        cathyObjectIdsAndUserIds[object.objectId!] = object.objectForKey("userId") as? String
                     }
-                    completion(querySuccessful: true, userObjectIdsAndNames: userObjectIdsAndNames)
+                    completion(querySuccessful: true, cathyObjectIdsAndUserIds: cathyObjectIdsAndUserIds)
                 }
             } else {
-                completion(querySuccessful: false, userObjectIdsAndNames: userObjectIdsAndNames)
+                completion(querySuccessful: false, cathyObjectIdsAndUserIds: cathyObjectIdsAndUserIds)
             }
         }
-
+        
     }
     
     func deleteUserFromOfficeUserInCloud(selectedUserType: UserType, userObjectIds: [String], officeUserIdsForUser: [[String]], indexPath: NSIndexPath) {
@@ -97,7 +124,7 @@ class OfficeConnectUserHelper {
     }
     
     
-    func connectObjectIdsToCareGiverInCloud(checkedCareGiverObjectId: String, objectIdsToBeConnected: Dictionary<String, [String]>, clientObjectIdsAndNames: [String: String], completion: (connectionSuccessful: Bool) -> Void) {
+    func connectObjectIdsToCareGiverInCloud(checkedCareGiverObjectId: String, objectIdsToBeConnected: Dictionary<String, [String]>, clientObjectIdsAndNames: [String: String], cathyObjectIdsAndUserIds: [String: String], completion: (connectionSuccessful: Bool) -> Void) {
         
         let query = PFQuery(className: classNameForCloud.getClassName(UserType.careGiver)!)
         query.getObjectInBackgroundWithId(checkedCareGiverObjectId) {
@@ -108,6 +135,7 @@ class OfficeConnectUserHelper {
             } else if let object = objects {
                 object["connectedObjectIds"] = objectIdsToBeConnected
                 object["clientObjectIdsAndNames"] = clientObjectIdsAndNames
+                object["cathyObjectIdsAndUserIds"] = cathyObjectIdsAndUserIds
                 object.saveInBackgroundWithBlock {
                     (success: Bool, error: NSError?) -> Void in
                     if (success) {
