@@ -582,6 +582,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             self.officeConnectUserHelper.attemptQueryingUsersObjectIdsAndNames(userType, completion: { (querySuccessful, userObjectIdsAndNames) -> Void in
                 if querySuccessful {
                     self.userObjectIdsAndNames += userObjectIdsAndNames
+                    
                 }
             })
             
