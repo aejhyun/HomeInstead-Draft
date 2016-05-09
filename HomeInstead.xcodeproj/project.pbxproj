@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		840CCE791CE027E6004580B6 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CCE781CE027E6004580B6 /* TabBarViewController.swift */; };
 		840E72D51CB1074400F24F00 /* ClientSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840E72D41CB1074400F24F00 /* ClientSignUpViewController.swift */; };
 		843C8E871C3E9551009E47C0 /* IOSVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843C8E861C3E9550009E47C0 /* IOSVersion.swift */; };
 		84416F461CB1FF9D00911D09 /* Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84416F451CB1FF9D00911D09 /* Structures.swift */; };
@@ -90,6 +91,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		840CCE781CE027E6004580B6 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		840E72D41CB1074400F24F00 /* ClientSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientSignUpViewController.swift; sourceTree = "<group>"; };
 		843C8E861C3E9550009E47C0 /* IOSVersion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOSVersion.swift; sourceTree = "<group>"; };
 		84416F451CB1FF9D00911D09 /* Structures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Structures.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				84C32F7B1C325B3000A245BC /* Miscellaneous.swift */,
 				84D931001C197DB1003C1688 /* AppDelegate.swift */,
 				8475606C1CD8A6D1007AC371 /* OverloadedOperators.swift */,
+				840CCE781CE027E6004580B6 /* TabBarViewController.swift */,
 				8475606E1CD8E07B007AC371 /* IdentifiedButton.swift */,
 				84C32F7D1C350E4A00A245BC /* Protocols.swift */,
 				8472A2191CB029BD0073E8CA /* Enumerations.swift */,
@@ -427,6 +430,7 @@
 				8460ECA11C3A99280041FD83 /* AddGiverTableViewController.swift in Sources */,
 				84C32F7C1C325B3000A245BC /* Miscellaneous.swift in Sources */,
 				84FD3E581C225B82007D2C31 /* MyActivityIndicator.swift in Sources */,
+				840CCE791CE027E6004580B6 /* TabBarViewController.swift in Sources */,
 				8479A8EF1C2FBCA30069A046 /* OfficeClientListTableViewController.swift in Sources */,
 				8488C9DA1CDAF49E0029EBEE /* CareGiverTaskListTableViewCell.swift in Sources */,
 				84B74CDC1C219A1B00A2C914 /* TaskListViewController.swift in Sources */,

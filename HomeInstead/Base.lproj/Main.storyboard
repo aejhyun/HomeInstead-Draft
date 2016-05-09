@@ -3590,9 +3590,9 @@ Photo</string>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="Bhl-DH-TYc" kind="show" identifier="firstPageToOffice" id="Cko-Oa-4uR"/>
                         <segue destination="ZqQ-Mr-6XC" kind="presentation" identifier="firstPageToSignUpSignIn" id="MMc-SA-BLO"/>
                         <segue destination="qBf-qo-nyX" kind="presentation" identifier="firstPageToCareGiver" id="bff-uE-coO"/>
+                        <segue destination="kZs-g1-A6z" kind="show" identifier="firstPageToOffice" id="xfu-Vw-Xkc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z1A-e2-4wT" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3838,8 +3838,8 @@ Photo</string>
                     <connections>
                         <outlet property="emailTextField" destination="GuN-mc-rPg" id="hSp-Um-cNr"/>
                         <outlet property="passwordTextField" destination="rBW-CZ-as1" id="pXc-Au-Ycl"/>
-                        <segue destination="Bhl-DH-TYc" kind="presentation" identifier="signInToOfficeChooseUserType" id="HLy-lk-jYv"/>
                         <segue destination="qBf-qo-nyX" kind="presentation" identifier="signInToCareGiverClientList" id="KL2-zC-opc"/>
+                        <segue destination="kZs-g1-A6z" kind="presentation" identifier="signInToOfficeChooseUserType" id="ruF-pK-gEb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="alN-VF-e6g" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4356,10 +4356,11 @@ Photo</string>
             </objects>
             <point key="canvasLocation" x="1156.5" y="-2960.25"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Item-->
         <scene sceneID="64X-le-gpo">
             <objects>
                 <navigationController id="Bhl-DH-TYc" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="0uV-Jg-jSD"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ERU-Zw-EnU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -4371,6 +4372,42 @@ Photo</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BmG-6k-Yrh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1128" y="-3794"/>
+        </scene>
+        <!--Item-->
+        <scene sceneID="GZ7-9i-xR9">
+            <objects>
+                <viewController id="eAe-3e-q7u" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="VCX-xN-6Ri"/>
+                        <viewControllerLayoutGuide type="bottom" id="ftO-LA-Aao"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dof-P3-vKF">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="XmF-xF-AQP"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DKs-qW-0ZA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1128" y="-4541.25"/>
+        </scene>
+        <!--Tab Bar View Controller-->
+        <scene sceneID="mXc-g1-WKl">
+            <objects>
+                <tabBarController id="kZs-g1-A6z" customClass="TabBarViewController" customModule="HomeInstead" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="I1G-2X-wND">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="eAe-3e-q7u" kind="relationship" relationship="viewControllers" id="rkF-s7-lO5"/>
+                        <segue destination="Bhl-DH-TYc" kind="relationship" relationship="viewControllers" id="S7o-gZ-ldq"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Rz-0W-ITI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="366" y="-3794.25"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ffj-fG-ZMG">
@@ -5756,7 +5793,7 @@ Photo</string>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="7Xq-bU-KsZ" firstAttribute="top" secondItem="g4h-DD-Jbc" secondAttribute="bottom" id="Bie-9q-fvN">
-                                <variation key="heightClass=regular-widthClass=compact" constant="-1"/>
+                                <variation key="heightClass=regular-widthClass=compact" constant="0.0"/>
                             </constraint>
                             <constraint firstItem="YDS-Of-YBV" firstAttribute="top" secondItem="bow-LN-ZPW" secondAttribute="bottom" id="Jyl-9l-Rfj">
                                 <variation key="widthClass=compact" constant="1"/>
@@ -6552,7 +6589,8 @@ Photo</string>
                                         <include reference="vds-c5-Gf5"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="64" width="400" height="736"/>
                                     <mask key="constraints">
                                         <include reference="fc6-e7-hlV"/>
                                     </mask>
@@ -7759,12 +7797,12 @@ Photo</string>
         <image name="phoneImage" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="JvB-e1-eF0"/>
-        <segue reference="rcA-bd-JiX"/>
-        <segue reference="MC4-7o-Ble"/>
-        <segue reference="i3m-7f-ANh"/>
+        <segue reference="ruF-pK-gEb"/>
         <segue reference="bff-uE-coO"/>
-        <segue reference="Cko-Oa-4uR"/>
-        <segue reference="cCf-lq-sRN"/>
+        <segue reference="cpF-fk-zBw"/>
+        <segue reference="MC4-7o-Ble"/>
+        <segue reference="JvB-e1-eF0"/>
+        <segue reference="i3m-7f-ANh"/>
+        <segue reference="rcA-bd-JiX"/>
     </inferredMetricsTieBreakers>
 </document>

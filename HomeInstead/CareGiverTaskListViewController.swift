@@ -440,6 +440,7 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         object["finishTime"] = self.finishTime
         object["finishAddress"] = self.finishAddress
         object["sendToCathys"] = false
+        
         //object["imageFiles"] = self.getImageFiles()
         
         object.pinInBackground()
