@@ -15,10 +15,13 @@ class CareGiverClientListTableViewController: UITableViewController {
     var nameButtonSelectedRow: Int = -1
     var selectedRowIndexPath: NSIndexPath? = nil
     var cathyObjectIdsAndUserIds: [String: String] = [String: String]()
-    var objectIdsAndNames: [String: String] = [String: String]()
+    var clientObjectIdsAndNames: [String: String] = [String: String]()
     var clientObjectIds: [String] = [String]()
+    var clientName: String = ""
     var connectedObjectIds: [String: [String]] = [String: [String]]()
     var officeUserIds: [String] = [String]()
+    var careGiverObjectId: String = ""
+    var careGiverName: String = ""
     
     var names: [String] = [String]()
     
@@ -35,9 +38,11 @@ class CareGiverClientListTableViewController: UITableViewController {
                 if let objects = objects {
                     for object in objects {
                         clientObjectIds = object.objectForKey("connectedObjectIds") as? [String: [String]]
+                        self.careGiverName = object.objectForKey("name") as! String
+                        self.careGiverObjectId = object.objectId!
                         self.officeUserIds = object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String]
                         self.connectedObjectIds = object.objectForKey("connectedObjectIds") as! [String: [String]]
-                        self.objectIdsAndNames = object.objectForKey("clientObjectIdsAndNames") as! [String: String]
+                        self.clientObjectIdsAndNames = object.objectForKey("clientObjectIdsAndNames") as! [String: String]
                         self.cathyObjectIdsAndUserIds = object.objectForKey("cathyObjectIdsAndUserIds") as! [String: String]
                         object.pinInBackground()
                     }
@@ -119,7 +124,7 @@ class CareGiverClientListTableViewController: UITableViewController {
         
         cell.accessoryType = .DisclosureIndicator
         
-        cell.nameButton.setTitle(self.objectIdsAndNames[self.clientObjectIds[indexPath.row]], forState: UIControlState.Normal)
+        cell.nameButton.setTitle(self.clientObjectIdsAndNames[self.clientObjectIds[indexPath.row]], forState: UIControlState.Normal)
         
 
 
@@ -155,6 +160,11 @@ class CareGiverClientListTableViewController: UITableViewController {
                 
                 careGiverTaskListViewController.cathyUserIds = getCathyUserIds()
                 careGiverTaskListViewController.officeUserIds = self.officeUserIds
+                careGiverTaskListViewController.careGiverObjectId = self.careGiverObjectId
+                careGiverTaskListViewController.clientObjectId = self.clientObjectIds[self.selectedRowIndexPath!.row]
+                careGiverTaskListViewController.careGiverName = self.careGiverName
+                careGiverTaskListViewController.clientName = self.clientObjectIdsAndNames[self.clientObjectIds[self.selectedRowIndexPath!.row]]!
+                
             } else {
                 print("destinationViewController returned nil")
             }

@@ -1,5 +1,5 @@
 //
-//  TabBarViewController.swift
+//  OfficeTabBarViewController.swift
 //  HomeInstead
 //
 //  Created by Jae Hyun Kim on 5/9/16.
@@ -8,12 +8,13 @@
 
 import UIKit
 
-class TabBarViewController: UITabBarController {
+class OfficeTabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+      
 
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {

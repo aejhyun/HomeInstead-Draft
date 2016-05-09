@@ -50,7 +50,6 @@ class OfficeAddUserTableViewController: UITableViewController {
                 if let objects = objects {
                     for object in objects {
                         
-                        
                         self.officeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
                         
                         self.userNames.append(object.objectForKey("name") as! String)

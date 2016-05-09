@@ -60,10 +60,14 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
 
     var locationManager: CLLocationManager = CLLocationManager()
     
+    var clientName: String = ""
+    var careGiverName: String = ""
+    var clientObjectId: String = ""
+    var careGiverObjectId: String = ""
     var cathyUserIds: [String] = [String]()
     var officeUserIds: [String] = [String]()
     var startTime: String = ""
-    var startDate: String = ""
+    var date: String = ""
     var startAddress: String = ""
     var commentsToBeUploaded: [String] = [String]()
     var imagesToBeUploaded: [UIImage?] = [UIImage?]()
@@ -323,7 +327,7 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
                         if error == nil {
                             
                             placemark = placemarks![0]
-                            print(placemark)
+                   
                             if let subThoroughFare = placemark.addressDictionary!["SubThoroughfare"] as? String {
                                 address = subThoroughFare + " "
                             }
@@ -401,7 +405,7 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
             }
         })
         self.startTime = self.getCurrentTime()
-        self.startDate = self.getCurrentDate()
+        self.date = self.getCurrentDate()
         
         self.tableView.reloadData()
     }
@@ -430,16 +434,21 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     func attemptUploadingTaskInformationToCloud(completion: (uploadSuccessful: Bool) -> Void) {
         
         let object = PFObject(className: "TaskInformation")
+        object["clientName"] = self.clientName
+        object["careGiverName"] = self.careGiverName
         object["cathyUserIds"] = self.cathyUserIds
         object["officeUserIds"] = self.officeUserIds
+        object["careGiverObjectId"] = self.careGiverObjectId
+        object["clientObjectId"] = self.clientObjectId
         object["startAddress"] = self.startAddress
-        object["startDate"] = self.startDate
+        object["date"] = self.date
         object["startTime"] = self.startTime
         object["taskDescriptions"] = self.taskDescriptionsToBeUploaded
         object["taskTimes"] = self.taskTimes
         object["finishTime"] = self.finishTime
         object["finishAddress"] = self.finishAddress
-        object["sendToCathys"] = false
+        object["sentToCathys"] = false
+        object["careGiverUserId"] = PFUser.currentUser()?.objectId
         
         //object["imageFiles"] = self.getImageFiles()
         
@@ -469,11 +478,11 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         self.attemptGettingCurrentAddress { (gotAddressSuccessfully, address) -> Void in
             if gotAddressSuccessfully {
                 self.finishAddress = address!
-                self.attemptUploadingTaskInformationToCloud { (uploadSuccessful) -> Void in
-                    print("yes")
-                }
             } else {
                 self.finishAddress = "Could not find address"
+            }
+            self.attemptUploadingTaskInformationToCloud { (uploadSuccessful) -> Void in
+                print("yes")
             }
         }
         

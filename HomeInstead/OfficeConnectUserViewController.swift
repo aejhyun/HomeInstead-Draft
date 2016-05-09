@@ -93,12 +93,14 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         self.barButtonItem.width = viewWidth - 20.0
     }
     
-    func setToolbar() {
+    func setTabBarTopBorderLine() {
         
-        self.toolBar.layer.borderWidth = 1.0
-        self.toolBar.clipsToBounds = true
-        self.toolBar.layer.borderColor = UIColor(red: 163.0/255.0, green: 163.0/255.0, blue: 163.0/255.0, alpha: 1.0).CGColor
-        self.toolBar.layer.borderWidth = 1.0
+        let viewFrame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 1.0)
+        let tabBarTopHairLine: UIView = UIView(frame: viewFrame)
+        tabBarTopHairLine.backgroundColor = UIColor.lightGrayColor()
+        self.view.addSubview(tabBarTopHairLine)
+        
+        self.tabBarController!.tabBar.addSubview(tabBarTopHairLine)
     }
     
     func setUserNamesForSelectedUserType(selectedUserType: UserType) {
@@ -524,7 +526,11 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         self.setSegmentedControlWidth()
         self.removeBottomLineFromNavigationBar()
-        self.setToolbar()
+        self.setTabBarTopBorderLine()
+        
+        
+        
+        
         
         // Need to set the initial chosen segment for the segment control. If this is not present, it will cause a crash.
         self.selectedUserType = UserType.careGiver
