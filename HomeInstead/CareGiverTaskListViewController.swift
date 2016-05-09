@@ -68,7 +68,7 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     var commentsToBeUploaded: [String] = [String]()
     var imagesToBeUploaded: [UIImage?] = [UIImage?]()
     var taskDescriptionsToBeUploaded: [String] = [String]()
-    var taskTime: [String] = [String]()
+    var taskTimes: [String] = [String]()
     var finishTime: String = ""
     var finishAddress: String = ""
     
@@ -300,7 +300,7 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         self.commentsToBeUploaded.append(self.comments[indexPath!.row])
         self.imagesToBeUploaded.append(self.images[indexPath!.row])
         self.taskDescriptionsToBeUploaded.append(self.tasks[indexPath!.row])
-        self.taskTime.append(self.getCurrentTime())
+        self.taskTimes.append(self.getCurrentTime())
         
     }
     
@@ -323,7 +323,7 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
                         if error == nil {
                             
                             placemark = placemarks![0]
-                      
+                            print(placemark)
                             if let subThoroughFare = placemark.addressDictionary!["SubThoroughfare"] as? String {
                                 address = subThoroughFare + " "
                             }
@@ -406,37 +406,50 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         self.tableView.reloadData()
     }
     
-    func uploadTaskInformationToCloud() {
+    func getImageFiles() -> [PFFile] {
+        
+        var data: NSData? = nil
+        
+        data = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 0.0)
+        var imageFile: [PFFile] = [PFFile(data: data!)!]
+
+        for image in self.imagesToBeUploaded {
+            if image != nil {
+                data = UIImageJPEGRepresentation(image!, 0.5)
+                imageFile.append(PFFile(data: data!)!)
+            } else {
+                data = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 0.0)
+                imageFile.append(PFFile(data: data!)!)
+            }
+            //print(imageFile)
+        }
+        return imageFile
+       
+    }
+    
+    func attemptUploadingTaskInformationToCloud(completion: (uploadSuccessful: Bool) -> Void) {
         
         let object = PFObject(className: "TaskInformation")
+        object["cathyUserIds"] = self.cathyUserIds
+        object["officeUserIds"] = self.officeUserIds
         object["startAddress"] = self.startAddress
         object["startDate"] = self.startDate
         object["startTime"] = self.startTime
         object["taskDescriptions"] = self.taskDescriptionsToBeUploaded
-        object[""]
-       
+        object["taskTimes"] = self.taskTimes
+        object["finishTime"] = self.finishTime
+        object["finishAddress"] = self.finishAddress
+        object["sendToCathys"] = false
+        //object["imageFiles"] = self.getImageFiles()
         
-        var cathyUserIds: [String] = [String]()
-        var officeUserIds: [String] = [String]()
-        var startTime: String = ""
-        var startDate: String = ""
-        var startAddress: String = ""
-        var commentsToBeUploaded: [String] = [String]()
-        var imagesToBeUploaded: [UIImage?] = [UIImage?]()
-        var taskDescriptionsToBeUploaded: [String] = [String]()
-        var taskTimes: [String] = [String]()
-        var finishTime: String = ""
-        var finishAddress: String = ""
-//        if imageFile != nil {
-//            object["imageFile"] = imageFile
-//        }
         object.pinInBackground()
         object.saveInBackgroundWithBlock {
             (success: Bool, error: NSError?) -> Void in
             if (success) {
-                
+                completion(uploadSuccessful: true)
             } else {
-                
+                print(error?.description)
+                completion(uploadSuccessful: false)
             }
         }
         
@@ -455,6 +468,9 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         self.attemptGettingCurrentAddress { (gotAddressSuccessfully, address) -> Void in
             if gotAddressSuccessfully {
                 self.finishAddress = address!
+                self.attemptUploadingTaskInformationToCloud { (uploadSuccessful) -> Void in
+                    print("yes")
+                }
             } else {
                 self.finishAddress = "Could not find address"
             }
