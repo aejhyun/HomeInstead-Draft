@@ -10,6 +10,9 @@
 		840CCE7B1CE0812F004580B6 /* OfficeTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CCE7A1CE0812F004580B6 /* OfficeTabBarViewController.swift */; };
 		840CCE7D1CE082BD004580B6 /* OfficeTasksCompletedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CCE7C1CE082BD004580B6 /* OfficeTasksCompletedTableViewController.swift */; };
 		840CCE7F1CE082F5004580B6 /* OfficeTasksCompletedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CCE7E1CE082F5004580B6 /* OfficeTasksCompletedTableViewCell.swift */; };
+		840CCE811CE0A430004580B6 /* OfficeTaskInformationFirstRowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CCE801CE0A430004580B6 /* OfficeTaskInformationFirstRowTableViewCell.swift */; };
+		840CCE831CE0A444004580B6 /* OfficeTaskInformationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CCE821CE0A444004580B6 /* OfficeTaskInformationTableViewController.swift */; };
+		840CCE851CE0A569004580B6 /* OfficeTaskInformationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CCE841CE0A569004580B6 /* OfficeTaskInformationTableViewCell.swift */; };
 		840E72D51CB1074400F24F00 /* ClientSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840E72D41CB1074400F24F00 /* ClientSignUpViewController.swift */; };
 		843C8E871C3E9551009E47C0 /* IOSVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843C8E861C3E9550009E47C0 /* IOSVersion.swift */; };
 		84416F461CB1FF9D00911D09 /* Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84416F451CB1FF9D00911D09 /* Structures.swift */; };
@@ -96,6 +99,9 @@
 		840CCE7A1CE0812F004580B6 /* OfficeTabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeTabBarViewController.swift; sourceTree = "<group>"; };
 		840CCE7C1CE082BD004580B6 /* OfficeTasksCompletedTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeTasksCompletedTableViewController.swift; sourceTree = "<group>"; };
 		840CCE7E1CE082F5004580B6 /* OfficeTasksCompletedTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeTasksCompletedTableViewCell.swift; sourceTree = "<group>"; };
+		840CCE801CE0A430004580B6 /* OfficeTaskInformationFirstRowTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeTaskInformationFirstRowTableViewCell.swift; sourceTree = "<group>"; };
+		840CCE821CE0A444004580B6 /* OfficeTaskInformationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeTaskInformationTableViewController.swift; sourceTree = "<group>"; };
+		840CCE841CE0A569004580B6 /* OfficeTaskInformationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeTaskInformationTableViewCell.swift; sourceTree = "<group>"; };
 		840E72D41CB1074400F24F00 /* ClientSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientSignUpViewController.swift; sourceTree = "<group>"; };
 		843C8E861C3E9550009E47C0 /* IOSVersion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOSVersion.swift; sourceTree = "<group>"; };
 		84416F451CB1FF9D00911D09 /* Structures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Structures.swift; sourceTree = "<group>"; };
@@ -265,6 +271,9 @@
 				8490EFAA1CC4C19800C3CBC9 /* OfficeCreateClientUserViewController.swift */,
 				840CCE7C1CE082BD004580B6 /* OfficeTasksCompletedTableViewController.swift */,
 				840CCE7E1CE082F5004580B6 /* OfficeTasksCompletedTableViewCell.swift */,
+				840CCE821CE0A444004580B6 /* OfficeTaskInformationTableViewController.swift */,
+				840CCE801CE0A430004580B6 /* OfficeTaskInformationFirstRowTableViewCell.swift */,
+				840CCE841CE0A569004580B6 /* OfficeTaskInformationTableViewCell.swift */,
 				847560741CDA2166007AC371 /* CareGiverClientListTableViewController.swift */,
 				8488C9D31CDADDFA0029EBEE /* CareGiverClientListTableViewCell.swift */,
 				8488C9D51CDAE73C0029EBEE /* CareGiverTaskListViewController.swift */,
@@ -450,7 +459,9 @@
 				847560751CDA2166007AC371 /* CareGiverClientListTableViewController.swift in Sources */,
 				847374E91C37EE5500B4096F /* TaskPictureViewController.swift in Sources */,
 				8479A8F11C2FDDF40069A046 /* OfficeCathyListTableViewController.swift in Sources */,
+				840CCE851CE0A569004580B6 /* OfficeTaskInformationTableViewCell.swift in Sources */,
 				8475606D1CD8A6D1007AC371 /* OverloadedOperators.swift in Sources */,
+				840CCE831CE0A444004580B6 /* OfficeTaskInformationTableViewController.swift in Sources */,
 				84B3C1A71C7D93BA00C879E6 /* AKImageViewerViewController.m in Sources */,
 				84F8025A1C8853A900708CEC /* CathyImageViewerViewController.swift in Sources */,
 				845CE0831C5DCD3C00A82437 /* CathyTaskLogThreeTableViewCell.swift in Sources */,
@@ -462,6 +473,7 @@
 				84B53A7D1C48CC18008CAB8A /* GiveClientListTableViewCell.swift in Sources */,
 				84C05E0E1C281870009A137C /* TaskListTableViewCell.swift in Sources */,
 				8490EFAB1CC4C19800C3CBC9 /* OfficeCreateClientUserViewController.swift in Sources */,
+				840CCE811CE0A430004580B6 /* OfficeTaskInformationFirstRowTableViewCell.swift in Sources */,
 				846DC5001C44FF97007B757C /* OfficeCathyListTableViewCell.swift in Sources */,
 				84C0A10E1C9C3887003135C9 /* OfficeAddCathyTableViewCell.swift in Sources */,
 				84D931011C197DB1003C1688 /* AppDelegate.swift in Sources */,
