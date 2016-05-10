@@ -35,7 +35,7 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
     
     func attemptQueryingTaskInformation(completion: (querySuccessful: Bool) -> Void) {
         
-        var startDate: String = ""
+        var date: String = ""
         var startTime: String = ""
         var finishTime: String = ""
         var clientName: String = ""
@@ -46,23 +46,23 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
         
         let query = PFQuery(className: "TaskInformation")
         query.whereKey("officeUserIds", containedIn: [(PFUser.currentUser()?.objectId)!])
-        query.fromLocalDatastore()
+        //query.fromLocalDatastore()
         query.whereKey("sentToCathys", equalTo: false)
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             if error == nil {
                 if let objects = objects {
                     for object in objects {
-                        startDate = object.objectForKey("date") as! String
-                        startTime = object.objectForKey("startTime") as! String
-                        finishTime = object.objectForKey("finishTime") as! String
+                        date = object.objectForKey("date") as! String
+                        startTime = object.objectForKey("startedTime") as! String
+                        finishTime = object.objectForKey("finishedTime") as! String
                         clientName = object.objectForKey("clientName") as! String
                         clientObjectId = object.objectForKey("clientObjectId") as! String
                         careGiverName = object.objectForKey("careGiverName") as! String
                         careGiverObjectId = object.objectForKey("careGiverObjectId") as! String
                         taskInformationObjectId = object.objectId!
                         
-                        self.date.append(startDate)
+                        self.date.append(date)
                         self.startTime.append(startTime)
                         self.finishTime.append(finishTime)
                         self.clientName.append(clientName)

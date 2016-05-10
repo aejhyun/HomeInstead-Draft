@@ -72,7 +72,7 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     var commentsToBeUploaded: [String] = [String]()
     var imagesToBeUploaded: [UIImage?] = [UIImage?]()
     var taskDescriptionsToBeUploaded: [String] = [String]()
-    var taskTimes: [String] = [String]()
+    var timesTasksCompleted: [String] = [String]()
     var finishTime: String = ""
     var finishAddress: String = ""
     
@@ -304,7 +304,7 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         self.commentsToBeUploaded.append(self.comments[indexPath!.row])
         self.imagesToBeUploaded.append(self.images[indexPath!.row])
         self.taskDescriptionsToBeUploaded.append(self.tasks[indexPath!.row])
-        self.taskTimes.append(self.getCurrentTime())
+        self.timesTasksCompleted.append(self.getCurrentTime())
         
     }
     
@@ -440,13 +440,13 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         object["officeUserIds"] = self.officeUserIds
         object["careGiverObjectId"] = self.careGiverObjectId
         object["clientObjectId"] = self.clientObjectId
-        object["startAddress"] = self.startAddress
+        object["address"] = self.startAddress
         object["date"] = self.date
-        object["startTime"] = self.startTime
+        object["startedTime"] = self.startTime
         object["taskDescriptions"] = self.taskDescriptionsToBeUploaded
-        object["taskTimes"] = self.taskTimes
-        object["finishTime"] = self.finishTime
-        object["finishAddress"] = self.finishAddress
+        object["timeTasksCompleted"] = self.timesTasksCompleted
+        object["taskComments"] = self.commentsToBeUploaded
+        object["finishedTime"] = self.finishTime
         object["sentToCathys"] = false
         object["careGiverUserId"] = PFUser.currentUser()?.objectId
         

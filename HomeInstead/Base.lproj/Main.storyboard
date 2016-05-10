@@ -5800,7 +5800,7 @@ Photo</string>
                             <constraint firstAttribute="trailingMargin" secondItem="YDS-Of-YBV" secondAttribute="trailing" constant="-20" id="WIH-sf-nQY"/>
                             <constraint firstItem="YDS-Of-YBV" firstAttribute="leading" secondItem="Tbf-sJ-Uxy" secondAttribute="leadingMargin" constant="-20" id="a1v-ii-ACz"/>
                             <constraint firstItem="ns0-1u-b0c" firstAttribute="top" secondItem="bow-LN-ZPW" secondAttribute="bottom" id="awk-xx-Fm6">
-                                <variation key="heightClass=regular-widthClass=compact" constant="20"/>
+                                <variation key="heightClass=regular-widthClass=compact" constant="15"/>
                             </constraint>
                             <constraint firstItem="ns0-1u-b0c" firstAttribute="leading" secondItem="Tbf-sJ-Uxy" secondAttribute="leadingMargin" constant="-20" id="b0K-oe-O5E"/>
                             <constraint firstItem="7Xq-bU-KsZ" firstAttribute="top" secondItem="YDS-Of-YBV" secondAttribute="bottom" constant="38" id="epe-Yt-8Zr">
@@ -6588,7 +6588,8 @@ Photo</string>
                                         <include reference="vds-c5-Gf5"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
+                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="64" width="400" height="736"/>
                                     <mask key="constraints">
                                         <include reference="fc6-e7-hlV"/>
                                     </mask>
@@ -7848,6 +7849,7 @@ Photo</string>
                                             <state key="normal" title="Edit"/>
                                             <connections>
                                                 <action selector="editButtonTapped:" destination="5Rb-dL-KNr" eventType="touchUpInside" id="QV1-Qt-ZkP"/>
+                                                <action selector="editButtonTapped:" destination="RqU-Eq-QP3" eventType="touchUpInside" id="oVf-vW-7bO"/>
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="characterWrap" translatesAutoresizingMaskIntoConstraints="NO" id="tko-cT-i2w">
@@ -7858,6 +7860,7 @@ Photo</string>
                                                 <action selector="addPhotoButtonTapped:" destination="rWN-SL-jl8" eventType="touchUpInside" id="FV4-ji-YnN"/>
                                                 <action selector="addPhotoButtonTapped:" destination="5Rb-dL-KNr" eventType="touchUpInside" id="MYB-4j-ZiK"/>
                                                 <action selector="addPhotoButtonTapped:" destination="rrl-uD-zv2" eventType="touchUpInside" id="SN6-Og-KbA"/>
+                                                <action selector="addPhotoButtonTapped:" destination="RqU-Eq-QP3" eventType="touchUpInside" id="TcY-EM-xV2"/>
                                                 <action selector="addPhotoButtonTapped:" destination="kqo-Jg-mM2" eventType="touchUpInside" id="j4C-is-Qyl"/>
                                             </connections>
                                         </button>
@@ -8067,9 +8070,10 @@ Photo</string>
                                     <outlet property="borderImageView" destination="OgX-Fk-Yn0" id="aEK-yq-qzz"/>
                                     <outlet property="editButton" destination="jux-og-frJ" id="o1R-02-4T9"/>
                                     <outlet property="imageViewHeightLayoutConstraint" destination="0cV-rg-wpJ" id="Dzf-8z-gGp"/>
+                                    <outlet property="taskCommentTextView" destination="egQ-lO-rth" id="Wdj-Zo-NzZ"/>
+                                    <outlet property="taskDescriptionTextField" destination="2j3-qW-x69" id="H6l-6U-NcO"/>
                                     <outlet property="taskImageView" destination="nCM-ao-93I" id="Jj5-k8-3k0"/>
-                                    <outlet property="textView" destination="egQ-lO-rth" id="FP7-XU-kyf"/>
-                                    <outlet property="timeTaskCompletedLabel" destination="k2f-FY-R6T" id="QLd-4I-q7U"/>
+                                    <outlet property="timeTaskCompletedTextField" destination="k2f-FY-R6T" id="S6h-RZ-zMM"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -8660,7 +8664,7 @@ Photo</string>
         <segue reference="Spb-1u-jWf"/>
         <segue reference="c3X-Ub-cn1"/>
         <segue reference="i3m-7f-ANh"/>
-        <segue reference="pqi-4y-KhW"/>
+        <segue reference="cpF-fk-zBw"/>
         <segue reference="ruF-pK-gEb"/>
         <segue reference="KL2-zC-opc"/>
     </inferredMetricsTieBreakers>

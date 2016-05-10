@@ -18,13 +18,15 @@ class OfficeTaskInformationTableViewCell: UITableViewCell {
     
     @IBOutlet weak var editButton: UIButton!
 
-    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var taskCommentTextView: UITextView!
     
-    @IBOutlet weak var timeTaskCompletedLabel: UITextField!
+    @IBOutlet weak var taskDescriptionTextField: UITextField!
     
-    var numberOfTimesViewLaidOutSubviews: Int = 0
+    @IBOutlet weak var timeTaskCompletedTextField: UITextField!
     
     @IBOutlet weak var imageViewHeightLayoutConstraint: NSLayoutConstraint!
+    
+    var numberOfTimesViewLaidOutSubviews: Int = 0
     
     func setTaskImageView() {
         
@@ -51,6 +53,19 @@ class OfficeTaskInformationTableViewCell: UITableViewCell {
     func setCell() {
         
         self.addPhotoButton.titleLabel?.textAlignment = .Center
+        self.addPhotoButton.alpha = 1.0
+        self.editButton.hidden = true
+        self.editButton.alpha = 0.0
+        
+    }
+    
+    func deleteImageWithAnimation() {
+        
+        self.taskImageView.image = nil
+        self.taskImageView.alpha = 1.0
+        self.taskImageView.layer.borderWidth = 1.0
+        self.borderImageView.alpha = 0.0
+        self.addPhotoButton.hidden = false
         self.addPhotoButton.alpha = 1.0
         self.editButton.hidden = true
         self.editButton.alpha = 0.0
