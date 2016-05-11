@@ -146,7 +146,17 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
                             for var row: Int = self.tableView.numberOfRowsInSection(0) - 1; row >= 0; row-- {
                                 let indexPath: NSIndexPath = NSIndexPath(forRow: row, inSection: 0)
                                 if self.tableView.cellForRowAtIndexPath(indexPath)?.accessoryType == .Checkmark {
+                                    
+                                    self.dates.removeAtIndex(indexPath.row)
+                                    self.startedTimes.removeAtIndex(indexPath.row)
+                                    self.finishedTimes.removeAtIndex(indexPath.row)
+                                    self.clientNames.removeAtIndex(indexPath.row)
+                                    self.careGiverNames.removeAtIndex(indexPath.row)
+                                    self.careGiverObjectIds.removeAtIndex(indexPath.row)
+                                    self.clientObjectIds.removeAtIndex(indexPath.row)
                                     self.taskInformationObjectIds.removeAtIndex(indexPath.row)
+                                    self.lastSavedTime.removeAtIndex(indexPath.row)
+                                    
                                     self.numberOfRows--
                                     cellIndicesToBeDeleted.append(indexPath)
                                 }
@@ -226,7 +236,11 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeTasksCompletedTableViewCell
-
+        
+        if self.numberOfRows == 0 {
+            cell.textLabel?.text = "No tasks to review"
+        }
+        
         cell.dateLabel.text = self.dates[indexPath.row]
         cell.startTimeLabel.text = self.startedTimes[indexPath.row]
         cell.finishTimeLabel.text = self.finishedTimes[indexPath.row]
