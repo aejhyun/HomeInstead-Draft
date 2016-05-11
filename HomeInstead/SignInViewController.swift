@@ -53,7 +53,7 @@ class SignInViewController: UIViewController, DismissViewControllerDelegate {
                             } else if userType == UserType.careGiver.rawValue {
                                 self.performSegueWithIdentifier("signInToCareGiverClientList", sender: nil)
                             } else if userType == UserType.cathy.rawValue {
-                                print("segue to cathy's first view controller")
+                                self.performSegueWithIdentifier("signInToCathyTasksCompleted", sender: nil)
                             }
                             
                         } else {

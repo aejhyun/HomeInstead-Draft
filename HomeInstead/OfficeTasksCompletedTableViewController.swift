@@ -11,6 +11,9 @@ import Parse
 
 class OfficeTasksCompletedTableViewController: UITableViewController {
     
+    var careGiverNameTapped: Bool = false
+    var clientNameTapped: Bool = false
+    
     var dates: [String] = [String]()
     var startedTimes: [String] = [String]()
     var finishedTimes: [String] = [String]()
@@ -21,7 +24,6 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
     var taskInformationObjectIds: [String] = [String]()
     var lastSavedTime: [String] = [String]()
     
-    var checkedRows: [Bool] = [Bool]()
     var numberOfCheckedRows: Int = 0
     var numberOfRows: Int = 0
     
@@ -69,7 +71,6 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
                 self.careGiverObjectIds.removeAll()
                 self.lastSavedTime.removeAll()
                 self.taskInformationObjectIds.removeAll()
-                self.checkedRows.removeAll()
                 
                 if let objects = objects {
                     for object in objects {
@@ -95,7 +96,6 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
                         object.pinInBackground()
                         
                     }
-                    self.checkedRows = [Bool](count: self.clientObjectIds.count, repeatedValue: false)
                     completion(querySuccessful: true)
                 }
             } else {
@@ -130,51 +130,67 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
 
     }
     
+    func removeCellValuesAtIndex(indexPath: NSIndexPath) {
+        
+        self.dates.removeAtIndex(indexPath.row)
+        self.startedTimes.removeAtIndex(indexPath.row)
+        self.finishedTimes.removeAtIndex(indexPath.row)
+        self.clientNames.removeAtIndex(indexPath.row)
+        self.careGiverNames.removeAtIndex(indexPath.row)
+        self.careGiverObjectIds.removeAtIndex(indexPath.row)
+        self.clientObjectIds.removeAtIndex(indexPath.row)
+        self.taskInformationObjectIds.removeAtIndex(indexPath.row)
+        self.lastSavedTime.removeAtIndex(indexPath.row)
+        
+    }
+    
     @IBAction func sendButtonTapped(sender: AnyObject) {
         
-        
         var numberOfUpdates: Int = 0
-        for var row: Int = 0; row < self.checkedRows.count; row++ { //Reason for this line is to get the checked rows
-            if self.checkedRows[row] {
-                self.attemptUpdatingTaskInformation(self.taskInformationObjectIds[row], completion: { (updateSuccessful) -> Void in
+        var cellIndicesToBeDeleted: [NSIndexPath] = [NSIndexPath]()
+        
+        for var row: Int = self.tableView.numberOfRowsInSection(0); row >= 0; row-- {
+            let indexPath: NSIndexPath = NSIndexPath(forRow: row, inSection: 0)
+            if self.tableView.cellForRowAtIndexPath(indexPath)?.accessoryType == .Checkmark {
+            
+                self.attemptUpdatingTaskInformation(self.taskInformationObjectIds[indexPath.row], completion: { (updateSuccessful) -> Void in
                     if updateSuccessful {
                         numberOfUpdates++
-                        if numberOfUpdates == self.numberOfCheckedRows {
-     
-                            var cellIndicesToBeDeleted: [NSIndexPath] = [NSIndexPath]()
-                            
-                            for var row: Int = self.tableView.numberOfRowsInSection(0) - 1; row >= 0; row-- {
-                                let indexPath: NSIndexPath = NSIndexPath(forRow: row, inSection: 0)
-                                if self.tableView.cellForRowAtIndexPath(indexPath)?.accessoryType == .Checkmark {
-                                    
-                                    self.dates.removeAtIndex(indexPath.row)
-                                    self.startedTimes.removeAtIndex(indexPath.row)
-                                    self.finishedTimes.removeAtIndex(indexPath.row)
-                                    self.clientNames.removeAtIndex(indexPath.row)
-                                    self.careGiverNames.removeAtIndex(indexPath.row)
-                                    self.careGiverObjectIds.removeAtIndex(indexPath.row)
-                                    self.clientObjectIds.removeAtIndex(indexPath.row)
-                                    self.taskInformationObjectIds.removeAtIndex(indexPath.row)
-                                    self.lastSavedTime.removeAtIndex(indexPath.row)
-                                    
-                                    self.numberOfRows--
-                                    cellIndicesToBeDeleted.append(indexPath)
-                                }
-                            }
-                            self.checkedRows = [Bool](count: self.numberOfRows, repeatedValue: false)
-                            self.numberOfCheckedRows = 0
 
+                        self.removeCellValuesAtIndex(indexPath)
+                        
+                        cellIndicesToBeDeleted.append(indexPath)
+                        self.numberOfRows--
+                        
+                        if numberOfUpdates == self.numberOfCheckedRows {
+                            self.numberOfCheckedRows = 0
                             self.tableView.beginUpdates()
                             self.tableView.deleteRowsAtIndexPaths(
                                 cellIndicesToBeDeleted, withRowAnimation: .Automatic)
                             self.tableView.endUpdates()
-
+                            
                         }
                         
                     }
                 })
+                
             }
         }
+        
+        
+    }
+    
+    @IBAction func careGiverNameTapped(sender: AnyObject) {
+
+        self.careGiverNameTapped = true
+        self.performSegueWithIdentifier("officeTaskCompletedToUserProfile", sender: self.careGiverObjectIds[sender.tag])
+        
+    }
+
+    @IBAction func clientNameTapped(sender: AnyObject) {
+        
+        self.clientNameTapped = true
+        self.performSegueWithIdentifier("officeTaskCompletedToUserProfile", sender: self.clientObjectIds[sender.tag])
         
     }
     
@@ -199,7 +215,6 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         self.attemptQueryingTaskInformation(queryFromLocalDateStore: false) { (querySuccessful) -> Void in
             if querySuccessful {
-                self.checkedRows = [Bool](count: self.clientObjectIds.count, repeatedValue: false)
                 self.numberOfRows = self.startedTimes.count
                 self.tableView.reloadData()
             }
@@ -212,16 +227,13 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
         if let cell = tableView.cellForRowAtIndexPath(indexPath) {
             if cell.accessoryType == .Checkmark {
                 cell.accessoryType = .None
-                self.checkedRows[indexPath.row] = false
                 self.numberOfCheckedRows--
             } else {
                 cell.accessoryType = .Checkmark
-                self.checkedRows[indexPath.row] = true
                 self.numberOfCheckedRows++
             }
         }
 
-        
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -237,15 +249,13 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeTasksCompletedTableViewCell
         
-        if self.numberOfRows == 0 {
-            cell.textLabel?.text = "No tasks to review"
-        }
-        
         cell.dateLabel.text = self.dates[indexPath.row]
         cell.startTimeLabel.text = self.startedTimes[indexPath.row]
         cell.finishTimeLabel.text = self.finishedTimes[indexPath.row]
         cell.careGiverNameButton.setTitle(self.careGiverNames[indexPath.row], forState: .Normal)
+        cell.careGiverNameButton.tag = indexPath.row
         cell.clientNameButton.setTitle(self.clientNames[indexPath.row], forState: .Normal)
+        cell.clientNameButton.tag = indexPath.row
         cell.lastSavedTime.text = self.lastSavedTime[indexPath.row]
         cell.seeDetailsButton.tag = indexPath.row
 
@@ -261,6 +271,23 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
             if let officeTaskInformationTableViewController = segue.destinationViewController as? OfficeTaskInformationTableViewController {
                 
                 officeTaskInformationTableViewController.taskInformationObjectId = self.taskInformationObjectIds[sender!.tag]
+                
+            } else {
+                print("destinationViewController returned nil")
+            }
+        } else if segue.identifier == "officeTaskCompletedToUserProfile" {
+            if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
+                
+                if self.careGiverNameTapped {
+                    userProfileViewController.selectedUserType = UserType.careGiver
+                    self.careGiverNameTapped = false
+                } else if self.clientNameTapped {
+                    userProfileViewController.selectedUserType = UserType.client
+                    self.clientNameTapped = false
+                }
+                
+                userProfileViewController.userObjectId = sender as! String
+                
                 
             } else {
                 print("destinationViewController returned nil")

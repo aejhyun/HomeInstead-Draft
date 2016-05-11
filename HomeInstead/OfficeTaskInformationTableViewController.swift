@@ -187,9 +187,13 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
     func getCurrentDateAndTime() -> String {
     
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yy h:mm a"
+        dateFormatter.dateFormat = "MM/dd/yy"
+        let dateInFormat = dateFormatter.stringFromDate(NSDate())
+        dateFormatter.dateFormat = "h:mm a"
         let timeInFormat = dateFormatter.stringFromDate(NSDate())
-        return timeInFormat
+        
+        let dateAndTimeInFormat = "On \(dateInFormat) at \(timeInFormat)"
+        return dateAndTimeInFormat
         
     }
     
@@ -229,17 +233,9 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
     
     @IBAction func saveButtonTapped(sender: AnyObject) {
         
-//        print(self.date)
-//        print(self.startedTime)
-//        print(self.finishedTime)
-//        print(self.address)
-//        print(self.taskComments)
-//        print(self.taskDescriptions)
-//        print(self.timeTasksCompleted)
-        
         self.attemptUpdatingTaskInformation { (updateSuccessful) -> Void in
             if updateSuccessful {
-                print("Updated task information.")
+                self.navigationController?.popToRootViewControllerAnimated(true)
             }
         }
     
