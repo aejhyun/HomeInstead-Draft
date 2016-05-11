@@ -13,6 +13,7 @@
 		840CCE811CE0A430004580B6 /* OfficeTaskInformationFirstRowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CCE801CE0A430004580B6 /* OfficeTaskInformationFirstRowTableViewCell.swift */; };
 		840CCE831CE0A444004580B6 /* OfficeTaskInformationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CCE821CE0A444004580B6 /* OfficeTaskInformationTableViewController.swift */; };
 		840CCE851CE0A569004580B6 /* OfficeTaskInformationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CCE841CE0A569004580B6 /* OfficeTaskInformationTableViewCell.swift */; };
+		840CCE871CE1CD19004580B6 /* IdentifiedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CCE861CE1CD19004580B6 /* IdentifiedTextField.swift */; };
 		840E72D51CB1074400F24F00 /* ClientSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840E72D41CB1074400F24F00 /* ClientSignUpViewController.swift */; };
 		843C8E871C3E9551009E47C0 /* IOSVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843C8E861C3E9550009E47C0 /* IOSVersion.swift */; };
 		84416F461CB1FF9D00911D09 /* Structures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84416F451CB1FF9D00911D09 /* Structures.swift */; };
@@ -102,6 +103,7 @@
 		840CCE801CE0A430004580B6 /* OfficeTaskInformationFirstRowTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeTaskInformationFirstRowTableViewCell.swift; sourceTree = "<group>"; };
 		840CCE821CE0A444004580B6 /* OfficeTaskInformationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeTaskInformationTableViewController.swift; sourceTree = "<group>"; };
 		840CCE841CE0A569004580B6 /* OfficeTaskInformationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeTaskInformationTableViewCell.swift; sourceTree = "<group>"; };
+		840CCE861CE1CD19004580B6 /* IdentifiedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifiedTextField.swift; sourceTree = "<group>"; };
 		840E72D41CB1074400F24F00 /* ClientSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientSignUpViewController.swift; sourceTree = "<group>"; };
 		843C8E861C3E9550009E47C0 /* IOSVersion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOSVersion.swift; sourceTree = "<group>"; };
 		84416F451CB1FF9D00911D09 /* Structures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Structures.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 				84D931001C197DB1003C1688 /* AppDelegate.swift */,
 				8475606C1CD8A6D1007AC371 /* OverloadedOperators.swift */,
 				8475606E1CD8E07B007AC371 /* IdentifiedButton.swift */,
+				840CCE861CE1CD19004580B6 /* IdentifiedTextField.swift */,
 				84C32F7D1C350E4A00A245BC /* Protocols.swift */,
 				8472A2191CB029BD0073E8CA /* Enumerations.swift */,
 				84416F451CB1FF9D00911D09 /* Structures.swift */,
@@ -465,6 +468,7 @@
 				84B3C1A71C7D93BA00C879E6 /* AKImageViewerViewController.m in Sources */,
 				84F8025A1C8853A900708CEC /* CathyImageViewerViewController.swift in Sources */,
 				845CE0831C5DCD3C00A82437 /* CathyTaskLogThreeTableViewCell.swift in Sources */,
+				840CCE871CE1CD19004580B6 /* IdentifiedTextField.swift in Sources */,
 				8447AD7B1C96A99C0076B9E3 /* TextField.swift in Sources */,
 				84C05E141C2BAE30009A137C /* CathyTaskLogTableCellViewController.swift in Sources */,
 				84C462AC1C202C1400FA82F9 /* FirstPageViewController.swift in Sources */,

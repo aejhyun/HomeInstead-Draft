@@ -9,7 +9,7 @@
 import UIKit
 import Parse
 
-class OfficeTaskInformationTableViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class OfficeTaskInformationTableViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
 
     var taskInformationObjectId: String = ""
     var addPhotoButtonTappedIndexPath: NSIndexPath? = nil
@@ -28,6 +28,11 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
     var timeTasksCompleted: [String] = [String]()
     var taskComments: [String] = [String]()
 
+    
+    override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        self.view.endEditing(true)
+    }
+    
     func attemptGettingTaskInformation(completion: (connectionSuccessful: Bool) -> Void) {
 
         let query = PFQuery(className: "TaskInformation")
@@ -51,17 +56,6 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
             }
         }
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.tableView.estimatedRowHeight = 140
-        self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.navigationItem.title = "Task List"
-        self.attemptGettingTaskInformation { (connectionSuccessful) -> Void in
-            self.tableView.reloadData()
-        }
-    }
-
 
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
@@ -155,9 +149,110 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
         
         alertAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
         alertController.addAction(alertAction)
-        
+    
         self.presentViewController(alertController, animated: true, completion: nil)
         
+    }
+    
+    
+    func textViewDidChange(textView: UITextView) {
+        self.taskComments[textView.tag] = textView.text
+    }
+    
+    func taskDescriptionTextFieldDidChange(textField: UITextField) {
+        self.taskDescriptions[textField.tag] = textField.text!
+    }
+    
+    func timeTaskCompletedTextFieldDidChange(textField: UITextField) {
+        self.timeTasksCompleted[textField.tag] = textField.text!
+    }
+    
+    func firstRowTextFieldDidChange(textField: UITextField) {
+        
+        switch textField.tag {
+        case 0:
+            self.date = textField.text!
+        case 1:
+            self.startedTime = textField.text!
+        case 2:
+            self.finishedTime = textField.text!
+        case 3:
+            self.address = textField.text!
+        default:
+            break
+        }
+        
+    }
+    
+    func getCurrentDateAndTime() -> String {
+    
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yy h:mm a"
+        let timeInFormat = dateFormatter.stringFromDate(NSDate())
+        return timeInFormat
+        
+    }
+    
+    func attemptUpdatingTaskInformation(completion: (updateSuccessful: Bool) -> Void) {
+        
+        let query = PFQuery(className: "TaskInformation")
+        query.getObjectInBackgroundWithId(self.taskInformationObjectId) {
+            (objects: PFObject?, error: NSError?) -> Void in
+            if error != nil {
+                print(error)
+                completion(updateSuccessful: false)
+            } else if let object = objects {
+                
+                object["date"] = self.date
+                object["startedTime"] = self.startedTime
+                object["finishedTime"] = self.finishedTime
+                object["address"] = self.address
+                object["taskComments"] = self.taskComments
+                object["taskDescriptions"] = self.taskDescriptions
+                object["timeTasksCompleted"] = self.timeTasksCompleted
+                object["lastSavedTime"] = self.getCurrentDateAndTime()
+                object.pinInBackground()
+                object.saveInBackgroundWithBlock {
+                    (success: Bool, error: NSError?) -> Void in
+                    if (success) {
+                        completion(updateSuccessful: true)
+                    } else {
+                        print(error?.description)
+                        completion(updateSuccessful: false)
+                    }
+                }
+                
+            }
+        }
+
+    }
+    
+    @IBAction func saveButtonTapped(sender: AnyObject) {
+        
+//        print(self.date)
+//        print(self.startedTime)
+//        print(self.finishedTime)
+//        print(self.address)
+//        print(self.taskComments)
+//        print(self.taskDescriptions)
+//        print(self.timeTasksCompleted)
+        
+        self.attemptUpdatingTaskInformation { (updateSuccessful) -> Void in
+            if updateSuccessful {
+                print("Updated task information.")
+            }
+        }
+    
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.tableView.estimatedRowHeight = 140
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.navigationItem.title = "Task List"
+        self.attemptGettingTaskInformation { (connectionSuccessful) -> Void in
+            self.tableView.reloadData()
+        }
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -174,9 +269,21 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
         
         let cell = tableView.dequeueReusableCellWithIdentifier("cellZero", forIndexPath: indexPath) as! OfficeTaskInformationFirstRowTableViewCell
         cell.dateTextField.text = self.date
+        cell.dateTextField.addTarget(self, action: "firstRowTextFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        cell.dateTextField.tag = 0
+        
         cell.startedTimeTextField.text = self.startedTime
+        cell.startedTimeTextField.addTarget(self, action: "firstRowTextFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        cell.startedTimeTextField.tag = 1
+
         cell.finishedTimeTextField.text = self.finishedTime
+        cell.finishedTimeTextField.addTarget(self, action: "firstRowTextFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        cell.finishedTimeTextField.tag = 2
+        
         cell.addressTextField.text = self.address
+        cell.addressTextField.addTarget(self, action: "firstRowTextFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        cell.addressTextField.tag = 3
+        
         cell.careGiverNameLabel.text = self.careGiverName
         cell.clientNameLabel.text = self.clientName
         
@@ -190,8 +297,15 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
         cell.setCell()
         
         cell.taskCommentTextView.text = self.taskComments[indexPathRow]
+        cell.taskCommentTextView.tag = indexPathRow
+        
         cell.taskDescriptionTextField.text = self.taskDescriptions[indexPathRow]
+        cell.taskDescriptionTextField.tag = indexPathRow
+        cell.taskDescriptionTextField.addTarget(self, action: "taskDescriptionTextFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+            
         cell.timeTaskCompletedTextField.text = self.timeTasksCompleted[indexPathRow]
+        cell.timeTaskCompletedTextField.tag = indexPathRow
+        cell.timeTaskCompletedTextField.addTarget(self, action: "timeTaskCompletedTextFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         
         if self.deletePhotoButtonTapped == true {
             cell.deleteImageWithAnimation()

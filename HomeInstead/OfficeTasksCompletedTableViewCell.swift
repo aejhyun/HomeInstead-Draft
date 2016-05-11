@@ -15,7 +15,8 @@ class OfficeTasksCompletedTableViewCell: UITableViewCell {
     @IBOutlet weak var finishTimeLabel: UILabel!
     @IBOutlet weak var careGiverNameButton: UIButton!
     @IBOutlet weak var clientNameButton: UIButton!
-    
+    @IBOutlet weak var lastSavedTime: UILabel!
+    @IBOutlet weak var seeDetailsButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

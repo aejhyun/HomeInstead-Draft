@@ -449,6 +449,7 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         object["finishedTime"] = self.finishTime
         object["sentToCathys"] = false
         object["careGiverUserId"] = PFUser.currentUser()?.objectId
+        object["lastSavedTime"] = "N/A"
         
         //object["imageFiles"] = self.getImageFiles()
         

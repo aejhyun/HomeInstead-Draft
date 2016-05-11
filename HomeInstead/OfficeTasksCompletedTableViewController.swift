@@ -11,14 +11,19 @@ import Parse
 
 class OfficeTasksCompletedTableViewController: UITableViewController {
     
-    var date: [String] = [String]()
-    var startTime: [String] = [String]()
-    var finishTime: [String] = [String]()
-    var clientName: [String] = [String]()
-    var careGiverName: [String] = [String]()
-    var careGiverObjectId: [String] = [String]()
-    var clientObjectId: [String] = [String]()
-    var taskInformationObjectId: [String] = [String]()
+    var dates: [String] = [String]()
+    var startedTimes: [String] = [String]()
+    var finishedTimes: [String] = [String]()
+    var clientNames: [String] = [String]()
+    var careGiverNames: [String] = [String]()
+    var careGiverObjectIds: [String] = [String]()
+    var clientObjectIds: [String] = [String]()
+    var taskInformationObjectIds: [String] = [String]()
+    var lastSavedTime: [String] = [String]()
+    
+    var checkedRows: [Bool] = [Bool]()
+    var numberOfCheckedRows: Int = 0
+    var numberOfRows: Int = 0
     
     var selectedRowIndexPath: NSIndexPath? = nil
     
@@ -33,46 +38,64 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
         
     }
     
-    func attemptQueryingTaskInformation(completion: (querySuccessful: Bool) -> Void) {
-        
+    func attemptQueryingTaskInformation(queryFromLocalDateStore localQuery: Bool, completion: (querySuccessful: Bool) -> Void) {
+
         var date: String = ""
-        var startTime: String = ""
-        var finishTime: String = ""
+        var startedTime: String = ""
+        var finishedTime: String = ""
         var clientName: String = ""
         var careGiverName: String = ""
         var careGiverObjectId: String = ""
         var clientObjectId: String = ""
+        var lastSavedTime: String = ""
         var taskInformationObjectId: String = ""
         
         let query = PFQuery(className: "TaskInformation")
         query.whereKey("officeUserIds", containedIn: [(PFUser.currentUser()?.objectId)!])
-        //query.fromLocalDatastore()
+        if localQuery{
+            query.fromLocalDatastore()
+        }
         query.whereKey("sentToCathys", equalTo: false)
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             if error == nil {
+                
+                self.dates.removeAll()
+                self.startedTimes.removeAll()
+                self.finishedTimes.removeAll()
+                self.clientNames.removeAll()
+                self.clientObjectIds.removeAll()
+                self.careGiverNames.removeAll()
+                self.careGiverObjectIds.removeAll()
+                self.lastSavedTime.removeAll()
+                self.taskInformationObjectIds.removeAll()
+                self.checkedRows.removeAll()
+                
                 if let objects = objects {
                     for object in objects {
                         date = object.objectForKey("date") as! String
-                        startTime = object.objectForKey("startedTime") as! String
-                        finishTime = object.objectForKey("finishedTime") as! String
+                        startedTime = object.objectForKey("startedTime") as! String
+                        finishedTime = object.objectForKey("finishedTime") as! String
                         clientName = object.objectForKey("clientName") as! String
                         clientObjectId = object.objectForKey("clientObjectId") as! String
                         careGiverName = object.objectForKey("careGiverName") as! String
                         careGiverObjectId = object.objectForKey("careGiverObjectId") as! String
+                        lastSavedTime = object.objectForKey("lastSavedTime") as! String
                         taskInformationObjectId = object.objectId!
                         
-                        self.date.append(date)
-                        self.startTime.append(startTime)
-                        self.finishTime.append(finishTime)
-                        self.clientName.append(clientName)
-                        self.clientObjectId.append(clientObjectId)
-                        self.careGiverName.append(careGiverName)
-                        self.careGiverObjectId.append(careGiverObjectId)
-                        self.taskInformationObjectId.append(taskInformationObjectId)
+                        self.dates.append(date)
+                        self.startedTimes.append(startedTime)
+                        self.finishedTimes.append(finishedTime)
+                        self.clientNames.append(clientName)
+                        self.clientObjectIds.append(clientObjectId)
+                        self.careGiverNames.append(careGiverName)
+                        self.careGiverObjectIds.append(careGiverObjectId)
+                        self.lastSavedTime.append(lastSavedTime)
+                        self.taskInformationObjectIds.append(taskInformationObjectId)
                         object.pinInBackground()
                         
                     }
+                    self.checkedRows = [Bool](count: self.clientObjectIds.count, repeatedValue: false)
                     completion(querySuccessful: true)
                 }
             } else {
@@ -81,22 +104,114 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
         }
 
     }
+
+    func attemptUpdatingTaskInformation(taskInformationObjectId: String, completion: (updateSuccessful: Bool) -> Void) {
+        
+        let query = PFQuery(className: "TaskInformation")
+        query.getObjectInBackgroundWithId(taskInformationObjectId) {
+            (objects: PFObject?, error: NSError?) -> Void in
+            if error != nil {
+                print(error)
+                completion(updateSuccessful: false)
+            } else if let object = objects {
+                object["sentToCathys"] = true
+                object.pinInBackground()
+                object.saveInBackgroundWithBlock {
+                    (success: Bool, error: NSError?) -> Void in
+                    if (success) {
+                        completion(updateSuccessful: true)
+                    } else {
+                        print(error?.description)
+                        completion(updateSuccessful: false)
+                    }
+                }
+            }
+        }
+
+    }
+    
+    @IBAction func sendButtonTapped(sender: AnyObject) {
+        var numberOfUpdates: Int = 0
+        
+        print(self.checkedRows)
+        
+        for var row: Int = 0; row < self.checkedRows.count; row++ {
+            if self.checkedRows[row] {
+                print(self.taskInformationObjectIds[row])
+                self.attemptUpdatingTaskInformation(self.taskInformationObjectIds[row], completion: { (updateSuccessful) -> Void in
+                    if updateSuccessful {
+                        numberOfUpdates++
+                        if numberOfUpdates == self.numberOfCheckedRows {
+                            var cellIndicesToBeDeleted: [NSIndexPath] = [NSIndexPath]()
+                            for var row: Int = 0; row < self.tableView.numberOfRowsInSection(0); row++ {
+                                let indexPath: NSIndexPath = NSIndexPath(forRow: row, inSection: 0)
+                                if self.tableView.cellForRowAtIndexPath(indexPath)?.accessoryType == .Checkmark {
+                                    self.numberOfRows--
+                                    cellIndicesToBeDeleted.append(indexPath)
+                                }
+                            }
+                            self.checkedRows = [Bool](count: self.numberOfRows, repeatedValue: false)
+                            self.numberOfCheckedRows = 0
+
+                            self.tableView.beginUpdates()
+                            self.tableView.deleteRowsAtIndexPaths(
+                                cellIndicesToBeDeleted, withRowAnimation: .Automatic)
+                            self.tableView.endUpdates()
+
+                        }
+                        
+                    }
+                })
+                
+            }
+        }
+        
+    }
+    
+    @IBAction func seeDetailsButtonTapped(sender: AnyObject) {
+        self.performSegueWithIdentifier("officeTasksCompletedToOfficeTaskInformation", sender: sender)
+ 
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Tasks Completed"
         self.setTabBarTopBorderLine()
-        self.attemptQueryingTaskInformation { (querySuccessful) -> Void in
+//        self.attemptQueryingTaskInformation(queryFromLocalDateStore: false) { (querySuccessful) -> Void in
+//            if querySuccessful {
+//                self.checkedRows = [Bool](count: self.clientObjectId.count, repeatedValue: false)
+//                self.tableView.reloadData()
+//            }
+//        }
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        self.attemptQueryingTaskInformation(queryFromLocalDateStore: false) { (querySuccessful) -> Void in
             if querySuccessful {
+                self.checkedRows = [Bool](count: self.clientObjectIds.count, repeatedValue: false)
+                self.numberOfRows = self.startedTimes.count
                 self.tableView.reloadData()
             }
         }
-        
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.selectedRowIndexPath = indexPath
-        self.performSegueWithIdentifier("officeTasksCompletedToOfficeTaskInformation", sender: nil)
+        
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+            if cell.accessoryType == .Checkmark {
+                cell.accessoryType = .None
+                self.checkedRows[indexPath.row] = false
+                self.numberOfCheckedRows--
+            } else {
+                cell.accessoryType = .Checkmark
+                self.checkedRows[indexPath.row] = true
+                self.numberOfCheckedRows++
+            }
+        }
+
+        
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -106,19 +221,24 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return self.startTime.count
+        return self.numberOfRows
     }
-
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! OfficeTasksCompletedTableViewCell
 
-        cell.dateLabel.text = self.date[indexPath.row]
-        cell.startTimeLabel.text = self.startTime[indexPath.row]
-        cell.finishTimeLabel.text = self.finishTime[indexPath.row]
-        cell.careGiverNameButton.setTitle(self.careGiverName[indexPath.row], forState: .Normal)
-        cell.clientNameButton.setTitle(self.clientName[indexPath.row], forState: .Normal)
+        cell.dateLabel.text = self.dates[indexPath.row]
+        cell.startTimeLabel.text = self.startedTimes[indexPath.row]
+        cell.finishTimeLabel.text = self.finishedTimes[indexPath.row]
+        cell.careGiverNameButton.setTitle(self.careGiverNames[indexPath.row], forState: .Normal)
+        cell.clientNameButton.setTitle(self.clientNames[indexPath.row], forState: .Normal)
+        cell.lastSavedTime.text = self.lastSavedTime[indexPath.row]
+        cell.seeDetailsButton.tag = indexPath.row
 
+        if self.numberOfCheckedRows == 0 {
+            cell.accessoryType = .None
+        }
+        
         return cell
     }
     
@@ -126,7 +246,7 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
         if segue.identifier == "officeTasksCompletedToOfficeTaskInformation" {
             if let officeTaskInformationTableViewController = segue.destinationViewController as? OfficeTaskInformationTableViewController {
                 
-                officeTaskInformationTableViewController.taskInformationObjectId = self.taskInformationObjectId[self.selectedRowIndexPath!.row]
+                officeTaskInformationTableViewController.taskInformationObjectId = self.taskInformationObjectIds[sender!.tag]
                 
             } else {
                 print("destinationViewController returned nil")
