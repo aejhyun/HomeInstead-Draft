@@ -131,21 +131,22 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
     }
     
     @IBAction func sendButtonTapped(sender: AnyObject) {
+        
+        
         var numberOfUpdates: Int = 0
-        
-        print(self.checkedRows)
-        
-        for var row: Int = 0; row < self.checkedRows.count; row++ {
+        for var row: Int = 0; row < self.checkedRows.count; row++ { //Reason for this line is to get the checked rows
             if self.checkedRows[row] {
-                print(self.taskInformationObjectIds[row])
                 self.attemptUpdatingTaskInformation(self.taskInformationObjectIds[row], completion: { (updateSuccessful) -> Void in
                     if updateSuccessful {
                         numberOfUpdates++
                         if numberOfUpdates == self.numberOfCheckedRows {
+     
                             var cellIndicesToBeDeleted: [NSIndexPath] = [NSIndexPath]()
-                            for var row: Int = 0; row < self.tableView.numberOfRowsInSection(0); row++ {
+                            
+                            for var row: Int = self.tableView.numberOfRowsInSection(0) - 1; row >= 0; row-- {
                                 let indexPath: NSIndexPath = NSIndexPath(forRow: row, inSection: 0)
                                 if self.tableView.cellForRowAtIndexPath(indexPath)?.accessoryType == .Checkmark {
+                                    self.taskInformationObjectIds.removeAtIndex(indexPath.row)
                                     self.numberOfRows--
                                     cellIndicesToBeDeleted.append(indexPath)
                                 }
@@ -162,7 +163,6 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
                         
                     }
                 })
-                
             }
         }
         
