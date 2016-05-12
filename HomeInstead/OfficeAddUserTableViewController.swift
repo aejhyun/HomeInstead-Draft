@@ -24,6 +24,8 @@ class OfficeAddUserTableViewController: UITableViewController {
     var numberOfTimesViewLaidOutSubviews: Int = 0
     var numberOfTimesViewWillAppearIsCalled: Int = 0
     
+    var connectedObjectIds: [Dictionary<String, [String]>] = [Dictionary<String, [String]>]()
+    
     func setNavigationBarTitle() {
         
         if self.selectedUserType == UserType.careGiver {
@@ -49,6 +51,7 @@ class OfficeAddUserTableViewController: UITableViewController {
                 if let objects = objects {
                     for object in objects {
                         
+                        self.connectedObjectIds.append(object.objectForKey("connectedObjectIds") as! Dictionary<String, [String]>)
                         self.officeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
                         
                         self.userNames.append(object.objectForKey("name") as! String)
@@ -238,6 +241,47 @@ class OfficeAddUserTableViewController: UITableViewController {
         
     }
     
+    func appendCurrentOfficeUserId(var officeUserIds: [String]) -> [String] {
+        let currentOfficeUserId: String = (PFUser.currentUser()?.objectId!)!
+        if !officeUserIds.contains(currentOfficeUserId) {
+            officeUserIds.append(currentOfficeUserId)
+        }
+        return officeUserIds
+    }
+    
+    func attemptUpdatingOfficeUserIds(userType: UserType, objectId: String, completion: (updateSuccessful: Bool) -> Void) {
+        
+        var officeUserIds: [String] = [String]()
+        let query = PFQuery(className: ClassNameForCloud().getClassName(userType)!)
+        query.getObjectInBackgroundWithId(objectId) {
+            (query: PFObject?, error: NSError?) -> Void in
+            if error != nil {
+                print(error)
+                completion(updateSuccessful: false)
+            } else if let query = query {
+                officeUserIds = query.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String]
+                query["idsOfOfficeUsersWhoAddedThisUser"] = self.appendCurrentOfficeUserId(officeUserIds)
+                query.saveInBackgroundWithBlock {
+                    (success: Bool, error: NSError?) -> Void in
+                    if (success) {
+                        completion(updateSuccessful: true)
+                    } else {
+                        print(error?.description)
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    func removeDuplicateObjectIds(values: [String]) -> [String] {
+
+        let uniques = Set<String>(values)
+        let result = Array<String>(uniques)
+        return result
+        
+    }
+    
     @IBAction func doneButtonTapped(sender: AnyObject) {
         
         var numberOfNonOfficeUsersToBeAddedToOfficeUser: Int = 0
@@ -250,13 +294,45 @@ class OfficeAddUserTableViewController: UITableViewController {
                         numberOfNonOfficeUsersAddedToOfficeUser++
                         if updateSuccessful {
                             if numberOfNonOfficeUsersAddedToOfficeUser == numberOfNonOfficeUsersToBeAddedToOfficeUser {
-                                self.dismissViewControllerAnimated(true, completion: nil)
+                               // self.dismissViewControllerAnimated(true, completion: nil)
                             }
                         }
                     })
                 }
             }
         }
+        
+        if self.selectedUserType == UserType.careGiver {
+            
+            var clientObjectIds: [String] = [String]()
+            var cathyObjectIds: [String] = [String]()
+            
+            for var row: Int = 0; row < self.userNames.count; row++ {
+                for (connectedClientObjectId, connectedCathyObjectIds) in self.connectedObjectIds[row] {
+                    clientObjectIds.append(connectedClientObjectId)
+                    cathyObjectIds.appendContentsOf(connectedCathyObjectIds)
+                }
+            }
+            
+            clientObjectIds = self.removeDuplicateObjectIds(clientObjectIds)
+            cathyObjectIds = self.removeDuplicateObjectIds(cathyObjectIds)
+            
+            for var index: Int = 0; index < clientObjectIds.count; index++ {
+                self.attemptUpdatingOfficeUserIds(UserType.client, objectId: clientObjectIds[index], completion: { (updateSuccessful) -> Void in
+                    
+                })
+            }
+            
+            for var index: Int = 0; index < cathyObjectIds.count; index++ {
+                print(index)
+                self.attemptUpdatingOfficeUserIds(UserType.cathy, objectId: cathyObjectIds[index], completion: { (updateSuccessful) -> Void in
+                    
+                })
+            }
+            
+            
+        }
+        
         
     }
     

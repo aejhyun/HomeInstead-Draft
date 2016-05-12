@@ -5467,23 +5467,14 @@ Photo</string>
                                         <mask key="constraints">
                                             <exclude reference="VMG-7G-8pC"/>
                                             <exclude reference="g7t-N8-Qnx"/>
-                                            <exclude reference="h8O-8b-HZ9"/>
-                                            <exclude reference="vNJ-fd-4G8"/>
-                                            <exclude reference="HNj-uf-IjL"/>
-                                            <exclude reference="sAx-o0-hyH"/>
-                                            <exclude reference="R8N-n7-6Q4"/>
-                                            <exclude reference="kh1-Cm-6zm"/>
+                                            <exclude reference="OLF-yI-ODP"/>
+                                            <exclude reference="WvO-rW-ePA"/>
                                             <exclude reference="kPc-MZ-cfC"/>
                                             <exclude reference="lgL-YR-6nD"/>
-                                            <exclude reference="2vm-4P-Q3G"/>
-                                            <exclude reference="XzL-U4-96d"/>
-                                            <exclude reference="d1e-Nr-Dvf"/>
+                                            <exclude reference="HNj-uf-IjL"/>
+                                            <exclude reference="sAx-o0-hyH"/>
                                             <exclude reference="0Sl-e3-kr2"/>
                                             <exclude reference="i67-ei-l3o"/>
-                                            <exclude reference="3ol-2h-TW0"/>
-                                            <exclude reference="Xj5-Zf-YCp"/>
-                                            <exclude reference="eC1-aV-moS"/>
-                                            <exclude reference="wQ5-VG-rm9"/>
                                             <exclude reference="2fv-1N-yfr"/>
                                             <exclude reference="DBr-I0-uQ3"/>
                                             <exclude reference="H3d-Pg-GVI"/>
@@ -5491,12 +5482,21 @@ Photo</string>
                                             <exclude reference="hIy-y8-z9L"/>
                                             <exclude reference="srG-vG-IWc"/>
                                             <exclude reference="u6h-rA-Oeb"/>
-                                            <exclude reference="OLF-yI-ODP"/>
-                                            <exclude reference="WvO-rW-ePA"/>
-                                            <exclude reference="llM-rp-yYF"/>
-                                            <exclude reference="zO4-ZF-JNP"/>
                                             <exclude reference="3Vi-Ht-wBP"/>
                                             <exclude reference="mB2-ca-80a"/>
+                                            <exclude reference="R8N-n7-6Q4"/>
+                                            <exclude reference="kh1-Cm-6zm"/>
+                                            <exclude reference="h8O-8b-HZ9"/>
+                                            <exclude reference="vNJ-fd-4G8"/>
+                                            <exclude reference="llM-rp-yYF"/>
+                                            <exclude reference="zO4-ZF-JNP"/>
+                                            <exclude reference="3ol-2h-TW0"/>
+                                            <exclude reference="Xj5-Zf-YCp"/>
+                                            <exclude reference="eC1-aV-moS"/>
+                                            <exclude reference="wQ5-VG-rm9"/>
+                                            <exclude reference="2vm-4P-Q3G"/>
+                                            <exclude reference="XzL-U4-96d"/>
+                                            <exclude reference="d1e-Nr-Dvf"/>
                                         </mask>
                                     </variation>
                                     <variation key="heightClass=regular-widthClass=compact">
@@ -5517,23 +5517,14 @@ Photo</string>
                                         <mask key="constraints">
                                             <include reference="VMG-7G-8pC"/>
                                             <include reference="g7t-N8-Qnx"/>
-                                            <include reference="h8O-8b-HZ9"/>
-                                            <include reference="vNJ-fd-4G8"/>
-                                            <include reference="HNj-uf-IjL"/>
-                                            <include reference="sAx-o0-hyH"/>
-                                            <include reference="R8N-n7-6Q4"/>
-                                            <include reference="kh1-Cm-6zm"/>
+                                            <include reference="OLF-yI-ODP"/>
+                                            <include reference="WvO-rW-ePA"/>
                                             <include reference="kPc-MZ-cfC"/>
                                             <include reference="lgL-YR-6nD"/>
-                                            <include reference="2vm-4P-Q3G"/>
-                                            <exclude reference="XzL-U4-96d"/>
-                                            <include reference="d1e-Nr-Dvf"/>
+                                            <include reference="HNj-uf-IjL"/>
+                                            <include reference="sAx-o0-hyH"/>
                                             <include reference="0Sl-e3-kr2"/>
                                             <include reference="i67-ei-l3o"/>
-                                            <include reference="3ol-2h-TW0"/>
-                                            <include reference="Xj5-Zf-YCp"/>
-                                            <exclude reference="eC1-aV-moS"/>
-                                            <include reference="wQ5-VG-rm9"/>
                                             <include reference="2fv-1N-yfr"/>
                                             <exclude reference="DBr-I0-uQ3"/>
                                             <include reference="H3d-Pg-GVI"/>
@@ -5541,12 +5532,21 @@ Photo</string>
                                             <exclude reference="hIy-y8-z9L"/>
                                             <include reference="srG-vG-IWc"/>
                                             <exclude reference="u6h-rA-Oeb"/>
-                                            <include reference="OLF-yI-ODP"/>
-                                            <include reference="WvO-rW-ePA"/>
-                                            <include reference="llM-rp-yYF"/>
-                                            <include reference="zO4-ZF-JNP"/>
                                             <include reference="3Vi-Ht-wBP"/>
                                             <include reference="mB2-ca-80a"/>
+                                            <include reference="R8N-n7-6Q4"/>
+                                            <include reference="kh1-Cm-6zm"/>
+                                            <include reference="h8O-8b-HZ9"/>
+                                            <include reference="vNJ-fd-4G8"/>
+                                            <include reference="llM-rp-yYF"/>
+                                            <include reference="zO4-ZF-JNP"/>
+                                            <include reference="3ol-2h-TW0"/>
+                                            <include reference="Xj5-Zf-YCp"/>
+                                            <exclude reference="eC1-aV-moS"/>
+                                            <include reference="wQ5-VG-rm9"/>
+                                            <include reference="2vm-4P-Q3G"/>
+                                            <exclude reference="XzL-U4-96d"/>
+                                            <include reference="d1e-Nr-Dvf"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
@@ -5560,10 +5560,10 @@ Photo</string>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="simpleCell" rowHeight="54" id="ZPG-l6-W0u" customClass="CathyTaskInformationTableViewCell" customModule="HomeInstead" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="230" width="600" height="60"/>
+                                <rect key="frame" x="0.0" y="230" width="600" height="54"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZPG-l6-W0u" id="uFp-OG-z9K">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="59"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="53"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Task finished at:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="drs-9L-miL">
@@ -5628,17 +5628,17 @@ Photo</string>
                                             <exclude reference="ZEl-q3-re7"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <exclude reference="ACy-Ao-7Fb"/>
-                                            <exclude reference="oED-hu-k7G"/>
+                                            <exclude reference="Opj-Gz-b6H"/>
+                                            <exclude reference="vGw-vv-rQK"/>
+                                            <exclude reference="CWt-eO-lMb"/>
+                                            <exclude reference="aJ3-ts-gLh"/>
                                             <exclude reference="9OC-u0-dGP"/>
                                             <exclude reference="Jzf-HT-fL4"/>
                                             <exclude reference="Rv0-Xn-Skg"/>
                                             <exclude reference="T9d-rc-Vjn"/>
                                             <exclude reference="vhn-y8-Rb0"/>
-                                            <exclude reference="Opj-Gz-b6H"/>
-                                            <exclude reference="vGw-vv-rQK"/>
-                                            <exclude reference="CWt-eO-lMb"/>
-                                            <exclude reference="aJ3-ts-gLh"/>
+                                            <exclude reference="ACy-Ao-7Fb"/>
+                                            <exclude reference="oED-hu-k7G"/>
                                         </mask>
                                     </variation>
                                     <variation key="heightClass=regular-widthClass=compact">
@@ -5649,17 +5649,17 @@ Photo</string>
                                             <include reference="ZEl-q3-re7"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <include reference="ACy-Ao-7Fb"/>
-                                            <include reference="oED-hu-k7G"/>
+                                            <include reference="Opj-Gz-b6H"/>
+                                            <include reference="vGw-vv-rQK"/>
+                                            <include reference="CWt-eO-lMb"/>
+                                            <include reference="aJ3-ts-gLh"/>
                                             <include reference="9OC-u0-dGP"/>
                                             <exclude reference="Jzf-HT-fL4"/>
                                             <include reference="Rv0-Xn-Skg"/>
                                             <exclude reference="T9d-rc-Vjn"/>
                                             <include reference="vhn-y8-Rb0"/>
-                                            <include reference="Opj-Gz-b6H"/>
-                                            <include reference="vGw-vv-rQK"/>
-                                            <include reference="CWt-eO-lMb"/>
-                                            <include reference="aJ3-ts-gLh"/>
+                                            <include reference="ACy-Ao-7Fb"/>
+                                            <include reference="oED-hu-k7G"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
@@ -5669,10 +5669,10 @@ Photo</string>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellWithTaskComment" rowHeight="75" id="QXF-ee-seu" customClass="CathyTaskInformationTableViewCell" customModule="HomeInstead" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="290" width="600" height="159"/>
+                                <rect key="frame" x="0.0" y="284" width="600" height="75"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QXF-ee-seu" id="i9q-Ij-pse">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="158"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="74"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Task finished at:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ww1-eg-PLa">
@@ -5758,10 +5758,9 @@ Photo</string>
                                             <exclude reference="KwN-hJ-isI"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <exclude reference="QRh-C2-Zy2"/>
-                                            <exclude reference="TjY-Jr-Y9E"/>
-                                            <exclude reference="0FM-Uh-99X"/>
-                                            <exclude reference="Kqt-If-NU0"/>
+                                            <exclude reference="1cw-4d-mXL"/>
+                                            <exclude reference="evQ-M2-2z5"/>
+                                            <exclude reference="rOQ-Re-Apx"/>
                                             <exclude reference="2IH-7e-jlU"/>
                                             <exclude reference="Ecp-qy-xHT"/>
                                             <exclude reference="RH8-Mh-D10"/>
@@ -5769,11 +5768,12 @@ Photo</string>
                                             <exclude reference="oiK-YN-Hzb"/>
                                             <exclude reference="Czi-ya-JEG"/>
                                             <exclude reference="m9R-be-1k5"/>
+                                            <exclude reference="0FM-Uh-99X"/>
+                                            <exclude reference="Kqt-If-NU0"/>
+                                            <exclude reference="QRh-C2-Zy2"/>
+                                            <exclude reference="TjY-Jr-Y9E"/>
                                             <exclude reference="BbR-x1-jfr"/>
                                             <exclude reference="Fg2-d9-H5Y"/>
-                                            <exclude reference="1cw-4d-mXL"/>
-                                            <exclude reference="evQ-M2-2z5"/>
-                                            <exclude reference="rOQ-Re-Apx"/>
                                         </mask>
                                     </variation>
                                     <variation key="heightClass=regular-widthClass=compact">
@@ -5786,10 +5786,9 @@ Photo</string>
                                             <include reference="KwN-hJ-isI"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <include reference="QRh-C2-Zy2"/>
-                                            <include reference="TjY-Jr-Y9E"/>
-                                            <include reference="0FM-Uh-99X"/>
-                                            <include reference="Kqt-If-NU0"/>
+                                            <include reference="1cw-4d-mXL"/>
+                                            <exclude reference="evQ-M2-2z5"/>
+                                            <include reference="rOQ-Re-Apx"/>
                                             <include reference="2IH-7e-jlU"/>
                                             <include reference="Ecp-qy-xHT"/>
                                             <include reference="RH8-Mh-D10"/>
@@ -5797,11 +5796,12 @@ Photo</string>
                                             <include reference="oiK-YN-Hzb"/>
                                             <include reference="Czi-ya-JEG"/>
                                             <include reference="m9R-be-1k5"/>
+                                            <include reference="0FM-Uh-99X"/>
+                                            <include reference="Kqt-If-NU0"/>
+                                            <include reference="QRh-C2-Zy2"/>
+                                            <include reference="TjY-Jr-Y9E"/>
                                             <include reference="BbR-x1-jfr"/>
                                             <include reference="Fg2-d9-H5Y"/>
-                                            <include reference="1cw-4d-mXL"/>
-                                            <exclude reference="evQ-M2-2z5"/>
-                                            <include reference="rOQ-Re-Apx"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
@@ -5812,10 +5812,10 @@ Photo</string>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellWithImage" rowHeight="229" id="SgL-RA-nUp" customClass="CathyTaskInformationTableViewCell" customModule="HomeInstead" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="449" width="600" height="191"/>
+                                <rect key="frame" x="0.0" y="359" width="600" height="229"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SgL-RA-nUp" id="wdG-Zu-D1H">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="190"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="228"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Task Description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tIV-ee-4rO">
@@ -5844,7 +5844,7 @@ Photo</string>
                                                     <variation key="heightClass=regular-widthClass=compact" constant="150"/>
                                                 </constraint>
                                             </constraints>
-                                            <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                            <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             <variation key="default">
@@ -5852,8 +5852,7 @@ Photo</string>
                                                     <exclude reference="cha-2V-YMd"/>
                                                 </mask>
                                             </variation>
-                                            <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                                <rect key="frame" x="14" y="48" width="372" height="165"/>
+                                            <variation key="heightClass=regular-widthClass=compact">
                                                 <mask key="constraints">
                                                     <include reference="cha-2V-YMd"/>
                                                 </mask>
@@ -5915,19 +5914,19 @@ Photo</string>
                                             <exclude reference="Dxh-7I-d5i"/>
                                         </mask>
                                         <mask key="constraints">
+                                            <exclude reference="NW7-oT-4dx"/>
+                                            <exclude reference="j2t-eB-XRj"/>
+                                            <exclude reference="mOY-lA-UGz"/>
+                                            <exclude reference="v24-oh-cH8"/>
                                             <exclude reference="4mX-01-3l8"/>
                                             <exclude reference="EX4-Gz-eRf"/>
                                             <exclude reference="hvs-H6-Z1u"/>
-                                            <exclude reference="mOY-lA-UGz"/>
-                                            <exclude reference="v24-oh-cH8"/>
-                                            <exclude reference="KEo-4R-tE9"/>
-                                            <exclude reference="YY6-Bw-KBh"/>
                                             <exclude reference="RL9-mn-w0m"/>
                                             <exclude reference="XVZ-Ie-gRS"/>
                                             <exclude reference="bO7-4G-YSN"/>
                                             <exclude reference="dkj-c7-tYL"/>
-                                            <exclude reference="NW7-oT-4dx"/>
-                                            <exclude reference="j2t-eB-XRj"/>
+                                            <exclude reference="KEo-4R-tE9"/>
+                                            <exclude reference="YY6-Bw-KBh"/>
                                         </mask>
                                     </variation>
                                     <variation key="heightClass=regular-widthClass=compact">
@@ -5939,19 +5938,19 @@ Photo</string>
                                             <include reference="Dxh-7I-d5i"/>
                                         </mask>
                                         <mask key="constraints">
+                                            <include reference="NW7-oT-4dx"/>
+                                            <include reference="j2t-eB-XRj"/>
+                                            <include reference="mOY-lA-UGz"/>
+                                            <include reference="v24-oh-cH8"/>
                                             <include reference="4mX-01-3l8"/>
                                             <include reference="EX4-Gz-eRf"/>
                                             <include reference="hvs-H6-Z1u"/>
-                                            <include reference="mOY-lA-UGz"/>
-                                            <include reference="v24-oh-cH8"/>
-                                            <include reference="KEo-4R-tE9"/>
-                                            <include reference="YY6-Bw-KBh"/>
                                             <include reference="RL9-mn-w0m"/>
                                             <include reference="XVZ-Ie-gRS"/>
                                             <include reference="bO7-4G-YSN"/>
                                             <include reference="dkj-c7-tYL"/>
-                                            <include reference="NW7-oT-4dx"/>
-                                            <include reference="j2t-eB-XRj"/>
+                                            <include reference="KEo-4R-tE9"/>
+                                            <include reference="YY6-Bw-KBh"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>
@@ -6572,7 +6571,7 @@ Photo</string>
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="ene-VR-qgK">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="12"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="22"/>
                                     </constraint>
                                 </constraints>
                                 <items>
@@ -6767,7 +6766,7 @@ Photo</string>
                             <constraint firstAttribute="trailingMargin" secondItem="YDS-Of-YBV" secondAttribute="trailing" constant="-20" id="WIH-sf-nQY"/>
                             <constraint firstItem="YDS-Of-YBV" firstAttribute="leading" secondItem="Tbf-sJ-Uxy" secondAttribute="leadingMargin" constant="-20" id="a1v-ii-ACz"/>
                             <constraint firstItem="ns0-1u-b0c" firstAttribute="top" secondItem="bow-LN-ZPW" secondAttribute="bottom" id="awk-xx-Fm6">
-                                <variation key="heightClass=regular-widthClass=compact" constant="15"/>
+                                <variation key="heightClass=regular-widthClass=compact" constant="13"/>
                             </constraint>
                             <constraint firstItem="ns0-1u-b0c" firstAttribute="leading" secondItem="Tbf-sJ-Uxy" secondAttribute="leadingMargin" constant="-20" id="b0K-oe-O5E"/>
                             <constraint firstItem="7Xq-bU-KsZ" firstAttribute="top" secondItem="YDS-Of-YBV" secondAttribute="bottom" constant="38" id="epe-Yt-8Zr">

@@ -107,7 +107,7 @@ class OfficeConnectUserHelper {
         
         let newOfficeUserIdsForUser: [String] = officeUserIdsForUser[indexPath.row].filter { $0 != PFUser.currentUser()?.objectId }
         let query = PFQuery(className: classNameForCloud.getClassName(selectedUserType)!)
-        let emptyDictionaryOfArray: Dictionary<String, [String]> = [:]
+        //let emptyDictionaryOfArray: Dictionary<String, [String]> = [:]
         
         query.getObjectInBackgroundWithId(userObjectIds[indexPath.row]) {
             (objects: PFObject?, error: NSError?) -> Void in
@@ -115,7 +115,7 @@ class OfficeConnectUserHelper {
                 print(error)
             } else if let object = objects {
                 if selectedUserType == UserType.careGiver {
-                    object["connectedObjectIds"] = emptyDictionaryOfArray
+                    //object["connectedObjectIds"] = emptyDictionaryOfArray
                 }
                 object["idsOfOfficeUsersWhoAddedThisUser"] = newOfficeUserIdsForUser
                 object.saveInBackground()
