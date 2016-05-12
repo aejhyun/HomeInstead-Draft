@@ -109,7 +109,31 @@ struct QuerySuccessCheck {
     
 }
 
-
+struct updateSuccessCheck {
+    
+    var firstUpdateSuccessful: Bool
+    var secondUpdateSuccessful: Bool
+    var thirdUpdateSuccessful: Bool
+    
+    init() {
+        
+        self.firstUpdateSuccessful = false
+        self.secondUpdateSuccessful = false
+        self.thirdUpdateSuccessful = false
+        
+    }
+    
+    func allUpdatesAreSuccessful() -> Bool {
+        
+        if self.thirdUpdateSuccessful && self.secondUpdateSuccessful && self.firstUpdateSuccessful {
+            return true
+        } else {
+            return false
+        }
+        
+    }
+    
+}
 
 
 

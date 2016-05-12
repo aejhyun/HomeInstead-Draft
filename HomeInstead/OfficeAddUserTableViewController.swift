@@ -287,21 +287,28 @@ class OfficeAddUserTableViewController: UITableViewController {
     
     @IBAction func doneButtonTapped(sender: AnyObject) {
         
-        var numberOfNonOfficeUsersToBeAddedToOfficeUser: Int = 0
-        var numberOfNonOfficeUsersAddedToOfficeUser: Int = 0
-        for var row: Int = 0; row < self.userNames.count; row++ {
+        let updateSuccessCheck =
+        
+        var firstUpdateFinished: Bool = false
+        var secondUpdateFinished: Bool = false
+        var thirdUpdateFinished: Bool = false
+        
+        
+        var numOfCheckedRows: Int = 0
+        var numOfOfficeUserIdsUpdated: Int = 0
+        
+        for var row: Int = 0; row < self.checkedRows.count; row++ {
             if self.checkedRows[row] == true {
-                if !self.isAlreadyAddedByCurrentOfficeUser(row) {
-                    numberOfNonOfficeUsersToBeAddedToOfficeUser++
-                    self.attemptUpdatingIdsOfOfficeUsersWhoAddedThisUserInCloud(row, completion: { (updateSuccessful) -> Void in
-                        numberOfNonOfficeUsersAddedToOfficeUser++
-                        if updateSuccessful {
-                            if numberOfNonOfficeUsersAddedToOfficeUser == numberOfNonOfficeUsersToBeAddedToOfficeUser {
-                               // self.dismissViewControllerAnimated(true, completion: nil)
-                            }
+                numOfCheckedRows++
+                self.attemptUpdatingOfficeUserIds(self.selectedUserType, objectId: self.userObjectIds[row], completion: { (updateSuccessful) -> Void in
+                    numOfOfficeUserIdsUpdated++
+                    if numOfCheckedRows == numOfOfficeUserIdsUpdated {
+                        if self.selectedUserType != UserType.careGiver {
+                            self.dismissViewControllerAnimated(true, completion: nil)
                         }
-                    })
-                }
+                        firstUpdateFinished = true
+                    }
+                })
             }
         }
         
@@ -310,26 +317,38 @@ class OfficeAddUserTableViewController: UITableViewController {
             var clientObjectIds: [String] = [String]()
             var cathyObjectIds: [String] = [String]()
             
-            for var row: Int = 0; row < self.userNames.count; row++ {
-                for (connectedClientObjectId, connectedCathyObjectIds) in self.connectedObjectIds[row] {
-                    clientObjectIds.append(connectedClientObjectId)
-                    cathyObjectIds.appendContentsOf(connectedCathyObjectIds)
+            for var row: Int = 0; row < self.checkedRows.count; row++ {
+                if self.checkedRows[row] == true {
+                    for (connectedClientObjectId, connectedCathyObjectIds) in self.connectedObjectIds[row] {
+                        clientObjectIds.append(connectedClientObjectId)
+                        cathyObjectIds.appendContentsOf(connectedCathyObjectIds)
+                    }
                 }
+   
             }
             
             clientObjectIds = self.removeDuplicateObjectIds(clientObjectIds)
             cathyObjectIds = self.removeDuplicateObjectIds(cathyObjectIds)
             
+            var numOfOfficeUserIdsUpdatedForClient = 0
+            
             for var index: Int = 0; index < clientObjectIds.count; index++ {
                 self.attemptUpdatingOfficeUserIds(UserType.client, objectId: clientObjectIds[index], completion: { (updateSuccessful) -> Void in
-                    
+                    numOfOfficeUserIdsUpdatedForClient++
+                    if numOfOfficeUserIdsUpdatedForClient == clientObjectIds.count {
+                        secondUpdateFinished = true
+                    }
                 })
             }
             
+            var numOfOfficeUserIdsUpdatedForCathy = 0
+            
             for var index: Int = 0; index < cathyObjectIds.count; index++ {
-                print(index)
                 self.attemptUpdatingOfficeUserIds(UserType.cathy, objectId: cathyObjectIds[index], completion: { (updateSuccessful) -> Void in
-                    
+                    numOfOfficeUserIdsUpdatedForCathy++
+                    if numOfOfficeUserIdsUpdatedForCathy == cathyObjectIds.count {
+                        thirdUpdateFinished = true
+                    }
                 })
             }
             
