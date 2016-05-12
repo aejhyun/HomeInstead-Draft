@@ -51,20 +51,10 @@ class CathyTaskInformationTableViewController: UITableViewController {
         
     }
     
-    func setTabBarTopBorderLine() {
-        
-        let viewFrame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 1.0)
-        let tabBarTopHairLine: UIView = UIView(frame: viewFrame)
-        tabBarTopHairLine.backgroundColor = UIColor.lightGrayColor()
-        print("dawg")
-        
-        self.tabBarController!.tabBar.addSubview(tabBarTopHairLine)
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.setTabBarTopBorderLine()
         
         self.tableView.estimatedRowHeight = 140
         self.tableView.rowHeight = UITableViewAutomaticDimension
@@ -125,9 +115,8 @@ class CathyTaskInformationTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("cellWithTaskComment", forIndexPath: indexPath) as! CathyTaskInformationTableViewCell
         let indexPathRow = indexPath.row - 1
         
-        
         cell.taskDescriptionLabel.text = self.taskDescriptions[indexPathRow]
-        cell.taskCommentLabel.text = "       \(self.taskComments[indexPathRow])"
+        cell.taskCommentLabel.text = "                     \(self.taskComments[indexPathRow])"
         cell.timeTaskCompletedLabel.text = self.timeTasksCompleted[indexPathRow]
         
         return cell
@@ -150,49 +139,5 @@ class CathyTaskInformationTableViewController: UITableViewController {
     }
 
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

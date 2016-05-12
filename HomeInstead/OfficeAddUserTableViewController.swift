@@ -38,7 +38,6 @@ class OfficeAddUserTableViewController: UITableViewController {
     
     func attemptQueryingNonOfficeUserInformationFromCloudWithClassName(queryFromLocalDateStore: Bool, className: String, completion: (querySuccessful: Bool) -> Void) {
     
-       
         let query = PFQuery(className:className)
         if queryFromLocalDateStore {
             query.fromLocalDatastore()

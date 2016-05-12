@@ -25,8 +25,10 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
     var lastSavedTime: [String] = [String]()
     
     var numberOfCheckedRows: Int = 0
-    var numberOfRows: Int = 0
     
+    var clientNameIndexPath: NSIndexPath? = nil
+    var careGiverNameIndexPath: NSIndexPath? = nil
+    var seeDetailsIndexPath: NSIndexPath? = nil
     var selectedRowIndexPath: NSIndexPath? = nil
     
     func setTabBarTopBorderLine() {
@@ -130,7 +132,7 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
 
     }
     
-    func removeCellValuesAtIndex(indexPath: NSIndexPath) {
+    func removeCellValuesAtIndexPath(indexPath: NSIndexPath) {
         
         self.dates.removeAtIndex(indexPath.row)
         self.startedTimes.removeAtIndex(indexPath.row)
@@ -144,29 +146,37 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
         
     }
     
+    func indexPathsInDescendingOrder(indexPathOne: NSIndexPath, indexPathTwo: NSIndexPath) -> Bool {
+        return indexPathTwo.row < indexPathOne.row
+    }
+    
     @IBAction func sendButtonTapped(sender: AnyObject) {
         
         var numberOfUpdates: Int = 0
-        var cellIndicesToBeDeleted: [NSIndexPath] = [NSIndexPath]()
+        var indexPathsToBeDeleted: [NSIndexPath] = [NSIndexPath]()
         
-        for var row: Int = self.tableView.numberOfRowsInSection(0); row >= 0; row-- {
+        for var row: Int = 0; row < self.tableView.numberOfRowsInSection(0); row++ {
             let indexPath: NSIndexPath = NSIndexPath(forRow: row, inSection: 0)
             if self.tableView.cellForRowAtIndexPath(indexPath)?.accessoryType == .Checkmark {
-            
                 self.attemptUpdatingTaskInformation(self.taskInformationObjectIds[indexPath.row], completion: { (updateSuccessful) -> Void in
                     if updateSuccessful {
-                        numberOfUpdates++
-
-                        self.removeCellValuesAtIndex(indexPath)
+                        numberOfUpdates++ // This is here so that I know when to call self.tableView.deleteRowsAtIndexPaths() because I want all the rows to be deleted at one time.
                         
-                        cellIndicesToBeDeleted.append(indexPath)
-                        self.numberOfRows--
+                        // Interesting behavior here. The indexPaths that come through do not come in an ascending order. I think whatever information that gets uploaded first, that associated indexPath will come through first. So it's quite unpredictable. And in the case that multiple rows are "checked", the removal of the cell values have to go from a descending order because if it goes in an ascending order, then it will cause everything to shift down, which will cause values to be removed at indeces that I do not want removed. So that is the reason for the sort function down below.
+                        indexPathsToBeDeleted.append(indexPath)
                         
                         if numberOfUpdates == self.numberOfCheckedRows {
+                            
+                            indexPathsToBeDeleted = indexPathsToBeDeleted.sort(self.indexPathsInDescendingOrder)
+                            
+                            for indexPath in indexPathsToBeDeleted {
+                                self.removeCellValuesAtIndexPath(indexPath)
+                            }
+                            
                             self.numberOfCheckedRows = 0
                             self.tableView.beginUpdates()
                             self.tableView.deleteRowsAtIndexPaths(
-                                cellIndicesToBeDeleted, withRowAnimation: .Automatic)
+                                indexPathsToBeDeleted, withRowAnimation: .Automatic)
                             self.tableView.endUpdates()
                             
                         }
@@ -181,7 +191,13 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
     }
     
     @IBAction func careGiverNameTapped(sender: AnyObject) {
-
+        
+        let careGiverNameButton = sender as! UIButton
+        let superView = careGiverNameButton.superview!
+        let officeTaskInformationTableViewCell = superView.superview as! OfficeTasksCompletedTableViewCell
+        let indexPath = self.tableView.indexPathForCell(officeTaskInformationTableViewCell)
+        self.careGiverNameIndexPath = indexPath
+        
         self.careGiverNameTapped = true
         self.performSegueWithIdentifier("officeTaskCompletedToUserProfile", sender: self.careGiverObjectIds[sender.tag])
         
@@ -189,12 +205,25 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
 
     @IBAction func clientNameTapped(sender: AnyObject) {
         
+        let clientNameButton = sender as! UIButton
+        let superView = clientNameButton.superview!
+        let officeTaskInformationTableViewCell = superView.superview as! OfficeTasksCompletedTableViewCell
+        let indexPath = self.tableView.indexPathForCell(officeTaskInformationTableViewCell)
+        self.clientNameIndexPath = indexPath
+        
         self.clientNameTapped = true
         self.performSegueWithIdentifier("officeTaskCompletedToUserProfile", sender: self.clientObjectIds[sender.tag])
         
     }
     
     @IBAction func seeDetailsButtonTapped(sender: AnyObject) {
+        
+        let seeDetailsButton = sender as! UIButton
+        let superView = seeDetailsButton.superview!
+        let officeTaskInformationTableViewCell = superView.superview as! OfficeTasksCompletedTableViewCell
+        let indexPath = self.tableView.indexPathForCell(officeTaskInformationTableViewCell)
+        self.seeDetailsIndexPath = indexPath
+        
         self.performSegueWithIdentifier("officeTasksCompletedToOfficeTaskInformation", sender: sender)
  
     }
@@ -215,7 +244,6 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         self.attemptQueryingTaskInformation(queryFromLocalDateStore: false) { (querySuccessful) -> Void in
             if querySuccessful {
-                self.numberOfRows = self.startedTimes.count
                 self.tableView.reloadData()
             }
         }
@@ -243,7 +271,7 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return self.numberOfRows
+        return self.taskInformationObjectIds.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -253,11 +281,8 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
         cell.startTimeLabel.text = self.startedTimes[indexPath.row]
         cell.finishTimeLabel.text = self.finishedTimes[indexPath.row]
         cell.careGiverNameButton.setTitle(self.careGiverNames[indexPath.row], forState: .Normal)
-        cell.careGiverNameButton.tag = indexPath.row
         cell.clientNameButton.setTitle(self.clientNames[indexPath.row], forState: .Normal)
-        cell.clientNameButton.tag = indexPath.row
         cell.lastSavedTime.text = self.lastSavedTime[indexPath.row]
-        cell.seeDetailsButton.tag = indexPath.row
 
         if self.numberOfCheckedRows == 0 {
             cell.accessoryType = .None
@@ -269,8 +294,8 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "officeTasksCompletedToOfficeTaskInformation" {
             if let officeTaskInformationTableViewController = segue.destinationViewController as? OfficeTaskInformationTableViewController {
-                
-                officeTaskInformationTableViewController.taskInformationObjectId = self.taskInformationObjectIds[sender!.tag]
+
+                officeTaskInformationTableViewController.taskInformationObjectId = self.taskInformationObjectIds[self.seeDetailsIndexPath!.row]
                 
             } else {
                 print("destinationViewController returned nil")
@@ -281,13 +306,12 @@ class OfficeTasksCompletedTableViewController: UITableViewController {
                 if self.careGiverNameTapped {
                     userProfileViewController.selectedUserType = UserType.careGiver
                     self.careGiverNameTapped = false
+                    userProfileViewController.userObjectId = self.careGiverObjectIds[self.careGiverNameIndexPath!.row]
                 } else if self.clientNameTapped {
                     userProfileViewController.selectedUserType = UserType.client
                     self.clientNameTapped = false
+                    userProfileViewController.userObjectId = self.clientObjectIds[self.clientNameIndexPath!.row]
                 }
-                
-                userProfileViewController.userObjectId = sender as! String
-                
                 
             } else {
                 print("destinationViewController returned nil")

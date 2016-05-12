@@ -84,10 +84,21 @@ class CathyTasksCompletedTableViewController: UITableViewController {
         }
         
     }
+    
+    func setTabBarTopBorderLine() {
+        
+        let viewFrame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 1.0)
+        let tabBarTopHairLine: UIView = UIView(frame: viewFrame)
+        tabBarTopHairLine.backgroundColor = UIColor.lightGrayColor()
+        
+        self.tabBarController!.tabBar.addSubview(tabBarTopHairLine)
+    }
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.setTabBarTopBorderLine()
         
         self.navigationItem.title = "Completed Tasks"
         
