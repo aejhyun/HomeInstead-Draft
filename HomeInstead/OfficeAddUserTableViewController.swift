@@ -287,12 +287,7 @@ class OfficeAddUserTableViewController: UITableViewController {
     
     @IBAction func doneButtonTapped(sender: AnyObject) {
         
-        let updateSuccessCheck =
-        
-        var firstUpdateFinished: Bool = false
-        var secondUpdateFinished: Bool = false
-        var thirdUpdateFinished: Bool = false
-        
+        var updateSuccessCheck = UpdateSuccessCheck()
         
         var numOfCheckedRows: Int = 0
         var numOfOfficeUserIdsUpdated: Int = 0
@@ -306,7 +301,10 @@ class OfficeAddUserTableViewController: UITableViewController {
                         if self.selectedUserType != UserType.careGiver {
                             self.dismissViewControllerAnimated(true, completion: nil)
                         }
-                        firstUpdateFinished = true
+                        updateSuccessCheck.firstUpdateSuccessful = true
+                        if updateSuccessCheck.allUpdatesAreSuccessful() == true {
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        }
                     }
                 })
             }
@@ -336,7 +334,10 @@ class OfficeAddUserTableViewController: UITableViewController {
                 self.attemptUpdatingOfficeUserIds(UserType.client, objectId: clientObjectIds[index], completion: { (updateSuccessful) -> Void in
                     numOfOfficeUserIdsUpdatedForClient++
                     if numOfOfficeUserIdsUpdatedForClient == clientObjectIds.count {
-                        secondUpdateFinished = true
+                        updateSuccessCheck.secondUpdateSuccessful = true
+                        if updateSuccessCheck.allUpdatesAreSuccessful() == true {
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        }
                     }
                 })
             }
@@ -347,7 +348,10 @@ class OfficeAddUserTableViewController: UITableViewController {
                 self.attemptUpdatingOfficeUserIds(UserType.cathy, objectId: cathyObjectIds[index], completion: { (updateSuccessful) -> Void in
                     numOfOfficeUserIdsUpdatedForCathy++
                     if numOfOfficeUserIdsUpdatedForCathy == cathyObjectIds.count {
-                        thirdUpdateFinished = true
+                        updateSuccessCheck.thirdUpdateSuccessful = true
+                        if updateSuccessCheck.allUpdatesAreSuccessful() == true {
+                            self.dismissViewControllerAnimated(true, completion: nil)
+                        }
                     }
                 })
             }

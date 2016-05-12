@@ -156,7 +156,16 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
 //        alertAction = UIAlertAction(title: "Cancel", style: .Default, handler: nil)
 //        alertController.addAction(alertAction)
 //        presentViewController(alertController, animated: true, completion: nil)
-
+        
+        
+        var clientObjectIds: [String] = [String]()
+        var cathyObjectIds: [String] = [String]()
+        
+        for (connectedClientObjectId, connectedCathyObjectIds) in self.connectedObjectIds[indexPath.row] {
+            clientObjectIds.append(connectedClientObjectId)
+            cathyObjectIds.appendContentsOf(connectedCathyObjectIds)
+        }
+        
         
         if selectedUserType == UserType.careGiver {
             
@@ -173,6 +182,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             }
             
         } else if selectedUserType == UserType.client {
+            
+            
             
             self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.selectedUserType, userObjectIds: self.clientObjectIds, officeUserIdsForUser: self.clientOfficeUserIds, indexPath: indexPath)
             self.clientNames.removeAtIndex(indexPath.row)

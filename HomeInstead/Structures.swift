@@ -109,7 +109,7 @@ struct QuerySuccessCheck {
     
 }
 
-struct updateSuccessCheck {
+struct UpdateSuccessCheck {
     
     var firstUpdateSuccessful: Bool
     var secondUpdateSuccessful: Bool
