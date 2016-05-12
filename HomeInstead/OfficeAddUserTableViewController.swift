@@ -51,7 +51,10 @@ class OfficeAddUserTableViewController: UITableViewController {
                 if let objects = objects {
                     for object in objects {
                         
-                        self.connectedObjectIds.append(object.objectForKey("connectedObjectIds") as! Dictionary<String, [String]>)
+                        if self.selectedUserType == UserType.careGiver {
+                            self.connectedObjectIds.append(object.objectForKey("connectedObjectIds") as! Dictionary<String, [String]>)
+                        }
+                        
                         self.officeUserIds.append(object.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String])
                         
                         self.userNames.append(object.objectForKey("name") as! String)
@@ -260,7 +263,7 @@ class OfficeAddUserTableViewController: UITableViewController {
                 completion(updateSuccessful: false)
             } else if let query = query {
                 officeUserIds = query.objectForKey("idsOfOfficeUsersWhoAddedThisUser") as! [String]
-                query["idsOfOfficeUsersWhoAddedThisUser"] = self.appendCurrentOfficeUserId(officeUserIds)
+                query["idsOfOfficeUsersWhoAddedThisUser"] = self.appendCurrentOfficeUserId(officeUserIds) // Only append if the office user id is not already present.
                 query.saveInBackgroundWithBlock {
                     (success: Bool, error: NSError?) -> Void in
                     if (success) {

@@ -6571,7 +6571,7 @@ Photo</string>
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="ene-VR-qgK">
-                                        <variation key="heightClass=regular-widthClass=compact" constant="22"/>
+                                        <variation key="heightClass=regular-widthClass=compact" constant="23"/>
                                     </constraint>
                                 </constraints>
                                 <items>
