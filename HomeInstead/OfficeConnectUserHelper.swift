@@ -103,19 +103,19 @@ class OfficeConnectUserHelper {
         
     }
     
-    func deleteUserFromOfficeUserInCloud(selectedUserType: UserType, userObjectIds: [String], officeUserIdsForUser: [[String]], indexPath: NSIndexPath) {
+    func deleteUserFromOfficeUserInCloud(userType: UserType, keepConnections: Bool, userObjectId: String, officeUserIdsForUser: [String]) {
         
-        let newOfficeUserIdsForUser: [String] = officeUserIdsForUser[indexPath.row].filter { $0 != PFUser.currentUser()?.objectId }
-        let query = PFQuery(className: classNameForCloud.getClassName(selectedUserType)!)
-        //let emptyDictionaryOfArray: Dictionary<String, [String]> = [:]
+        let newOfficeUserIdsForUser: [String] = officeUserIdsForUser.filter { $0 != PFUser.currentUser()?.objectId }
+        let query = PFQuery(className: classNameForCloud.getClassName(userType)!)
+        let emptyDictionaryOfArray: Dictionary<String, [String]> = [:]
         
-        query.getObjectInBackgroundWithId(userObjectIds[indexPath.row]) {
+        query.getObjectInBackgroundWithId(userObjectId) {
             (objects: PFObject?, error: NSError?) -> Void in
             if error != nil {
                 print(error)
             } else if let object = objects {
-                if selectedUserType == UserType.careGiver {
-                    //object["connectedObjectIds"] = emptyDictionaryOfArray
+                if userType == UserType.careGiver && keepConnections == false {
+                    object["connectedObjectIds"] = emptyDictionaryOfArray
                 }
                 object["idsOfOfficeUsersWhoAddedThisUser"] = newOfficeUserIdsForUser
                 object.saveInBackground()

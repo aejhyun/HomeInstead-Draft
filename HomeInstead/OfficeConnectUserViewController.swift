@@ -138,73 +138,102 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         }
     }
     
-
+    func deleteRowForCareGiverHelper(indexPath: NSIndexPath, keepConnections: Bool) {
+        
+        self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.selectedUserType, keepConnections: keepConnections, userObjectId: self.careGiverObjectIds[indexPath.row], officeUserIdsForUser: self.careGiverOfficeUserIds[indexPath.row])
+        
+        self.careGiverNames.removeAtIndex(indexPath.row)
+        self.careGiverObjectIds.removeAtIndex(indexPath.row)
+        self.careGiverNotes.removeAtIndex(indexPath.row)
+        self.connectedObjectIds.removeAtIndex(indexPath.row)
+        
+        if self.careGiverCheckedRow == indexPath.row {
+            self.careGiverCheckedRow = -1
+        } else if self.careGiverCheckedRow > indexPath.row {
+            self.careGiverCheckedRow -= 1
+        }
+        
+    }
     
-    func deleteRowForSelectedUserType(indexPath: NSIndexPath) {
+    func deleteRowForCareGiver(indexPath: NSIndexPath, completion: (deleteRowsAtIndexPath: Bool) -> Void) {
         
-//        var keepConnections: Bool = false
-//        
-//        let alertController = UIAlertController(title: "", message: "Please select from one of the options:", preferredStyle: UIAlertControllerStyle.Alert)
-//        var alertAction = UIAlertAction(title: "Disconnect", style: .Default) { (UIAlertAction) -> Void in
-//            keepConnections = false
-//        }
-//        alertController.addAction(alertAction)
-//        alertAction = UIAlertAction(title: "Keep Connections", style: .Default, handler: { (UIAlertAction) -> Void in
-//            keepConnections = true
-//        })
-//        alertController.addAction(alertAction)
-//        alertAction = UIAlertAction(title: "Cancel", style: .Default, handler: nil)
-//        alertController.addAction(alertAction)
-//        presentViewController(alertController, animated: true, completion: nil)
+        let alertController = UIAlertController(title: "", message: "Please select from one of the options:", preferredStyle: UIAlertControllerStyle.Alert)
         
+        var alertAction = UIAlertAction(title: "Keep Connections", style: .Default, handler: { (UIAlertAction) -> Void in
+            
+            self.deleteRowForCareGiverHelper(indexPath, keepConnections: true)
+            completion(deleteRowsAtIndexPath: true)
+        })
+        
+        alertController.addAction(alertAction)
+        
+        alertAction = UIAlertAction(title: "Disconnect", style: .Default, handler: { (UIAlertAction) -> Void in
+            
+            self.deleteRowForCareGiverHelper(indexPath, keepConnections: false)
+            completion(deleteRowsAtIndexPath: true)
+        })
+        
+        alertController.addAction(alertAction)
+
+        alertAction = UIAlertAction(title: "Cancel", style: .Default, handler: { (UIAlertAction) -> Void in
+            completion(deleteRowsAtIndexPath: false)
+        })
+       
+        alertController.addAction(alertAction)
+        presentViewController(alertController, animated: true, completion: nil)
+        
+    }
+    
+    func deleteRowForClientAndCathy(indexPath: NSIndexPath) {
         
         var clientObjectIds: [String] = [String]()
         var cathyObjectIds: [String] = [String]()
         
-        for (connectedClientObjectId, connectedCathyObjectIds) in self.connectedObjectIds[indexPath.row] {
-            clientObjectIds.append(connectedClientObjectId)
-            cathyObjectIds.appendContentsOf(connectedCathyObjectIds)
+        if self.connectedObjectIds.count != 0 {
+            for (connectedClientObjectId, connectedCathyObjectIds) in self.connectedObjectIds[indexPath.row] {
+                clientObjectIds.append(connectedClientObjectId)
+                cathyObjectIds.appendContentsOf(connectedCathyObjectIds)
+            }
         }
         
+        if selectedUserType == UserType.client {
+            
+            if clientObjectIds.contains(self.clientObjectIds[indexPath.row]) {
+                
+                self.presentBasicAlertControllerWithMessage("Cannot delete client because of the client's current connection(s)")
+                
+            } else {
+                
+                self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.selectedUserType, keepConnections: true, userObjectId: self.clientObjectIds[indexPath.row], officeUserIdsForUser: self.clientOfficeUserIds[indexPath.row])
+                self.clientNames.removeAtIndex(indexPath.row)
+                self.clientObjectIds.removeAtIndex(indexPath.row)
+                self.clientNotes.removeAtIndex(indexPath.row)
+                
+                if self.clientCheckedRow == indexPath.row {
+                    self.clientCheckedRow = -1
+                } else if self.clientCheckedRow > indexPath.row {
+                    self.clientCheckedRow -= 1
+                }
         
-        if selectedUserType == UserType.careGiver {
-            
-            self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.selectedUserType, userObjectIds: self.careGiverObjectIds, officeUserIdsForUser: self.careGiverOfficeUserIds, indexPath: indexPath)
-            self.careGiverNames.removeAtIndex(indexPath.row)
-            self.careGiverObjectIds.removeAtIndex(indexPath.row)
-            self.careGiverNotes.removeAtIndex(indexPath.row)
-            self.connectedObjectIds.removeAtIndex(indexPath.row)
-            
-            if self.careGiverCheckedRow == indexPath.row {
-                self.careGiverCheckedRow = -1
-            } else if self.careGiverCheckedRow > indexPath.row {
-                self.careGiverCheckedRow -= 1
             }
             
-        } else if selectedUserType == UserType.client {
-            
-            
-            
-            self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.selectedUserType, userObjectIds: self.clientObjectIds, officeUserIdsForUser: self.clientOfficeUserIds, indexPath: indexPath)
-            self.clientNames.removeAtIndex(indexPath.row)
-            self.clientObjectIds.removeAtIndex(indexPath.row)
-            self.clientNotes.removeAtIndex(indexPath.row)
-            
-            if self.clientCheckedRow == indexPath.row {
-                self.clientCheckedRow = -1
-            } else if self.clientCheckedRow > indexPath.row {
-                self.clientCheckedRow -= 1
-            }
-    
         } else if selectedUserType == UserType.cathy {
             
-            self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.selectedUserType, userObjectIds: self.cathyObjectIds, officeUserIdsForUser: self.cathyOfficeUserIds, indexPath: indexPath)
-            self.cathyNames.removeAtIndex(indexPath.row)
-            self.cathyObjectIds.removeAtIndex(indexPath.row)
-            self.cathyNotes.removeAtIndex(indexPath.row)
-            self.cathyCheckedRows.removeAtIndex(indexPath.row)
+            if cathyObjectIds.contains(self.cathyObjectIds[indexPath.row]) {
+                
+                self.presentBasicAlertControllerWithMessage("Cannot delete cathy because of the cathy's current connection(s)")
+                
+            } else {
+                
+                self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.selectedUserType, keepConnections: true, userObjectId: self.cathyObjectIds[indexPath.row], officeUserIdsForUser: self.cathyOfficeUserIds[indexPath.row])
+                self.cathyNames.removeAtIndex(indexPath.row)
+                self.cathyObjectIds.removeAtIndex(indexPath.row)
+                self.cathyNotes.removeAtIndex(indexPath.row)
+                self.cathyCheckedRows.removeAtIndex(indexPath.row)
+            }
+            
         }
-        
+
     }
     
     func configureCellForUserType(cell: OfficeConnectUserTableViewCell, userType: UserType, indexPath: NSIndexPath) {
@@ -680,8 +709,17 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
         if editingStyle == .Delete {
             
-            self.deleteRowForSelectedUserType(indexPath)
-            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            if self.selectedUserType == UserType.careGiver {
+                self.deleteRowForCareGiver(indexPath, completion: { (deleteRowsAtIndexPath) -> Void in
+                    if deleteRowsAtIndexPath {
+                        self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                    }
+                })
+            } else {
+                self.deleteRowForClientAndCathy(indexPath)
+                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            }
+
         }
         
     }

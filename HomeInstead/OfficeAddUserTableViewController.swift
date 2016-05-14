@@ -298,13 +298,16 @@ class OfficeAddUserTableViewController: UITableViewController {
                 self.attemptUpdatingOfficeUserIds(self.selectedUserType, objectId: self.userObjectIds[row], completion: { (updateSuccessful) -> Void in
                     numOfOfficeUserIdsUpdated++
                     if numOfCheckedRows == numOfOfficeUserIdsUpdated {
-                        if self.selectedUserType != UserType.careGiver {
+
+                        if self.selectedUserType == UserType.careGiver {
                             self.dismissViewControllerAnimated(true, completion: nil)
                         }
+
                         updateSuccessCheck.firstUpdateSuccessful = true
                         if updateSuccessCheck.allUpdatesAreSuccessful() == true {
                             self.dismissViewControllerAnimated(true, completion: nil)
                         }
+                        
                     }
                 })
             }
@@ -356,9 +359,7 @@ class OfficeAddUserTableViewController: UITableViewController {
                 })
             }
             
-            
         }
-        
         
     }
     
