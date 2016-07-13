@@ -23,7 +23,10 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     @IBOutlet weak var finishButton: UIBarButtonItem!
     
     var addPhotoButtonTappedIndexPath: NSIndexPath? = nil
-    var editButtonTappedIndexPath: NSIndexPath? = nil
+    var editPhotoButtonTappedIndexPath: NSIndexPath? = nil
+    
+    var addPhotoButtonTapped: Bool = false
+    var editPhotoButtonTapped: Bool = false
     
     var expandButtonTappedIndexPath: NSIndexPath? = nil
     var standardExpandButtonTappedIndexPath: NSIndexPath? = nil
@@ -72,7 +75,7 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     var commentsToBeUploaded: [String] = [String]()
     var imagesToBeUploaded: [UIImage?] = [UIImage?]()
     var taskDescriptionsToBeUploaded: [String] = [String]()
-    var timesTasksCompleted: [String] = [String]()
+    var timesTasksCompletedToBeUploaded: [String] = [String]()
     var finishTime: String = ""
     var finishAddress: String = ""
     
@@ -188,14 +191,24 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         
         let selectedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         
+        var indexPath: NSIndexPath? = nil
+        if self.addPhotoButtonTapped {
+            indexPath = self.addPhotoButtonTappedIndexPath
+        }
+        if self.editPhotoButtonTapped {
+            indexPath = self.editPhotoButtonTappedIndexPath
+        }
+        
+        print(indexPath?.row)
+        
         if self.selectedTaskType == TaskType.standard {
-            self.standardImages[(self.addPhotoButtonTappedIndexPath?.row)!] = selectedImage
+            self.standardImages[(indexPath?.row)!] = selectedImage
         } else if self.selectedTaskType == TaskType.specialized {
-            self.specializedImages[(self.addPhotoButtonTappedIndexPath?.row)!] = selectedImage
+            self.specializedImages[(indexPath?.row)!] = selectedImage
         }
         
         self.tableView.beginUpdates()
-        self.tableView.reloadRowsAtIndexPaths([self.addPhotoButtonTappedIndexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
+        self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
         self.tableView.endUpdates()
         
         dismissViewControllerAnimated(true, completion: nil)
@@ -204,11 +217,14 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     
     @IBAction func editButtonTapped(sender: AnyObject) {
         
+        self.editPhotoButtonTapped = true
+        self.addPhotoButtonTapped = false
+        
         let editPhotoButton = sender as! UIButton
         let superView = editPhotoButton.superview!
         let careGiverTaskListTableViewCell = superView.superview as! CareGiverTaskListTableViewCell
         let indexPath = self.tableView.indexPathForCell(careGiverTaskListTableViewCell)
-        self.editButtonTappedIndexPath = indexPath
+        self.editPhotoButtonTappedIndexPath = indexPath
         
         let alertController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         var alertAction: UIAlertAction = UIAlertAction(title: "Take Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
@@ -230,13 +246,13 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
             self.deletePhotoButtonTapped = true
             
             if self.selectedTaskType == TaskType.standard {
-                self.standardImages[(self.editButtonTappedIndexPath?.row)!] = nil
+                self.standardImages[(self.editPhotoButtonTappedIndexPath?.row)!] = nil
             } else if self.selectedTaskType == TaskType.specialized {
-                self.specializedImages[(self.editButtonTappedIndexPath?.row)!] = nil
+                self.specializedImages[(self.editPhotoButtonTappedIndexPath?.row)!] = nil
             }
             
             self.tableView.beginUpdates()
-            self.tableView.reloadRowsAtIndexPaths([self.editButtonTappedIndexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
+            self.tableView.reloadRowsAtIndexPaths([self.editPhotoButtonTappedIndexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
             self.tableView.endUpdates()
             
         }
@@ -250,6 +266,9 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
 
     
     @IBAction func addPhotoButtonTapped(sender: AnyObject) {
+        
+        self.editPhotoButtonTapped = false
+        self.addPhotoButtonTapped = true
         
         let addPhotoButton = sender as! UIButton
         let superView = addPhotoButton.superview!
@@ -301,10 +320,11 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         
         self.setReadOnlyVariablesForTaskType(self.selectedTaskType)
         
+        
         self.commentsToBeUploaded.append(self.comments[indexPath!.row])
         self.imagesToBeUploaded.append(self.images[indexPath!.row])
         self.taskDescriptionsToBeUploaded.append(self.tasks[indexPath!.row])
-        self.timesTasksCompleted.append(self.getCurrentTime())
+        self.timesTasksCompletedToBeUploaded.append(self.getCurrentTime())
         
     }
     
@@ -399,7 +419,6 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         self.attemptGettingCurrentAddress({ (gotAddressSuccessfully, address) -> Void in
             if gotAddressSuccessfully {
                 self.startAddress = address!
-                print(address)
             } else {
                 self.startAddress = "Could not find address."
             }
@@ -415,19 +434,20 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         var data: NSData? = nil
         
         data = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 0.0)
-        var imageFile: [PFFile] = [PFFile(data: data!)!]
+        var imageFiles: [PFFile] = [PFFile(data: data!)!]
 
         for image in self.imagesToBeUploaded {
             if image != nil {
                 data = UIImageJPEGRepresentation(image!, 0.5)
-                imageFile.append(PFFile(data: data!)!)
+                imageFiles.append(PFFile(name: "defaultImage.jpg", data: data!)!)
+           
             } else {
                 data = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 0.0)
-                imageFile.append(PFFile(data: data!)!)
+                imageFiles.append(PFFile(name: "taskImage.jpg", data: data!)!)
             }
             //print(imageFile)
         }
-        return imageFile
+        return imageFiles
        
     }
     
@@ -444,14 +464,14 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         object["date"] = self.date
         object["startedTime"] = self.startTime
         object["taskDescriptions"] = self.taskDescriptionsToBeUploaded
-        object["timeTasksCompleted"] = self.timesTasksCompleted
+        object["timeTasksCompleted"] = self.timesTasksCompletedToBeUploaded
         object["taskComments"] = self.commentsToBeUploaded
         object["finishedTime"] = self.finishTime
         object["sentToCathys"] = false
         object["careGiverUserId"] = PFUser.currentUser()?.objectId
         object["lastSavedTime"] = "N/A"
         
-        //object["imageFiles"] = self.getImageFiles()
+        object["imageFiles"] = self.getImageFiles()
         
         object.pinInBackground()
         object.saveInBackgroundWithBlock {
@@ -469,11 +489,6 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     
     @IBAction func finishButtonTapped(sender: AnyObject) {
         
-        self.finishButton.enabled = false
-        self.startButton.enabled = true
-        self.tasksStarted = false
-        self.navigationItem.setHidesBackButton(false, animated: true)
-        
         self.finishTime = self.getCurrentTime()
         
         self.attemptGettingCurrentAddress { (gotAddressSuccessfully, address) -> Void in
@@ -483,8 +498,12 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
                 self.finishAddress = "Could not find address"
             }
             self.attemptUploadingTaskInformationToCloud { (uploadSuccessful) -> Void in
-                print("yes")
+                self.finishButton.enabled = false
+                self.startButton.enabled = true
+                self.tasksStarted = false
+                self.navigationItem.setHidesBackButton(false, animated: true)
             }
+            
         }
         
         

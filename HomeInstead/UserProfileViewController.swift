@@ -243,7 +243,7 @@ class UserProfileViewController: UIViewController {
             self.imageView.image = nil
             self.noPhotoLabel.hidden = false
         }
-        print(self.image)
+     
     }
     
     override func viewWillAppear(animated: Bool) {

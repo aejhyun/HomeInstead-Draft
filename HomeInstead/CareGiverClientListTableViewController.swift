@@ -31,7 +31,7 @@ class CareGiverClientListTableViewController: UITableViewController {
         
         let query = PFQuery(className: self.classNameForCloud.getClassName(UserType.careGiver)!)
         query.whereKey("userId", equalTo: (PFUser.currentUser()?.objectId)!)
-        query.fromLocalDatastore()
+        //query.fromLocalDatastore()
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             if error == nil {
@@ -103,6 +103,7 @@ class CareGiverClientListTableViewController: UITableViewController {
         self.performSegueWithIdentifier("careGiverClientListToUserProfile", sender: nil)
         
     }
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.selectedRowIndexPath = indexPath
         self.performSegueWithIdentifier("careGiverClientListToCareGiverTaskList", sender: nil)
