@@ -156,8 +156,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
         let selectedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-        
-        print(selectedImage)
+
         self.imageView.image = selectedImage
         self.imageView.alpha = 1.0
         self.borderImageView.alpha = 0.0
@@ -338,7 +337,8 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     func attemptUploadUserInformationToCloudWithClassName(className: String, completion: (uploadSuccessful: Bool) -> Void) {
         
-        let imageFile: NSData? = self.getImageFile()
+        let imageFile: PFFile? = self.getImageFile()
+
         
         let object = PFObject(className: className)
         object["name"] = self.nameTextField.text
@@ -365,17 +365,12 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         if className != ClassNameForCloud().officeUser {
             object["idsOfOfficeUsersWhoAddedThisUser"] = []
-//            object["connectedClientIds"] = []
-//            object["connectedCathysIds"] = []
-//            object["connectedCareGiverIds"] = []
-//            object["connectedClientNames"] = []
-//            object["connectedCathyNames"] = []
-//            object["connectedCareGiverNames"] = []
         }
 
         if imageFile != nil {
             object["imageFile"] = imageFile
         }
+        
         object.pinInBackground()
         object.saveInBackgroundWithBlock {
             (success: Bool, error: NSError?) -> Void in
@@ -390,15 +385,20 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
     }
     
-    func getImageFile() -> NSData? {
+    func getImageFile() -> PFFile? {
         
-        var imageFile: NSData? = nil
+        var imageData: NSData? = nil
+        
+        var imageFile: PFFile? = nil
         
         if self.imageView.image != nil {
-            imageFile = UIImageJPEGRepresentation(self.imageView.image!, 1.0)
-        } else {
-            imageFile = nil
+            imageData = UIImageJPEGRepresentation(self.imageView.image!, 0.1)
         }
+        
+        if imageData != nil {
+            imageFile = PFFile(name: "image.jpeg", data: imageData!)
+        }
+        
         return imageFile
         
     }

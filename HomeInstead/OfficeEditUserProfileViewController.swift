@@ -188,7 +188,7 @@ class OfficeEditUserProfileViewController: SignUpViewController {
     
     func attemptUpdatingUserInformationToCloudWithClassName(className: String, completion: (updateSuccessful: Bool) -> Void) {
         
-        let imageFile: NSData? = self.getImageFile()
+        let imageFile: PFFile? = self.getImageFile()
         
         let query = PFQuery(className: className)
         query.getObjectInBackgroundWithId(self.userObjectId) {
@@ -216,6 +216,7 @@ class OfficeEditUserProfileViewController: SignUpViewController {
                 object.saveInBackgroundWithBlock({ (success: Bool, error: NSError?) -> Void in
                     if let error = error {
                         print(error)
+                        self.presentAlertControllerWithMessage("There was an error updating the user's information")
                         completion(updateSuccessful: false)
                     } else {
                         completion(updateSuccessful: true)

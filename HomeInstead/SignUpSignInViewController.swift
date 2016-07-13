@@ -113,8 +113,6 @@ class SignUpSignInViewController: UIViewController {
             if let navigationController = segue.destinationViewController as? UINavigationController {
                 if let _ = navigationController.topViewController as? SignInViewController {
                     
-                    
-                    
                 } else {
                     print("signInViewController returned nil")
                 }

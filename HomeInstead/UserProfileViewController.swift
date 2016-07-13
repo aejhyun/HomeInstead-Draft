@@ -185,6 +185,8 @@ class UserProfileViewController: UIViewController {
         self.streetThree = userInformation["streetThree"] as! String
         self.postalCode = userInformation["postalCode"] as! String
         self.notes = userInformation["notes"] as! String
+
+  
         
     }
     

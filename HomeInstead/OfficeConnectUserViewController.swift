@@ -578,7 +578,8 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     }
     
     override func viewWillAppear(animated: Bool) {
-
+        self.expandButtonTappedIndexPath = nil
+        self.tableView.reloadData()
         self.numberOfTimesReloadDataIsCalled = 0
         
         self.tableView.estimatedRowHeight = 200
@@ -634,6 +635,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                     }
                     if querySuccessCheck.successfullyQueriedAllUsers() {
                         self.numberOfTimesReloadDataIsCalled++
+                        
                         self.tableView.reloadData()
                     }
                 }
@@ -818,6 +820,19 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         }
         return clientObjectIdAndName
     }
+    
+    func clearCheckMarks()  {
+        
+        self.careGiverCheckedRow = -1
+        self.clientCheckedRow = -1
+        
+        for(var i: Int = 0; i < self.cathyCheckedRows.count; i++) {
+            if(self.cathyCheckedRows[i] == true) {
+                self.cathyCheckedRows[i] = false
+            }
+        }
+        
+    }
 
     @IBAction func connectButtonTapped(sender: AnyObject) {
   
@@ -831,18 +846,16 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             
             // The reason for this function is an architectural faulty. Because the way that objectIds are stored, namely, in an array of a dictionary which has another [String] associated to a key, I was not sure if I were to store the names in another row, it would be queried in the same manner. So in order to prevent that from happening, I had to do this, which also means that when the care giver queries her client, she will only be able to get the objectIds of the client. So, I need an efficient way to some how connect the objectIds to the names. This is the best way that I found so far how to do it.
             let clientObjectIdsAndNames = self.getConnectedClientObjectIdsAndNamesForCareGiver(objectIdsToBeConnected)
-            
+
             // The following function also uploads the clientObjectIdsAndNames to the cloud. But the primary function is to connect users in the cloud. Also, right now self.cathyObjectIdsAndUserIds is being uploaded which holds all the cathy object ids and user ids that are added by the user not necessarily the ones that are connected to a certain giver. So I will eventually make this change. But for the sake of finishing the app, I will hold this off for now.
             self.officeConnectUserHelper.connectObjectIdsToCareGiverInCloud(checkedCareGiverObjectId, objectIdsToBeConnected: objectIdsToBeConnected, clientObjectIdsAndNames: clientObjectIdsAndNames, cathyObjectIdsAndUserIds: self.cathyObjectIdsAndUserIds, completion: { (connectionSuccessful) -> Void in
                 if connectionSuccessful {
                     self.connectedObjectIds[self.careGiverCheckedRow] = objectIdsToBeConnected
                     self.setExpandedRowHeights()
-                    if self.selectedUserType == UserType.careGiver {
-                        self.tableView.reloadData()
-                        
-                    }
-              
-                    
+                    self.clearCheckMarks()
+   
+                    self.tableView.reloadData()
+                    self.presentBasicAlertControllerWithMessage("Connection successful :)")
                 }
             })
  
@@ -866,16 +879,14 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                     if connectionSuccessful {
                         self.connectedObjectIds[self.careGiverCheckedRow] = objectIdsToBeConnected
                         self.setExpandedRowHeights()
-                        if self.selectedUserType == UserType.careGiver {
-                            self.tableView.reloadData()
-                        }
+                        self.clearCheckMarks()
+
+                        self.tableView.reloadData()
+                        self.presentBasicAlertControllerWithMessage("Disconnection successful :)")
                     }
                 })
                 
             }
-            
-
-            
         }
     }
     

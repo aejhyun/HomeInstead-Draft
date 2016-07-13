@@ -31,7 +31,7 @@ class OfficeCreateClientUserViewController: OfficeEditUserProfileViewController 
     
     func uploadClientUserInformationToCloud(completion: (uploadSuccessful: Bool) -> Void) {
         
-        let imageFile: NSData? = self.getImageFile()
+        let imageFile: PFFile? = self.getImageFile()
         
         let object = PFObject(className: "ClientUser")
         object["name"] = self.nameTextField.text
