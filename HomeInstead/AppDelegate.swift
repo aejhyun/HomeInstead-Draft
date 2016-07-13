@@ -24,6 +24,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.setApplicationId("1gCNaidQfUXiDdwFRBsoZZL4cYblAEj9a6eSWqDx",
             clientKey: "uumzBnqWPzZQPh6KVKq7Z5wf9v1RQCOYOXy8Ef6g")
         
+//        let configuration = ParseClientConfiguration {
+//            $0.applicationId = "1gCNaidQfUXiDdwFRBsoZZL4cYblAEj9a6eSWqDx"
+//            $0.clientKey = "uumzBnqWPzZQPh6KVKq7Z5wf9v1RQCOYOXy8Ef6g"
+//            $0.server = "http://homeinstead.herokuapp.com/parse"
+//        }
+//        Parse.initializeWithConfiguration(configuration)
+        
+        
         // [Optional] Track statistics around application opens.
         PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
         

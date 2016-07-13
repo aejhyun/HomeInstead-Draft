@@ -69,9 +69,11 @@
 		84F3FE631CB66EC700693E31 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F3FE621CB66EC700693E31 /* SignInViewController.swift */; };
 		84F8025A1C8853A900708CEC /* CathyImageViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F802591C8853A900708CEC /* CathyImageViewerViewController.swift */; };
 		84FD3E581C225B82007D2C31 /* MyActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FD3E571C225B82007D2C31 /* MyActivityIndicator.swift */; };
+		91276015D6244B036069739A /* Pods_HomeInstead.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFFCDFB4740AB855ACFA8729 /* Pods_HomeInstead.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A58A7CED21C2E94BE3FCD16 /* Pods-HomeInstead.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HomeInstead.release.xcconfig"; path = "Pods/Target Support Files/Pods-HomeInstead/Pods-HomeInstead.release.xcconfig"; sourceTree = "<group>"; };
 		840CCE7A1CE0812F004580B6 /* OfficeTabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeTabBarViewController.swift; sourceTree = "<group>"; };
 		840CCE7C1CE082BD004580B6 /* OfficeTasksCompletedTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeTasksCompletedTableViewController.swift; sourceTree = "<group>"; };
 		840CCE7E1CE082F5004580B6 /* OfficeTasksCompletedTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfficeTasksCompletedTableViewCell.swift; sourceTree = "<group>"; };
@@ -138,6 +140,8 @@
 		84F3FE621CB66EC700693E31 /* SignInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		84F802591C8853A900708CEC /* CathyImageViewerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CathyImageViewerViewController.swift; sourceTree = "<group>"; };
 		84FD3E571C225B82007D2C31 /* MyActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyActivityIndicator.swift; sourceTree = "<group>"; };
+		E3C5543A5B5755020014F224 /* Pods-HomeInstead.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HomeInstead.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HomeInstead/Pods-HomeInstead.debug.xcconfig"; sourceTree = "<group>"; };
+		EFFCDFB4740AB855ACFA8729 /* Pods_HomeInstead.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HomeInstead.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +165,7 @@
 				84D9319A1C1999FF003C1688 /* Parse.framework in Frameworks */,
 				84D931181C197F37003C1688 /* AudioToolbox.framework in Frameworks */,
 				84D9319B1C1999FF003C1688 /* ParseFacebookUtils.framework in Frameworks */,
+				91276015D6244B036069739A /* Pods_HomeInstead.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,6 +179,7 @@
 				84D930FF1C197DB1003C1688 /* HomeInstead */,
 				84D930FE1C197DB1003C1688 /* Products */,
 				84D931921C1999FF003C1688 /* ParseLibrary */,
+				E02A49837D3AF80514B082B3 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -254,6 +260,7 @@
 				84D931251C197F67003C1688 /* SystemConfiguration.framework */,
 				84D931171C197F37003C1688 /* AudioToolbox.framework */,
 				84D931191C197F3F003C1688 /* CFNetwork.framework */,
+				EFFCDFB4740AB855ACFA8729 /* Pods_HomeInstead.framework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -271,6 +278,15 @@
 			path = ParseLibrary;
 			sourceTree = "<group>";
 		};
+		E02A49837D3AF80514B082B3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E3C5543A5B5755020014F224 /* Pods-HomeInstead.debug.xcconfig */,
+				3A58A7CED21C2E94BE3FCD16 /* Pods-HomeInstead.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -278,9 +294,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 84D931121C197DB1003C1688 /* Build configuration list for PBXNativeTarget "HomeInstead" */;
 			buildPhases = (
+				8C17F476AD21ADBB47F30001 /* Check Pods Manifest.lock */,
 				84D930F91C197DB1003C1688 /* Sources */,
 				84D930FA1C197DB1003C1688 /* Frameworks */,
 				84D930FB1C197DB1003C1688 /* Resources */,
+				168B16FB57C572892EB9F879 /* Embed Pods Frameworks */,
+				AE50AE1C83032AA7A560CBDA /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -337,6 +356,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		168B16FB57C572892EB9F879 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HomeInstead/Pods-HomeInstead-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8C17F476AD21ADBB47F30001 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AE50AE1C83032AA7A560CBDA /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HomeInstead/Pods-HomeInstead-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		84D930F91C197DB1003C1688 /* Sources */ = {
@@ -494,6 +561,7 @@
 		};
 		84D931131C197DB1003C1688 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E3C5543A5B5755020014F224 /* Pods-HomeInstead.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -516,6 +584,7 @@
 		};
 		84D931141C197DB1003C1688 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A58A7CED21C2E94BE3FCD16 /* Pods-HomeInstead.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
