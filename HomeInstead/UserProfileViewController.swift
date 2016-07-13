@@ -185,9 +185,18 @@ class UserProfileViewController: UIViewController {
         self.streetThree = userInformation["streetThree"] as! String
         self.postalCode = userInformation["postalCode"] as! String
         self.notes = userInformation["notes"] as! String
-
-  
         
+        if let imageFile = userInformation["imageFile"] {
+            imageFile.getDataInBackgroundWithBlock({ (imageData: NSData?, error: NSError?) -> Void in
+                if error != nil {
+                    print(error)
+                } else {
+                    self.image = UIImage(data: imageData!)
+                    self.setImageView()
+                }
+            })
+        }
+  
     }
     
     func setNavigationBarTitle() {
@@ -225,8 +234,7 @@ class UserProfileViewController: UIViewController {
         self.imageView.layer.cornerRadius = self.imageViewHeightLayoutConstraint.constant / 2
         
         if let image = self.image {
-            self.image = image as? UIImage
-            self.imageView.image = self.image
+            self.imageView.image = image
             self.noPhotoLabel.hidden = true
             self.imageView.layer.borderWidth = 0.0
         } else {
@@ -235,7 +243,7 @@ class UserProfileViewController: UIViewController {
             self.imageView.image = nil
             self.noPhotoLabel.hidden = false
         }
-        
+        print(self.image)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -248,9 +256,6 @@ class UserProfileViewController: UIViewController {
             }
         }
         self.setImageView()
-        
-
-        
 
     }
     
@@ -275,13 +280,4 @@ class UserProfileViewController: UIViewController {
         
     }
 
-    
-
-    
-    
-    
-    
-    
-    
-    
 }
