@@ -160,11 +160,19 @@ class CathyTaskInformationTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("cellWithTaskImage", forIndexPath: indexPath) as! CathyTaskInformationTableViewCell
         let indexPathRow = indexPath.row - 1
         
+        cell.setTaskImageView()
+        cell.setBezierPath()
+        
         cell.taskDescriptionLabel.text = self.taskDescriptions[indexPathRow]
-
+        cell.taskCommentTextView.text = "                     \(self.taskComments[indexPathRow])"
+            
+            //self.taskComments[indexPathRow]
+        
         //cell.taskCommentLabel.text = "                     \(self.taskComments[indexPathRow])"
         cell.timeTaskCompletedLabel.text = self.timeTasksCompleted[indexPathRow]
+        
         cell.taskImageView.image = self.images["\(indexPathRow)"]
+        
         
         return cell
     }
@@ -177,7 +185,7 @@ class CathyTaskInformationTableViewController: UITableViewController {
         } else {
             if self.images["\(indexPath.row - 1)"] != nil {
                 return cellWithTaskImage(indexPath)
-            }else if self.taskComments[indexPath.row - 1] == "" {
+            } else if self.taskComments[indexPath.row - 1] == "" {
                 return simpleCell(indexPath)
             } else {
                 return cellWithTaskComment(indexPath)
