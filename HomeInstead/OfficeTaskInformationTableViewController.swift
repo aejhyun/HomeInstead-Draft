@@ -24,11 +24,14 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
     var clientName: String = ""
     var careGiverName: String = ""
     
+    var gotAllImages: Bool = false
+    
     var taskDescriptions: [String] = [String]()
     var timeTasksCompleted: [String] = [String]()
     var taskComments: [String] = [String]()
+    var imageFiles: [String: PFFile] = [String: PFFile]()
+    var images: [String: UIImage] = [String: UIImage]()
 
-    
     override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         self.view.endEditing(true)
     }
@@ -52,9 +55,40 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
                 self.taskDescriptions = object.objectForKey("taskDescriptions") as! [String]
                 self.timeTasksCompleted = object.objectForKey("timeTasksCompleted") as! [String]
                 self.taskComments = object.objectForKey("taskComments") as! [String]
+              
+                if let imageFiles = object.objectForKey("imageFiles") {
+                    self.imageFiles = imageFiles as! [String: PFFile]
+        
+                    var count: Int = 0
+                    self.getImages({ (gotImage) -> Void in
+                        if count == imageFiles.count - 1 {
+                            self.gotAllImages = true
+                            self.tableView.reloadData()
+                        }
+                        count++
+                    })
+                }
                 completion(connectionSuccessful: true)
             }
         }
+    }
+    
+    func getImages(completion: (gotImage: Bool) -> Void) {
+        
+        for (key, imageFile) in self.imageFiles {
+            
+            imageFile.getDataInBackgroundWithBlock({ (imageData: NSData?, error: NSError?) -> Void in
+                if error != nil {
+                    print(error)
+                } else {
+                    let image = UIImage(data: imageData!)
+                    self.images[key] = image
+                    completion(gotImage: true)
+                }
+            })
+            
+        }
+        
     }
 
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
@@ -302,6 +336,14 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
         cell.timeTaskCompletedTextField.text = self.timeTasksCompleted[indexPathRow]
         cell.timeTaskCompletedTextField.tag = indexPathRow
         cell.timeTaskCompletedTextField.addTarget(self, action: "timeTaskCompletedTextFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+
+        
+        if self.gotAllImages {
+            if let image = self.images["\(indexPathRow)"] {
+                cell.taskImageView?.image = image
+            }
+        }
+        
         
         if self.deletePhotoButtonTapped == true {
             cell.deleteImageWithAnimation()

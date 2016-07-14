@@ -429,24 +429,19 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         self.tableView.reloadData()
     }
     
-    func getImageFiles() -> [PFFile] {
+    func getImageFiles() -> [String:PFFile] {
         
         var data: NSData? = nil
         
-        data = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 0.0)
-        var imageFiles: [PFFile] = [PFFile(data: data!)!]
+        var imageFiles: [String:PFFile] = [String:PFFile]()
 
-        for image in self.imagesToBeUploaded {
-            if image != nil {
-                data = UIImageJPEGRepresentation(image!, 0.5)
-                imageFiles.append(PFFile(name: "defaultImage.jpg", data: data!)!)
-           
-            } else {
-                data = UIImageJPEGRepresentation(UIImage(named: "defaultPicture")!, 0.0)
-                imageFiles.append(PFFile(name: "taskImage.jpg", data: data!)!)
+        for var i: Int = 0; i < self.imagesToBeUploaded.count; i++ {
+            if self.imagesToBeUploaded[i] != nil {
+                data = UIImageJPEGRepresentation(self.imagesToBeUploaded[i]!, 0.5)
+                imageFiles["\(i)"] = PFFile(name: "taskImage.jpg", data: data!)!
             }
-            //print(imageFile)
         }
+        
         return imageFiles
        
     }
@@ -470,7 +465,7 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         object["sentToCathys"] = false
         object["careGiverUserId"] = PFUser.currentUser()?.objectId
         object["lastSavedTime"] = "N/A"
-        
+
         object["imageFiles"] = self.getImageFiles()
         
         object.pinInBackground()
