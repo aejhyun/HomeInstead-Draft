@@ -199,8 +199,6 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
             indexPath = self.editPhotoButtonTappedIndexPath
         }
         
-        print(indexPath?.row)
-        
         if self.selectedTaskType == TaskType.standard {
             self.standardImages[(indexPath?.row)!] = selectedImage
         } else if self.selectedTaskType == TaskType.specialized {

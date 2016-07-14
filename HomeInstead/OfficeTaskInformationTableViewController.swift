@@ -99,14 +99,8 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
         
         let selectedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         
-        
-        //self.standardImages[(self.addPhotoButtonTappedIndexPath?.row)!] = selectedImage
-       
-        
-        
-        self.tableView.beginUpdates()
-        self.tableView.reloadRowsAtIndexPaths([self.addPhotoButtonTappedIndexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
-        self.tableView.endUpdates()
+        self.images["\(self.addPhotoButtonTappedIndexPath!.row - 1)"] = selectedImage
+        self.tableView.reloadData()
         
         dismissViewControllerAnimated(true, completion: nil)
         
@@ -139,8 +133,7 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
             
             self.deletePhotoButtonTapped = true
             
-            
-            //self.standardImages[(self.editButtonTappedIndexPath?.row)!] = nil
+            self.images["\(self.editButtonTappedIndexPath!.row - 1)"] = nil
             
             self.tableView.beginUpdates()
             self.tableView.reloadRowsAtIndexPaths([self.editButtonTappedIndexPath!], withRowAnimation: UITableViewRowAnimation.Automatic)
@@ -231,6 +224,19 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
         
     }
     
+    func getImageFiles() -> [String:PFFile] {
+        
+        var data: NSData? = nil
+        var imageFiles: [String:PFFile] = [String:PFFile]()
+        
+        for (key, image) in self.images {
+            data = UIImageJPEGRepresentation(image, 0.5)
+            imageFiles[key] = PFFile(name: "taskImage.jpg", data: data!)!
+        }
+        
+        return imageFiles
+    }
+    
     func attemptUpdatingTaskInformation(completion: (updateSuccessful: Bool) -> Void) {
         
         let query = PFQuery(className: "TaskInformation")
@@ -249,6 +255,9 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
                 object["taskDescriptions"] = self.taskDescriptions
                 object["timeTasksCompleted"] = self.timeTasksCompleted
                 object["lastSavedTime"] = self.getCurrentDateAndTime()
+                object["imageFiles"] = self.getImageFiles()
+                
+                
                 object.pinInBackground()
                 object.saveInBackgroundWithBlock {
                     (success: Bool, error: NSError?) -> Void in
@@ -337,12 +346,13 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
         cell.timeTaskCompletedTextField.tag = indexPathRow
         cell.timeTaskCompletedTextField.addTarget(self, action: "timeTaskCompletedTextFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
 
+        cell.layoutSubviews()
         
         if self.gotAllImages {
-            if let image = self.images["\(indexPathRow)"] {
-                cell.taskImageView?.image = image
-            }
+            cell.setTaskImage(self.images["\(indexPathRow)"])
+            cell.layoutSubviews()
         }
+        
         
         
         if self.deletePhotoButtonTapped == true {
