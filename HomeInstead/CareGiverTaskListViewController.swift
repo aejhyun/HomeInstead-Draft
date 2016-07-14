@@ -480,8 +480,26 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    @IBAction func finishButtonTapped(sender: AnyObject) {
+    func clearFields() {
+        for(var i: Int = 0; i < self.standardComments.count; i++) {
+            self.standardComments[i] = ""
+        }
         
+        for(var i: Int = 0; i < self.specializedComments.count; i++) {
+            self.specializedComments[i] = ""
+        }
+        
+        for(var i: Int = 0; i < self.standardImages.count; i++) {
+            self.standardImages[i] = nil
+        }
+        
+        for(var i: Int = 0; i < self.specializedImages.count; i++) {
+            self.specializedImages[i] = nil
+        }
+    }
+    
+    @IBAction func finishButtonTapped(sender: AnyObject) {
+        self.finishButton.enabled = false
         self.finishTime = self.getCurrentTime()
         
         self.attemptGettingCurrentAddress { (gotAddressSuccessfully, address) -> Void in
@@ -491,7 +509,11 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
                 self.finishAddress = "Could not find address"
             }
             self.attemptUploadingTaskInformationToCloud { (uploadSuccessful) -> Void in
-                self.finishButton.enabled = false
+                
+                self.clearFields()
+                self.tableView.reloadData()
+
+                self.finishButton.enabled = true
                 self.startButton.enabled = true
                 self.tasksStarted = false
                 self.navigationItem.setHidesBackButton(false, animated: true)
