@@ -2347,7 +2347,7 @@
                                     <outlet property="timeTaskCompletedLabel" destination="vqw-5p-uw5" id="Mzu-ye-IJO"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellWithImage" rowHeight="229" id="SgL-RA-nUp" customClass="CathyTaskInformationTableViewCell" customModule="HomeInstead" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellWithTaskImage" rowHeight="229" id="SgL-RA-nUp" customClass="CathyTaskInformationTableViewCell" customModule="HomeInstead" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="359" width="600" height="229"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SgL-RA-nUp" id="wdG-Zu-D1H">
@@ -2539,7 +2539,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NNa-cu-Kpe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5057" y="-2828"/>
+            <point key="canvasLocation" x="5416.5" y="-2952.75"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="a6S-fX-n7c">

@@ -24,6 +24,10 @@ class CathyTaskInformationTableViewController: UITableViewController {
     var taskComments: [String] = [String]()
     var timeTasksCompleted: [String] = [String]()
     
+    var gotAllImages: Bool = false
+    var images: [String: UIImage] = [String: UIImage]()
+    var imageFiles: [String: PFFile] = [String: PFFile]()
+    
     func attempQueryingTaskInformation(completion: (querySuccessful: Bool) -> Void) {
         
         let query = PFQuery(className: "TaskInformation")
@@ -44,6 +48,20 @@ class CathyTaskInformationTableViewController: UITableViewController {
                 self.taskDescriptions = object.objectForKey("taskDescriptions") as! [String]
                 self.timeTasksCompleted = object.objectForKey("timeTasksCompleted") as! [String]
                 self.taskComments = object.objectForKey("taskComments") as! [String]
+                
+                if let imageFiles = object.objectForKey("imageFiles") {
+                    self.imageFiles = imageFiles as! [String: PFFile]
+                    
+                    var count: Int = 0
+                    self.getImages({ (gotImage) -> Void in
+                        if count == imageFiles.count - 1 {
+                            self.gotAllImages = true
+                            self.tableView.reloadData()
+                        }
+                        count++
+                    })
+                }
+                
                 completion(querySuccessful: true)
                 
             }
@@ -51,7 +69,23 @@ class CathyTaskInformationTableViewController: UITableViewController {
         
     }
     
-
+    func getImages(completion: (gotImage: Bool) -> Void) {
+        
+        for (key, imageFile) in self.imageFiles {
+            
+            imageFile.getDataInBackgroundWithBlock({ (imageData: NSData?, error: NSError?) -> Void in
+                if error != nil {
+                    print(error)
+                } else {
+                    let image = UIImage(data: imageData!)
+                    self.images[key] = image
+                    completion(gotImage: true)
+                }
+            })
+            
+        }
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,22 +156,34 @@ class CathyTaskInformationTableViewController: UITableViewController {
         return cell
     }
     
+    func cellWithTaskImage(indexPath: NSIndexPath) -> CathyTaskInformationTableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("cellWithTaskImage", forIndexPath: indexPath) as! CathyTaskInformationTableViewCell
+        let indexPathRow = indexPath.row - 1
+        
+        cell.taskDescriptionLabel.text = self.taskDescriptions[indexPathRow]
+
+        //cell.taskCommentLabel.text = "                     \(self.taskComments[indexPathRow])"
+        cell.timeTaskCompletedLabel.text = self.timeTasksCompleted[indexPathRow]
+        cell.taskImageView.image = self.images["\(indexPathRow)"]
+        
+        return cell
+    }
+    
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 
         if indexPath.row == 0 {
             return self.firstRowCell(indexPath)
         } else {
-            if self.taskComments[indexPath.row - 1] == "" {
+            if self.images["\(indexPath.row - 1)"] != nil {
+                return cellWithTaskImage(indexPath)
+            }else if self.taskComments[indexPath.row - 1] == "" {
                 return simpleCell(indexPath)
             } else {
                 return cellWithTaskComment(indexPath)
             }
-            
-
         }
 
     }
-
-
 
 }

@@ -10,7 +10,7 @@ import UIKit
 import Parse
 
 class OfficeTaskInformationTableViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
-
+    
     var taskInformationObjectId: String = ""
     var addPhotoButtonTappedIndexPath: NSIndexPath? = nil
     var editButtonTappedIndexPath: NSIndexPath? = nil
@@ -31,6 +31,9 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
     var taskComments: [String] = [String]()
     var imageFiles: [String: PFFile] = [String: PFFile]()
     var images: [String: UIImage] = [String: UIImage]()
+    
+    var addPhotoButtonTapped: Bool = false
+    var editButtonTapped:Bool = false
 
     override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         self.view.endEditing(true)
@@ -99,7 +102,13 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
         
         let selectedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         
-        self.images["\(self.addPhotoButtonTappedIndexPath!.row - 1)"] = selectedImage
+        if self.editButtonTapped {
+            self.images["\(self.editButtonTappedIndexPath!.row - 1)"] = selectedImage
+        }
+        if self.addPhotoButtonTapped {
+            self.images["\(self.addPhotoButtonTappedIndexPath!.row - 1)"] = selectedImage
+        }
+        
         self.tableView.reloadData()
         
         dismissViewControllerAnimated(true, completion: nil)
@@ -113,6 +122,8 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
         let officeTaskInformationTableViewCell = superView.superview as! OfficeTaskInformationTableViewCell
         let indexPath = self.tableView.indexPathForCell(officeTaskInformationTableViewCell)
         self.editButtonTappedIndexPath = indexPath
+        self.editButtonTapped = true
+        self.addPhotoButtonTapped = false
         
         let alertController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         var alertAction: UIAlertAction = UIAlertAction(title: "Take Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
@@ -156,6 +167,8 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
         let officeTaskInformationTableViewCell = superView.superview as! OfficeTaskInformationTableViewCell
         let indexPath = self.tableView.indexPathForCell(officeTaskInformationTableViewCell)
         self.addPhotoButtonTappedIndexPath = indexPath
+        self.addPhotoButtonTapped = true
+        self.editButtonTapped = false
         
         let alertController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         var alertAction: UIAlertAction = UIAlertAction(title: "Take Photo", style: .Default) { (alertAction: UIAlertAction) -> Void in
@@ -275,10 +288,11 @@ class OfficeTaskInformationTableViewController: UITableViewController, UIImagePi
     }
     
     @IBAction func saveButtonTapped(sender: AnyObject) {
-        
+        self.navigationItem.rightBarButtonItem?.enabled = false
         self.attemptUpdatingTaskInformation { (updateSuccessful) -> Void in
             if updateSuccessful {
                 self.navigationController?.popToRootViewControllerAnimated(true)
+                self.navigationItem.rightBarButtonItem?.enabled = true
             }
         }
     
