@@ -60,6 +60,8 @@ class OfficeAddUserTableViewController: UITableViewController {
                         self.userNames.append(object.objectForKey("name") as! String)
                         self.userObjectIds.append(object.objectId!)
                         self.userNotes.append(object.objectForKey("notes") as! String)
+                        
+                        
 
                         object.pinInBackground()
                     }
@@ -93,7 +95,7 @@ class OfficeAddUserTableViewController: UITableViewController {
             
             self.officeUserIds.removeAll()
             self.userNames.removeAll()
-            
+            self.userObjectIds.removeAll() 
             self.attemptQueryingNonOfficeUserInformationFromCloudWithClassName(false, className: ClassNameForCloud().getClassName(self.selectedUserType)!) { (querySuccessful) -> Void in
                 
                 if querySuccessful {
@@ -101,6 +103,7 @@ class OfficeAddUserTableViewController: UITableViewController {
                     if self.selectedUserType == UserType.client {
                         self.createClientUserBarButton.enabled = true
                     }
+                    print(self.userObjectIds)
                     self.checkedRows = [Bool](count: self.userNames.count, repeatedValue: false)
                     self.tableView.reloadData()
         

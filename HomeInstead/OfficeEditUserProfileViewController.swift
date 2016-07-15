@@ -33,7 +33,17 @@ class OfficeEditUserProfileViewController: SignUpViewController {
     
     func unpackUserInformation() {
         
-        self.image = nil
+        if let imageFile = userInformation["imageFile"] {
+            imageFile.getDataInBackgroundWithBlock({ (imageData: NSData?, error: NSError?) -> Void in
+                if error != nil {
+                    print(error)
+                } else {
+                    self.image = UIImage(data: imageData!)
+                    self.setImageView()
+                }
+            })
+        }
+        
         self.name = userInformation["name"] as! String
         self.phoneNumber = userInformation["phoneNumber"] as! String
         self.emergencyPhoneNumber = userInformation["emergencyPhoneNumber"] as! String
@@ -99,16 +109,35 @@ class OfficeEditUserProfileViewController: SignUpViewController {
     
     override func setImageView() {
         
-        self.imageView.alpha = 0.0
-        self.imageView.layer.borderWidth = 0
+        self.borderImageView.layer.borderColor = UIColor.lightGrayColor().CGColor
+        
+        self.imageView.layer.borderColor = UIColor.clearColor().CGColor
+        
+        if let image = image {
+            self.imageView.image = image
+            self.imageView.alpha = 1.0
+            self.imageView.layer.borderWidth = 0.0
+            self.borderImageView.alpha = 0.0
+            self.addPhotoButton.hidden = true
+            self.addPhotoButton.alpha = 0.0
+            self.editButton.hidden = false
+            self.editButton.alpha = 1.0
+            
+        } else {
+            self.imageView.image = nil
+            self.imageView.alpha = 1.0
+            self.imageView.layer.borderWidth = 1.0
+            self.borderImageView.alpha = 0.0
+            self.addPhotoButton.hidden = false
+            self.addPhotoButton.alpha = 1.0
+            self.editButton.hidden = true
+            self.editButton.alpha = 0.0
+        }
+
         self.imageView.layer.masksToBounds = false
         self.imageView.layer.cornerRadius = self.imageViewHeightLayoutConstraint.constant / 2
         self.imageView.clipsToBounds = true
-        
-        if self.image != nil {
-            self.imageView.alpha = 1.0
-        }
-        
+                
     }
     
     override func setBorderImageView() {

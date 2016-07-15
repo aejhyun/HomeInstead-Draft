@@ -1613,6 +1613,7 @@
                                                 </mask>
                                             </variation>
                                             <connections>
+                                                <action selector="careGiverNameButtonTapped:" destination="MOB-5m-5t2" eventType="touchUpInside" id="aeP-JF-57u"/>
                                                 <action selector="careGiverNameTapped:" destination="Efi-co-hen" eventType="touchUpInside" id="m6I-mX-osC"/>
                                             </connections>
                                         </button>
@@ -1682,6 +1683,7 @@
                                                 </mask>
                                             </variation>
                                             <connections>
+                                                <action selector="clientNameButtonTapped:" destination="MOB-5m-5t2" eventType="touchUpInside" id="GIJ-NR-HgU"/>
                                                 <action selector="clientNameTapped:" destination="Efi-co-hen" eventType="touchUpInside" id="pAp-sv-8pi"/>
                                             </connections>
                                         </button>
@@ -1806,6 +1808,7 @@
                     </navigationItem>
                     <connections>
                         <segue destination="D4i-Td-MU2" kind="show" identifier="cathyTasksCompletedToCathyTaskInformation" id="aXE-oB-CgN"/>
+                        <segue destination="VCR-vU-sTM" kind="show" identifier="cathyTaskCompletedToUserProfile" id="8vE-GO-C57"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c5y-y2-UAf" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -6294,9 +6297,9 @@ Photo</string>
         <image name="phoneImage" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="8vE-GO-C57"/>
         <segue reference="8U4-Hz-0zt"/>
         <segue reference="KL2-zC-opc"/>
         <segue reference="ruF-pK-gEb"/>
-        <segue reference="EER-8q-9yK"/>
     </inferredMetricsTieBreakers>
 </document>

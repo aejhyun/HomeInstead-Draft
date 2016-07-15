@@ -22,6 +22,9 @@ class CathyTasksCompletedTableViewController: UITableViewController {
     var careGiverObjectIds: [String] = [String]()
     var clientObjectIds: [String] = [String]()
     var taskInformationObjectIds: [String] = [String]()
+    
+    var clientNameIndexPath: NSIndexPath? = nil
+    var careGiverNameIndexPath: NSIndexPath? = nil
 
     func attemptQueryingTaskInformation(queryFromLocalDateStore localQuery: Bool, completion: (querySuccessful: Bool) -> Void) {
         
@@ -111,6 +114,34 @@ class CathyTasksCompletedTableViewController: UITableViewController {
   
     }
     
+    @IBAction func careGiverNameButtonTapped(sender: AnyObject) {
+        
+        let careGiverNameButton = sender as! UIButton
+        let superView = careGiverNameButton.superview!
+        let cathyTaskInformationTableViewCell = superView.superview as! CathyTasksCompletedTableViewCell
+        let indexPath = self.tableView.indexPathForCell(cathyTaskInformationTableViewCell)
+        self.careGiverNameIndexPath = indexPath
+        
+        self.careGiverNameTapped = true
+        self.performSegueWithIdentifier("cathyTaskCompletedToUserProfile", sender: self.careGiverObjectIds[sender.tag])
+        
+    }
+    
+    
+    @IBAction func clientNameButtonTapped(sender: AnyObject) {
+        
+        let clientNameButton = sender as! UIButton
+        let superView = clientNameButton.superview!
+        let cathyTaskInformationTableViewCell = superView.superview as! CathyTasksCompletedTableViewCell
+        let indexPath = self.tableView.indexPathForCell(cathyTaskInformationTableViewCell)
+        self.clientNameIndexPath = indexPath
+        
+        self.clientNameTapped = true
+        self.performSegueWithIdentifier("cathyTaskCompletedToUserProfile", sender: self.clientObjectIds[sender.tag])
+        
+    }
+    
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         self.performSegueWithIdentifier("cathyTasksCompletedToCathyTaskInformation", sender: indexPath)
@@ -147,6 +178,22 @@ class CathyTasksCompletedTableViewController: UITableViewController {
                 
                 cathyTaskInformationTableViewController.taskInformationObjectId = self.taskInformationObjectIds[sender!.row]
                 
+                
+            } else {
+                print("destinationViewController returned nil")
+            }
+        } else if segue.identifier == "cathyTaskCompletedToUserProfile" {
+            if let userProfileViewController = segue.destinationViewController as? UserProfileViewController {
+                
+                if self.careGiverNameTapped {
+                    userProfileViewController.selectedUserType = UserType.careGiver
+                    self.careGiverNameTapped = false
+                    userProfileViewController.userObjectId = self.careGiverObjectIds[self.careGiverNameIndexPath!.row]
+                } else if self.clientNameTapped {
+                    userProfileViewController.selectedUserType = UserType.client
+                    self.clientNameTapped = false
+                    userProfileViewController.userObjectId = self.clientObjectIds[self.clientNameIndexPath!.row]
+                }
                 
             } else {
                 print("destinationViewController returned nil")
