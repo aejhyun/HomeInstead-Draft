@@ -95,7 +95,7 @@ class OfficeAddUserTableViewController: UITableViewController {
             
             self.officeUserIds.removeAll()
             self.userNames.removeAll()
-            self.userObjectIds.removeAll() 
+            self.userObjectIds.removeAll()
             self.attemptQueryingNonOfficeUserInformationFromCloudWithClassName(false, className: ClassNameForCloud().getClassName(self.selectedUserType)!) { (querySuccessful) -> Void in
                 
                 if querySuccessful {
@@ -103,7 +103,6 @@ class OfficeAddUserTableViewController: UITableViewController {
                     if self.selectedUserType == UserType.client {
                         self.createClientUserBarButton.enabled = true
                     }
-                    print(self.userObjectIds)
                     self.checkedRows = [Bool](count: self.userNames.count, repeatedValue: false)
                     self.tableView.reloadData()
         
@@ -301,10 +300,8 @@ class OfficeAddUserTableViewController: UITableViewController {
                 self.attemptUpdatingOfficeUserIds(self.selectedUserType, objectId: self.userObjectIds[row], completion: { (updateSuccessful) -> Void in
                     numOfOfficeUserIdsUpdated++
                     if numOfCheckedRows == numOfOfficeUserIdsUpdated {
-
-                        if self.selectedUserType == UserType.careGiver {
-                            self.dismissViewControllerAnimated(true, completion: nil)
-                        }
+                  
+                        self.dismissViewControllerAnimated(true, completion: nil)
 
                         updateSuccessCheck.firstUpdateSuccessful = true
                         if updateSuccessCheck.allUpdatesAreSuccessful() == true {
@@ -317,7 +314,7 @@ class OfficeAddUserTableViewController: UITableViewController {
         }
         
         if self.selectedUserType == UserType.careGiver {
-            
+
             var clientObjectIds: [String] = [String]()
             var cathyObjectIds: [String] = [String]()
             
