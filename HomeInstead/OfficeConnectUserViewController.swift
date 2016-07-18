@@ -184,15 +184,40 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         
     }
     
-    func deleteRowForClientAndCathy(indexPath: NSIndexPath) {
+    func deleteRowForClientAndCathy(indexPath: NSIndexPath, completion: (deleteRowsAtIndexPath: Bool) -> Void) {
         
         var clientObjectIds: [String] = [String]()
         var cathyObjectIds: [String] = [String]()
         
+    
+
+
+    
+        
+//        if self.connectedObjectIds.count != 0 {
+//            for (connectedClientObjectId, connectedCathyObjectIds) in self.connectedObjectIds[indexPath.row] {
+// 
+//                clientObjectIds.append(connectedClientObjectId)
+//                cathyObjectIds.appendContentsOf(connectedCathyObjectIds)
+//            }
+//        }
+        
+        print(self.connectedObjectIds)
+        
         if self.connectedObjectIds.count != 0 {
-            for (connectedClientObjectId, connectedCathyObjectIds) in self.connectedObjectIds[indexPath.row] {
-                clientObjectIds.append(connectedClientObjectId)
-                cathyObjectIds.appendContentsOf(connectedCathyObjectIds)
+            for (connectedClientObjectIds) in self.connectedObjectIds {
+                
+                for (connectedClientObjectId, connectedCathyObjectIds) in connectedClientObjectIds {
+            
+                    clientObjectIds.append(connectedClientObjectId)
+                    for connectedCathyObjectId in connectedCathyObjectIds {
+                        if !cathyObjectIds.contains(connectedCathyObjectId) {
+                            cathyObjectIds.append(connectedCathyObjectId)
+                        }
+                        
+                    }
+                }
+                
             }
         }
         
@@ -201,7 +226,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             if clientObjectIds.contains(self.clientObjectIds[indexPath.row]) {
                 
                 self.presentBasicAlertControllerWithMessage("Cannot delete client because of the client's current connection(s)")
-                
+                completion(deleteRowsAtIndexPath: false)
             } else {
                 
                 self.officeConnectUserHelper.deleteUserFromOfficeUserInCloud(self.selectedUserType, keepConnections: true, userObjectId: self.clientObjectIds[indexPath.row], officeUserIdsForUser: self.clientOfficeUserIds[indexPath.row])
@@ -214,6 +239,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                 } else if self.clientCheckedRow > indexPath.row {
                     self.clientCheckedRow -= 1
                 }
+                completion(deleteRowsAtIndexPath: true)
         
             }
             
@@ -222,6 +248,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             if cathyObjectIds.contains(self.cathyObjectIds[indexPath.row]) {
                 
                 self.presentBasicAlertControllerWithMessage("Cannot delete cathy because of the cathy's current connection(s)")
+                completion(deleteRowsAtIndexPath: false)
                 
             } else {
                 
@@ -230,6 +257,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
                 self.cathyObjectIds.removeAtIndex(indexPath.row)
                 self.cathyNotes.removeAtIndex(indexPath.row)
                 self.cathyCheckedRows.removeAtIndex(indexPath.row)
+                completion(deleteRowsAtIndexPath: true)
             }
             
         }
@@ -578,7 +606,7 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     }
     
     override func viewWillAppear(animated: Bool) {
-        self.expandButtonTappedIndexPath = nil
+        
         self.tableView.reloadData()
         self.numberOfTimesReloadDataIsCalled = 0
         
@@ -714,12 +742,17 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
             if self.selectedUserType == UserType.careGiver {
                 self.deleteRowForCareGiver(indexPath, completion: { (deleteRowsAtIndexPath) -> Void in
                     if deleteRowsAtIndexPath {
+                        self.expandButtonTappedIndexPath = nil
                         self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
                     }
                 })
             } else {
-                self.deleteRowForClientAndCathy(indexPath)
-                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                self.deleteRowForClientAndCathy(indexPath, completion: { (deleteRowsAtIndexPath) -> Void in
+                    if deleteRowsAtIndexPath {
+                        self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                    }
+                })
+                
             }
 
         }
