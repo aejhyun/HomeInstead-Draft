@@ -44,7 +44,7 @@ class CareGiverTaskListViewController: UIViewController, UIBarPositioningDelegat
     var specializedOptionButtonEnabledRows: [Bool] = [Bool]()
     
     var tasks: [String] = [String]()
-    var standardTasks = ["Go on a walk", "Give a bath", "Dance", "Give a message", "Practice language", "Excersice", "Go shopping", "Go out to the park", "Look at a flower", "Read a book", "Play piano", "Make a new friend", "Wash clothes", "Paint nails", "Paint"]
+    var standardTasks = ["Go on a walk while looking at the flowers on the side", "Give a bath", "Dance", "Give a message", "Practice language", "Excersice", "Go shopping", "Go out to the park", "Look at a flower", "Read a book", "Play piano", "Make a new friend", "Wash clothes", "Paint nails", "Paint"]
     var specializedTasks = ["Eat some food", "Watch TV", "Ride a bike", "Dance", "Give a message", "Practice language", "Excersice", "Go shopping", "Go out to the park", "Look at a flower", "Read a book", "Play piano", "Make a new friend", "Wash clothes", "Paint nails", "Paint"]
     
     var comments: [String] = [String]()

@@ -189,21 +189,6 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
         var clientObjectIds: [String] = [String]()
         var cathyObjectIds: [String] = [String]()
         
-    
-
-
-    
-        
-//        if self.connectedObjectIds.count != 0 {
-//            for (connectedClientObjectId, connectedCathyObjectIds) in self.connectedObjectIds[indexPath.row] {
-// 
-//                clientObjectIds.append(connectedClientObjectId)
-//                cathyObjectIds.appendContentsOf(connectedCathyObjectIds)
-//            }
-//        }
-        
-        print(self.connectedObjectIds)
-        
         if self.connectedObjectIds.count != 0 {
             for (connectedClientObjectIds) in self.connectedObjectIds {
                 
@@ -312,24 +297,50 @@ class OfficeConnectUserViewController: UIViewController, UIBarPositioningDelegat
     
     func configureCellContentAnimation(cell: OfficeConnectUserTableViewCell) {
         
-        cell.nameButton.alpha = 0.0
-        cell.notesLabel.alpha = 0.0
-        cell.expandButton.alpha = 0.0
+        let fadeDuration: Double = 0.7
+        
         
         if self.numberOfTimesReloadDataIsCalled == 1 {
             cell.nameButton.alpha = 1.0
             cell.notesLabel.alpha = 1.0
             cell.expandButton.alpha = 1.0
-            
+            cell.clientLabel.alpha = 0.0
+            cell.cathyLabel.alpha = 1.0
+            cell.clientLabel.alpha = 1.0
+            cell.cathyLabel.alpha = 1.0
+            for nameButton in cell.nameButtons {
+                nameButton.alpha = 1.0
+            }
+        } else {
+            cell.nameButton.alpha = 0.0
+            cell.notesLabel.alpha = 0.0
+            cell.expandButton.alpha = 0.0
+            cell.clientLabel.alpha = 0.0
+            cell.cathyLabel.alpha = 0.0
+            for nameButton in cell.nameButtons {
+                nameButton.alpha = 0.0
+            }
         }
         
-        UIView.animateWithDuration(0.6, animations: { () -> Void in
+        for nameButton in cell.nameButtons {
+            UIView.animateWithDuration(fadeDuration, animations: { () -> Void in
+                nameButton.alpha = 1.0
+            })
+        }
+        
+        UIView.animateWithDuration(fadeDuration, animations: { () -> Void in
+            cell.clientLabel.alpha = 1.0
+        })
+        UIView.animateWithDuration(fadeDuration, animations: { () -> Void in
+            cell.cathyLabel.alpha = 1.0
+        })
+        UIView.animateWithDuration(fadeDuration, animations: { () -> Void in
             cell.nameButton.alpha = 1.0
         })
-        UIView.animateWithDuration(0.6, animations: { () -> Void in
+        UIView.animateWithDuration(fadeDuration, animations: { () -> Void in
             cell.notesLabel.alpha = 1.0
         })
-        UIView.animateWithDuration(0.6, animations: { () -> Void in
+        UIView.animateWithDuration(fadeDuration, animations: { () -> Void in
             cell.expandButton.alpha = 1.0
         })
         
